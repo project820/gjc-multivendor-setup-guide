@@ -82,6 +82,24 @@ profiles:
       architect: openai-codex/gpt-5.4:high                      # 272k 상한 — 거대 코드베이스엔 부적합
       critic:    openai-codex/gpt-5.4:high                      # ⚠동일벤더=독립성 약함(트레이드오프)
 
+  claude-codex:                        # ★2벤더(Claude+Codex)만 — 평소 균형. Anthropic=실행·ctx / Codex=추론·비평
+    required_providers: [anthropic, openai-codex]
+    model_mapping:
+      default:   anthropic/claude-opus-4-8:medium               # 라우터·툴신뢰
+      executor:  anthropic/claude-opus-4-8:high                 # 코딩 1위(SWE-bench 88.6)
+      planner:   openai-codex/gpt-5.5:high                      # OpenAI 추론 플래그십
+      architect: anthropic/claude-opus-4-8:high                 # 1M 윈도우(codex 272k 한계 회피)
+      critic:    openai-codex/gpt-5.4:high                      # cross-family vs Opus(executor), 코딩인지
+
+  claude-codex-max:                    # 2벤더(Claude+Codex) 최강 — 비용 무시
+    required_providers: [anthropic, openai-codex]
+    model_mapping:
+      default:   anthropic/claude-opus-4-8:high
+      executor:  anthropic/claude-opus-4-8:max                  # SWE-bench 88.6 코딩 1위
+      planner:   openai-codex/gpt-5.5:xhigh                     # 최상위 추론(ARC-AGI-2 강)
+      architect: anthropic/claude-opus-4-8:high                 # 1M 윈도우
+      critic:    openai-codex/gpt-5.5:high                      # cross-family 독립 비평 vs Opus
+
 # ─────────────────────────────────────────────────────────────────────────────
 # opencode-go: OPENCODE_API_KEY 설정 시 활성(eco.executor·monorepo.critic 에서 사용).
 #   검증✅: deepseek-v4-flash/pro · minimax-m2.7 · qwen3.7-max · kimi-k2.6 · glm-5.1 · mimo-v2.5.

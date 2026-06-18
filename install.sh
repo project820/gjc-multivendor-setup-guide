@@ -93,7 +93,7 @@ else:
 
 open(target, "w", encoding="utf-8").write(out)
 if replaced: print("  · 기존 동일이름 프로필 교체:", ", ".join(sorted(set(replaced))))
-print("  · 프로필 8종 병합 완료 →", target)
+print("  · 프로필 10종 병합 완료 →", target)
 PY
 
 # 4) 기본 프로필 설정 (config.yml). none 이면 건너뜀
@@ -124,8 +124,8 @@ fi
 echo
 g "✓ 설치 완료"
 echo
-b "설치된 프로필 8종"
-echo "  ★daily  ultimate  coding-sprint  escalation  eco  monorepo  solo-anthropic  solo-openai"
+b "설치된 프로필 10종"
+echo "  ★daily  ultimate  coding-sprint  escalation  eco  monorepo  solo-anthropic  solo-openai  claude-codex  claude-codex-max"
 echo
 b "다음 단계"
 echo "  gjc --mpreset daily          # 이번 세션만 적용"
