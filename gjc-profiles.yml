@@ -1,4 +1,4 @@
-# GJC 멀티벤더 셋업 — 7 프로필 (claude · gpt · grok · gemini · opencode go)
+# GJC 멀티벤더 셋업 v1.1 — 10 프로필 (claude · gpt · grok · gemini · opencode go)
 # 설계 원칙: default=Opus 고정 · critic=cross-family · 무조건 max 금지 · 매쿼리 스왑 금지.
 # 엔진 하드룰: Gemini Pro={low,high} · openai-codex ctx 272k · Sonnet 최대 high
 #             · opencode-go effort 생략 · antigravity Gemini 고추론 = gemini-3.1-pro-low:high.
