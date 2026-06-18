@@ -7,7 +7,8 @@
 복잡한 모델 선택을 고민하지 말고, **한 줄로 설치**해 역할마다 최적 모델이 자동으로 배치되게 하라.
 
 [![GJC](https://img.shields.io/badge/for-Gajae%20Code%20(GJC)-e23?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code)
-[![Version](https://img.shields.io/badge/version-1.1-2496ED?style=flat-square)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.2-2496ED?style=flat-square)](./CHANGELOG.md)
+[![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/profiles-10-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
 ![Verified](https://img.shields.io/badge/selectors-live%20tested%202026--06--18-brightgreen?style=flat-square)
@@ -16,6 +17,9 @@
 <img src="assets/role-winners.svg" alt="ultimate 셋업 — 역할별 최강 모델" width="100%">
 
 </div>
+
+> [!NOTE]
+> **이 가이드의 핵심은 GJC 공식 문서로 채택됐다** — 압축판이 [`docs/multi-vendor-profiles.md`](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) 로 업스트림 머지됨([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). 역할·셀렉터 개념의 **정식 레퍼런스는 GJC 공식 docs**를 따르고, **이 레포는 거기 없는 것** — 원클릭 설치기, 10개 프로필 전체(`solo-*`·`claude-codex*` 포함), 그리고 [유지보수·검증 도구](./MAINTAINING.md)(정적 검증 CI + 라이브 셀렉터 배터리 + 카탈로그 드리프트 추적) — 를 제공한다.
 
 ---
 
