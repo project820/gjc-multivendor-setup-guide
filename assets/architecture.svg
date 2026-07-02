@@ -1,14 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="472" viewBox="0 0 1000 472" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img">
-<defs><marker id="ah" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#9AA0AE"/></marker></defs>
 <title>강본체 1 + 서브에이전트 4 — 작업신호 위임</title>
+<defs><marker id="ah" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#9AA0AE"/></marker></defs>
 <rect width="1000" height="472" rx="18" fill="#ffffff"/><rect width="1000" height="472" rx="18" fill="none" stroke="#ECECF1"/>
 <text x="32" y="40" font-size="17" font-weight="700" fill="#1A1A28">본체 1개(default) + 서브에이전트 4 — 신호가 명확할 때만 위임</text>
 <rect x="425" y="60" width="150" height="38" rx="19" fill="#F4F4F8" stroke="#D9D9E3"/><text x="500" y="84" font-size="13" font-weight="600" fill="#33334a" text-anchor="middle">📥 사용자 작업</text>
 <line x1="500" y1="98" x2="500" y2="122" stroke="#9AA0AE" stroke-width="1.5" marker-end="url(#ah)"/>
 <rect x="320" y="124" width="360" height="90" rx="14" fill="#D9583E"/>
-<text x="500" y="155" font-size="15.5" font-weight="800" fill="#fff" text-anchor="middle">🎛 default · 본체</text>
-<text x="500" y="178" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">Claude Opus 4.8</text>
-<text x="500" y="199" font-size="11.5" fill="#FFE7E0" text-anchor="middle">읽기 · 편집 · 도구호출 · 라우팅</text>
+<text x="500" y="150" font-size="14.5" font-weight="800" fill="#fff" text-anchor="middle">🎛 default · 본체</text>
+<text x="500" y="172" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">default 프로필의 Anthropic 플래그십</text>
+<text x="500" y="189" font-size="11.5" font-weight="700" fill="#FFD9CE" text-anchor="middle">(Opus 4.8 / Fable 5)</text>
+<text x="500" y="206" font-size="10.5" fill="#FFE7E0" text-anchor="middle">읽기 · 편집 · 도구호출 · 라우팅</text>
 <path d="M680 169 C 760 169, 760 110, 690 124" fill="none" stroke="#C9CDD6" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#ah)"/>
 <text x="772" y="150" font-size="11" fill="#7A7F8C">단순 작업(대부분)</text>
 <text x="772" y="166" font-size="11" fill="#7A7F8C">→ 본체 단독</text>

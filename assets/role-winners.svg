@@ -1,31 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1256" height="242" viewBox="0 0 1256 242" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img">
-<title>ultimate 셋업 — 역할별 최강 모델</title>
-<rect width="1256" height="242" rx="18" fill="#ffffff"/><rect width="1256" height="242" rx="18" fill="none" stroke="#ECECF1"/>
-<text x="24" y="44" font-size="22" font-weight="700" fill="#1A1A28">🏆 ultimate 셋업 — 역할별 최강 모델</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1256" height="268" viewBox="0 0 1256 268" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img">
+<title>👑 legend (Ultimate Legend) 셋업 — 역할별 최강 모델</title>
+<rect width="1256" height="268" rx="18" fill="#ffffff"/><rect width="1256" height="268" rx="18" fill="none" stroke="#ECECF1"/>
+<text x="24" y="44" font-size="22" font-weight="700" fill="#1A1A28">👑 legend (Ultimate Legend) 셋업 — 역할별 최강 모델</text>
 <text x="24" y="70" font-size="13" fill="#6B6B7B">한 벤더가 모든 역할에서 1위는 아니다 — 5역할을 강점별로 4개 벤더에 분산(Anthropic·OpenAI·Google·xAI)</text>
-<rect x="24" y="92" width="232" height="132" rx="14" fill="#FBE9E4"/><rect x="24" y="92" width="232" height="6" rx="3" fill="#D9583E"/>
-<text x="40" y="126" font-size="15" font-weight="700" fill="#8A2B1A">🎛 default</text>
-<text x="40" y="148" font-size="11.5" fill="#5a5a6a">오케스트레이션·툴 신뢰성</text>
-<text x="40" y="180" font-size="16" font-weight="800" fill="#1A1A28">Claude Opus 4.8</text>
-<text x="40" y="204" font-size="10.8" fill="#8A2B1A" opacity="0.85">Anthropic · 라우터=품질 상한</text>
-<rect x="268" y="92" width="232" height="132" rx="14" fill="#FBE9E4"/><rect x="268" y="92" width="232" height="6" rx="3" fill="#D9583E"/>
-<text x="284" y="126" font-size="15" font-weight="700" fill="#8A2B1A">🔨 executor</text>
-<text x="284" y="148" font-size="11.5" fill="#5a5a6a">실코딩 :max</text>
-<text x="284" y="180" font-size="16" font-weight="800" fill="#1A1A28">Claude Opus 4.8</text>
-<text x="284" y="204" font-size="10.8" fill="#8A2B1A" opacity="0.85">Anthropic · SWE-bench 88.6</text>
-<rect x="512" y="92" width="232" height="132" rx="14" fill="#E3F4EE"/><rect x="512" y="92" width="232" height="6" rx="3" fill="#10A37F"/>
-<text x="528" y="126" font-size="15" font-weight="700" fill="#0A6B53">🧠 planner</text>
-<text x="528" y="148" font-size="11.5" fill="#5a5a6a">최상위 추론 :xhigh</text>
-<text x="528" y="180" font-size="16" font-weight="800" fill="#1A1A28">GPT-5.5</text>
-<text x="528" y="204" font-size="10.8" fill="#0A6B53" opacity="0.85">OpenAI · ARC-AGI-2 추론 강세</text>
-<rect x="756" y="92" width="232" height="132" rx="14" fill="#E8F0FE"/><rect x="756" y="92" width="232" height="6" rx="3" fill="#4285F4"/>
-<text x="772" y="126" font-size="15" font-weight="700" fill="#1A56C4">🔭 architect</text>
-<text x="772" y="148" font-size="11.5" fill="#5a5a6a">멀티모달·비전 리뷰</text>
-<text x="772" y="180" font-size="16" font-weight="800" fill="#1A1A28">Gemini 3.1 Pro</text>
-<text x="772" y="204" font-size="10.8" fill="#1A56C4" opacity="0.85">Google · MMMU 81% (초장문맥은 Opus)</text>
-<rect x="1000" y="92" width="232" height="132" rx="14" fill="#EEF1F5"/><rect x="1000" y="92" width="232" height="6" rx="3" fill="#475569"/>
-<text x="1016" y="126" font-size="15" font-weight="700" fill="#2D3A4D">⚖ critic</text>
-<text x="1016" y="148" font-size="11.5" fill="#5a5a6a">독립 적대 비평</text>
-<text x="1016" y="180" font-size="16" font-weight="800" fill="#1A1A28">Grok 4.3</text>
-<text x="1016" y="204" font-size="10.8" fill="#2D3A4D" opacity="0.85">xAI · cross-family(vs Opus)</text>
+<rect x="24" y="92" width="232" height="152" rx="14" fill="#FBE9E4"/><rect x="24" y="92" width="232" height="6" rx="3" fill="#D9583E"/>
+<text x="40" y="124" font-size="15" font-weight="700" fill="#8A2B1A">🎛 default</text>
+<text x="40" y="145" font-size="11.5" fill="#5a5a6a">오케스트레이션·툴 신뢰성</text>
+<text x="40" y="176" font-size="16" font-weight="800" fill="#1A1A28">Claude Fable 5</text>
+<text x="40" y="198" font-size="12.5" font-weight="700" fill="#D9583E">:high</text>
+<text x="40" y="222" font-size="10.8" fill="#8A2B1A" opacity="0.85">Anthropic · 라우터=품질 상한</text>
+<rect x="268" y="92" width="232" height="152" rx="14" fill="#FBE9E4"/><rect x="268" y="92" width="232" height="6" rx="3" fill="#D9583E"/>
+<text x="284" y="124" font-size="15" font-weight="700" fill="#8A2B1A">🔨 executor</text>
+<text x="284" y="145" font-size="11.5" fill="#5a5a6a">실코딩</text>
+<text x="284" y="176" font-size="16" font-weight="800" fill="#1A1A28">Claude Opus 4.8</text>
+<text x="284" y="198" font-size="12.5" font-weight="700" fill="#D9583E">:max</text>
+<text x="284" y="222" font-size="10.8" fill="#8A2B1A" opacity="0.85">Anthropic · 구독 포함 코딩 최강</text>
+<rect x="512" y="92" width="232" height="152" rx="14" fill="#E3F4EE"/><rect x="512" y="92" width="232" height="6" rx="3" fill="#10A37F"/>
+<text x="528" y="124" font-size="15" font-weight="700" fill="#0A6B53">🧠 planner</text>
+<text x="528" y="145" font-size="11.5" fill="#5a5a6a">최상위 추론·설계</text>
+<text x="528" y="176" font-size="16" font-weight="800" fill="#1A1A28">GPT-5.5</text>
+<text x="528" y="198" font-size="12.5" font-weight="700" fill="#10A37F">:xhigh</text>
+<text x="528" y="222" font-size="10.8" fill="#0A6B53" opacity="0.85">OpenAI · ARC-AGI-2 추론 강세</text>
+<rect x="756" y="92" width="232" height="152" rx="14" fill="#E8F0FE"/><rect x="756" y="92" width="232" height="6" rx="3" fill="#4285F4"/>
+<text x="772" y="124" font-size="15" font-weight="700" fill="#1A56C4">🔭 architect</text>
+<text x="772" y="145" font-size="11.5" fill="#5a5a6a">멀티모달·1M ctx 리뷰</text>
+<text x="772" y="176" font-size="13.5" font-weight="800" fill="#1A1A28">Gemini 3.1 Pro-low</text>
+<text x="772" y="198" font-size="12.5" font-weight="700" fill="#4285F4">:high</text>
+<text x="772" y="222" font-size="10.8" fill="#1A56C4" opacity="0.85">Google · MMMU 81% 검증 우위</text>
+<rect x="1000" y="92" width="232" height="152" rx="14" fill="#EEF1F5"/><rect x="1000" y="92" width="232" height="6" rx="3" fill="#475569"/>
+<text x="1016" y="124" font-size="15" font-weight="700" fill="#2D3A4D">⚖ critic</text>
+<text x="1016" y="145" font-size="11.5" fill="#5a5a6a">독립 적대 비평</text>
+<text x="1016" y="176" font-size="16" font-weight="800" fill="#1A1A28">Grok 4.3</text>
+<text x="1016" y="198" font-size="12.5" font-weight="700" fill="#475569">:high</text>
+<text x="1016" y="222" font-size="10.8" fill="#2D3A4D" opacity="0.85">xAI · cross-family(vs Anthropic)</text>
 </svg>
