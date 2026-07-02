@@ -1,29 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="312" viewBox="0 0 1000 312" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" width="1150" height="420" viewBox="0 0 1150 420" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img">
+<title>적응형 effort 에스컬레이션 — 6단계 사다리</title>
 <defs><marker id="ah" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#9AA0AE"/></marker></defs>
-<title>적응형 effort 에스컬레이션</title>
-<rect width="1000" height="312" rx="18" fill="#ffffff"/><rect width="1000" height="312" rx="18" fill="none" stroke="#ECECF1"/>
-<text x="24" y="42" font-size="18" font-weight="700" fill="#1A1A28">⚙ 적응형 effort 에스컬레이션 (실패신호 기반)</text>
-<rect x="44" y="170" width="170" height="60" rx="12" fill="#FDECE7"/>
-<text x="129.0" y="200" font-size="17" font-weight="800" fill="#8A2B1A" text-anchor="middle">:low</text>
-<text x="129.0" y="216" font-size="11.5" fill="#8A2B1A" text-anchor="middle" opacity="0.85">평소 시작</text>
-<line x1="220" y1="208" x2="250" y2="186" stroke="#9AA0AE" stroke-width="1.5" marker-end="url(#ah)"/>
-<text x="235" y="172" font-size="9.5" fill="#7A7F8C" text-anchor="middle">실패신호</text>
-<text x="235" y="183" font-size="9.5" fill="#7A7F8C" text-anchor="middle">↑1단계</text>
-<rect x="256" y="142" width="170" height="88" rx="12" fill="#F6C9BC"/>
-<text x="341.0" y="172" font-size="17" font-weight="800" fill="#8A2B1A" text-anchor="middle">:high</text>
-<text x="341.0" y="216" font-size="11.5" fill="#8A2B1A" text-anchor="middle" opacity="0.85">막히면</text>
-<line x1="432" y1="208" x2="462" y2="172" stroke="#9AA0AE" stroke-width="1.5" marker-end="url(#ah)"/>
-<text x="447" y="158" font-size="9.5" fill="#7A7F8C" text-anchor="middle">실패신호</text>
-<text x="447" y="169" font-size="9.5" fill="#7A7F8C" text-anchor="middle">↑1단계</text>
-<rect x="468" y="114" width="170" height="116" rx="12" fill="#EC9A85"/>
-<text x="553.0" y="144" font-size="17" font-weight="800" fill="#5A1A0E" text-anchor="middle">:xhigh</text>
-<text x="553.0" y="216" font-size="11.5" fill="#5A1A0E" text-anchor="middle" opacity="0.85">계속 실패</text>
-<line x1="644" y1="208" x2="674" y2="158" stroke="#9AA0AE" stroke-width="1.5" marker-end="url(#ah)"/>
-<text x="659" y="144" font-size="9.5" fill="#7A7F8C" text-anchor="middle">실패신호</text>
-<text x="659" y="155" font-size="9.5" fill="#7A7F8C" text-anchor="middle">↑1단계</text>
-<rect x="680" y="86" width="170" height="144" rx="12" fill="#D9583E"/>
-<text x="765.0" y="116" font-size="17" font-weight="800" fill="#FFFFFF" text-anchor="middle">:max</text>
-<text x="765.0" y="216" font-size="11.5" fill="#FFFFFF" text-anchor="middle" opacity="0.85">최후</text>
-<text x="24" y="272" font-size="12" fill="#1A1A28">✅ 못 풀어서 올리는 건 정당 (테스트깨짐·자기모순·critic반려)   ❌ "올리면 안전하겠지"는 낭비 — medium→high: +1~2점에 토큰 ~23배</text>
-<text x="24" y="294" font-size="12" fill="#6B6B7B">minimal 금지(-23점 급락) · 저점은 low 까지 · Gemini 3.x Pro 는 low ↔ high 단일 점프</text>
+<rect width="1150" height="420" rx="18" fill="#ffffff"/><rect width="1150" height="420" rx="18" fill="none" stroke="#ECECF1"/>
+<text x="24" y="42" font-size="18" font-weight="700" fill="#1A1A28">⚙ 적응형 effort 에스컬레이션 (실패신호 기반) — 사다리 6단계</text>
+<rect x="40" y="184" width="150" height="56" rx="12" fill="#F4F4F6" stroke="#C9CDD6" stroke-dasharray="5 4"/>
+<text x="115.0" y="206" font-size="14" font-weight="800" fill="#9AA0AE" text-anchor="middle">🚫 :minimal</text>
+<text x="115.0" y="228" font-size="10.5" fill="#9AA0AE" text-anchor="middle" opacity="0.9">사용 금지(-23점)</text>
+<rect x="224" y="164" width="150" height="76" rx="12" fill="#FDECE7"/>
+<text x="299.0" y="186" font-size="16" font-weight="800" fill="#8A2B1A" text-anchor="middle">:low</text>
+<text x="299.0" y="228" font-size="10.5" fill="#8A2B1A" text-anchor="middle" opacity="0.9">평소 시작</text>
+<rect x="408" y="144" width="150" height="96" rx="12" fill="#FAD9CE"/>
+<text x="483.0" y="166" font-size="16" font-weight="800" fill="#8A2B1A" text-anchor="middle">:medium</text>
+<text x="483.0" y="228" font-size="10.5" fill="#8A2B1A" text-anchor="middle" opacity="0.9">효율 knee</text>
+<rect x="592" y="124" width="150" height="116" rx="12" fill="#F6C9BC"/>
+<text x="667.0" y="146" font-size="16" font-weight="800" fill="#8A2B1A" text-anchor="middle">:high</text>
+<text x="667.0" y="228" font-size="10.5" fill="#8A2B1A" text-anchor="middle" opacity="0.9">막히면</text>
+<rect x="776" y="100" width="150" height="140" rx="12" fill="#EC9A85"/>
+<text x="851.0" y="122" font-size="16" font-weight="800" fill="#5A1A0E" text-anchor="middle">:xhigh</text>
+<text x="851.0" y="228" font-size="10.5" fill="#5A1A0E" text-anchor="middle" opacity="0.9">계속 실패</text>
+<rect x="960" y="76" width="150" height="164" rx="12" fill="#D9583E"/>
+<text x="1035.0" y="98" font-size="16" font-weight="800" fill="#FFFFFF" text-anchor="middle">:max</text>
+<text x="1035.0" y="228" font-size="10.5" fill="#FFFFFF" text-anchor="middle" opacity="0.9">최후</text>
+<line x1="377" y1="172" x2="402" y2="156" stroke="#9AA0AE" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="389.5" y="132" font-size="9.5" fill="#7A7F8C" text-anchor="middle">실패신호</text>
+<text x="389.5" y="143" font-size="9.5" fill="#7A7F8C" text-anchor="middle">필요 단계만큼 ↑</text>
+<line x1="561" y1="152" x2="586" y2="136" stroke="#9AA0AE" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="573.5" y="112" font-size="9.5" fill="#7A7F8C" text-anchor="middle">실패신호</text>
+<text x="573.5" y="123" font-size="9.5" fill="#7A7F8C" text-anchor="middle">필요 단계만큼 ↑</text>
+<line x1="745" y1="132" x2="770" y2="112" stroke="#9AA0AE" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="757.5" y="88" font-size="9.5" fill="#7A7F8C" text-anchor="middle">실패신호</text>
+<text x="757.5" y="99" font-size="9.5" fill="#7A7F8C" text-anchor="middle">필요 단계만큼 ↑</text>
+<line x1="929" y1="108" x2="954" y2="88" stroke="#9AA0AE" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="941.5" y="64" font-size="9.5" fill="#7A7F8C" text-anchor="middle">실패신호</text>
+<text x="941.5" y="75" font-size="9.5" fill="#7A7F8C" text-anchor="middle">필요 단계만큼 ↑</text>
+<text x="24" y="270" font-size="12.5" font-weight="700" fill="#33334a">모델별 effort 상한 — GJC 0.7.10 실효 (검증 2026-07-02)</text>
+<rect x="24" y="282" width="185" height="26" rx="13" fill="#F6F6FA" stroke="#E2E2EA"/>
+<text x="116.5" y="299" font-size="11" fill="#3A3A4C" text-anchor="middle">Opus 4.8 = minimal..max</text>
+<rect x="221" y="282" width="263" height="26" rx="13" fill="#F6F6FA" stroke="#E2E2EA"/>
+<text x="352.5" y="299" font-size="11" fill="#3A3A4C" text-anchor="middle">Fable 5 ≤ xhigh (GJC, :max 클램프)</text>
+<rect x="496" y="282" width="156" height="26" rx="13" fill="#F6F6FA" stroke="#E2E2EA"/>
+<text x="574.0" y="299" font-size="11" fill="#3A3A4C" text-anchor="middle">Sonnet 4.6/5 ≤ high</text>
+<rect x="664" y="282" width="156" height="26" rx="13" fill="#F6F6FA" stroke="#E2E2EA"/>
+<text x="742.0" y="299" font-size="11" fill="#3A3A4C" text-anchor="middle">xai Grok 4.3 ≤ high</text>
+<rect x="832" y="282" width="192" height="26" rx="13" fill="#F6F6FA" stroke="#E2E2EA"/>
+<text x="928.0" y="299" font-size="11" fill="#3A3A4C" text-anchor="middle">Gemini Pro = {low, high}</text>
+<rect x="24" y="316" width="199" height="26" rx="13" fill="#F6F6FA" stroke="#E2E2EA"/>
+<text x="123.5" y="333" font-size="11" fill="#3A3A4C" text-anchor="middle">opencode-go = effort 생략</text>
+<text x="24" y="372" font-size="12" fill="#1A1A28">✅ 못 풀어서 올리는 건 정당 (테스트깨짐·자기모순·critic반려)   ❌ "올리면 안전하겠지"는 낭비 — medium→high: +1~2점에 토큰 ~23배</text>
+<text x="24" y="394" font-size="12" fill="#6B6B7B">🚫 minimal 은 품질 급락(-23점) — 실전 저점은 low · 클램프는 침묵 적용(에러 없이 상한으로 하향)이라 셀렉터에 상한 초과 effort 를 쓰지 말 것</text>
 </svg>

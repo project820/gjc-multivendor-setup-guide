@@ -1,9 +1,11 @@
-# GJC 멀티벤더 셋업 v1.1 — 10 프로필 (claude · gpt · grok · gemini · opencode go)
-# 설계 원칙: default=Opus 고정 · critic=cross-family · 무조건 max 금지 · 매쿼리 스왑 금지.
-# 엔진 하드룰: Gemini Pro={low,high} · openai-codex ctx 272k · Sonnet 최대 high
-#             · opencode-go effort 생략 · antigravity Gemini 고추론 = gemini-3.1-pro-low:high.
+# GJC 멀티벤더 셋업 v1.4 — 12 프로필 (claude · gpt · grok · gemini · opencode go)
+# 설계 원칙: default=Anthropic 플래그십(Opus/Fable) · critic=cross-family · 무조건 max 금지 · 매쿼리 스왑 금지.
+# 엔진 하드룰(GJC 0.7.10 실효): Gemini Pro={low,high} · Sonnet(4.6/5) 최대 high · Fable 5 최대 xhigh(:max는 xhigh로 침묵 클램프)
+#             · xai grok-4.3 최대 high(:xhigh 침묵 클램프) · opencode-go effort 생략
+#             · antigravity Gemini 고추론 = gemini-3.1-pro-low:high.
+# openai-codex ctx: gpt-5.4=1M · gpt-5.5=272K (모델별 상이 — "codex 272k" 일괄 룰 폐기).
 # Gemini 는 google-antigravity 프로바이더(Google AI Pro/Ultra 구독 토큰).
-# ★ 모든 셀렉터는 이 머신에서 `gjc -p`로 실호출 동작 검증 완료(2026-06-18).
+# ★ 모든 셀렉터는 이 머신에서 `gjc -p`로 실호출 동작 검증 완료(2026-07-02, gjc 0.7.10).
 #   openai-codex 는 ChatGPT 계정에서 base GPT(gpt-5.5/5.4)만 동작 — '-codex' 변종은 미지원이라 미사용.
 # 설치 후 GJC 에서 /login: anthropic · openai-codex · google-antigravity · xai.
 # 가이드: https://github.com/project820/gjc-multivendor-setup-guide
@@ -19,89 +21,116 @@ profiles:
       architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx·멀티모달(MMMU-Pro 81%)
       critic:    xai/grok-4.3:medium                            # cross-family 저가 독립비평($1.25/2.5)
 
-  ultimate:                            # 비용무시, 역할별 최강 + 벤더분산
+  ultimate:                            # 비용무시, 역할별 최강 + 벤더분산 (지속 가능판 — 이벤트판은 ultimate-f5)
     required_providers: [anthropic, openai-codex, google-antigravity, xai]
     model_mapping:
       default:   anthropic/claude-opus-4-8:high
-      executor:  anthropic/claude-opus-4-8:max                  # 접근가능 코딩 1위(SWE-bench Verified 88.6)
+      executor:  anthropic/claude-opus-4-8:max                  # 구독 포함 코딩 최강(SWE-bench Verified 88.6)
       planner:   openai-codex/gpt-5.5:xhigh                     # 최상위 추론 + OpenAI 다양성
       architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx·멀티모달
       critic:    xai/grok-4.3:high                              # cross-family 독립비평
+
+  ultimate-f5:                         # 🔥 이벤트: Fable 5 중심 — 구독 포함 ~2026-07-07(주간 한도 50% 상한), 이후 usage credits($10/$50)
+    required_providers: [anthropic, openai-codex, google-antigravity, xai]
+    model_mapping:
+      default:   anthropic/claude-fable-5:high                  # 라우터=품질 상한. refusal(HTTP 200+stop_reason) 유의
+      executor:  anthropic/claude-fable-5:xhigh                 # SWE-bench Verified 95.0 신 1위. ⚠:max 금지(xhigh로 침묵 클램프)
+      planner:   openai-codex/gpt-5.5:xhigh                     # 추론 축은 Fable 우위 미입증(ARC-AGI-2 미공개) — GPT 유지
+      architect: google-antigravity/gemini-3.1-pro-low:high     # 멀티모달 검증 우위 유지(Fable 비전은 vendor-claimed)
+      critic:    xai/grok-4.3:high                              # cross-family 불변 — Fable 자기평가 금지
+      # 7/7 이후: default를 opus-4-8:high로 내리면 legend와 동일한 지속 구조
+
+  legend:                              # 👑 Ultimate Legend — 7/7 이후에도 유지 가능한 최강 (fable은 default 한 자리만)
+    display_name: legend5
+    required_providers: [anthropic, openai-codex, google-antigravity, xai]
+    model_mapping:
+      default:   anthropic/claude-fable-5:high                  # 라우터 품질 상한 = Fable (usage credits 노출 최소 지점)
+      executor:  anthropic/claude-opus-4-8:max                  # 구독 포함 코딩 최강(88.6)
+      planner:   openai-codex/gpt-5.5:xhigh
+      architect: google-antigravity/gemini-3.1-pro-low:high
+      critic:    xai/grok-4.3:high
+      # credits 비용 회피 시: default를 opus-4-8:high로 — ultimate와 동일해짐
 
   coding-sprint:                       # 순수 구현 처리량. executor 주연 + 코딩인지 critic
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
       default:   anthropic/claude-opus-4-8:medium               # 본체 오케스트레이션
-      executor:  anthropic/claude-opus-4-8:max                  # 접근가능 코딩 1위(88.6)
+      executor:  anthropic/claude-opus-4-8:max                  # 구독 포함 코딩 최강(88.6)
       planner:   google-antigravity/gemini-3.1-pro-low:high     # 추론 검증1위로 경량 계획
       architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx 리뷰
       critic:    openai-codex/gpt-5.4:high                      # 코딩인지 critic(실버그 포착), cross-family vs gemini
 
-  escalation:                          # 고실패비용. 전역 최대 + critic 멀티벤더 병렬패널(§프로세스)
+  escalation:                          # 고실패비용 — 실패 신호 시 최강 실행자(Fable 5) 투입 + critic 멀티벤더 병렬패널(§프로세스)
     required_providers: [anthropic, openai-codex, google-antigravity, xai]
     model_mapping:
       default:   anthropic/claude-opus-4-8:high
-      executor:  anthropic/claude-opus-4-8:max
+      executor:  anthropic/claude-fable-5:xhigh                 # 실패한 작업의 구원투수(SWE-V 95.0). 간헐 사용 = credits 과금과도 궁합
       planner:   openai-codex/gpt-5.5:xhigh
       architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    xai/grok-4.3:xhigh                             # + 3표 교차벤더 critic 패널(독립투표→본체집계)
+      critic:    xai/grok-4.3:high                              # + 3표 교차벤더 critic 패널(독립투표→본체집계). ⚠xai :xhigh는 high로 침묵 클램프라 미사용
+      # (v1.3까지의 critic :xhigh는 no-op 클램프였음 — xhigh는 grok-build 프로바이더 전용이며 effort 서픽스 미지원)
 
   eco:                                 # 최저가 — 본체만 Opus(effort 절감), 위임은 초저가/구독 모델(전부 검증✅)
     required_providers: [anthropic, opencode-go, google-antigravity, xai]
     model_mapping:
       default:   anthropic/claude-opus-4-8:low                  # 라우터는 못 내림, effort만 절감
-      executor:  opencode-go/deepseek-v4-flash                  # $0.14/0.28, 1M, 최저가 코더(5번째 벤더)
+      executor:  opencode-go/deepseek-v4-flash                  # $0.14/0.28, 1M, 최저가 코더(5번째 벤더). 대안: sonnet-5:medium(≈sonnet-4-6:high, 인트로 $2/10 ~8/31)
       planner:   xai/grok-4-1-fast:high                         # $0.2/0.5, 2M, 저가 추론
       architect: google-antigravity/gemini-3.1-pro-low          # 구독 토큰, 저effort, 1M ctx
-      critic:    google-antigravity/gemini-3.5-flash            # 구독 토큰, 경량, cross-family vs executor(opencode-go)
+      critic:    google-antigravity/gemini-3.5-flash-low        # 구독 토큰, 경량, cross-family vs executor(opencode-go). 리터럴 id 핀(구 'gemini-3.5-flash'는 퍼지 매칭)
 
-  monorepo:                            # 거대 코드베이스 — 전역 1M ctx (★codex 272k 배제)
+  monorepo:                            # 거대 코드베이스 — 전역 1M ctx (★gpt-5.5 272K 배제 — gpt-5.4는 1M이나 Opus가 동급 이상)
     required_providers: [anthropic, google-antigravity, opencode-go]
     model_mapping:
       default:   anthropic/claude-opus-4-8:medium               # 1M
       executor:  anthropic/claude-opus-4-8:high                 # 1M
       planner:   google-antigravity/gemini-3.1-pro-low:high     # 추론(스코프 입력)
       architect: anthropic/claude-opus-4-8:high                 # Opus 4.8 = GJC 1M ctx 윈도우 지원(멀티턴 누적·검색 최상). 단일 메시지 paste만 ~400k 한도 — 한 방에 >400k는 opencode-go/deepseek-v4-pro
-      critic:    opencode-go/glm-5.2                            # 신규 오픈웨이트 1위(AA 51 > V4 Pro 44), cross-family vs anthropic (대안: deepseek-v4-pro)
+      critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51 > V4 Pro 44), 0.7.10 번들 카탈로그 편입, cross-family vs anthropic (대안: deepseek-v4-pro)
 
-  solo-anthropic:                      # 단일 벤더로만 운영, 신뢰성 곱셈붕괴(0.99^N) 회피
+  solo-anthropic:                      # 단일 벤더로만 운영 — 전 역할 Opus (v1.4: critic Sonnet→Opus, 능력 우선)
     required_providers: [anthropic]
     model_mapping:
       default:   anthropic/claude-opus-4-8:high
       executor:  anthropic/claude-opus-4-8:max
       planner:   anthropic/claude-opus-4-8:max
       architect: anthropic/claude-opus-4-8:high                 # 1M, Gemini 대체(폴백 1순위)
-      critic:    anthropic/claude-sonnet-4-6:high               # ⚠동일벤더=독립성 약함(트레이드오프)
+      critic:    anthropic/claude-opus-4-8:high                 # ⚠동일모델 자기평가=편향 최대(연구 확인) — 품질 경로는 cross-family 프로필
+      # Sonnet 5 critic 비추천: 리뷰어 버그 리콜 실측 하락(63%→50%, 정밀도만 상승)
 
-  solo-openai:                         # ChatGPT(Codex) 계정만 — base GPT 전용 (★ctx 272k 상한)
+  solo-openai:                         # ChatGPT(Codex) 계정만 — base GPT 전용
     required_providers: [openai-codex]
     model_mapping:
-      default:   openai-codex/gpt-5.5:high                      # 라우터(base GPT 최강)
+      default:   openai-codex/gpt-5.5:high                      # 라우터(base GPT 최강, ctx 272K)
       executor:  openai-codex/gpt-5.5:xhigh                     # 이 계정 최강 코더
       planner:   openai-codex/gpt-5.5:xhigh                     # 최상위 추론
-      architect: openai-codex/gpt-5.4:high                      # 272k 상한 — 거대 코드베이스엔 부적합
+      architect: openai-codex/gpt-5.4:high                      # ★gpt-5.4 = 1M ctx — 대용량 입력은 이쪽(5.5는 272K)
       critic:    openai-codex/gpt-5.4:high                      # ⚠동일벤더=독립성 약함(트레이드오프)
 
   claude-codex:                        # ★2벤더(Claude+Codex)만 — 평소 균형. Anthropic=실행·ctx / Codex=추론·비평
     required_providers: [anthropic, openai-codex]
     model_mapping:
       default:   anthropic/claude-opus-4-8:medium               # 라우터·툴신뢰
-      executor:  anthropic/claude-opus-4-8:high                 # 코딩 1위(SWE-bench 88.6)
+      executor:  anthropic/claude-opus-4-8:high                 # 구독 포함 코딩 최강(SWE-bench 88.6)
       planner:   openai-codex/gpt-5.5:high                      # OpenAI 추론 플래그십
-      architect: anthropic/claude-opus-4-8:high                 # 1M 윈도우(codex 272k 한계 회피)
+      architect: anthropic/claude-opus-4-8:high                 # 1M 윈도우(gpt-5.5 272K 한계 회피)
       critic:    openai-codex/gpt-5.4:high                      # cross-family vs Opus(executor), 코딩인지
 
   claude-codex-max:                    # 2벤더(Claude+Codex) 최강 — 비용 무시
     required_providers: [anthropic, openai-codex]
     model_mapping:
       default:   anthropic/claude-opus-4-8:high
-      executor:  anthropic/claude-opus-4-8:max                  # SWE-bench 88.6 코딩 1위
+      executor:  anthropic/claude-opus-4-8:max                  # SWE-bench 88.6
       planner:   openai-codex/gpt-5.5:xhigh                     # 최상위 추론(ARC-AGI-2 강)
       architect: anthropic/claude-opus-4-8:high                 # 1M 윈도우
       critic:    openai-codex/gpt-5.5:high                      # cross-family 독립 비평 vs Opus
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Claude 5 패밀리(2026-07-01~): Fable 5 = $10/$50(Opus 2배), 구독 포함은 ~7/7(주간 한도 50%)뿐 — "무료" 아님.
+#   Sonnet 5 = $3/$15(인트로 $2/$10 ~2026-08-31), 토크나이저 변경으로 동일 텍스트 ~30% 토큰 증가.
+#   GJC 실효 effort: fable-5 ≤xhigh · sonnet-5 ≤high (API는 둘 다 max 지원 — GJC 파서 갭, 상류 제보됨).
 # opencode-go: OPENCODE_API_KEY 설정 시 활성(eco.executor·monorepo.critic 에서 사용).
-#   검증✅: deepseek-v4-flash/pro · minimax-m2.7 · qwen3.7-max · kimi-k2.6 · glm-5.1 · mimo-v2.5.
-# 선택: grok 구독(SuperGrok OAuth)의 grok-build/composer 도 사용 가능(검증✅):
-#   xai/grok-composer-2.5-fast (200k) · grok-build 계열은 /login 후 카탈로그 노출.
+#   검증✅: deepseek-v4-flash/pro · glm-5.2 · minimax-m2.7 · qwen3.7-max · kimi-k2.6 · mimo-v2.5.
+#   신규 입점(미검증·후보): kimi-k2.7-code(버짓 executor 유력) · minimax-m3(1M 멀티모달).
+# 선택: grok 구독(SuperGrok OAuth)의 grok-build/composer 도 사용 가능:
+#   grok-build/grok-4.3 (bare 셀렉터만 동작, effort 서픽스 미지원 — 검증✅ 2026-07-02).

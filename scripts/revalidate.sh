@@ -7,6 +7,8 @@
 #   SELECTORS_ONLY=1 bash scripts/revalidate.sh   # skip the long-context probes
 #
 # Exit code: non-zero if any selector EXPECTED to work failed (regression).
+# Credential failures (expired/unauthorized/re-login needed) are recorded as
+# `blocked(creds)` and do NOT count as regressions — re-run after /login <provider>.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 DATE="$(date +%Y-%m-%d)"
@@ -20,29 +22,44 @@ FAIL=0
   echo "Each row: \`gjc -p --no-session --no-tools --model <selector> \"Reply OK\"\`."; echo
   echo "| selector | expect | result |"; echo "| --- | --- | --- |"; } > "$OUT"
 
-# P <selector> <expect: ok|fail>
+# P <selector> <expect: ok|ok-live|fail>
 P(){ local sel="$1" expect="$2" r a
   r="$(perl -e 'alarm 100; exec @ARGV' gjc -p --no-session --no-tools --model "$sel" "Reply with exactly: OK" 2>&1)"
-  if printf '%s' "$r" | grep -qw OK; then a="ok"; else
+  if printf '%s' "$r" | grep -qw OK; then a="ok"
+  elif printf '%s' "$r" | tr '\n' ' ' | grep -qiE 'credential|expired|invalidated|unauthorized|401|login|sign'; then
+    a="blocked(creds)"   # auth problem (e.g. expired OAuth token), NOT a model regression
+  else
     a="fail[$(printf '%s' "$r" | tr '\n' ' ' | grep -oiE 'not supported|404|500|400|no api key|did not resolve' | head -1)]"; fi
   printf '| `%s` | %s | %s |\n' "$sel" "$expect" "$a" >> "$OUT"
-  if [ "$expect" = ok ] && [ "${a#ok}" != "" ] && [ "$a" != ok ]; then
-    case "$a" in ok) ;; *) echo "REGRESSION: $sel expected ok, got $a"; FAIL=1;; esac
+  if [ "$expect" = ok ]; then
+    case "$a" in
+      ok) ;;
+      "blocked(creds)") echo "BLOCKED(creds): $sel — run /login for its provider, then re-run" ;;
+      *) echo "REGRESSION: $sel expected ok, got $a"; FAIL=1;;
+    esac
   fi
 }
 
-# --- bundled-catalog selectors used by profiles (must stay ok) ---
+# --- bundled-catalog selectors used by the v1.4 profiles (must stay ok) ---
 for s in \
   "anthropic/claude-opus-4-8:high" "anthropic/claude-sonnet-4-6:high" \
+  "anthropic/claude-fable-5:high" "anthropic/claude-fable-5:xhigh" \
+  "anthropic/claude-sonnet-5:high" \
   "openai-codex/gpt-5.5:high" "openai-codex/gpt-5.4:high" \
   "google-antigravity/gemini-3.1-pro-low" "google-antigravity/gemini-3.1-pro-low:high" \
+  "google-antigravity/gemini-3.5-flash-low" \
   "xai/grok-4.3:high" "xai/grok-4-1-fast:high" "xai/grok-4-fast:high" \
-  "opencode-go/deepseek-v4-flash" "opencode-go/deepseek-v4-pro" ; do P "$s" ok; done
+  "opencode-go/deepseek-v4-flash" "opencode-go/deepseek-v4-pro" \
+  "opencode-go/glm-5.2" ; do P "$s" ok; done
+# (glm-5.2 moved to bundled: in the 0.7.10 bundled catalog — old 'live-catalog only' caveat retired)
 
-# --- live-catalog (dynamic) selectors: ok once discovery has run ---
-for s in "opencode-go/glm-5.2" "google-antigravity/gemini-3.5-flash"; do P "$s" ok-live; done
+# --- fuzzy/dynamic selectors (informational; not counted as regression) ---
+# bare gemini-3.5-flash is NOT a literal catalog id — resolves via fuzzy match to -low today;
+# kept as a canary for fuzzy-resolution changes. Profiles pin gemini-3.5-flash-low (above).
+for s in "google-antigravity/gemini-3.5-flash"; do P "$s" ok-live; done
 
 # --- known rejections (documented; expected to FAIL) ---
+# gemini-3.1-pro-high: appears in the catalog LISTING since 0.7.10 but the live call still 400s (trap).
 for s in "google-antigravity/gemini-3.1-pro-high" "openai-codex/gpt-5.3-codex:high"; do P "$s" fail; done
 
 if [ "${SELECTORS_ONLY:-0}" != 1 ]; then

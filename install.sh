@@ -12,6 +12,9 @@
 #    GJC_CODING_AGENT_DIR=...    # GJC 에이전트 디렉터리 override (기본: ~/.gjc/agent)
 #
 #  안전장치: 기존 models.yml / config.yml 자동 백업 · 관리블록 sentinel 로 재실행 시 깔끔 교체.
+#  ⚠ GJC 0.7.10 의 프리셋 rename/delete 는 models.yml 주석(sentinel 포함)을 전부 제거함 —
+#    sentinel 이 사라진 파일에서는 이름 기반 교체로 동작하며, GJC 에서 삭제한 가이드 프로필이
+#    재설치 시 부활함(설치 전 경고 출력).
 # ============================================================================
 set -euo pipefail
 
@@ -42,7 +45,34 @@ else
   echo "  · 소스: $PROFILES_URL"
 fi
 
+# 1b) 프로필 로스터/카운트를 소스에서 파생 (하드코딩 금지 — 프로필 추가 시 자동 반영)
+PROFILE_NAMES="$(python3 - "$SRC" <<'PY'
+import sys, re
+s = open(sys.argv[1], encoding="utf-8").read().splitlines()
+pi = next((i for i, l in enumerate(s) if l.rstrip() == "profiles:"), None)
+if pi is None: sys.exit("소스에 profiles: 블록이 없습니다")
+names = [m.group(1) for l in s[pi+1:]
+         for m in [re.match(r"^  ([A-Za-z0-9_-]+):\s*(#.*)?$", l)] if m]
+print(" ".join(names))
+PY
+)" || die "프로필 소스 파싱 실패"
+PROFILE_COUNT="$(printf '%s' "$PROFILE_NAMES" | wc -w | tr -d ' ')"
+[ "$PROFILE_COUNT" -gt 0 ] || die "프로필 소스에서 프로필을 찾지 못했습니다"
+
 mkdir -p "$DIR"
+
+# 1c) sentinel 소실 감지 — GJC 0.7.10 의 프리셋 rename/delete 는 models.yml 의 모든 주석을
+#     제거하므로 관리블록 sentinel 도 사라짐. 그 경우 병합은 '이름 기반 교체'로 격하됨.
+if [ -f "$TARGET" ] && ! grep -q "$SENTINEL" "$TARGET"; then
+  for _n in $PROFILE_NAMES; do
+    if grep -qE "^  ${_n}:" "$TARGET"; then
+      y "⚠ 기존 models.yml 에 관리블록 sentinel 이 없습니다 (GJC 0.7.10 프리셋 편집이 주석을 제거한 것으로 보임)."
+      y "  → 이름 기반 교체로 병합합니다: 가이드와 같은 이름의 프로필은 원본으로 덮어써지고,"
+      y "    GJC 에서 삭제했던 가이드 프로필도 재설치로 부활합니다. (백업: $TARGET.bak-<ts>)"
+      break
+    fi
+  done
+fi
 
 # 2) 백업
 TS="$(date +%Y%m%d-%H%M%S)"
@@ -93,7 +123,7 @@ else:
 
 open(target, "w", encoding="utf-8").write(out)
 if replaced: print("  · 기존 동일이름 프로필 교체:", ", ".join(sorted(set(replaced))))
-print("  · 프로필 10종 병합 완료 →", target)
+print(f"  · 프로필 {len(our)}종 병합 완료 →", target)
 PY
 
 # 4) 기본 프로필 설정 (config.yml). none 이면 건너뜀
@@ -124,8 +154,12 @@ fi
 echo
 g "✓ 설치 완료"
 echo
-b "설치된 프로필 10종"
-echo "  ★daily  ultimate  coding-sprint  escalation  eco  monorepo  solo-anthropic  solo-openai  claude-codex  claude-codex-max"
+b "설치된 프로필 ${PROFILE_COUNT}종"
+ROSTER=""
+for _n in $PROFILE_NAMES; do
+  if [ "$_n" = "$DEFAULT_PROFILE" ]; then ROSTER="$ROSTER ★$_n"; else ROSTER="$ROSTER  $_n"; fi
+done
+echo " $ROSTER"
 echo
 b "다음 단계"
 echo "  gjc --mpreset daily          # 이번 세션만 적용"

@@ -3,7 +3,7 @@
 이 가이드의 모든 변경은 이 파일에 기록한다.
 
 **버전 규칙 (SemVer 유사 — `MAJOR.MINOR`)**
-- **MINOR ↑** — 프로필/모델 배치 추가·변경 (반드시 실호출 검증 동반)
+- **MINOR ↑** — 프로필/모델 배치 추가·변경(반드시 실호출 검증 동반), 또는 인프라·i18n 등 독립적 기능 추가
 - **PATCH/문서** — 오타·문구·근거 보강 (버전 유지 또는 `x.y.z`)
 - **MAJOR ↑** — 구조 재설계 (역할 정의·셋업 방식·라우팅 모델 변경)
 
@@ -11,7 +11,54 @@
 
 ---
 
-## v1.3 — 2026-06-18
+## v1.4 — 2026-07-02
+
+### Added
+- **Claude 5 패밀리 지원**(2026-07-01 출시, gjc 0.7.10 실호출 검증) — 프로필 **10 → 12**:
+  - `ultimate-f5` 🔥 이벤트 프로필: default/executor = **Fable 5**(SWE-bench Verified **95.0** 신 1위, Opus 4.8 88.6 대비).
+    구독 포함은 **~2026-07-07**(Pro/Max/Team 주간 한도의 50% 상한)뿐이며 이후 **usage credits($10/$50 per MTok)** 별도 과금 —
+    "무료" 아님. 안전 분류기 거부가 **HTTP 200 + `stop_reason: refusal`** 로 오는 점 유의.
+  - `legend` 👑 (display_name `legend5` — 동명 로컬 커스텀 프리셋 보호): 7/7 이후에도 지속 가능한 최강 구성 —
+    Fable 5 는 default 한 자리만(credits 노출 최소), executor 는 `opus-4-8:max` 유지. credits 회피 시 default를 `opus-4-8:high`로.
+- **effort 클램프 표 (GJC 실효 ≠ API)**: fable-5 상한 **xhigh**(`:max`는 xhigh로 침묵 클램프, thinking 상시-온) ·
+  sonnet-5 상한 **high**(`:xhigh`/`:max` 침묵 클램프, 토크나이저 변경으로 동일 텍스트 ~30% 토큰 증가).
+  API는 두 모델 모두 max 지원 — **GJC 파서 갭은 상류 제보됨**.
+- §10 가격표: Fable 5($10/$50, 배치 $5/$25, 캐시 히트 $1) · Sonnet 5($3/$15, 인트로 $2/$10 ~2026-08-31) · GLM-5.2 행 추가.
+  경쟁 동향 각주: GPT-5.6 Sol 파트너 프리뷰(6/26) · Gemini 3.5 Pro 7월 GA 연기 · Grok 4.5 프라이빗 베타 ·
+  DeepInfra 신규 프로바이더(GJC 0.7.9~, DeepSeek V4 Pro/Flash + service-tier).
+
+### Changed
+- **`escalation` 재설계**: executor를 `claude-fable-5:xhigh`로 — 실패한 작업의 **구원투수**(간헐 투입이라 7/7 이후 credits 과금과도 궁합).
+  critic의 기존 `xai/grok-4.3:xhigh`는 **no-op이었음**(xai 프로바이더 상한 high — 침묵 클램프로 ultimate와 동일 동작;
+  xhigh는 grok-build 프로바이더 전용) → `:high`로 정정하고 클램프를 하드룰로 문서화.
+- **`solo-anthropic` 전 역할 Opus 전환**(critic Sonnet 4.6 → Opus 4.8): 능력 우선 선택.
+  ⚠자기선호 편향 캐비앗 병기 — 강한 모델일수록 편향이 더 큼(arXiv 2410.21819, 2604.22891), cross-family 프로필이 품질 경로.
+  Sonnet 5 critic은 리뷰어 버그 리콜 실측 하락(63%→50%, CodeRabbit)으로 기각.
+- **`eco.critic`**: `gemini-3.5-flash` → **`gemini-3.5-flash-low` 리터럴 핀**(구 셀렉터는 카탈로그에 리터럴 id가 없어 퍼지 매칭으로 우연 동작).
+  glm-5.2 "라이브-카탈로그 전용" 캐비앗 폐기(0.7.10 번들 카탈로그 편입). eco executor 대안으로 `sonnet-5:medium`(≈sonnet-4-6:high, 인트로가) 주석.
+- **codex ctx 룰 재작성**: 일괄 "272k" 폐기 → **gpt-5.4=1M / gpt-5.5=272K**(400K→272K 축소).
+  solo-openai architect = gpt-5.4(1M)로 근거 정정, monorepo codex 배제 논거 재서술.
+- **불변식 재서술**: "default=Opus 고정" → **"default=Anthropic 플래그십(Opus 4.8/Fable 5)"** (README·MAINTAINING·routing-rules·SVG 전체).
+- `routing-rules.md`: Claude 5 하드룰 행(fable-5 xhigh 클램프·refusal, sonnet-5 high·토크나이저) +
+  에스컬레이션 사다리에 모델별 상한 주석 + codex ctx 룰 갱신.
+
+### Fixed
+- `catalog-snapshot.sh`: `--diff`가 macOS(bash 3.2)에서 `mapfile` 미지원으로 고장 + 실패 후 스냅샷 덮어쓰기로 폴스루 → bash 3.2 호환 재작성.
+  쿼리 stem 목록에 'fable' 부재로 드리프트 감지가 **claude-fable-5를 구조적으로 못 보던 맹점** 수정.
+- `revalidate.sh`: 자격증명 만료를 회귀(`fail[]`)로 오분류 → `blocked(creds)` 분리 분류 추가.
+- `validate-profiles.py`: fable-5/sonnet-5 effort 룰 추가(기존엔 WARN만), grok 룰 프로바이더 분리(xai ≤high —
+  escalation no-op을 CI가 못 잡던 공범), gpt-5 base 룰 수정, dead-expression 정리.
+- `install.sh`: 하드코딩 "10종" 카운트·로스터를 파싱 파생값으로; GJC 0.7.10 프리셋 rename/delete가 센티널 주석을 제거해
+  managed block이 이름 기반 교체로 격하되는 경우(삭제 프로필 부활·수정 덮어쓰기) 경고 출력 + 문서화.
+- CHANGELOG v1.3 날짜 정정(06-18 → 실제 태그 날짜 06-19).
+
+### Docs / Assets
+- SVG 재생성: role-winners(default 카드 → Fable 5) · profiles-matrix(12 프로필, 푸터 불변식 "Anthropic 플래그십"으로 재서술) ·
+  effort-ladder(6단계 전부 + 모델별 클램프 스트립).
+- 검증 매트릭스·배지 → **2026-07-02**(gjc 0.7.10 라이브 배터리 + 마이크로벤치 20/20 정답; openai-codex 재인증 후 `gpt-5.5:high` 검증 OK).
+  `gemini-3.1-pro-high`는 카탈로그 목록에 떠도 호출은 여전히 400 — 함정 명시 유지.
+
+## v1.3 — 2026-06-19
 
 ### Added
 - **다국어(i18n)**: 영문 `README.en.md` · 중문 `README.zh.md` · 일문 `README.ja.md` 추가. 한국어 정본 포함 4개 파일 상단에 언어 내비. 셀렉터·YAML은 verbatim, 프로즈·YAML 주석은 번역, 심층 분석(§6-2/6-3)은 요약 + 한국어 정본·공식 docs 링크.
