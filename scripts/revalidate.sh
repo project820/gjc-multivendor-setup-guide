@@ -26,10 +26,10 @@ FAIL=0
 P(){ local sel="$1" expect="$2" r a
   r="$(perl -e 'alarm 100; exec @ARGV' gjc -p --no-session --no-tools --model "$sel" "Reply with exactly: OK" 2>&1)"
   if printf '%s' "$r" | grep -qw OK; then a="ok"
-  elif printf '%s' "$r" | tr '\n' ' ' | grep -qiE 'credential|expired|invalidated|unauthorized|401|login|sign'; then
-    a="blocked(creds)"   # auth problem (e.g. expired OAuth token), NOT a model regression
+  elif printf '%s' "$r" | tr '\n' ' ' | grep -qiE 'credential|expired|invalidated|unauthorized|401|login|sign|no api key'; then
+    a="blocked(creds)"   # auth problem (expired OAuth token / provider not configured), NOT a model regression
   else
-    a="fail[$(printf '%s' "$r" | tr '\n' ' ' | grep -oiE 'not supported|404|500|400|no api key|did not resolve' | head -1)]"; fi
+    a="fail[$(printf '%s' "$r" | tr '\n' ' ' | grep -oiE 'not supported|404|500|400|did not resolve' | head -1)]"; fi
   printf '| `%s` | %s | %s |\n' "$sel" "$expect" "$a" >> "$OUT"
   if [ "$expect" = ok ]; then
     case "$a" in
