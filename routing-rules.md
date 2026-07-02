@@ -1,4 +1,4 @@
-# GJC 멀티벤더 운영 규칙 (본체=default=Claude Opus 4.8 이 따른다)
+# GJC 멀티벤더 운영 규칙 (본체 default = Anthropic 플래그십(Opus 4.8/Fable 5)이 따른다)
 
 <!--
 사용법:
@@ -23,15 +23,25 @@
 ## 적응형 effort 에스컬레이션 — 실패신호 기반
 - 최저 합리 등급으로 시작 (단순=low, executor/planner=high).
 - 실패신호(테스트 깨짐·자기모순·재시도 루프·critic 반려)에서만 1단계 격상: high → xhigh → max.
-- minimal 금지(-23점 급락). "안전하니 올리자"식 무조건 max 금지. Gemini는 low↔high 2단뿐.
+- 단, 사다리 상한은 모델별(GJC 실효): max는 Opus 전용 최상단 · Fable 5=**xhigh**(`:max`는 침묵 클램프) ·
+  Sonnet(4.6/5)=**high** · xai grok-4.3=**high**(`:xhigh` 침묵 클램프) · Gemini Pro는 low↔high 2단뿐 ·
+  opencode-go는 effort 자체를 생략. 상한 위 등급을 써도 에러 없이 조용히 깎이니 "올렸다"고 착각 금지.
+- minimal 금지(-23점 급락). "안전하니 올리자"식 무조건 max 금지.
 
 ## 프로필 스왑 — 모드 경계에서만 (매 쿼리 스왑 ❌, 캐시 손실)
 - 평소: `daily`  |  머지·보안·결제·비가역: `escalation`  |  대량 리팩터·비용압박: `eco`
 - 거대 코드베이스: `monorepo`  |  단일 벤더로만: `solo-anthropic` / `solo-openai`
 
 ## 검증된 셀렉터 하드룰 (위반 금지)
-- Gemini 고추론 = `google-antigravity/gemini-3.1-pro-low:high`  (★ `gemini-3.1-pro-high` 는 400)
-- openai-codex 는 base GPT만 (`gpt-5.5` / `gpt-5.4`) — `-codex` 변종(gpt-5.3-codex 등) 미지원
+- `anthropic/claude-fable-5` — GJC 실효 상한 = **xhigh** (`:max`는 수용되나 xhigh로 **침묵 클램프** — 광고 금지).
+  thinking 상시-온(끌 수 없음). 안전 분류기 거부가 **HTTP 200 + `stop_reason: refusal`**로 옴 — "빈 응답"으로 오인 금지.
+- `anthropic/claude-sonnet-5` — GJC 실효 상한 = **high** (`:xhigh`/`:max`는 high로 침묵 클램프).
+  토크나이저 변경으로 동일 텍스트 ~30% 토큰 증가 — 실효 비용을 스티커 가격으로 계산 금지.
+- Gemini 고추론 = `google-antigravity/gemini-3.1-pro-low:high`  (★ `gemini-3.1-pro-high` 는 카탈로그 목록엔 떠도 호출은 여전히 400)
+- openai-codex 는 base GPT만 (`gpt-5.5` / `gpt-5.4`) — `-codex` 변종(gpt-5.3-codex 등) 미지원.
+  ctx는 모델별: **gpt-5.4=1M / gpt-5.5=272K**(400K→272K 축소 — "codex 272k" 일괄 룰 폐기). 대용량 입력은 gpt-5.4.
+- xai `grok-4.3` — 상한 = **high** (`:xhigh`는 침묵 클램프. xhigh는 grok-build 프로바이더 전용이나
+  거긴 effort 서픽스가 미해석 — bare `grok-build/grok-4.3`만 동작)
 - opencode-go 는 effort 접미사 생략, `OPENCODE_API_KEY` 필요
 - critic 은 항상 본체와 다른 벤더(cross-family). 멀티 critic 은 병렬 독립 투표 후 본체가 집계(토론 금지)
 
