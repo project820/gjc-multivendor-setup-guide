@@ -25,7 +25,7 @@ ROLES = {"default", "executor", "architect", "planner", "critic"}
 # Documented intentional same-family pairs (design choices, not bugs).
 # (profile, pair) -> rationale ; pair in {"exec_arch","plan_crit"}.
 SAME_FAMILY_OK = {
-    ("monorepo", "exec_arch"): "all roles >=1M ctx; openai-codex (272k) excluded, only Opus gives 1M",
+    ("monorepo", "exec_arch"): "all roles >=1M ctx; gpt-5.5 (272K) excluded — gpt-5.4 is 1M but Opus ranks at least equal",
     ("claude-codex", "exec_arch"): "2-vendor: Anthropic = execution/context lane",
     ("claude-codex", "plan_crit"): "2-vendor: Codex = reasoning/critique lane",
     ("claude-codex-max", "exec_arch"): "2-vendor: Anthropic = execution/context lane",
@@ -39,19 +39,26 @@ FAMILY = {
     "xai": "grok", "opencode-go": "ocgo", "zai": "zai",
     "kimi-code": "kimi", "xiaomi": "mimo", "minimax-code": "minimax", "cursor": "cursor",
 }
-# Legal effort suffixes by model class. None = effort suffix optional/omitted.
-# Each entry: (matcher(model_id)->bool, legal_efforts_or_None)
+# Legal effort suffixes by model class. Matchers take (provider, model_id) so
+# per-provider ceilings can differ (same model id can clamp differently by provider).
+# Sets encode GJC-EFFECTIVE ceilings (0.7.10, live-verified 2026-07-02), NOT the API ones:
+#   fable-5 <=xhigh (:max silently clamps) · sonnet-5 <=high (API allows max — upstream gap)
+#   xai grok <=high (:xhigh silently clamps; xhigh exists only on the grok-build provider,
+#   whose effort suffixes don't resolve at all — bare grok-build selectors only).
 def _eff_rules():
     return [
-        (lambda m: m.startswith("claude-opus-4"), {"minimal","low","medium","high","xhigh","max"}),
-        (lambda m: m.startswith("claude-sonnet-4"), {"minimal","low","medium","high"}),
-        (lambda m: m.startswith("claude-haiku-4"), {"minimal","low","medium","high","xhigh"}),
-        (lambda m: m.startswith("gpt-5.1-codex-mini"), {"medium","high"}),
-        (lambda m: re.match(r"gpt-5\.[2-9]", m) or m.startswith("gpt-5.5") or "codex" in m and re.match(r"gpt-5\.[2-9]", m), {"low","medium","high","xhigh"}),
-        (lambda m: m.startswith("gpt-5"), {"low","medium","high","xhigh"}),  # 5.2+; conservative
-        (lambda m: "gemini" in m and "pro" in m, {"low","high"}),
-        (lambda m: "gemini" in m and "flash" in m, {"minimal","low","medium","high"}),
-        (lambda m: m.startswith("grok"), {"minimal","low","medium","high","xhigh"}),
+        (lambda p, m: m.startswith("claude-fable-5"), {"minimal","low","medium","high","xhigh"}),   # :max -> silent clamp to xhigh
+        (lambda p, m: m.startswith("claude-sonnet-5"), {"minimal","low","medium","high"}),          # :xhigh/:max -> silent clamp to high
+        (lambda p, m: m.startswith("claude-opus-4"), {"minimal","low","medium","high","xhigh","max"}),
+        (lambda p, m: m.startswith("claude-sonnet-4"), {"minimal","low","medium","high"}),
+        (lambda p, m: m.startswith("claude-haiku-4"), {"minimal","low","medium","high","xhigh"}),
+        (lambda p, m: m.startswith("gpt-5.1-codex-mini"), {"medium","high"}),
+        (lambda p, m: re.match(r"gpt-5\.[2-9]", m), {"low","medium","high","xhigh"}),
+        (lambda p, m: m.startswith("gpt-5"), {"minimal","low","medium","high"}),  # base gpt-5/gpt-5.1 (catalog: minimal..high)
+        (lambda p, m: "gemini" in m and "pro" in m, {"low","high"}),
+        (lambda p, m: "gemini" in m and "flash" in m, {"minimal","low","medium","high"}),
+        (lambda p, m: p == "xai" and m.startswith("grok"), {"minimal","low","medium","high"}),      # :xhigh -> silent clamp to high
+        (lambda p, m: p == "grok-build" and m.startswith("grok"), set()),  # catalog lists xhigh but effort suffixes don't resolve — bare selectors only
     ]
 
 def family_of(selector: str) -> str:
@@ -111,7 +118,7 @@ def main() -> int:
             legal = None
             for matcher, allowed in _eff_rules():
                 try:
-                    if matcher(model):
+                    if matcher(prov, model):
                         legal = allowed; break
                 except Exception:
                     pass
