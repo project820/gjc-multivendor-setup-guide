@@ -65,7 +65,9 @@ case "$sub" in
     done
     ;;
   --panel)
-    run_review --panel "${2:?usage: gjc-cop --panel <PR#>}"
+    pr="${2:?usage: gjc-cop --panel <PR#>}"
+    case "$pr" in ''|*[!0-9]*) echo "gjc-cop: PR must be a positive integer: '$pr'" >&2; exit 2 ;; esac
+    run_review --panel "$pr"
     ;;
   *)
     case "$sub" in ''|*[!0-9]*) echo "gjc-cop: unknown command '$sub' (try: gjc-cop --help)" >&2; exit 2 ;; esac

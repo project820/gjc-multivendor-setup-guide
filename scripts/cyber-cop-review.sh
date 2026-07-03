@@ -34,7 +34,7 @@ case "$PR" in ''|*[!0-9]*) echo "PR number must be a positive integer: '$PR'" >&
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 WORK="$(mktemp -d "/tmp/cc-review-${PR}.XXXX")"
-cleanup() { git -C "$REPO_ROOT" worktree remove --force "$WORK/prhead" >/dev/null 2>&1 || true; rm -rf "$WORK"; }
+cleanup() { rm -rf "$WORK"; }   # $WORK/prclone is a throwaway git repo — plain rm suffices
 trap cleanup EXIT
 
 # --- untrusted PR context → DATA files only (never interpolated into a prompt) ---
@@ -212,24 +212,21 @@ fi
 
 # --- 3. INVARIANTS — run by the orchestrator against the PR HEAD (not the local checkout) ---
 echo "## 3. INVARIANTS (scripts/validate-profiles.py on PR head — run by orchestrator)"
+# Self-contained: init a throwaway git repo in $WORK and fetch the EXACT pinned commit
+# ($PIN_SHA) from the EXPLICIT $REPO into it, then check it out. This does NOT depend on
+# $REPO_ROOT being a git repo — so it works identically inside the guide checkout AND when
+# the installed `gjc-cop` wrapper runs the orchestrator standalone (REPO_ROOT=~/.gjc/agent).
+# Pinned SHA (not the moving pull/$PR/head) makes invariants immune to a force-push mid-review.
 INV_TREE="$REPO_ROOT"; INV_NOTE=""; INV_OK_FETCH=1
-# Fetch the EXACT pinned commit ($PIN_SHA) from the EXPLICIT $REPO (not the local origin,
-# and not the moving pull/$PR/head ref) so invariants validate the SAME commit the seats
-# reviewed, immune to a force-push mid-review. Fail-closed if it can't be fetched.
-FETCH_REF="${PIN_SHA:-pull/${PR}/head}"
-if [ -n "$PIN_SHA" ] && git -C "$REPO_ROOT" rev-parse --git-dir >/dev/null 2>&1 && git -C "$REPO_ROOT" fetch -q "https://github.com/${REPO}.git" "$FETCH_REF" 2>/dev/null; then
-  # Materialize from the immutable pinned SHA, NOT the repo-wide FETCH_HEAD (a concurrent
-  # review could overwrite FETCH_HEAD between our fetch and this worktree add).
-  if git -C "$REPO_ROOT" worktree add -q --detach "$WORK/prhead" "$PIN_SHA" 2>/dev/null; then
-    INV_TREE="$WORK/prhead"; INV_NOTE=" (pinned ${PIN_SHA:0:12} @ ${REPO})"
-  else
-    # fetched but couldn't materialize the worktree → do NOT silently validate local checkout
-    INV_OK_FETCH=0
-    INV_NOTE=" (WARNING: fetched ${REPO} PR head but worktree add failed; not validating local checkout)"
-  fi
+PRCLONE="$WORK/prclone"
+if [ -n "$PIN_SHA" ] && command -v git >/dev/null 2>&1 \
+   && git init -q "$PRCLONE" 2>/dev/null \
+   && git -C "$PRCLONE" fetch -q --depth 1 "https://github.com/${REPO}.git" "$PIN_SHA" 2>/dev/null \
+   && git -C "$PRCLONE" checkout -q FETCH_HEAD 2>/dev/null; then
+  INV_TREE="$PRCLONE"; INV_NOTE=" (pinned ${PIN_SHA:0:12} @ ${REPO})"
 else
   INV_OK_FETCH=0
-  INV_NOTE=" (WARNING: could not fetch ${REPO} PR head; invariant result would not reflect the PR)"
+  INV_NOTE=" (WARNING: could not fetch ${REPO}@${PIN_SHA:0:12}; invariant result would not reflect the PR)"
 fi
 INV_OK=1
 # P2 (#11 codex-bot): guide-specific invariants only apply when the reviewed tree IS this
