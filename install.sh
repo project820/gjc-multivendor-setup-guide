@@ -176,6 +176,10 @@ if [ "${GJC_SETUP_COP:-0}" = "1" ]; then
     *":$BIN_DIR:"*) : ;;
     *) y "  ⚠ $BIN_DIR 가 PATH에 없습니다 — 셸 rc에 추가: export PATH=\"$BIN_DIR:\$PATH\"" ;;
   esac
+  # 배송된 validator 는 PyYAML 필요 — 없으면 가이드 PR 리뷰의 invariants 가 항상 FAIL(fail-closed).
+  if ! python3 -c "import yaml" >/dev/null 2>&1; then
+    y "  ⚠ PyYAML 미설치 — 가이드 레포 PR 리뷰 시 invariants 단계가 실패합니다: pip3 install pyyaml"
+  fi
 fi
 echo
 g "✓ 설치 완료"
