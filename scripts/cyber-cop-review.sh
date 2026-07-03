@@ -43,6 +43,11 @@ gh pr diff "$PR" -R "$REPO" > "$WORK/pr.diff"
 # Pin the exact reviewed commit up front so a force-push mid-review can't make the model
 # verdicts (on this diff) and the invariant check (below) apply to different commits.
 PIN_SHA="$(python3 -c "import json;print(json.load(open('$WORK/meta.json')).get('headRefOid',''))" 2>/dev/null || true)"
+# Detect a force-push during the meta→diff window: if head moved, the diff the seats
+# review and the pinned SHA the invariants validate may differ → fail-closed.
+POST_SHA="$(gh pr view "$PR" -R "$REPO" --json headRefOid -q .headRefOid 2>/dev/null || true)"
+DIFF_RACED=0
+[ -n "$PIN_SHA" ] && [ -n "$POST_SHA" ] && [ "$PIN_SHA" != "$POST_SHA" ] && DIFF_RACED=1
 IDENTITY_WARN=""
 # P2 (#11 codex-bot): if the diff exceeds GJC's @file text cap (MAX_CLI_TEXT_BYTES=5MiB),
 # the attachment is replaced by a skipped marker and --no-tools leaves the seat no way to
@@ -244,8 +249,9 @@ case "$CRIT_V" in BLOCK|REQUEST_CHANGES) REC="DO-NOT-MERGE" ;; esac
 [ "$INV_OK" = 0 ] && REC="DO-NOT-MERGE"
 [ "$PANEL_BLOCK" = 1 ] && REC="DO-NOT-MERGE"
 [ "$DIFF_TOO_BIG" = 1 ] && REC="DO-NOT-MERGE"
+[ "$DIFF_RACED" = 1 ] && REC="DO-NOT-MERGE"
 echo "## 4. MERGE RECOMMENDATION: ${REC}"
-echo "(architect ${ARCH_V}, critic ${CRIT_V}, invariants ${INV_STATUS}$([ "$PANEL" = 1 ] && echo ", panel=$([ "$PANEL_BLOCK" = 1 ] && echo BLOCK || echo clear)")$([ "$DIFF_TOO_BIG" = 1 ] && echo ", diff>5MiB: seats could not see full diff — fail-closed"))"
+echo "(architect ${ARCH_V}, critic ${CRIT_V}, invariants ${INV_STATUS}$([ "$PANEL" = 1 ] && echo ", panel=$([ "$PANEL_BLOCK" = 1 ] && echo BLOCK || echo clear)")$([ "$DIFF_TOO_BIG" = 1 ] && echo ", diff>5MiB fail-closed")$([ "$DIFF_RACED" = 1 ] && echo ", head force-pushed mid-capture (${PIN_SHA:0:8}→${POST_SHA:0:8}) — fail-closed"))"
 echo "— merge is a human decision; cyber-cop never merges."
 if [ -n "$IDENTITY_WARN" ]; then
   echo
