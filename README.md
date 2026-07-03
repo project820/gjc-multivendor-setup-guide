@@ -7,7 +7,7 @@
 복잡한 모델 선택을 고민하지 말고, **한 줄로 설치**해 역할마다 최적 모델이 자동으로 배치되게 하라.
 
 [![GJC](https://img.shields.io/badge/for-Gajae%20Code%20(GJC)-e23?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code)
-[![Version](https://img.shields.io/badge/version-1.5-2496ED?style=flat-square)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.5.5-2496ED?style=flat-square)](./CHANGELOG.md)
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/profiles-13-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
@@ -23,8 +23,28 @@
 > [!NOTE]
 > **이 가이드의 핵심은 GJC 공식 문서로 채택됐다** — 압축판이 [`docs/multi-vendor-profiles.md`](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) 로 업스트림 머지됨([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). 역할·셀렉터 개념의 **정식 레퍼런스는 GJC 공식 docs**를 따르고, **이 레포는 거기 없는 것** — 원클릭 설치기, 13개 프로필 전체(`solo-*`·`claude-codex*`·`legend`·`cyber-cop` 포함), 그리고 [유지보수·검증 도구](./MAINTAINING.md)(정적 검증 CI + 라이브 셀렉터 배터리 + 카탈로그 드리프트 추적) — 를 제공한다.
 
-> [!TIP]
-> 🚨 **What's New (v1.5)**: 첫 reviewer 모드 프로필 **cyber-cop** — PR 리뷰·보안 감사 전용. 갭 논증·사용법 3단계·자동 리뷰 파이프라인·보안 수칙은 [공지 문서](./docs/whats-new-cyber-cop.md) 참조.
+## 🚨 NEW · `cyber-cop` — 첫 reviewer 모드 프로필
+
+> 지금까지 12개 프로필은 전부 코드를 **쓰는(author)** 세션용이었다. **`cyber-cop`은 코드를 막아서는 세션**을 위한 13번째 프로필 — GJC 최초의 **reviewer 모드**다. 남의 PR을 검토하고, 반대 근거를 찾고, 머지 게이트에서 판정한다.
+
+**무엇이 다른가**
+- PR 리뷰·보안 감사에서 역할 가중치가 **반전** → **architect(1차 판정: CLEAR/WATCH/BLOCK)와 critic(머지 게이트)이 주연**, executor는 재현 PoC·failing test 조연으로 내려간다.
+- critic이 **코드 작성자(Claude 가정) 대비 cross-family**(GPT-5.5) → 자기선호 편향을 구조적으로 차단([arXiv 2410.21819](https://arxiv.org/abs/2410.21819)).
+- 고위험 PR·보안 감사는 **3표 병렬 패널**(`gpt-5.5` · `grok-4.3` · `gemini-3.1-pro`) 독립 투표 → 2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단.
+
+**작동 증거 — 이 레포가 스스로 검증했다**
+> PR #4~#7에서 리뷰 게이트가 **머지 전 결함 10건을 차단**했다(#4: 5건 · #6: 5건 · #7: 첫 투표 통과). 리뷰 헬퍼가 *자기 자신의* prompt-injection 결함으로 BLOCK 당했고(고친 뒤 통과), 본체(Anthropic)가 자기 계열 문서를 관대히 넘긴 지점 2건(상대경로 인젝션 표면·권한 과장)을 **cross-family critic(GPT-5.5)이 정확히 BLOCK**했다. (추가로 #6 머지 후 1건이 발견돼 #7로 즉시 수정.) 자기선호-편향 방어가 실전에서 작동함을 증명한 것이다.
+
+**한 줄로 시작**
+```bash
+GUIDE=/path/to/gjc-multivendor-setup-guide     # 이 셋업가이드 레포 경로
+cd <리뷰할-레포>
+gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
+# 또는 헬퍼로 헤드리스 4섹션 판정 (REPO로 대상 지정 — 없으면 이 가이드 레포가 기본):
+# REPO=owner/name "$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
+```
+
+📖 갭 논증·사용법 3단계·자동 리뷰 파이프라인·보안 수칙 전체 → **[cyber-cop 공지 문서](./docs/whats-new-cyber-cop.md)**
 
 ---
 

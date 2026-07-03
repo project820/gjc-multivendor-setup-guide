@@ -7,7 +7,7 @@
 モデル選びで悩むのをやめよう。**ワンライナーでインストール**し、各役割に最適なモデルを自動で割り当てる。
 
 [![GJC](https://img.shields.io/badge/for-Gajae%20Code%20(GJC)-e23?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code)
-[![Version](https://img.shields.io/badge/version-1.5-2496ED?style=flat-square)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.5.5-2496ED?style=flat-square)](./CHANGELOG.md)
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/profiles-13-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
@@ -23,8 +23,28 @@
 > [!NOTE]
 > **本ガイドの中核は GJC 公式ドキュメントに採用された** — 圧縮版が上流に [`docs/multi-vendor-profiles.md`](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) としてマージ済み（[PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860)、`dev`）。役割/セレクタの概念は **GJC 公式ドキュメントを正式リファレンス**とし、本リポジトリはそこに無いもの — **ワンライナー・インストーラ**、**13プロファイル一式**（`solo-*` / `claude-codex*` / `legend` / `cyber-cop` 含む）、そして[保守・検証ツール](./MAINTAINING.md)（静的チェック CI + ライブセレクタ検証 + カタログドリフト追跡）— を提供する。
 
-> [!TIP]
-> 🚨 **What's New (v1.5)**: 初の reviewer モードプロファイル **cyber-cop** — PRレビュー·セキュリティ監査専用。設計根拠·3段階の使い方·自動レビューパイプライン·セキュリティ規則は[アナウンス文書](./docs/whats-new-cyber-cop.md)（韓国語正本）を参照。
+## 🚨 NEW · `cyber-cop` — 初の reviewer モードプロファイル
+
+> これまでの 12 プロファイルはすべてコードを**書く(author)**セッション用だった。**`cyber-cop` は 13 番目のプロファイル —— GJC 初の reviewer モード**で、コードを**止める**セッション用だ：他人の PR をレビューし、却下の根拠を探し、マージゲートで判定する。
+
+**何が違うか**
+- PR レビュー·セキュリティ監査では役割の重みが**反転** → **architect(一次判定：CLEAR/WATCH/BLOCK)と critic(マージゲート)が主役**、executor は再現 PoC·failing test の脇役に下がる。
+- critic が**コード作成者(Claude 想定)に対して cross-family**(GPT-5.5) → 自己選好バイアスを構造的に抑制([arXiv 2410.21819](https://arxiv.org/abs/2410.21819))。
+- 高リスク PR·セキュリティ監査は**3 票並列パネル**(`gpt-5.5` · `grok-4.3` · `gemini-3.1-pro`)を招集し、独立投票 → 2/3 反対または CRITICAL/BLOCK 1 件で遮断。
+
+**実証済み —— 本リポジトリが自己検証した**
+> PR #4〜#7 でレビューゲートがマージ前に**欠陥 10 件を遮断**した（#4：5 · #6：5 · #7：初回投票で通過）。レビュー補助スクリプトは*自身の* prompt-injection 欠陥で BLOCK され(修正後に通過)、本体(Anthropic)が自家系統の文書を甘く通した 2 点(相対パス注入面·権限の過大表示)を**cross-family critic(GPT-5.5)が正確に BLOCK**。（さらに 1 件が #6 マージ**後**に検出 → #7 で即修正。）自己選好バイアス防御が実戦で機能することを証明した。
+
+**一行で始める**
+```bash
+GUIDE=/path/to/gjc-multivendor-setup-guide     # この設定ガイドリポジトリのパス
+cd <レビュー対象リポジトリ>
+gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
+# またはヘッドレス 4 セクション判定（REPO で対象を指定 —— 未指定だと本ガイドリポジトリが既定）：
+# REPO=owner/name "$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
+```
+
+📖 ギャップ論証·3 段階の使い方·自動レビューパイプライン·セキュリティ規則の全体 → **[cyber-cop アナウンス文書](./docs/whats-new-cyber-cop.md)**（韓国語正本）
 
 ---
 
