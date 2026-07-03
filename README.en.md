@@ -7,7 +7,7 @@
 Stop agonizing over model choice. **Install in one line** and let each role get its best-fit model automatically.
 
 [![GJC](https://img.shields.io/badge/for-Gajae%20Code%20(GJC)-e23?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code)
-[![Version](https://img.shields.io/badge/version-1.5-2496ED?style=flat-square)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.5.5-2496ED?style=flat-square)](./CHANGELOG.md)
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/profiles-13-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
@@ -23,8 +23,27 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 > [!NOTE]
 > **The core of this guide was adopted into the official GJC docs** — a condensed version was merged upstream as [`docs/multi-vendor-profiles.md`](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) ([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). Treat the **official GJC docs as the canonical reference** for the role/selector concepts; this repo provides what those docs do not — the **one-line installer**, the **full set of 13 profiles** (incl. `solo-*` / `claude-codex*` / `legend` / `cyber-cop`), and [maintenance & validation tooling](./MAINTAINING.md) (static-check CI + live selector battery + catalog drift tracking).
 
-> [!TIP]
-> 🚨 **What's New (v1.5)**: **cyber-cop** — the first reviewer-mode profile, dedicated to PR review & security audits. See the [announcement](./docs/whats-new-cyber-cop.md) (Korean canonical) for the rationale, 3-tier usage guide, automated review pipeline, and security rules.
+## 🚨 NEW · `cyber-cop` — the first reviewer-mode profile
+
+> The 12 original profiles were all for *writing* code (author mode). **`cyber-cop` is the 13th profile — GJC's first reviewer mode** — for sessions that *gate* code: review someone else's PR, hunt for reasons to block, and adjudicate at the merge gate.
+
+**What's different**
+- In PR review / security audits the role weighting **inverts** → **architect (first-pass verdict: CLEAR/WATCH/BLOCK) and critic (merge gate) lead**; executor drops to a supporting repro-PoC / failing-test role.
+- The critic runs **cross-family vs the code author (assumed Claude)** (GPT-5.5) → structurally counters self-preference bias ([arXiv 2410.21819](https://arxiv.org/abs/2410.21819)).
+- High-risk / security PRs convene a **3-vote parallel panel** (`gpt-5.5` · `grok-4.3` · `gemini-3.1-pro`), independent votes → 2/3 dissent or any CRITICAL/BLOCK blocks.
+
+**Proof it works — this repo dogfooded it**
+> Across PRs #4–#7 the review gate **caught 11 real defects before merge**. The review helper was BLOCKed by *its own* prompt-injection flaw (fixed, then passed), and two overclaims the Anthropic base model waved through (a relative-path injection surface and a permission overclaim) were **correctly BLOCKed by the cross-family critic (GPT-5.5)** — proving the self-preference-bias defense works in practice.
+
+**Start in one line**
+```bash
+GUIDE=/path/to/gjc-multivendor-setup-guide     # this setup-guide repo
+cd <repo-under-review>
+gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
+# or headless 4-section verdict: "$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
+```
+
+📖 Full gap argument, 3-step usage, automated review pipeline & security rules → **[cyber-cop announcement](./docs/whats-new-cyber-cop.md)** (Korean canonical)
 
 ---
 

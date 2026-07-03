@@ -11,6 +11,11 @@
 
 ---
 
+## v1.5.5 — 2026-07-03 (docs)
+
+### Docs
+- **README 4종에 `cyber-cop` 대대적 홍보 섹션 추가** — 히어로 직후 상단에 featured 섹션(첫 reviewer 모드·역할 반전·cross-family critic 편향차단·3표 패널)과 "이 레포가 스스로 검증(PR #4~#7에서 결함 11건 차단)" 실증, 원라이너 시작 예시, 공지 문서 링크. 기존 1줄 What's New TIP를 대체. 버전 배지 1.5 → 1.5.5. YAML embed·표·프로필 매핑 무변경.
+
 ## v1.5.4 — 2026-07-03 (docs)
 
 ### Fixed

@@ -7,7 +7,7 @@
 不用再纠结选哪个模型。**一行安装**，让每个角色自动用上最合适的模型。
 
 [![GJC](https://img.shields.io/badge/for-Gajae%20Code%20(GJC)-e23?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code)
-[![Version](https://img.shields.io/badge/version-1.5-2496ED?style=flat-square)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.5.5-2496ED?style=flat-square)](./CHANGELOG.md)
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/profiles-13-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
@@ -23,8 +23,27 @@
 > [!NOTE]
 > **本指南的核心已被采纳进 GJC 官方文档** — 精简版已合并到上游 [`docs/multi-vendor-profiles.md`](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md)（[PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860)，`dev`）。角色/选择器概念请以 **GJC 官方文档为权威参考**；本仓库提供官方文档没有的东西 —— **一行安装脚本**、**完整的 13 套配置**（含 `solo-*`、`claude-codex*`、`legend`、`cyber-cop`），以及[维护与验证工具](./MAINTAINING.md)（静态检查 CI + 实时选择器测试 + 目录漂移追踪）。
 
-> [!TIP]
-> 🚨 **What's New (v1.5)**: 首个 reviewer 模式配置 **cyber-cop** — 专用于 PR 审查·安全审计。设计依据·三级用法·自动审查流水线·安全守则见[公告文档](./docs/whats-new-cyber-cop.md)（韩文正本）。
+## 🚨 NEW · `cyber-cop` — 首个 reviewer 模式配置
+
+> 此前 12 个配置全是为**编写(author)**代码的会话服务的。**`cyber-cop` 是第 13 个配置 —— GJC 首个 reviewer 模式**，用于**拦截**代码的会话：审查他人 PR、寻找反对依据、在合并门做出判定。
+
+**有何不同**
+- 在 PR 审查·安全审计中角色权重**反转** → **architect(一级判定：CLEAR/WATCH/BLOCK)与 critic(合并门)为主角**，executor 降为复现 PoC·failing test 的配角。
+- critic **相对代码作者(假定 Claude)跨族(cross-family)**(GPT-5.5) → 从结构上抑制自我偏好偏差([arXiv 2410.21819](https://arxiv.org/abs/2410.21819))。
+- 高风险 PR·安全审计召集**3 票并行评审团**(`gpt-5.5` · `grok-4.3` · `gemini-3.1-pro`)，独立投票 → 2/3 反对或任一 CRITICAL/BLOCK 即拦截。
+
+**实证有效 —— 本仓库自我验证**
+> 在 PR #4~#7 中，审查门在合并前**拦截了 11 个真实缺陷**。审查辅助脚本因*自身的* prompt-injection 缺陷被 BLOCK(修复后通过)；本体(Anthropic)对自家族文档放行的 2 处(相对路径注入面·权限夸大)被**跨族 critic(GPT-5.5)准确 BLOCK** —— 证明自我偏好偏差防御在实战中生效。
+
+**一行开始**
+```bash
+GUIDE=/path/to/gjc-multivendor-setup-guide     # 本设置指南仓库路径
+cd <待审查仓库>
+gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
+# 或用辅助脚本输出无头 4 段判定："$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
+```
+
+📖 完整的缺口论证·三步用法·自动审查流水线·安全守则 → **[cyber-cop 公告文档](./docs/whats-new-cyber-cop.md)**（韩文正本）
 
 ---
 
