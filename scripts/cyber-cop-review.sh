@@ -180,10 +180,20 @@ if [ "$PANEL" = "1" ]; then
     BLOCK) panel_hard_block=1; panel_dissent=$((panel_dissent+1)) ;;
     REQUEST_CHANGES) panel_dissent=$((panel_dissent+1)) ;;
   esac
+  # grok is optional per routing-rules.md: with no xai login it downgrades to a 2-vote
+  # {gpt-5.5, gemini} panel. A provider-unavailable seat ([seat error]) is VOIDED (not a
+  # BLOCK vote); we then require >=2 VALID non-default-family votes (critic + >=1 panelist).
+  panel_valid=1   # critic (gpt-5.5) is one valid non-default vote
   for pm in "xai/grok-4.3:high" "google-antigravity/gemini-3.1-pro-low:high"; do
     p_out="$(run_seat "$pm" "You are an independent cyber-cop panel CRITIC for PR #${PR}. ${CONTRACT}
 First line = exactly one of: APPROVE | REQUEST_CHANGES | BLOCK. Then one file-backed reason. Vote independently; no debate.")"
+    case "$p_out" in
+      *"[seat error:"*)
+        echo "### panel vote (${pm}): VOID (unavailable/failed — downgraded per routing-rules)"; echo
+        continue ;;
+    esac
     p_v="$(crit_verdict "$p_out")"
+    panel_valid=$((panel_valid+1))
     echo "### panel vote (${pm}): ${p_v}"
     echo "$p_out"; echo
     case "$p_v" in
@@ -191,8 +201,13 @@ First line = exactly one of: APPROVE | REQUEST_CHANGES | BLOCK. Then one file-ba
       REQUEST_CHANGES) panel_dissent=$((panel_dissent+1)) ;;
     esac
   done
-  if [ "$panel_hard_block" = 1 ] || [ "$panel_dissent" -ge 2 ]; then PANEL_BLOCK=1; fi
-  echo "→ panel: $([ "$PANEL_BLOCK" = 1 ] && echo BLOCK || echo clear) (dissent=${panel_dissent}, any-block=${panel_hard_block})"; echo
+  if [ "$panel_valid" -lt 2 ]; then
+    PANEL_BLOCK=1
+    echo "→ panel: BLOCK (only ${panel_valid} valid cross-family vote — provenance minimum is >=2)"; echo
+  else
+    if [ "$panel_hard_block" = 1 ] || [ "$panel_dissent" -ge 2 ]; then PANEL_BLOCK=1; fi
+    echo "→ panel: $([ "$PANEL_BLOCK" = 1 ] && echo BLOCK || echo clear) (valid votes=${panel_valid}, dissent=${panel_dissent}, any-block=${panel_hard_block})"; echo
+  fi
 fi
 
 # --- 3. INVARIANTS — run by the orchestrator against the PR HEAD (not the local checkout) ---
@@ -215,6 +230,10 @@ else
   INV_NOTE=" (WARNING: could not fetch ${REPO} PR head; invariant result would not reflect the PR)"
 fi
 INV_OK=1
+# P2 (#11 codex-bot): guide-specific invariants only apply when the reviewed tree IS this
+# guide (has gjc-profiles.yml). For a non-guide REPO target, mark N/A and DON'T gate merge.
+INV_APPLICABLE=1
+[ -f "$INV_TREE/gjc-profiles.yml" ] || INV_APPLICABLE=0
 # SECURITY: never execute or import the PR's code. Run the TRUSTED validator by ABSOLUTE
 # PATH from this local checkout (so Python's sys.path[0] is the trusted scripts dir, not the
 # PR tree — a hostile PR's scripts/yaml.py can't shadow the stdlib import), passing the PR
@@ -229,17 +248,20 @@ if [ "$INV_TREE" != "$REPO_ROOT" ]; then
     [ -L "$df" ] && SYMLINK_BAD=1
   done
 fi
-if [ "$SYMLINK_BAD" = 1 ]; then
+if [ "$INV_APPLICABLE" = 0 ]; then
+  inv_out="N/A — target tree has no gjc-profiles.yml; guide-specific invariants do not apply to this repo (arch/critic verdicts still gate)."
+  INV_STATUS="N/A"
+elif [ "$SYMLINK_BAD" = 1 ]; then
   inv_out="refusing to validate: a PR-head data file (gjc-profiles.yml / README*.md) is a symlink"; INV_OK=0
 elif [ -f "$TRUSTED_VALIDATOR" ] && [ -d "$INV_TREE" ]; then
   inv_out="$(python3 "$TRUSTED_VALIDATOR" --root "$INV_TREE" 2>&1)" || INV_OK=0
 else
   inv_out="trusted validate-profiles.py not available"; INV_OK=0
 fi
-# fail-closed: if we could not validate the actual PR head, the result is untrustworthy
-[ "$INV_OK_FETCH" = 0 ] && INV_OK=0
+# fail-closed: if we could not validate the actual PR head of a GUIDE repo, it's untrustworthy
+[ "$INV_APPLICABLE" = 1 ] && [ "$INV_OK_FETCH" = 0 ] && INV_OK=0
 echo "$inv_out"
-INV_STATUS=$([ "$INV_OK" = 1 ] && echo PASS || echo FAIL)
+[ "$INV_APPLICABLE" = 1 ] && INV_STATUS=$([ "$INV_OK" = 1 ] && echo PASS || echo FAIL)
 echo "→ ${INV_STATUS}${INV_NOTE}"; echo
 
 # --- 4. MERGE RECOMMENDATION (deterministic from verdicts + invariants) ---
