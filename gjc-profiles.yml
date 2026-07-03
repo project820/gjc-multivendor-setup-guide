@@ -30,7 +30,7 @@ profiles:
       architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx·멀티모달
       critic:    xai/grok-4.3:high                              # cross-family 독립비평
 
-  ultimate-f5:                         # 🔥 이벤트: Fable 5 중심 — 구독 포함 ~2026-07-07(주간 한도 50% 상한), 이후 usage credits($10/$50)
+  ultimate-f5:                         # 🔥 이벤트/opt-in: Fable 5 중심 — L3 실측(2026-07-03): 품질 근소우위이나 default-라우터로는 Opus 대비 1.83× 비용 + benign 과제 1건 refusal/error. 일상 default 비추천 — 구독 포함 ~2026-07-07(주간 한도 50% 상한), 이후 usage credits($10/$50)
     required_providers: [anthropic, openai-codex, google-antigravity, xai]
     model_mapping:
       default:   anthropic/claude-fable-5:high                  # 라우터=품질 상한. refusal(HTTP 200+stop_reason) 유의
@@ -40,7 +40,7 @@ profiles:
       critic:    xai/grok-4.3:high                              # cross-family 불변 — Fable 자기평가 금지
       # 7/7 이후: default를 opus-4-8:high로 내리면 legend와 동일한 지속 구조
 
-  legend:                              # 👑 Ultimate Legend — 7/7 이후에도 유지 가능한 최강 (fable은 default 한 자리만)
+  legend:                              # 👑 Ultimate Legend — opt-in 최강 (fable은 default 한 자리만). L3(2026-07-03): Fable-default 품질우위하나 비용 1.83×·refusal 리스크 — 일상은 ultimate(Opus default) 권장
     display_name: legend5
     required_providers: [anthropic, openai-codex, google-antigravity, xai]
     model_mapping:
