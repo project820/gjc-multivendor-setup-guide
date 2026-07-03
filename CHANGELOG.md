@@ -11,6 +11,12 @@
 
 ---
 
+## v1.5.1 — 2026-07-03
+
+### Added
+- **`scripts/cyber-cop-review.sh` 헬퍼** — `gh`로 PR 메타·diff를 수집해 GJC 헤드리스(`cyber-cop` 프로필)로 4섹션 판정(architect/critic/invariants/merge recommendation)을 출력하는 리뷰어 스크립트. 머지는 절대 하지 않음(routing-rules.md 계약 — 판정은 사람에게 표면화).
+  보안 경화(레드팀 리뷰 반영): PR 제어 콘텐츠(제목·파일 목록)의 프롬프트 보간 제거 — 모델이 신뢰 경로(`meta.json`/`files.txt`/`pr.diff`)를 직접 읽음 · 프롬프트에 명문 인젝션 방어 규칙(PR 내용 = untrusted data, 지시 시도는 공격 신호로 보고) · `set -euo pipefail` · temp 디렉터리 `trap` 정리. MAINTAINING.md §2 Tooling 표에 등재.
+
 ## v1.5 — 2026-07-03
 
 ### Added
