@@ -72,3 +72,24 @@ Every selector in all 12 profiles was OK in the 2026-07-02 live matrix (re-confi
 - **Curtailed**: planner/architect direct A/B (time budget) — verdict leans on external benchmarks.
 - **Unverified**: grok-build Composer Standard access on this machine.
 - Total L3 spend: $15.24 / $30 cap (24 runs; planner/arch full A/B intentionally not exhausted).
+## 7. Capability / cost-normalized dual ranking (7/7 two-phase)
+
+Two rankings for the **default-router / premium-executor seat** (the seat where the Opus-vs-Fable decision bites): **capability** (ordinal, from external council benchmarks + our L3 quality judge) and **cost-normalized value** (capability per measured $). Costs are the L3-measured router battery (`ultimate`=Opus-default $0.461/task; `legend`=Fable-default $0.844/task, R1–R8 mean). Two phases because Fable 5's price model flips on **7/7**: pre-7/7 Fable is bundled in the Anthropic Max subscription (near-zero marginal), post-7/7 it is credit-metered ($10 / $50 tiers) and its true per-token cost surfaces.
+
+**Capability rank (phase-invariant — capability doesn't change with billing):**
+
+| Rank | Seat model | Capability basis |
+|:--:|---|---|
+| 1 | Fable 5 (`legend`/`ultimate-f5`) | marginal quality edge in L3 double-judge (R1 both judges; R8 GPT only) + vendor frontier claims |
+| 1 | Opus 4.8 (`ultimate`/`daily`) | tied top; **only seat with 8/8 reliability** (Fable refused R6) — reliability breaks the tie for an always-on router |
+| 3 | Sonnet-5 (`eco` exec tier) | strong, cheaper, lower ceiling |
+
+**Cost-normalized value rank (capability ÷ measured $/task):**
+
+| Rank | Phase A — **pre-7/7** (Fable subscription-bundled) | Phase B — **post-7/7** (Fable credits $10/$50) |
+|:--:|---|---|
+| 1 | **Opus 4.8** — $0.461/task, top-tier, 8/8 reliable | **Opus 4.8** — $0.461/task; gap over Fable *widens* |
+| 2 | Fable 5 — marginal quality edge, subscription hides the 1.83× marginal cost; still loses on reliability | Sonnet-5 — cheaper strong tier becomes the value pick for non-critical throughput |
+| 3 | Sonnet-5 — cheapest strong tier | Fable 5 — 1.83× measured cost now **explicit + credit-metered**; premium-only, worst value |
+
+**Reading**: Opus 4.8 is the cost-normalized #1 in *both* phases; Fable's only ranking argument (marginal capability) never overcomes its 1.83× cost + R6 reliability failure, and post-7/7 its value rank *drops* as the subscription no longer masks marginal cost. This is the quantitative backing for **KEEP Opus recommended default; Fable = opt-in premium** — and it means the v1.4 split gets *more* defensible after 7/7, not less. (Capability ordering is L1/L2 ordinal — external benchmarks + 2 judged pairs; cost figures are L3-measured.)
