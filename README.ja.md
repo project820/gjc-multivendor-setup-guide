@@ -23,6 +23,9 @@
 > [!NOTE]
 > **本ガイドの中核は GJC 公式ドキュメントに採用された** — 圧縮版が上流に [`docs/multi-vendor-profiles.md`](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) としてマージ済み（[PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860)、`dev`）。役割/セレクタの概念は **GJC 公式ドキュメントを正式リファレンス**とし、本リポジトリはそこに無いもの — **ワンライナー・インストーラ**、**13プロファイル一式**（`solo-*` / `claude-codex*` / `legend` / `cyber-cop` 含む）、そして[保守・検証ツール](./MAINTAINING.md)（静的チェック CI + ライブセレクタ検証 + カタログドリフト追跡）— を提供する。
 
+> [!TIP]
+> 🚨 **What's New (v1.5)**: 初の reviewer モードプロファイル **cyber-cop** — PRレビュー·セキュリティ監査専用。設計根拠·3段階の使い方·自動レビューパイプライン·セキュリティ規則は[アナウンス文書](./docs/whats-new-cyber-cop.md)（韓国語正本）を参照。
+
 ---
 
 ## ⚡ 30秒インストール（ワンライナーをコピペ）

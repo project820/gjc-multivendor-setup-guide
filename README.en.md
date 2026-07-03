@@ -23,6 +23,9 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 > [!NOTE]
 > **The core of this guide was adopted into the official GJC docs** — a condensed version was merged upstream as [`docs/multi-vendor-profiles.md`](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) ([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). Treat the **official GJC docs as the canonical reference** for the role/selector concepts; this repo provides what those docs do not — the **one-line installer**, the **full set of 13 profiles** (incl. `solo-*` / `claude-codex*` / `legend` / `cyber-cop`), and [maintenance & validation tooling](./MAINTAINING.md) (static-check CI + live selector battery + catalog drift tracking).
 
+> [!TIP]
+> 🚨 **What's New (v1.5)**: **cyber-cop** — the first reviewer-mode profile, dedicated to PR review & security audits. See the [announcement](./docs/whats-new-cyber-cop.md) (Korean canonical) for the rationale, 3-tier usage guide, automated review pipeline, and security rules.
+
 ---
 
 ## ⚡ 30-second install (one-line copy-paste)

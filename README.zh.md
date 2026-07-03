@@ -23,6 +23,9 @@
 > [!NOTE]
 > **本指南的核心已被采纳进 GJC 官方文档** — 精简版已合并到上游 [`docs/multi-vendor-profiles.md`](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md)（[PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860)，`dev`）。角色/选择器概念请以 **GJC 官方文档为权威参考**；本仓库提供官方文档没有的东西 —— **一行安装脚本**、**完整的 13 套配置**（含 `solo-*`、`claude-codex*`、`legend`、`cyber-cop`），以及[维护与验证工具](./MAINTAINING.md)（静态检查 CI + 实时选择器测试 + 目录漂移追踪）。
 
+> [!TIP]
+> 🚨 **What's New (v1.5)**: 首个 reviewer 模式配置 **cyber-cop** — 专用于 PR 审查·安全审计。设计依据·三级用法·自动审查流水线·安全守则见[公告文档](./docs/whats-new-cyber-cop.md)（韩文正本）。
+
 ---
 
 ## ⚡ 30 秒安装（一行复制粘贴）

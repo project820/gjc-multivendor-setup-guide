@@ -23,6 +23,9 @@
 > [!NOTE]
 > **이 가이드의 핵심은 GJC 공식 문서로 채택됐다** — 압축판이 [`docs/multi-vendor-profiles.md`](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) 로 업스트림 머지됨([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). 역할·셀렉터 개념의 **정식 레퍼런스는 GJC 공식 docs**를 따르고, **이 레포는 거기 없는 것** — 원클릭 설치기, 13개 프로필 전체(`solo-*`·`claude-codex*`·`legend`·`cyber-cop` 포함), 그리고 [유지보수·검증 도구](./MAINTAINING.md)(정적 검증 CI + 라이브 셀렉터 배터리 + 카탈로그 드리프트 추적) — 를 제공한다.
 
+> [!TIP]
+> 🚨 **What's New (v1.5)**: 첫 reviewer 모드 프로필 **cyber-cop** — PR 리뷰·보안 감사 전용. 갭 논증·사용법 3단계·자동 리뷰 파이프라인·보안 수칙은 [공지 문서](./docs/whats-new-cyber-cop.md) 참조.
+
 ---
 
 ## ⚡ 30초 설치 (한 줄 복붙)
