@@ -11,6 +11,11 @@
 
 ---
 
+## v1.5.7 — 2026-07-03 (docs errata)
+
+### Fixed
+- **`evidence/2026-07-03-ultimate-final-report.md` 벤치 표 errata** — Composer 2.5의 `74.7% → 54.0%` 붕괴 수치가 **SWE-bench Verified 열에 오배치**돼 있던 것을 **SWE-bench Pro 열로 이동**(같은 문서 §3.2가 Pro로 정확히 인용 — 내부 모순 해소). errata 마커로 명시. (codex-bot P2, PR #5 post-merge 발견 — repo 전체 미회신 코멘트 스윕에서 처리.)
+
 ## v1.5.6 — 2026-07-03
 
 ### Fixed
