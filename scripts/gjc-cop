@@ -110,15 +110,29 @@ case "$sub" in
     # Invoked by the pre-push shim. stdin: "<local-ref> <local-sha> <remote-ref> <remote-sha>" per ref.
     # Reviews the outgoing diff with the SINGLE cross-family critic seat (push-unit economics, #9 Lv.2).
     # advisory (default): report only, exit 0 · strict (git config cop.strict true / GJC_COP_STRICT=1):
-    # exit 1 unless APPROVE — seat failure fails CLOSED in strict, warns in advisory.
-    git rev-parse --git-dir >/dev/null 2>&1 || exit 0
-    command -v gjc >/dev/null 2>&1 || { echo "gjc-cop hook: gjc not found — skipping (advisory)"; exit 0; }
-    STRICT="${GJC_COP_STRICT:-$(git config --get cop.strict 2>/dev/null || echo false)}"
+    # exit 1 unless APPROVE. FAIL-CLOSED CONTRACT: in strict, EVERY pre-seat guard (missing gjc,
+    # diff-computation failure, oversized diff, seat failure) blocks — never silently passes.
+    # STRICT is computed FIRST (env, then repo config) so every early-exit path can honor it.
+    STRICT="${GJC_COP_STRICT:-}"
+    if [ -z "$STRICT" ] && git rev-parse --git-dir >/dev/null 2>&1; then
+      STRICT="$(git config --get cop.strict 2>/dev/null || echo false)"
+    fi
     case "$STRICT" in 1|true|yes) STRICT=1 ;; *) STRICT=0 ;; esac
+    # bail <msg>: strict → exit 1 (fail-closed) · advisory → warn, allow push
+    bail() {
+      echo "gjc-cop hook: $1"
+      if [ "$STRICT" = 1 ]; then
+        echo "gjc-cop hook: STRICT → push blocked (bypass once: git push --no-verify)"; exit 1
+      fi
+      echo "gjc-cop hook: advisory — allowing push"; exit 0
+    }
+    git rev-parse --git-dir >/dev/null 2>&1 || bail "not a git repo — cannot review"
+    command -v gjc >/dev/null 2>&1 || bail "gjc not found on PATH — cannot review"
     HTIMEOUT="${GJC_COP_HOOK_TIMEOUT:-240}"
     ZERO="0000000000000000000000000000000000000000"
     W="$(mktemp -d "/tmp/gjc-cop-hook.XXXX")"; trap 'rm -rf "$W"' EXIT
     : > "$W/diff"
+    DERR=0   # diff-computation failure ≠ genuinely-empty diff — must not be conflated
     while read -r _lref lsha _rref rsha; do
       [ -z "${lsha:-}" ] && continue
       [ "$lsha" = "$ZERO" ] && continue   # branch deletion — nothing to review
@@ -126,15 +140,18 @@ case "$sub" in
         # new remote branch: base on the default branch's merge-base; else last commit only
         base="$(git merge-base "$lsha" "$(git rev-parse --abbrev-ref origin/HEAD 2>/dev/null || echo HEAD)" 2>/dev/null || true)"
         if [ -n "$base" ] && [ "$base" != "$lsha" ]; then
-          git diff "$base" "$lsha" >> "$W/diff" 2>/dev/null || true
+          git diff "$base" "$lsha" >> "$W/diff" 2>>"$W/differr" || DERR=1
         else
           echo "gjc-cop hook: no base for new branch — reviewing tip commit only"
-          git show --patch "$lsha" >> "$W/diff" 2>/dev/null || true
+          git show --patch "$lsha" >> "$W/diff" 2>>"$W/differr" || DERR=1
         fi
       else
-        git diff "$rsha" "$lsha" >> "$W/diff" 2>/dev/null || true
+        git diff "$rsha" "$lsha" >> "$W/diff" 2>>"$W/differr" || DERR=1
       fi
     done
+    if [ "$DERR" = 1 ]; then
+      bail "diff computation failed ($(head -c 100 "$W/differr" 2>/dev/null)) — cannot verify outgoing changes"
+    fi
     if [ ! -s "$W/diff" ]; then echo "gjc-cop hook: empty outgoing diff — nothing to review"; exit 0; fi
     DB=$(wc -c < "$W/diff" | tr -d ' ')
     if [ "${DB:-0}" -gt 5242880 ]; then
