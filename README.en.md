@@ -40,7 +40,8 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 GUIDE=/path/to/gjc-multivendor-setup-guide     # this setup-guide repo
 cd <repo-under-review>
 gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
-# or headless 4-section verdict: "$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
+# or headless 4-section verdict (set REPO to the target — defaults to this guide repo):
+# REPO=owner/name "$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
 ```
 
 📖 Full gap argument, 3-step usage, automated review pipeline & security rules → **[cyber-cop announcement](./docs/whats-new-cyber-cop.md)** (Korean canonical)

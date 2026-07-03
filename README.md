@@ -40,7 +40,8 @@
 GUIDE=/path/to/gjc-multivendor-setup-guide     # 이 셋업가이드 레포 경로
 cd <리뷰할-레포>
 gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
-# 또는 헬퍼로 헤드리스 4섹션 판정: "$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
+# 또는 헬퍼로 헤드리스 4섹션 판정 (REPO로 대상 지정 — 없으면 이 가이드 레포가 기본):
+# REPO=owner/name "$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
 ```
 
 📖 갭 논증·사용법 3단계·자동 리뷰 파이프라인·보안 수칙 전체 → **[cyber-cop 공지 문서](./docs/whats-new-cyber-cop.md)**

@@ -40,7 +40,8 @@
 GUIDE=/path/to/gjc-multivendor-setup-guide     # この設定ガイドリポジトリのパス
 cd <レビュー対象リポジトリ>
 gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
-# またはヘッドレス 4 セクション判定："$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
+# またはヘッドレス 4 セクション判定（REPO で対象を指定 —— 未指定だと本ガイドリポジトリが既定）：
+# REPO=owner/name "$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
 ```
 
 📖 ギャップ論証·3 段階の使い方·自動レビューパイプライン·セキュリティ規則の全体 → **[cyber-cop アナウンス文書](./docs/whats-new-cyber-cop.md)**（韓国語正本）

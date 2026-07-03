@@ -40,7 +40,8 @@
 GUIDE=/path/to/gjc-multivendor-setup-guide     # 本设置指南仓库路径
 cd <待审查仓库>
 gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
-# 或用辅助脚本输出无头 4 段判定："$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
+# 或用辅助脚本输出无头 4 段判定（用 REPO 指定目标 —— 缺省为本指南仓库）：
+# REPO=owner/name "$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
 ```
 
 📖 完整的缺口论证·三步用法·自动审查流水线·安全守则 → **[cyber-cop 公告文档](./docs/whats-new-cyber-cop.md)**（韩文正本）
