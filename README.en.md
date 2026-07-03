@@ -35,14 +35,16 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 **Proof it works — this repo dogfooded it**
 > Across PRs #4–#7 the review gate **blocked 10 defects before merge** (#4: 5 · #6: 5 · #7: passed on first vote). The review helper was BLOCKed by *its own* prompt-injection flaw (fixed, then passed), and two overclaims the Anthropic base model waved through (a relative-path injection surface and a permission overclaim) were **correctly BLOCKed by the cross-family critic (GPT-5.5)**. (One more was caught *after* #6 merged → fixed immediately in #7.) The self-preference-bias defense works in practice.
 
-**Start in one line**
+**Start clone-free in 2 commands (v1.6+)**
 ```bash
-GUIDE=/path/to/gjc-multivendor-setup-guide     # this setup-guide repo
+curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | GJC_SETUP_COP=1 bash
 cd <repo-under-review>
-gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
-# or headless 4-section verdict (set REPO to the target — defaults to this guide repo):
-# REPO=owner/name "$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
+gjc-cop 123               # PR #123 → 4-section verdict (REPO auto-detected from cwd — never merges)
+# gjc-cop --panel 123     # high-risk: 3-vote cross-family panel
+# gjc-cop shell           # interactive reviewer session (trusted contract auto-injected)
+# gjc-cop watch           # poll & review new PRs (humans decide merges)
 ```
+The clone/manual path (same mechanics, no wrapper) is in the [announcement §3](./docs/whats-new-cyber-cop.md).
 
 📖 Full gap argument, 3-step usage, automated review pipeline & security rules → **[cyber-cop announcement](./docs/whats-new-cyber-cop.md)** (Korean canonical)
 

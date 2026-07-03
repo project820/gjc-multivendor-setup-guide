@@ -11,6 +11,12 @@
 
 ---
 
+## v1.6.1 — 2026-07-03 (docs)
+
+### Docs
+- **README 4종 quickstart를 gjc-cop 원커맨드 플로우로 교체** — 홍보 섹션의 클론+`$GUIDE` 경로를 v1.6.0의 **클론 없이 2커맨드**(`curl … | GJC_SETUP_COP=1 bash` → `gjc-cop <PR>`)로 교체하고 `--panel`/`shell`/`watch` 소개, 클론/수동 경로는 공지 §3 링크로 강등. 공지 문서 0단계와 문구 정합. YAML embed·표 무변경.
+- **카탈로그 스냅샷 `evidence/2026-07-03-catalog.txt`** — `--diff` vs 2026-07-02: **드리프트 없음**(신규/은퇴 모델·ctx/effort 변화 0; Gemini 3.5 Pro 미입점 확인).
+
 ## v1.6.0 — 2026-07-03
 
 ### Added

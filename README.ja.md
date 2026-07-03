@@ -35,14 +35,16 @@
 **実証済み —— 本リポジトリが自己検証した**
 > PR #4〜#7 でレビューゲートがマージ前に**欠陥 10 件を遮断**した（#4：5 · #6：5 · #7：初回投票で通過）。レビュー補助スクリプトは*自身の* prompt-injection 欠陥で BLOCK され(修正後に通過)、本体(Anthropic)が自家系統の文書を甘く通した 2 点(相対パス注入面·権限の過大表示)を**cross-family critic(GPT-5.5)が正確に BLOCK**。（さらに 1 件が #6 マージ**後**に検出 → #7 で即修正。）自己選好バイアス防御が実戦で機能することを証明した。
 
-**一行で始める**
+**クローン不要、2 コマンドで開始（v1.6+）**
 ```bash
-GUIDE=/path/to/gjc-multivendor-setup-guide     # この設定ガイドリポジトリのパス
+curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | GJC_SETUP_COP=1 bash
 cd <レビュー対象リポジトリ>
-gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
-# またはヘッドレス 4 セクション判定（REPO で対象を指定 —— 未指定だと本ガイドリポジトリが既定）：
-# REPO=owner/name "$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
+gjc-cop 123               # PR #123 → 4 セクション判定（REPO は cwd から自動検出 —— マージは絶対しない）
+# gjc-cop --panel 123     # 高リスク：3 票 cross-family パネル
+# gjc-cop shell           # 対話型レビューアセッション（信頼契約を自動注入）
+# gjc-cop watch           # 新規 PR をポーリング·レビュー（マージは人間が決定）
 ```
+クローン/手動パス（同じ仕組み、ラッパーなし）は[アナウンス文書 §3](./docs/whats-new-cyber-cop.md)を参照。
 
 📖 ギャップ論証·3 段階の使い方·自動レビューパイプライン·セキュリティ規則の全体 → **[cyber-cop アナウンス文書](./docs/whats-new-cyber-cop.md)**（韓国語正本）
 
