@@ -59,7 +59,7 @@ All numbers below are from vendor documentation or independent evaluators — se
 | **GPT-5.5** `:xhigh` | 1.05M / 128k | $5 / $30 | 82.60% ([Vals](https://vals.ai/benchmarks/swebench)) | 58.6% ([OpenAI](https://openai.com/index/introducing-gpt-5-5/)) | **82.7% official / 84.7% top agent** ([TB 2.0](https://www.tbench.ai/leaderboard/terminal-bench/2.0)) | — | ✅ none/low/med/high/xhigh |
 | **Gemini 3.1 Pro** | 1M / 64k | $2 / $12 (<200k) | 80.6% ([DeepMind](https://deepmind.google/models/gemini/pro/)) | 54.2% (DeepMind) | 68.5% (DeepMind Terminus-2) / 80.2% (TB pairings) | 88.48% ([Vals](https://vals.ai/benchmarks/lcb)) | ✅ `thinking_level` low/high |
 | **Grok 4.3** | 1M / — | $1.25 / $2.50 | — (not on official leaderboard) | — | Weak in Vals harness | — | ✅ none/low/med/high |
-| **Grok Composer 2.5 Fast** | 200k / — | Fast $3 / $15 · Standard $0.50 / $2.50 | — | 74.7% → **54.0% under stricter harness** ([Cursor](https://cursor.com/blog/reward-hacking-coding-benchmarks)) *(errata 2026-07-03: value was misplaced under Verified; §3.2 correctly cites it as SWE-bench Pro)* | 69.3% (BenchLM) | CursorBench 3.1: **63.2%** ([CursorBench](https://cursor.com/cursorbench)) | ❌ **No** — flagged `supportsReasoningEffort: false` in GJC catalog |
+| **Grok Composer 2.5 Fast** | 200k / — | Fast $3 / $15 · Standard $0.50 / $2.50 | 74.7% → **54.0% under stricter harness** ([Cursor](https://cursor.com/blog/reward-hacking-coding-benchmarks)) | — | 69.3% (BenchLM) | CursorBench 3.1: **63.2%** ([CursorBench](https://cursor.com/cursorbench)) | ❌ **No** — flagged `supportsReasoningEffort: false` in GJC catalog |
 
 **Key structural observations from the deep-research pass:**
 
