@@ -33,7 +33,7 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 - High-risk / security PRs convene a **3-vote parallel panel** (`gpt-5.5` · `grok-4.3` · `gemini-3.1-pro`), independent votes → 2/3 dissent or any CRITICAL/BLOCK blocks.
 
 **Proof it works — this repo dogfooded it**
-> Across PRs #4–#7 the review gate **caught 11 real defects before merge**. The review helper was BLOCKed by *its own* prompt-injection flaw (fixed, then passed), and two overclaims the Anthropic base model waved through (a relative-path injection surface and a permission overclaim) were **correctly BLOCKed by the cross-family critic (GPT-5.5)** — proving the self-preference-bias defense works in practice.
+> Across PRs #4–#7 the review gate **caught multiple real defects before merge**. The review helper was BLOCKed by *its own* prompt-injection flaw (fixed, then passed), and two overclaims the Anthropic base model waved through (a relative-path injection surface and a permission overclaim) were **correctly BLOCKed by the cross-family critic (GPT-5.5)** — proving the self-preference-bias defense works in practice.
 
 **Start in one line**
 ```bash
