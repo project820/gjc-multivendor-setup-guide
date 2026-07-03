@@ -73,11 +73,12 @@ gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
 
 프로필 설치가 안 됐다면 [원클릭 설치](../README.md#-30초-설치-한-줄-복붙) 후 `gjc --mpreset cyber-cop`.
 
-원커맨드 헬퍼(v1.5.1 동봉)도 있다 — 헤드리스로 4섹션 verdict(architect/critic/불변식/머지 권고)를 출력하고, **절대 머지하지 않는다**:
+원커맨드 헬퍼(동봉)도 있다 — **좌석 오케스트레이터**로, 좌석마다 `gjc -p --model …`를 따로 호출해 4섹션 verdict(architect/critic/불변식/머지 권고)를 조립한다. critic은 **실제로 `openai-codex/gpt-5.5`(Claude 작성자 대비 cross-family)로 실행**되며 본체가 롤플레이하지 않는다 — cross-family가 프롬프트 순응이 아니라 **호출 구조로 보장**된다(#10). 각 섹션 헤더에 실행 모델이 명기되고, 불변식은 스크립트가 직접 실행하며, **절대 머지하지 않는다**:
 
 ```bash
 # 헬퍼는 셋업가이드 레포에 있다(설치기는 gjc-profiles.yml만 받음) — $GUIDE 절대경로로 실행
-REPO=owner/name "$GUIDE/scripts/cyber-cop-review.sh" 123   # REPO 미지정 시 이 가이드 레포가 기본
+REPO=owner/name "$GUIDE/scripts/cyber-cop-review.sh" 123           # 기본 2좌석(architect+critic)
+REPO=owner/name "$GUIDE/scripts/cyber-cop-review.sh" --panel 123   # 고위험: 3표 cross-family 패널
 ```
 
 ### 2단계 · 세션 상주 오케스트레이션 (자동 감지 + 사람 승인)
