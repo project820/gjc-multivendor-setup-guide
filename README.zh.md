@@ -35,14 +35,18 @@
 **实证有效 —— 本仓库自我验证**
 > 在 PR #4~#7 中，审查门在合并前**拦截了 10 个缺陷**（#4：5 · #6：5 · #7：首轮通过）。审查辅助脚本因*自身的* prompt-injection 缺陷被 BLOCK(修复后通过)；本体(Anthropic)对自家族文档放行的 2 处(相对路径注入面·权限夸大)被**跨族 critic(GPT-5.5)准确 BLOCK**。（另有 1 个在 #6 合并**后**发现 → 已在 #7 立即修复。）证明自我偏好偏差防御在实战中生效。
 
-**一行开始**
+**免克隆，两条命令开始（v1.6+）**
 ```bash
-GUIDE=/path/to/gjc-multivendor-setup-guide     # 本设置指南仓库路径
+# 前提：已安装并认证 gh CLI（gh auth login）+ gjc 各提供方 /login 完成
+curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | GJC_SETUP_COP=1 bash
+export PATH="$HOME/.local/bin:$PATH"   # 若安装器提示 PATH 警告则执行一次
 cd <待审查仓库>
-gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
-# 或用辅助脚本输出无头 4 段判定（用 REPO 指定目标 —— 缺省为本指南仓库）：
-# REPO=owner/name "$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
+gjc-cop 123               # PR #123 → 4 段判定（REPO 从 cwd 自动检测 —— 绝不合并）
+# gjc-cop --panel 123     # 高风险：3 票跨族评审团
+# gjc-cop shell           # 交互式审查会话（自动注入可信契约）
+# gjc-cop watch           # 轮询·审查新 PR（合并由人决定）
 ```
+克隆/手动路径（同样机制，无包装器）见[公告文档 §3](./docs/whats-new-cyber-cop.md)。
 
 📖 完整的缺口论证·三步用法·自动审查流水线·安全守则 → **[cyber-cop 公告文档](./docs/whats-new-cyber-cop.md)**（韩文正本）
 

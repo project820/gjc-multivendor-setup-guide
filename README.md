@@ -35,14 +35,18 @@
 **작동 증거 — 이 레포가 스스로 검증했다**
 > PR #4~#7에서 리뷰 게이트가 **머지 전 결함 10건을 차단**했다(#4: 5건 · #6: 5건 · #7: 첫 투표 통과). 리뷰 헬퍼가 *자기 자신의* prompt-injection 결함으로 BLOCK 당했고(고친 뒤 통과), 본체(Anthropic)가 자기 계열 문서를 관대히 넘긴 지점 2건(상대경로 인젝션 표면·권한 과장)을 **cross-family critic(GPT-5.5)이 정확히 BLOCK**했다. (추가로 #6 머지 후 1건이 발견돼 #7로 즉시 수정.) 자기선호-편향 방어가 실전에서 작동함을 증명한 것이다.
 
-**한 줄로 시작**
+**클론 없이 2커맨드로 시작 (v1.6+)**
 ```bash
-GUIDE=/path/to/gjc-multivendor-setup-guide     # 이 셋업가이드 레포 경로
+# 전제: gh CLI 설치·인증(gh auth login) + gjc 프로바이더 /login 완료
+curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | GJC_SETUP_COP=1 bash
+export PATH="$HOME/.local/bin:$PATH"   # 설치기가 PATH 경고를 출력한 경우 1회
 cd <리뷰할-레포>
-gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
-# 또는 헬퍼로 헤드리스 4섹션 판정 (REPO로 대상 지정 — 없으면 이 가이드 레포가 기본):
-# REPO=owner/name "$GUIDE/scripts/cyber-cop-review.sh" <PR_NUMBER>
+gjc-cop 123               # PR #123 → 4섹션 verdict (REPO는 cwd 자동 감지 — 머지는 절대 안 함)
+# gjc-cop --panel 123     # 고위험: 3표 cross-family 패널
+# gjc-cop shell           # 대화형 리뷰어 세션(신뢰 계약 자동 주입)
+# gjc-cop watch           # 신규 PR 폴링·자동 리뷰(머지는 사람이 결정)
 ```
+클론/수동 경로(래퍼 없이 동작 원리 그대로)는 [공지 문서 §3](./docs/whats-new-cyber-cop.md) 참조.
 
 📖 갭 논증·사용법 3단계·자동 리뷰 파이프라인·보안 수칙 전체 → **[cyber-cop 공지 문서](./docs/whats-new-cyber-cop.md)**
 

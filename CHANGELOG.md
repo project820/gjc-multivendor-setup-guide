@@ -15,6 +15,11 @@
 
 ### Added
 - **`gjc-cop --install-hook` — pre-push 훅 (#9 Lv.2)** — push 직전 나가는 diff(`remote_sha..local_sha`; 신규 브랜치는 `origin/HEAD` merge-base, 없으면 tip 커밋)를 **cross-family critic 1좌석**(`openai-codex/gpt-5.5:high`)이 판정. **기본 advisory**(verdict 출력만, push 허용) — `git config cop.strict true` 또는 `GJC_COP_STRICT=1`이면 APPROVE 아닐 때 push 차단(**strict에선 좌석 도달 전 모든 실패 — gjc 부재·diff 계산 실패·5MiB 초과·좌석 실패 — 가 fail-closed**; 리뷰 반영). 우회는 git 네이티브 `git push --no-verify`. 훅 파일은 thin shim(로직은 gjc-cop `hook-exec`) — 마커 기반 멱등 설치, **기존 타 훅은 절대 덮어쓰지 않음**(거부), `--uninstall-hook`은 우리 것만 제거. diff는 `@`-첨부 비신뢰 데이터 계약 유지, verdict는 first-line 파싱(fail-toward-blocking). 신규 셀렉터 0.
+## v1.6.1 — 2026-07-03 (docs)
+
+### Docs
+- **README 4종 quickstart를 gjc-cop 원커맨드 플로우로 교체** — 홍보 섹션의 클론+`$GUIDE` 경로를 v1.6.0의 **클론 없이 2커맨드**(`curl … | GJC_SETUP_COP=1 bash` → `gjc-cop <PR>`)로 교체하고 `--panel`/`shell`/`watch` 소개, 클론/수동 경로는 공지 §3 링크로 강등. 공지 문서 0단계와 문구 정합. YAML embed·표 무변경.
+- **카탈로그 스냅샷 `evidence/2026-07-03-catalog.txt`** — `--diff` vs 2026-07-02: **드리프트 없음**(신규/은퇴 모델·ctx/effort 변화 0; Gemini 3.5 Pro 미입점 확인).
 
 ## v1.6.0 — 2026-07-03
 
