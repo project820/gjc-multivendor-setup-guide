@@ -15,7 +15,7 @@ Default-router A/B: `ultimate` (default=Opus 4.8) vs `legend` (default=Fable 5);
 
 **Cost**: Opus-default total $3.69 vs Fable-default $6.75 → **Fable-default 1.83× cost**.
 **Reliability**: Fable-default had 1 refusal/error event(s) on benign tasks (R6 defensive security triage: partial output then stopReason=error); Opus-default completed all 8.
-**Quality (double-judge, anonymized, GPT-5.5)**: on R1 & R8, judge preferred the Fable-default output (5/5 vs 4/4; 4/4 vs 3/3) — marginal quality edge.
+**Quality (double-judge, anonymized: GPT-5.5 + Gemini 3.1 Pro)**: R1 — both judges preferred Fable-default (5/5 vs 4/4); R8 — **split** (GPT-5.5 → Fable 4/4 vs 3/3; Gemini → Opus, flagged Output-A truncation). Marginal, non-counterbalanced edge (A=legend in both judged pairs, n=2 → position-bias not excluded).
 
 ## Verdict per seat
 - **default (router)** → **KEEP Opus** as recommended default. Fable-default shows a marginal quality edge but ~1.7–2× cost **and** a refusal/error on a benign task — unacceptable for the always-on router seat. Fable-default remains a valid **opt-in premium** (`legend`/`ultimate-f5`), now backed by L3 data. This VALIDATES v1.4's existing split (Opus=recommended, Fable=premium event).

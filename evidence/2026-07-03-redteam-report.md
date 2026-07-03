@@ -20,7 +20,7 @@ The community's two loud questions ("is Grok right as critic", "should Composer 
 
 - **Cost**: Opus-default $3.69 vs Fable-default $6.75 → **1.83×**.
 - **Reliability**: Fable-default hit a **refusal/error (`stopReason=error`) on R6** (a *benign* defensive install.sh security triage) after partial output; Opus-default completed all 8. 1/8 observed — vendor's "<5% safety-router" is L1 background, but the router seat is exactly where a mid-orchestration refusal is most damaging.
-- **Quality**: anonymized double-judge (GPT-5.5) marginally **preferred Fable-default** on R1 & R8 (5/5 vs 4/4; 4/4 vs 3/3).
+- **Quality**: anonymized double-judge (GPT-5.5 + Gemini 3.1 Pro) — R1: both judges preferred Fable-default (5/5 vs 4/4); R8: **split** (GPT-5.5 → Fable 4/4 vs 3/3; Gemini → Opus, flagging Output-A truncation). Net a *marginal, non-counterbalanced* edge (A=legend in both judged pairs, n=2 → position-bias confound not excluded).
 - **Net**: quality edge does not clear the cost-adjusted + reliability bar for an always-on router → **KEEP Opus default; Fable-default stays premium/opt-in** (`legend`, `ultimate-f5`). This directly **validates v1.4's existing recommended=Opus / premium=Fable split** with behavioral data.
 
 Planner/architect Fable candidates: direct A/B **curtailed** (delegation runs exceeded 420–600s wall budget — N1-ultimate timed out at 420s, N2-ultimate completed at 499s, Fable sides terminated). Verdict falls back to external benchmark + router evidence (KEEP incumbents). Labeled INCONCLUSIVE on direct A/B, per plan pre-mortem.
@@ -71,4 +71,4 @@ Every selector in all 12 profiles was OK in the 2026-07-02 live matrix (re-confi
 - **Medium**: Fable refusal rate (1/8 observed; not a rate claim), quality edge (2 judged pairs).
 - **Curtailed**: planner/architect direct A/B (time budget) — verdict leans on external benchmarks.
 - **Unverified**: grok-build Composer Standard access on this machine.
-- Total L3 spend: ~$14.1 / $30 cap (planner/arch full A/B intentionally not exhausted).
+- Total L3 spend: $15.24 / $30 cap (24 runs; planner/arch full A/B intentionally not exhausted).
