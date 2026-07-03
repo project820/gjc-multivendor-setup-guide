@@ -73,7 +73,8 @@ gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
 원커맨드 헬퍼(v1.5.1 동봉)도 있다 — 헤드리스로 4섹션 verdict(architect/critic/불변식/머지 권고)를 출력하고, **절대 머지하지 않는다**:
 
 ```bash
-scripts/cyber-cop-review.sh 123        # REPO=owner/name 환경변수로 대상 변경
+# 헬퍼는 셋업가이드 레포에 있다(설치기는 gjc-profiles.yml만 받음) — $GUIDE 절대경로로 실행
+REPO=owner/name "$GUIDE/scripts/cyber-cop-review.sh" 123   # REPO 미지정 시 이 가이드 레포가 기본
 ```
 
 ### 2단계 · 세션 상주 오케스트레이션 (자동 감지 + 사람 승인)
