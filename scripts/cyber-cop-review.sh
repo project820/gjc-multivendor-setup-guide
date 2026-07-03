@@ -22,7 +22,13 @@ set -euo pipefail
 REPO="${REPO:-project820/gjc-multivendor-setup-guide}"
 TIMEOUT="${TIMEOUT:-400}"
 PANEL=0
-case "${1:-}" in --panel) PANEL=1; shift ;; esac
+# accept --panel in any position; collect the rest as positional args
+_args=""
+for a in "$@"; do
+  if [ "$a" = "--panel" ]; then PANEL=1; else _args="$_args $a"; fi
+done
+# shellcheck disable=SC2086
+set -- $_args
 PR="${1:?usage: cyber-cop-review.sh [--panel] <PR_NUMBER>}"
 case "$PR" in ''|*[!0-9]*) echo "PR number must be a positive integer: '$PR'" >&2; exit 2 ;; esac
 
@@ -54,12 +60,23 @@ run_seat() {
   [ "$rc" -ne 0 ] && out="$out
 [seat error: $model rc=$rc]"
   # W2: verify the intended model ACTUALLY ran (defends against a silent --model fallback
-  # to the default model — the #10 class). Whitespace-tolerant JSON, dot/regex-escaped id.
+  # to the default model — the #10 class). Reads ONLY GJC's trusted session metadata
+  # (*.jsonl), never the model-controlled stdout/stderr. Portable Python (no grep flags).
   local short; short="${model%%:*}"; short="${short##*/}"
-  local esc; esc="$(printf '%s' "$short" | sed 's/[][().^$*+?{}\\|]/\\&/g')"
-  # Search ONLY GJC's trusted session metadata (*.jsonl), never the model-controlled
-  # stdout/stderr — else a fallback model could print {"model":"gpt-5.5"} to fake the check.
-  if [ "$rc" -eq 0 ] && ! grep -rqE --include='*.jsonl' "\"model\"[[:space:]]*:[[:space:]]*\"[^\"]*${esc}[^\"]*\"" "$dir" 2>/dev/null; then
+  if [ "$rc" -eq 0 ] && ! MODEL_SHORT="$short" SEAT_DIR="$dir" python3 - <<'PY'
+import os, glob, re, sys
+d = os.environ["SEAT_DIR"]; short = os.environ["MODEL_SHORT"]
+for f in glob.glob(os.path.join(d, "**", "*.jsonl"), recursive=True):
+    try:
+        with open(f, encoding="utf-8", errors="ignore") as fh:
+            for line in fh:
+                if any(short in m for m in re.findall(r'"model"\s*:\s*"([^"]*)"', line)):
+                    sys.exit(0)
+    except OSError:
+        pass
+sys.exit(1)
+PY
+  then
     out="$out
 [seat error: $model identity NOT found in session log — possible silent model fallback]"
   fi

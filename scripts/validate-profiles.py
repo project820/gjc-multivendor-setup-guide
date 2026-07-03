@@ -23,6 +23,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 # data without executing the PR's code (no cd into / import from an untrusted tree).
 if "--root" in sys.argv:
     _i = sys.argv.index("--root")
+    if _i + 1 >= len(sys.argv):
+        sys.exit("--root requires a directory argument")
     ROOT = pathlib.Path(sys.argv[_i + 1]).resolve()
 PROFILES = ROOT / "gjc-profiles.yml"
 README = ROOT / "README.md"
