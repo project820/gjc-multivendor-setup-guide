@@ -107,6 +107,9 @@ case "$sub" in
     fi
     ;;
   hook-exec)
+    # pre-push passes <remote-name> <remote-url> as args; the shim forwards them, so after
+    # 'hook-exec' ($1) the pushed remote's NAME is $2 — used to base new-branch diffs (P2 #15).
+    HOOK_REMOTE="${2:-origin}"
     # Invoked by the pre-push shim. stdin: "<local-ref> <local-sha> <remote-ref> <remote-sha>" per ref.
     # Reviews the outgoing diff with the SINGLE cross-family critic seat (push-unit economics, #9 Lv.2).
     # advisory (default): report only, exit 0 · strict (git config cop.strict true / GJC_COP_STRICT=1):
@@ -138,7 +141,7 @@ case "$sub" in
       [ "$lsha" = "$ZERO" ] && continue   # branch deletion — nothing to review
       if [ "${rsha:-$ZERO}" = "$ZERO" ]; then
         # new remote branch: base on the default branch's merge-base; else last commit only
-        base="$(git merge-base "$lsha" "$(git rev-parse --abbrev-ref origin/HEAD 2>/dev/null || echo HEAD)" 2>/dev/null || true)"
+        base="$(git merge-base "$lsha" "$(git rev-parse --abbrev-ref "$HOOK_REMOTE/HEAD" 2>/dev/null || git rev-parse --abbrev-ref origin/HEAD 2>/dev/null || echo HEAD)" 2>/dev/null || true)"
         if [ -n "$base" ] && [ "$base" != "$lsha" ]; then
           git diff "$base" "$lsha" >> "$W/diff" 2>>"$W/differr" || DERR=1
         else
@@ -171,7 +174,7 @@ case "$sub" in
     fi
     first="$(printf '%s\n' "$out" | grep -vE '^[[:space:]]*$' | head -n1 | tr '[:lower:]' '[:upper:]' | sed -E 's/[`*#>:|]+/ /g; s/^[[:space:]]+//; s/^VERDICT[[:space:]]+//; s/^[[:space:]]+//; s/^REQUEST[[:space:]]+CHANGES/REQUEST_CHANGES/' | grep -oE '^[A-Z_]+' | head -n1 || true)"
     case "$first" in
-      APPROVE*) V=APPROVE ;;
+      APPROVE) V=APPROVE ;;   # EXACT match — 'APPROVED'/'APPROVE_X' must NOT pass (B3: only fail-open direction)
       REQUEST_CHANGES*) V=REQUEST_CHANGES ;;
       BLOCK*) V=BLOCK ;;
       *) V=UNPARSEABLE ;;
