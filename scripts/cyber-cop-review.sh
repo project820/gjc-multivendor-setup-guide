@@ -147,7 +147,7 @@ crit_verdict() {
   case "$(first_tok "$1")" in
     BLOCK*) echo BLOCK ;;
     REQUEST_CHANGES*|"REQUEST CHANGES"*) echo REQUEST_CHANGES ;;
-    APPROVE*) echo APPROVE ;;
+    APPROVE) echo APPROVE ;;   # EXACT — 'APPROVED'/'APPROVE_X' fall through to BLOCK (fail-closed; same class as gjc-cop B3)
     *) echo BLOCK ;;
   esac
 }

@@ -171,7 +171,7 @@ if [ "${GJC_SETUP_COP:-0}" = "1" ]; then
   chmod +x "$COP_HOME/cyber-cop-review.sh" "$COP_HOME/gjc-cop"
   ln -sf "$COP_HOME/gjc-cop" "$BIN_DIR/gjc-cop"   # idempotent PATH wrapper
   g "  · cyber-cop 배송 → $COP_HOME"
-  g "  · 래퍼 → $BIN_DIR/gjc-cop  (사용: gjc-cop <PR> · gjc-cop --panel <PR> · gjc-cop shell · gjc-cop watch)"
+  g "  · 래퍼 → $BIN_DIR/gjc-cop  (사용: gjc-cop <PR> · --panel <PR> · shell · watch · --install-hook[pre-push])"
   case ":$PATH:" in
     *":$BIN_DIR:"*) : ;;
     *) y "  ⚠ $BIN_DIR 가 PATH에 없습니다 — 셸 rc에 추가: export PATH=\"$BIN_DIR:\$PATH\"" ;;
