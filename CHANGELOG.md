@@ -11,14 +11,33 @@
 
 ---
 
-## Unreleased (v1.5 draft — red-team, pending approval)
+## v1.5 — 2026-07-03
 
-### Verified / Changed
-- **Red-team 딥리서치(2026-07-03)**: deep-interview→ralplan→ultragoal 파이프라인으로 12프로필 재검증. 결과 **12/12 KEEP**(모델 배치 무변경) — 아키텍처가 근거기반임을 확인.
+### Added
+- **`cyber-cop` 🚨 reviewer 모드 프로필** — 프로필 **12 → 13**. 기존 12종이 전부 author 모드(default+executor 가중)인 갭을 닫는
+  reviewer-side 카테고리: PR 리뷰·보안 감사 세션에서 역할 가중치가 반전되어 **architect(1차 코드리뷰 판정자)와 critic(머지 게이트)이 주연**.
+  배치: default/architect=`opus-4-8:high`(1M 실효검색 — MRCR 76%@1M vs Gemini 26% 붕괴), executor/critic=`gpt-5.5:high`
+  (critic은 Claude-작성 코드와 cross-family — 자기선호 편향 완화, arXiv 2410.21819 · 2604.22891), planner=`gemini-3.1-pro-low:high`.
+  고위험 PR·보안 감사는 critic 3표 병렬 패널(독립 투표→본체 집계, 2/3 반박 또는 CRITICAL/BLOCK 1건 차단).
+  **신규 셀렉터 0** — 전 좌석이 §6 검증 매트릭스의 기존 실호출 evidence를 인용하며, cross-family CI 검사를 예외 등록(SAME_FAMILY_OK) 없이 자연 통과.
+- **`routing-rules.md` 리뷰어 계약 6조항** — 스왑 행(PR 리뷰·보안 감사 → cyber-cop) · 위임 순서(리뷰 진입→architect 선호출, 머지 게이트→critic/패널) ·
+  default=집계자 제한(critic raw verdict 보존·노출) · 증거 계약(critic 1표당 file-backed blocking issue 또는 no-finding rationale) ·
+  provenance fallback(작성 모델 unknown이면 non-default family ≥2 호출) · 근거 없는 LGTM 금지. `escalation`(author-side 게이트)과의 역할 구분 명시.
+
+### Verified / Changed (red-team 딥리서치 2026-07-03)
+- **12프로필 재검증**: deep-interview→ralplan→ultragoal 파이프라인으로 재감사. 결과 **12 인큐번트 12/12 KEEP**(모델 배치 무변경) — 아키텍처가 근거기반임을 확인. `cyber-cop`은 이 12종 감사와 별개로 추가된 13번째 reviewer-side 프로필이다.
 - **L3 행동실측**: Fable-default 라우터 A/B(`ultimate` vs `legend`, 8쌍) — Fable-default는 품질 근소우위이나 **Opus 대비 1.83× 비용 + benign 과제 1건 refusal/error**. → Opus=권장 default, Fable=opt-in premium 재확인(ultimate-f5/legend 주석에 반영).
 - **Composer**: Fast는 executor 부적합 재확인(=Standard 6×가·effort knob 없음·200k·reward-hacking 붕괴). grok-build Standard 접근성 미검증으로 `ultimate-fast`는 조건부 보류.
 - **council 4대 권고 판정**: effort-ladder=ACCEPT, architect 셀렉터=RESOLVED(`-low:high` 유지), 메타심판 2차critic=ACCEPT(문서), ultimate-fast=조건부.
+- **능력/비용정규화 이중 순위표(7/7 전후 2국면)**: Opus가 두 국면 모두 비용정규화 1위 — v1.4 split이 7/7 이후 더 방어적이 됨.
 - 증거: `evidence/2026-07-03-l3-fable-rolefit.{jsonl,md}` · `evidence/2026-07-03-redteam-report.md`.
+
+### Fixed
+- **GitHub 앵커 VS16 결함 교정**: GitHub 슬러거는 이모지를 제거하되 **U+FE0F(변이 선택자)를 보존**한다(라이브 렌더링 HTML로 실측).
+  `🗂️`(U+1F5C2 U+FE0F) 헤딩을 가리키는 §5 카탈로그 앵커 8곳(README×4)과 KO `#7-…-설치--제거`(🛠️) 앵커를 실동작 슬러그로 교정.
+
+### Docs / Assets
+- profiles-matrix.svg 재생성(13 프로필). README×4 배지(version-1.5 · profiles-13)·카운트·푸터 동기. gjc-profiles.yml 헤더 v1.5—13.
 
 ## v1.4 — 2026-07-02
 

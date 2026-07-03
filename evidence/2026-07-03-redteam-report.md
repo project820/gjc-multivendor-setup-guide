@@ -27,6 +27,8 @@ Planner/architect Fable candidates: direct A/B **curtailed** (delegation runs ex
 
 ## 2. 12-profile L2 audit
 
+> Scope note: this audit covers the **12 incumbent (author-mode) profiles**. The v1.5 release also adds a 13th profile, `cyber-cop` (reviewer-mode) — a new addition, not a reassignment of any incumbent, and outside this audit's KEEP/REASSIGN scope.
+
 Every selector in all 12 profiles was OK in the 2026-07-02 live matrix (re-confirmed 2026-07-03 for fable/sonnet-5). Role-family check: `critic` is cross-family with `executor` in **10/12**; the 2 same-family cases (`solo-anthropic`, `solo-openai`) are **intentional single-vendor** profiles (documented independence tradeoff). No accidental same-family critic found.
 
 | Profile | verdict | note |

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""gen_svgs.py — GJC 멀티벤더 가이드 SVG 자산 재생성기 (v1.4)
+"""gen_svgs.py — GJC 멀티벤더 가이드 SVG 자산 재생성기 (v1.5)
 
 assets/ 아래 4개 SVG 를 데이터 기반으로 재생성한다:
   - role-winners.svg     : 👑 legend (Ultimate Legend) 역할별 최강 배너
-  - profiles-matrix.svg  : 12 프로필 × 5 역할 매트릭스
+  - profiles-matrix.svg  : 13 프로필 × 5 역할 매트릭스
   - effort-ladder.svg    : effort 6단계 사다리 + 모델별 클램프 스트립
   - architecture.svg     : 본체 1 + 서브에이전트 4 (본체 라벨 프로필-중립)
 
@@ -14,7 +14,7 @@ routing-tree.svg 는 모델명 하드코딩이 없어 재생성 대상이 아니
   python3 scripts/gen_svgs.py            # repo 루트 기준 assets/ 에 출력
   python3 scripts/gen_svgs.py --out DIR  # 다른 디렉터리에 출력
 
-데이터 원천: gjc-profiles.yml (v1.4, 12 프로필). 프로필이 바뀌면
+데이터 원천: gjc-profiles.yml (v1.5, 13 프로필). 프로필이 바뀌면
 아래 PROFILES 테이블을 yml 과 동기화한 뒤 재실행한다.
 검증 스탬프 날짜는 VERIFY_DATE 하나만 고치면 된다.
 """
@@ -47,7 +47,7 @@ VENDOR_LABELS = [
 
 ROLES = ["🎛 default", "🔨 executor", "🧠 planner", "🔭 architect", "⚖ critic"]
 
-# ── 프로필 데이터 (gjc-profiles.yml v1.4 와 1:1 동기화) ─────────────────────
+# ── 프로필 데이터 (gjc-profiles.yml v1.5 와 1:1 동기화) ─────────────────────
 # 셀 = (vendor, model_display, effort_display)  — effort_display None 이면 생략.
 # Gemini 셀렉터 gemini-3.1-pro-low:high 는 모델 'Gemini 3.1 Pro-low' + effort ':high'
 # 로 분리 표기한다 (과거 'low:high' 병합 오표기 금지).
@@ -73,6 +73,9 @@ PROFILES = [
     ("🛡 escalation", "구원투수=Fable", [
         (A, "Opus 4.8", ":high"), (A, "Fable 5", ":xhigh"),
         (O, "GPT-5.5", ":xhigh"), GEM_HI, (X, "Grok 4.3", ":high")]),
+    ("🚨 cyber-cop", "reviewer 모드", [
+        (A, "Opus 4.8", ":high"), (O, "GPT-5.5", ":high"),
+        GEM_HI, (A, "Opus 4.8", ":high"), (O, "GPT-5.5", ":high")]),
     ("💸 eco", None, [
         (A, "Opus 4.8", ":low"), (C, "DeepSeek V4 Flash", None),
         (X, "Grok 4.1 Fast", ":high"),

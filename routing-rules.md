@@ -31,6 +31,22 @@
 ## 프로필 스왑 — 모드 경계에서만 (매 쿼리 스왑 ❌, 캐시 손실)
 - 평소: `daily`  |  머지·보안·결제·비가역: `escalation`  |  대량 리팩터·비용압박: `eco`
 - 거대 코드베이스: `monorepo`  |  단일 벤더로만: `solo-anthropic` / `solo-openai`
+- **PR 리뷰·보안 감사 세션: `cyber-cop`** (reviewer 모드 — 아래 리뷰어 계약 적용)
+
+## 리뷰어 계약 — cyber-cop 프로필 전용 (PR 리뷰·보안 감사 세션)
+- **위임 순서**: 리뷰 진입 → **architect 선호출**(1차 코드리뷰 판정자: CLEAR/WATCH/BLOCK) →
+  머지 게이트 → **critic**. 고위험 PR·보안 감사는 critic **3표 병렬 패널**
+  `{openai-codex/gpt-5.5:high, xai/grok-4.3:high, google-antigravity/gemini-3.1-pro-low:high}` —
+  독립 투표 후 본체가 집계(토론 금지), **2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단**.
+  (3표째 grok은 xai 로그인 시 — 미보유면 2표 {gpt-5.5, gemini}로 강등 운영, provenance 최소치(non-default family ≥2)는 유지된다.)
+- **default=집계자 제한**: 본체는 critic/패널의 raw verdict를 **요약·은폐 없이 보존·노출**한다.
+  본체(Anthropic)가 Claude-작성 PR을 재해석하면 자기선호 편향이 재생된다(arXiv 2410.21819) — 판정 원문이 진실원천.
+- **증거 계약**: critic 1표당 **file-backed blocking issue 최소 1건** 또는 **명시적 no-finding rationale** 필수.
+  파일·라인 근거 없는 판정은 무효표로 집계.
+- **provenance fallback**: PR 작성 모델을 모르면 "Claude 작성"으로 가정하지 말고
+  **non-default family 최소 2개**를 패널에 호출한다.
+- **근거 없는 LGTM 금지**: 승인 편향 억제 — 반대 근거를 먼저 탐색하고, 근거 없이 통과시키지 않는다.
+  cyber-cop은 reviewer-side(반대 근거 탐색)다 — author-side 최종 게이트는 `escalation`.
 
 ## 검증된 셀렉터 하드룰 (위반 금지)
 - `anthropic/claude-fable-5` — GJC 실효 상한 = **xhigh** (`:max`는 수용되나 xhigh로 **침묵 클램프** — 광고 금지).
