@@ -6,7 +6,7 @@
 > gjc --mpreset cyber-cop --append-system-prompt @/path/to/gjc-multivendor-setup-guide/routing-rules.md
 > ```
 >
-> 또는 헬퍼 스크립트로: `scripts/cyber-cop-review.sh <PR_NUMBER>` (v1.5.1)
+> 또는 헬퍼 스크립트로 (가이드 체크아웃 기준): `$GUIDE/scripts/cyber-cop-review.sh <PR_NUMBER>` — `$GUIDE`=이 셋업가이드 레포 경로 (v1.5.1, §3 참조)
 
 > [!NOTE]
 > **이 문서는 non-normative 설명 공지다.** 아래의 셀렉터·프로필 표기는 독자 이해를 위한 인용이며, 실제 구성의 규범 출처는 [`gjc-profiles.yml`](../gjc-profiles.yml), 운영 계약의 규범 출처는 [`routing-rules.md`](../routing-rules.md)의 리뷰어 계약, 독자용 카탈로그·라우팅 요약은 [README §5](../README.md#5-%EF%B8%8F-최종-카탈로그-13종)·[§8](../README.md#8--동적-라우팅-전략)이다. 이 문서와 규범 문서가 다르면 규범 문서가 옳다.

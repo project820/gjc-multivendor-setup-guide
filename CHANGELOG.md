@@ -11,6 +11,11 @@
 
 ---
 
+## v1.5.4 — 2026-07-03 (docs)
+
+### Fixed
+- **`docs/whats-new-cyber-cop.md` TL;DR** — the quick-start helper command used a relative `scripts/cyber-cop-review.sh`, which is absent after the one-line install (installer ships only `gjc-profiles.yml`) or when the reader is inside the repo under review. Now points at `$GUIDE/scripts/cyber-cop-review.sh` (setup-guide checkout), consistent with §3. (codex-connector[bot] P2, post-merge follow-up to #6.)
+
 ## v1.5.3 — 2026-07-03 (docs)
 
 ### Docs
