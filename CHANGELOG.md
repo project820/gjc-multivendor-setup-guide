@@ -14,7 +14,7 @@
 ## v1.7.0 — 2026-07-03
 
 ### Added
-- **`gjc-cop --install-hook` — pre-push 훅 (#9 Lv.2)** — push 직전 나가는 diff(`remote_sha..local_sha`; 신규 브랜치는 `origin/HEAD` merge-base, 없으면 tip 커밋)를 **cross-family critic 1좌석**(`openai-codex/gpt-5.5:high`)이 판정. **기본 advisory**(verdict 출력만, push 허용) — `git config cop.strict true` 또는 `GJC_COP_STRICT=1`이면 APPROVE 아닐 때 push 차단(**좌석 실패·5MiB 초과 diff도 fail-closed**). 우회는 git 네이티브 `git push --no-verify`. 훅 파일은 thin shim(로직은 gjc-cop `hook-exec`) — 마커 기반 멱등 설치, **기존 타 훅은 절대 덮어쓰지 않음**(거부), `--uninstall-hook`은 우리 것만 제거. diff는 `@`-첨부 비신뢰 데이터 계약 유지, verdict는 first-line 파싱(fail-toward-blocking). 신규 셀렉터 0.
+- **`gjc-cop --install-hook` — pre-push 훅 (#9 Lv.2)** — push 직전 나가는 diff(`remote_sha..local_sha`; 신규 브랜치는 `origin/HEAD` merge-base, 없으면 tip 커밋)를 **cross-family critic 1좌석**(`openai-codex/gpt-5.5:high`)이 판정. **기본 advisory**(verdict 출력만, push 허용) — `git config cop.strict true` 또는 `GJC_COP_STRICT=1`이면 APPROVE 아닐 때 push 차단(**strict에선 좌석 도달 전 모든 실패 — gjc 부재·diff 계산 실패·5MiB 초과·좌석 실패 — 가 fail-closed**; 리뷰 반영). 우회는 git 네이티브 `git push --no-verify`. 훅 파일은 thin shim(로직은 gjc-cop `hook-exec`) — 마커 기반 멱등 설치, **기존 타 훅은 절대 덮어쓰지 않음**(거부), `--uninstall-hook`은 우리 것만 제거. diff는 `@`-첨부 비신뢰 데이터 계약 유지, verdict는 first-line 파싱(fail-toward-blocking). 신규 셀렉터 0.
 
 ## v1.6.0 — 2026-07-03
 
