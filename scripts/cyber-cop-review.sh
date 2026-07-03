@@ -45,17 +45,23 @@ run_seat() {
   local dir="$WORK/seat-$(printf '%s' "$model" | tr '/:' '__')"
   mkdir -p "$dir"
   local rc=0
+  # Capture STDOUT only for verdict parsing (gjc stderr banners/progress must not be
+  # mistaken for the verdict token, which would degrade the tool into an always-BLOCK oracle).
   perl -e 'alarm shift; exec @ARGV' "$TIMEOUT" \
     gjc -p --model "$model" --no-tools --session-dir "$dir" \
-    "@$WORK/meta.json" "@$WORK/pr.diff" "$prompt" 2>&1 || rc=$?
-  [ "$rc" -ne 0 ] && echo "[seat error: $model rc=$rc]"
+    "@$WORK/meta.json" "@$WORK/pr.diff" "$prompt" >"$dir/stdout" 2>"$dir/stderr" || rc=$?
+  local out; out="$(cat "$dir/stdout" 2>/dev/null || true)"
+  [ "$rc" -ne 0 ] && out="$out
+[seat error: $model rc=$rc]"
   # W2: verify the intended model ACTUALLY ran (defends against a silent --model fallback
-  # to the default model — the #10 class). Assert its id appears in the session log.
-  local short="${model%%:*}"; short="${short##*/}"
-  if [ "$rc" -eq 0 ] && ! grep -rqE "\"model\":\"[^\"]*${short}[^\"]*\"" "$dir" 2>/dev/null; then
-    echo "[seat error: $model identity NOT found in session log — possible silent model fallback]"
+  # to the default model — the #10 class). Whitespace-tolerant JSON, dot/regex-escaped id.
+  local short; short="${model%%:*}"; short="${short##*/}"
+  local esc; esc="$(printf '%s' "$short" | sed 's/[][().^$*+?{}\\|]/\\&/g')"
+  if [ "$rc" -eq 0 ] && ! grep -rqE "\"model\"[[:space:]]*:[[:space:]]*\"[^\"]*${esc}[^\"]*\"" "$dir" 2>/dev/null; then
+    out="$out
+[seat error: $model identity NOT found in session log — possible silent model fallback]"
   fi
-  return 0
+  printf '%s' "$out"
 }
 
 # Extract the seat verdict from its FIRST non-empty line only (the prompt mandates the token
@@ -139,10 +145,17 @@ else
   INV_NOTE=" (WARNING: could not fetch ${REPO} PR head; ran against local checkout — invariant result may not reflect the PR)"
 fi
 INV_OK=1
-if [ -f "$INV_TREE/scripts/validate-profiles.py" ]; then
+# SECURITY: never execute the PR's code. Run the TRUSTED validator (from this local
+# checkout) against the PR-head DATA (gjc-profiles.yml + READMEs in the worktree) by
+# overwriting the worktree's copy with the trusted one before running. A PR that itself
+# changes validate-profiles.py cannot gain RCE here and must be reviewed by a human.
+TRUSTED_VALIDATOR="$REPO_ROOT/scripts/validate-profiles.py"
+if [ -f "$TRUSTED_VALIDATOR" ] && [ -d "$INV_TREE" ]; then
+  mkdir -p "$INV_TREE/scripts"
+  cp "$TRUSTED_VALIDATOR" "$INV_TREE/scripts/validate-profiles.py"
   inv_out="$(cd "$INV_TREE" && python3 scripts/validate-profiles.py 2>&1)" || INV_OK=0
 else
-  inv_out="validate-profiles.py not present in target tree"; INV_OK=0
+  inv_out="trusted validate-profiles.py not available"; INV_OK=0
 fi
 # fail-closed: if we could not validate the actual PR head, the result is untrustworthy
 [ "$INV_OK_FETCH" = 0 ] && INV_OK=0
