@@ -1,0 +1,73 @@
+# cyber-cop GitHub Actions bot — EXAMPLE (#9 Lv.3)
+# Copy to .github/workflows/cyber-cop.yml in the repo you want reviewed.
+#
+# REQUIRES A SELF-HOSTED RUNNER (subscription OAuth cannot live on public runners):
+#   - gjc installed and /login'ed for the seat providers
+#   - gjc-cop installed:  curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | GJC_SETUP_COP=1 bash
+#   - runner labeled `gjc-cop` (or change runs-on below)
+#
+# SECURITY MODEL — why pull_request_target is safe HERE (and only here):
+#   * This workflow NEVER checks out or executes PR code. gjc-cop reviews the PR as
+#     DATA only (gh pr view/diff; invariants run a TRUSTED validator over a pinned-SHA
+#     clone). The classic pwn-request ("checkout attacker code with a write token")
+#     cannot occur because there is no checkout step at all — do not add one.
+#   * Prompt-injection: PR title/body/diff reach the model as untrusted data under the
+#     embedded reviewer contract (directives inside them are findings, not commands).
+#   * Token scope is comment-only: `issues: write` posts the verdict (PR conversation
+#     comments = issue-comment API). Do NOT grant `pull-requests: write` — it would
+#     allow approve/request-changes, which is more than comment-only.
+#   * The bot NEVER merges. See the recipe at the bottom for human-gated auto-merge.
+
+name: cyber-cop
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: cyber-cop-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    runs-on: [self-hosted, gjc-cop]
+    timeout-minutes: 20
+    steps:
+      - name: cyber-cop review (data-only, never merges)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          # trusted tool from the RUNNER's install — never from the PR
+          out="$("$HOME/.local/bin/gjc-cop" "$PR" 2>&1)" || true
+          body="## 🚨 cyber-cop verdict (Actions)
+
+          \`\`\`
+          ${out}
+          \`\`\`
+          _cyber-cop never merges — merge stays a human decision._"
+          gh api "repos/$REPO/issues/$PR/comments" -f body="$body" >/dev/null
+          # make the check itself carry the verdict, so it can serve as a required status:
+          case "$out" in
+            *"MERGE RECOMMENDATION: MERGE"*) exit 0 ;;
+            *) echo "cyber-cop: DO-NOT-MERGE (or unparseable) — failing the check"; exit 1 ;;
+          esac
+
+# ── EXTREME-AUTOMATION RECIPE (bot still never merges) ─────────────────────────
+# 1) Branch protection → require the "cyber-cop / review" status check.
+# 2) A human enables GitHub NATIVE auto-merge on a specific PR; GitHub completes the
+#    merge only when required checks pass. The bot never merges; the human's per-PR
+#    opt-in IS the gate. (Every `synchronize` re-runs the review on the new head.)
+#
+# ── ALTERNATIVE PATH (no machine with subscription auth) ───────────────────────
+# A `cyber-cop-ci` profile variant on API-key providers (e.g. xai / deepinfra /
+# google-vertex) could run on public runners. It is NOT shipped here on purpose:
+# those seats introduce NEW selectors, and repo discipline requires the live
+# validation battery (scripts/revalidate.sh + dated evidence/) BEFORE any selector
+# enters gjc-profiles.yml — plus a documented quality tradeoff vs the subscription
+# seats. Propose it as its own PR if you need it.
