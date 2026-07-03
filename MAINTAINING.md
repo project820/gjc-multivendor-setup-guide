@@ -37,6 +37,7 @@ bash scripts/catalog-snapshot.sh               # snapshot; later: scripts/catalo
 ```
 
 `evidence/` is the durable audit trail — committed, dated, never rewritten. It backs the README's "verified" claims.
+It also holds the dated deep-research / consultant / model-council reports that justify the role→model assignments (`evidence/<date>-deep-research-benchmarks.md`, `-consultant-report.md`, `-ultimate-final-report.md`), cross-linked from README §6-2. Re-validation ships as a *new* dated report — never edit a published one.
 
 ---
 
