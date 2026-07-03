@@ -38,6 +38,7 @@
   머지 게이트 → **critic**. 고위험 PR·보안 감사는 critic **3표 병렬 패널**
   `{openai-codex/gpt-5.5:high, xai/grok-4.3:high, google-antigravity/gemini-3.1-pro-low:high}` —
   독립 투표 후 본체가 집계(토론 금지), **2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단**.
+  (3표째 grok은 xai 로그인 시 — 미보유면 2표 {gpt-5.5, gemini}로 강등 운영, provenance 최소치(non-default family ≥2)는 유지된다.)
 - **default=집계자 제한**: 본체는 critic/패널의 raw verdict를 **요약·은폐 없이 보존·노출**한다.
   본체(Anthropic)가 Claude-작성 PR을 재해석하면 자기선호 편향이 재생된다(arXiv 2410.21819) — 판정 원문이 진실원천.
 - **증거 계약**: critic 1표당 **file-backed blocking issue 최소 1건** 또는 **명시적 no-finding rationale** 필수.

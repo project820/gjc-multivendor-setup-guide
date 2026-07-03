@@ -263,7 +263,7 @@ profiles:
       # (v1.3 までの critic :xhigh は no-op クランプだった — xhigh は grok-build プロバイダ専用で、そちらは effort サフィックス非対応)
 
   cyber-cop:                           # 🚨 reviewer モード — PRレビュー·セキュリティ監査（author モードの逆相）
-    required_providers: [anthropic, openai-codex, google-antigravity, xai]
+    required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
       default:   anthropic/claude-opus-4-8:high                 # 不変条件遵守 + 1M ctx。集計者に限定 — critic の raw verdict を保持·公開（routing-rules 契約）
       executor:  openai-codex/gpt-5.5:high                      # 脇役 — 再現 PoC·failing test·harness（Terminal-Bench 82.7）
@@ -272,6 +272,7 @@ profiles:
       critic:    openai-codex/gpt-5.5:high                      # 主役2 — マージゲート、Claude 作成コードと cross-family
       # 高リスク PR·セキュリティ監査：critic 3票並列パネル {openai-codex/gpt-5.5:high, xai/grok-4.3:high,
       # google-antigravity/gemini-3.1-pro-low:high} — 独立投票後に本体が集計（議論禁止）、2/3 反対または CRITICAL/BLOCK 1件で遮断
+      # (3票目の grok は xai ログイン時 — 未保有でも 2票 {gpt-5.5, gemini} で provenance 最低条件(non-default family ≥2)を充足)
 
   eco:                                 # 最安 — メインループのみ Opus(effort 抑制)、委譲は超安価/サブスクモデル(全て検証✅)
     required_providers: [anthropic, opencode-go, google-antigravity, xai]

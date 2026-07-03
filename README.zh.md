@@ -263,7 +263,7 @@ profiles:
       # (v1.3 之前的 critic :xhigh 实为 no-op 夹取 — xhigh 仅存在于 grok-build 提供方，且那边不支持 effort 后缀)
 
   cyber-cop:                           # 🚨 reviewer 模式 — PR 审查·安全审计（author 模式的反相）
-    required_providers: [anthropic, openai-codex, google-antigravity, xai]
+    required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
       default:   anthropic/claude-opus-4-8:high                 # 满足不变式 + 1M ctx。仅作聚合者 — 完整保留·公开 critic 原始判定（routing-rules 契约）
       executor:  openai-codex/gpt-5.5:high                      # 配角 — 复现 PoC·failing test·harness（Terminal-Bench 82.7）
@@ -272,6 +272,7 @@ profiles:
       critic:    openai-codex/gpt-5.5:high                      # 主角2 — 合并门禁，与 Claude 编写的代码 cross-family
       # 高风险 PR·安全审计：critic 三票并行评审团 {openai-codex/gpt-5.5:high, xai/grok-4.3:high,
       # google-antigravity/gemini-3.1-pro-low:high} — 独立投票后由主体聚合（禁止辩论），2/3 反对或出现任一 CRITICAL/BLOCK 即阻断
+      # (第 3 票 grok 需要 xai 登录 — 未登录时 2 票 {gpt-5.5, gemini} 仍满足 provenance 最低要求：非 default 家族 ≥2)
 
   eco:                                 # 最省 — 仅主循环用 Opus(降 effort)，委派全用超低价/订阅模型(全部已验证✅)
     required_providers: [anthropic, opencode-go, google-antigravity, xai]

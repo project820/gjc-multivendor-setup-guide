@@ -263,7 +263,7 @@ profiles:
       # (the critic :xhigh used through v1.3 was a no-op clamp — xhigh exists only on the grok-build provider, which doesn't resolve effort suffixes)
 
   cyber-cop:                           # 🚨 reviewer mode — PR review & security audit (inverse of author mode)
-    required_providers: [anthropic, openai-codex, google-antigravity, xai]
+    required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
       default:   anthropic/claude-opus-4-8:high                 # invariant-compliant + 1M ctx. Aggregator-only — preserve/expose raw critic verdicts (routing-rules contract)
       executor:  openai-codex/gpt-5.5:high                      # supporting role — repro PoCs, failing tests, harnesses (Terminal-Bench 82.7)
@@ -272,6 +272,7 @@ profiles:
       critic:    openai-codex/gpt-5.5:high                      # lead #2 — merge gate, cross-family vs Claude-authored code
       # High-risk PRs / security audits: 3-vote parallel critic panel {openai-codex/gpt-5.5:high, xai/grok-4.3:high,
       # google-antigravity/gemini-3.1-pro-low:high} — independent votes aggregated by the main loop (no debate); block on 2/3 rejection or any CRITICAL/BLOCK
+      # (3rd vote (grok) requires xai login — without it, 2 votes {gpt-5.5, gemini} still meet the provenance minimum of ≥2 non-default families)
 
   eco:                                 # cheapest — only the main loop is Opus (effort trimmed), delegation ultra-cheap/subscription (all verified✅)
     required_providers: [anthropic, opencode-go, google-antigravity, xai]

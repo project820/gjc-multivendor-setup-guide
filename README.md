@@ -279,7 +279,7 @@ profiles:
       # (v1.3까지의 critic :xhigh는 no-op 클램프였음 — xhigh는 grok-build 프로바이더 전용이며 effort 서픽스 미지원)
 
   cyber-cop:                           # 🚨 reviewer 모드 — PR 리뷰·보안 감사 (author 모드의 역상)
-    required_providers: [anthropic, openai-codex, google-antigravity, xai]
+    required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
       default:   anthropic/claude-opus-4-8:high                 # 불변식 준수 + 1M ctx. 집계자 제한 — critic raw verdict 보존·노출(routing-rules 계약)
       executor:  openai-codex/gpt-5.5:high                      # 조연 — 재현 PoC·failing test·harness (Terminal-Bench 82.7)
@@ -288,6 +288,7 @@ profiles:
       critic:    openai-codex/gpt-5.5:high                      # 주연2 — 머지 게이트, Claude-작성 코드와 cross-family
       # 고위험 PR·보안 감사: critic 3표 병렬 패널 {openai-codex/gpt-5.5:high, xai/grok-4.3:high,
       # google-antigravity/gemini-3.1-pro-low:high} — 독립 투표 후 본체 집계(토론 금지), 2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단
+      # (3표째 grok은 xai 로그인 시 — 미보유면 2표 {gpt-5.5, gemini}로도 provenance 최소치(non-default family ≥2) 충족)
 
   eco:                                 # 최저가 — 본체만 Opus(effort 절감), 위임은 초저가/구독 모델(전부 검증✅)
     required_providers: [anthropic, opencode-go, google-antigravity, xai]
@@ -368,7 +369,7 @@ profiles:
 - **legend** — 👑 지속 가능 최강(상단 배너). Fable 5를 **default 한 자리에만** 둬서 7/7 이후 usage credits 노출을 최소화하면서 라우터 품질 상한을 유지하고, executor는 구독 포함 최강 Opus `:max`. `display_name: legend5` 는 로컬 커스텀 프리셋과의 이름 충돌(덮어쓰기)을 막는 보호 장치. 참고: default는 최다 호출 역할이라 credits 비용은 계속 발생한다 — 완전 회피하려면 default를 `opus-4-8:high`로(= `ultimate`와 동일).
 - **coding-sprint** — executor 주연(Opus `:max`), 계획·리뷰는 가볍게, critic은 *코딩을 아는* `gpt-5.4`로 실버그를 잡는다(cross-family vs gemini).
 - **escalation** — v1.4 재설계: 실패 신호가 뜬 작업에 **최강 실행자 Fable 5 `:xhigh`를 구원투수로 투입**한다 — 간헐 사용이라 7/7 이후 usage credits 과금과도 궁합이 맞다. critic은 멀티벤더 3표 패널([§9](#9--병렬-에이전트--신뢰성)). 정직한 기록: v1.3까지의 critic `grok-4.3:xhigh`는 **no-op였다** — xai 프로바이더의 grok-4.3 상한이 high라 침묵 클램프로 `ultimate` critic과 동일 동작(xhigh는 grok-build 프로바이더 전용인데 그쪽은 effort 서픽스 자체가 해석되지 않는다). v1.4는 `:high`로 명시 교정했다. 되돌릴 수 없는 변경 전용.
-- **cyber-cop** — 🚨 **reviewer 모드** (v1.5 신규): 기존 12종이 전부 author 모드(default+executor 가중)인 갭을 닫는 13번째 카테고리. 리뷰 세션에선 역할 가중치가 반전된다 — executor는 재현 PoC·failing test용 조연으로 내려가고, **architect(1차 코드리뷰 판정자)와 critic(머지 게이트)이 주연**이 된다. architect=Opus `:high`(1M 실효검색 76% vs Gemini 26% 붕괴 — 200k+ diff 통독), critic=`gpt-5.5:high`(Claude-작성 코드와 cross-family — 자기선호 편향 완화, arXiv [2410.21819](https://arxiv.org/abs/2410.21819)). 고위험 PR·보안 감사는 critic 3표 패널(§9 규칙 그대로 — 독립 투표, 토론 금지, 2/3 반박 시 차단). 비용 대략치(100k in/10k out 리뷰 패스당): grok ~$0.15 · opus ~$0.75 · gpt-5.5 ~$0.80 — critic은 머지 게이트에서만 호출되는 저빈도 자리라 상시 gpt-5.5도 부담이 작다. 운영 규칙(위임 순서·증거 계약·집계자 제한·provenance fallback·LGTM 금지)은 [`routing-rules.md`](./routing-rules.md)의 리뷰어 계약 참조. `escalation`과의 차이: escalation은 author-side 게이트(고쳐서 통과), cyber-cop은 reviewer-side(반대 근거 탐색).
+- **cyber-cop** — 🚨 **reviewer 모드** (v1.5 신규): 기존 12종이 전부 author 모드(default+executor 가중)인 갭을 닫는 13번째 카테고리. 리뷰 세션에선 역할 가중치가 반전된다 — executor는 재현 PoC·failing test용 조연으로 내려가고, **architect(1차 코드리뷰 판정자)와 critic(머지 게이트)이 주연**이 된다. architect=Opus `:high`(1M 실효검색 76% vs Gemini 26% 붕괴 — 200k+ diff 통독), critic=`gpt-5.5:high`(Claude-작성 코드와 cross-family — 자기선호 편향 완화, arXiv [2410.21819](https://arxiv.org/abs/2410.21819)). 고위험 PR·보안 감사는 critic 3표 패널(§9 규칙 그대로 — 독립 투표, 토론 금지, 2/3 반박 시 차단; 3표째 grok은 xai 로그인 시 — 그래서 xai는 `required_providers`에 없고, 미보유자도 2표 {gpt-5.5, gemini}로 provenance 최소치를 지키며 운영 가능). 비용 대략치(100k in/10k out 리뷰 패스당): grok ~$0.15 · opus ~$0.75 · gpt-5.5 ~$0.80 — critic은 머지 게이트에서만 호출되는 저빈도 자리라 상시 gpt-5.5도 부담이 작다. 운영 규칙(위임 순서·증거 계약·집계자 제한·provenance fallback·LGTM 금지)은 [`routing-rules.md`](./routing-rules.md)의 리뷰어 계약 참조. `escalation`과의 차이: escalation은 author-side 게이트(고쳐서 통과), cyber-cop은 reviewer-side(반대 근거 탐색).
 - **eco** — 본체만 Opus(`:low`), executor는 최저가 `deepseek-v4-flash`(opencode-go — 5번째 벤더 활용; 대안: `sonnet-5:medium` ≈ sonnet-4-6:high, 인트로 $2/$10 ~8/31), planner는 초저가 Grok Fast, architect/critic은 구독 토큰 Gemini. critic은 `gemini-3.5-flash-low`로 **리터럴 id 핀**(구 `gemini-3.5-flash`는 퍼지 매칭으로 우연히 동작하던 것) — executor(opencode-go)와 cross-family.
 - **monorepo** — 전 역할이 1M ctx. `gpt-5.5`(272K)는 배제 — gpt-5.4는 1M이지만 Opus가 동급 이상. architect=**Opus**(1M 실효검색 1위 **76%@1M** — Gemini는 26%로 붕괴, Grok은 멀티모달 약함), critic=**`glm-5.2`**(cross-family, 대안 `deepseek-v4-pro`). 1M을 넘보는 거대 입력은 한 메시지에 통째로 붓지 말고 **청크로 나눠 멀티턴 누적**하면 1M 윈도우를 그대로 쓸 수 있다([§6-3](#6-3-잔여-공백-검토-gap-13--gjc-실효-컨텍스트-실측)) — 단일 메시지 >~400k paste만 `opencode-go/deepseek-v4-pro`로.
 - **solo-anthropic** — 단일 벤더 운영, v1.4에서 critic까지 **전 역할 Opus**(능력 우선 선택). Sonnet 계열 critic은 비추천 — Sonnet 5 리뷰어 실측(CodeRabbit)에서 정밀도는 올랐지만 **버그 리콜이 63%→50%로 하락**했다. 단, 전부-Opus가 편향을 없애는 건 아니다: 연구상 **강한 모델일수록 자기선호 편향이 오히려 크고**(arXiv [2410.21819](https://arxiv.org/abs/2410.21819) · [2604.22891](https://arxiv.org/abs/2604.22891)), **능력이 편향을 상쇄하지 않는다**. 이 프로필은 "단일 벤더 제약 하의 능력 우선"이고, **품질 경로는 여전히 cross-family 프로필**이다.
