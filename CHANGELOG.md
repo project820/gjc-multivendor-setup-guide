@@ -15,6 +15,10 @@
 
 ### Added
 - **`gjc-cop` 원커맨드 reviewer (#9 Lv.1)** — `install.sh`에 **`GJC_SETUP_COP=1`** 플래그 추가: `routing-rules.md` + `scripts/cyber-cop-review.sh` + trusted `validate-profiles.py` + `scripts/gjc-cop` 래퍼를 `~/.gjc/agent/cyber-cop/`에 배송하고 `gjc-cop` 심링크를 `~/.local/bin`에 등록(멱등). **클론·`$GUIDE` 불요**: `gjc-cop <PR>`(REPO cwd 자동감지→4섹션 verdict) · `--panel <PR>`(3표 패널) · `shell`(대화형 리뷰어 세션) · `watch [interval]`(신규 PR 폴링·리뷰, 머지 금지). 래퍼가 **항상 신뢰 로컬 경로를 주입**하므로 #6 상대경로 인젝션 풋건이 구조적으로 소멸. 신규 셀렉터 0. `cyber-cop-review.sh`는 `$CYBER_COP_VALIDATOR` env로 배송된 trusted validator 위치를 수용. 문서: 공지 §3 0단계 · MAINTAINING §2.
+## v1.5.7 — 2026-07-03 (docs errata)
+
+### Fixed
+- **`evidence/2026-07-03-errata.md` 신설 (append-only 정정)** — ultimate-final-report §2 벤치 표에서 Composer 2.5의 `74.7% → 54.0%` 붕괴 수치가 **SWE-bench Verified 열에 오배치**(정답: **Pro**; 같은 문서 §3.2·deep-research는 Pro로 정확히 인용). `evidence/`는 재작성 불가 감사추적이므로 **원본은 verbatim 보존**하고 dated errata 리포트로 정정. 판정 영향 없음. (codex-bot P2, PR #5 post-merge — repo 전체 미회신 코멘트 스윕에서 발견.)
 
 ## v1.5.6 — 2026-07-03
 
