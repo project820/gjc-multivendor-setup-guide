@@ -143,7 +143,7 @@ gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
 예시 워크플로 [`docs/examples/cyber-cop-action.yml`](./examples/cyber-cop-action.yml)을 대상 레포의 `.github/workflows/`에 복사하면 **PR이 열릴 때마다 자동으로 cyber-cop verdict가 코멘트로** 달린다. 구독 OAuth는 공용 러너에 못 올리므로 **gjc/gjc-cop가 설치·로그인된 셀프호스티드 러너**가 전제다.
 
 - **pwn-request 구조적 회피**: 워크플로가 PR 코드를 체크아웃/실행하지 않는다 — gjc-cop이 PR을 **데이터로만** 리뷰(gh view/diff + pinned-SHA 신뢰검증). 그래서 `pull_request_target`(fork PR에도 코멘트 가능)이 안전하다. **checkout 스텝을 추가하지 말 것.**
-- **권한 최소**: `issues: write`(코멘트 전용)만. `pull-requests: write` 금지(§5-2).
+- **권한 최소**: `issues: write`(verdict 코멘트) + `pull-requests: read`(gh pr view/diff). `pull-requests: write`는 금지 — approve 권한이라 comment-only 경계 위반(§5-2).
 - **극한 자동화**: verdict를 required status check로 + 사람이 PR별 GitHub 네이티브 auto-merge 활성화 — **봇은 여전히 절대 머지 안 함**, 사람의 per-PR opt-in이 게이트.
 - API-키 변형(`cyber-cop-ci`)은 신규 셀렉터라 라이브 검증 배터리 선행 없인 미출하(예시 파일 하단 참조).
 
