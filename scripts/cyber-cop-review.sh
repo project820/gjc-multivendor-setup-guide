@@ -218,7 +218,9 @@ INV_TREE="$REPO_ROOT"; INV_NOTE=""; INV_OK_FETCH=1
 # reviewed, immune to a force-push mid-review. Fail-closed if it can't be fetched.
 FETCH_REF="${PIN_SHA:-pull/${PR}/head}"
 if [ -n "$PIN_SHA" ] && git -C "$REPO_ROOT" rev-parse --git-dir >/dev/null 2>&1 && git -C "$REPO_ROOT" fetch -q "https://github.com/${REPO}.git" "$FETCH_REF" 2>/dev/null; then
-  if git -C "$REPO_ROOT" worktree add -q --detach "$WORK/prhead" FETCH_HEAD 2>/dev/null; then
+  # Materialize from the immutable pinned SHA, NOT the repo-wide FETCH_HEAD (a concurrent
+  # review could overwrite FETCH_HEAD between our fetch and this worktree add).
+  if git -C "$REPO_ROOT" worktree add -q --detach "$WORK/prhead" "$PIN_SHA" 2>/dev/null; then
     INV_TREE="$WORK/prhead"; INV_NOTE=" (pinned ${PIN_SHA:0:12} @ ${REPO})"
   else
     # fetched but couldn't materialize the worktree → do NOT silently validate local checkout
