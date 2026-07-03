@@ -30,6 +30,9 @@ run_review() {  # args: [--panel] <PR#>
   [ -f "$ORCH" ] || { echo "gjc-cop: not installed. Re-run install.sh with GJC_SETUP_COP=1." >&2; exit 1; }
   local repo; repo="$(detect_repo)"
   [ -n "$repo" ] || { echo "gjc-cop: set REPO=owner/name or run inside a gh-recognized repo." >&2; exit 2; }
+  # The headless orchestrator EMBEDS its reviewer contract (it does not read routing-rules.md),
+  # so only the trusted validator path + REPO need injecting here. routing-rules.md is used
+  # only by `gjc-cop shell` (above), which sources it from the trusted $CONTRACT_FILE.
   CYBER_COP_VALIDATOR="$VALIDATOR" REPO="$repo" bash "$ORCH" "$@"
 }
 
