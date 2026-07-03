@@ -38,7 +38,7 @@ Every selector in all 12 profiles was OK in the 2026-07-02 live matrix (re-confi
 | coding-sprint | KEEP | exec Opus:max + coding-aware GPT critic (cross-family vs gemini). |
 | escalation | KEEP | v1.4 already moved exec→fable-5:xhigh as rescue; §1 supports intermittent Fable use. critic Grok:xhigh silently clamps to high (documented). |
 | eco | KEEP | cheap delegation; critic gemini-3.5-flash-low cross-family vs opencode-go exec. |
-| monorepo | KEEP | all-1M seats; critic deepseek (cross-family vs anthropic). |
+| monorepo | KEEP | all-1M seats; critic opencode-go/glm-5.2 (cross-family vs anthropic exec; deepseek-v4-pro documented alt). |
 | solo-anthropic | KEEP | single-vendor; same-family critic = documented tradeoff. |
 | solo-openai | KEEP | single-vendor base-GPT; same-family critic tradeoff. |
 | claude-codex | KEEP | 2-vendor; Anthropic exec / GPT critic cross-family. |
@@ -49,7 +49,7 @@ Every selector in all 12 profiles was OK in the 2026-07-02 live matrix (re-confi
 ## 3. Composer 2.5 (community "why not Composer" question)
 
 - **grok-build Standard access on this machine: NOT verified** — the `grok-build` provider requires `GROK_CLI_OAUTH_TOKEN` wiring that is not present; `xai/grok-composer-2.5-fast` resolves but Standard-tier routing via grok-build is unconfirmed here. Marked **vendor/route-unverified**.
-- Evidence (external, corroborated): Composer 2.5 = Cursor fine-tune on Kimi K2.5; **Fast = Standard intelligence at ~6× price** (pure latency purchase); `supportsReasoningEffort:false` breaks GJC executor self-verify contract; 200k ctx vs Claude 1M; SWE-bench Pro **74.7→54.0 collapse** under stricter harness.
+- Evidence (external, corroborated): Composer 2.5 = Cursor fine-tune on Kimi K2.5; **Fast = Standard intelligence at ~6× price** (pure latency purchase); `supportsReasoningEffort:false` on the grok-build composer route breaks GJC executor self-verify contract (note: the `xai/grok-composer-2.5-fast` catalog row does expose effort levels — the property is route-variant-dependent); 200k ctx vs Claude 1M; SWE-bench Pro **74.7→54.0 collapse** under stricter harness.
 - **Verdict**: REJECT Composer Fast as executor. If throughput is genuinely needed, an optional **`ultimate-fast`** lane on Composer **Standard** (never Fast) is defensible — gated on verifying grok-build Standard access first.
 
 ## 4. External council 4-recommendation verdict table
@@ -57,7 +57,7 @@ Every selector in all 12 profiles was OK in the 2026-07-02 live matrix (re-confi
 | Rec | Verdict | Basis |
 |---|:--:|---|
 | Effort ladder (`:max`/`:xhigh`→`:high`, escalate on Critic ITERATE/Architect BLOCK) | **ACCEPT** | L3 cost data: premium seats at max are the dominant cost driver ($3.69–6.75/8-task). Add as guidance + optional lower-effort variant; keep `:max` in `ultimate`/`escalation` where accuracy-first. |
-| Verify `gemini-3.1-pro-low:high` architect selector (A/B vs `gemini-3.1-pro:high`) | **PARTIAL/RESOLVED** | Our engine check + external agree: bare `gemini-3.1-pro-high` 400s; `-low:high` is the engine's canonical high path (thinking_level HIGH), NOT degraded. KEEP `-low:high`; no `gemini-3.1-pro:high` public slug on this provider. |
+| Verify `gemini-3.1-pro-low:high` architect selector (A/B vs `gemini-3.1-pro:high`) | **PARTIAL/RESOLVED** | Our engine check is decisive (externals only recommended verifying — did not themselves conclude non-degraded): bare `gemini-3.1-pro-high` 400s; `-low:high` is the engine's canonical high path (thinking_level HIGH), NOT degraded. KEEP `-low:high`; no `gemini-3.1-pro:high` public slug on this provider. |
 | GPT-5.5 second-pass critic (meta-judge) for merge-critical | **ACCEPT (doc-only)** | Judging-with-Many-Minds: meta-judge > debate. Add as workflow note for `escalation`, not a YAML seat change (single YAML critic stays Grok). |
 | `ultimate-fast` throughput profile (Composer **Standard**) | **CONDITIONAL ACCEPT** | Only after grok-build Standard access is verified (see §3). Ship as opt-in, never Fast. |
 
