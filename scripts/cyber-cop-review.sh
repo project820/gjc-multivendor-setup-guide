@@ -183,16 +183,21 @@ if [ "$PANEL" = "1" ]; then
     BLOCK) panel_hard_block=1; panel_dissent=$((panel_dissent+1)) ;;
     REQUEST_CHANGES) panel_dissent=$((panel_dissent+1)) ;;
   esac
-  # grok is optional per routing-rules.md: with no xai login it downgrades to a 2-vote
-  # {gpt-5.5, gemini} panel. A provider-unavailable seat ([seat error]) is VOIDED (not a
-  # BLOCK vote); we then require >=2 VALID non-default-family votes (critic + >=1 panelist).
+  # ONLY the grok seat is optional per routing-rules.md (no-xai-login downgrades to the
+  # 2-vote {gpt-5.5, gemini} panel). A failed/unavailable GEMINI seat is NOT voidable —
+  # that would silently change the documented panel composition — it FAILS CLOSED (BLOCK).
   panel_valid=1   # critic (gpt-5.5) is one valid non-default vote
   for pm in "xai/grok-4.3:high" "google-antigravity/gemini-3.1-pro-low:high"; do
     p_out="$(run_seat "$pm" "You are an independent cyber-cop panel CRITIC for PR #${PR}. ${CONTRACT}
 First line = exactly one of: APPROVE | REQUEST_CHANGES | BLOCK. Then one file-backed reason. Vote independently; no debate.")"
     case "$p_out" in
       *"[seat error:"*)
-        echo "### panel vote (${pm}): VOID (unavailable/failed — downgraded per routing-rules)"; echo
+        if [ "$pm" = "xai/grok-4.3:high" ]; then
+          echo "### panel vote (${pm}): VOID (optional seat unavailable — 2-vote downgrade per routing-rules)"; echo
+          continue
+        fi
+        echo "### panel vote (${pm}): BLOCK (required seat failed — fail-closed, not voidable)"; echo
+        panel_hard_block=1; panel_dissent=$((panel_dissent+1))
         continue ;;
     esac
     p_v="$(crit_verdict "$p_out")"
@@ -244,16 +249,19 @@ if [ "$INV_OK_FETCH" = 0 ]; then
   # guide PR under a standalone gjc-cop install where REPO_ROOT=~/.gjc/agent — issue #12.)
   inv_out="could not fetch the PR head — cannot verify invariants; failing closed"; INV_OK=0; INV_STATUS="FAIL"
 else
+  # SYMLINK CHECK FIRST (P1, PR#11 post-merge): a hostile guide PR could replace
+  # gjc-profiles.yml with a symlink to a non-regular target (/dev/zero) — then `-f` is
+  # false and an applicability-first branch would mark N/A and skip gating entirely.
+  # `-L` catches the symlink regardless of target type, so it must win over N/A.
+  SYMLINK_BAD=0
+  for df in "$INV_TREE"/gjc-profiles.yml "$INV_TREE"/README*.md; do [ -L "$df" ] && SYMLINK_BAD=1; done
   # Applicability is judged ONLY from the actually-fetched PR head: guide-specific invariants
   # apply iff the reviewed repo ships gjc-profiles.yml; otherwise N/A (arch/critic still gate).
   INV_APPLICABLE=1; [ -f "$INV_TREE/gjc-profiles.yml" ] || INV_APPLICABLE=0
-  # P1 (#11): reject symlinked data files in the untrusted fetched tree (→ /dev/zero / secrets).
-  SYMLINK_BAD=0
-  for df in "$INV_TREE"/gjc-profiles.yml "$INV_TREE"/README*.md; do [ -L "$df" ] && SYMLINK_BAD=1; done
-  if [ "$INV_APPLICABLE" = 0 ]; then
-    inv_out="N/A — reviewed repo has no gjc-profiles.yml; guide-specific invariants do not apply (arch/critic still gate)."; INV_STATUS="N/A"
-  elif [ "$SYMLINK_BAD" = 1 ]; then
+  if [ "$SYMLINK_BAD" = 1 ]; then
     inv_out="refusing to validate: a PR-head data file (gjc-profiles.yml / README*.md) is a symlink"; INV_OK=0; INV_STATUS="FAIL"
+  elif [ "$INV_APPLICABLE" = 0 ]; then
+    inv_out="N/A — reviewed repo has no gjc-profiles.yml; guide-specific invariants do not apply (arch/critic still gate)."; INV_STATUS="N/A"
   elif [ -f "$TRUSTED_VALIDATOR" ]; then
     inv_out="$(python3 "$TRUSTED_VALIDATOR" --root "$INV_TREE" 2>&1)" || INV_OK=0
     INV_STATUS=$([ "$INV_OK" = 1 ] && echo PASS || echo FAIL)
