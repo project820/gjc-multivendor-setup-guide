@@ -1,4 +1,4 @@
-# GJC 멀티벤더 셋업 v1.4 — 12 프로필 (claude · gpt · grok · gemini · opencode go)
+# GJC 멀티벤더 셋업 v1.5 — 13 프로필 (claude · gpt · grok · gemini · opencode go)
 # 설계 원칙: default=Anthropic 플래그십(Opus/Fable) · critic=cross-family · 무조건 max 금지 · 매쿼리 스왑 금지.
 # 엔진 하드룰(GJC 0.7.10 실효): Gemini Pro={low,high} · Sonnet(4.6/5) 최대 high · Fable 5 최대 xhigh(:max는 xhigh로 침묵 클램프)
 #             · xai grok-4.3 최대 high(:xhigh 침묵 클램프) · opencode-go effort 생략
@@ -69,6 +69,17 @@ profiles:
       architect: google-antigravity/gemini-3.1-pro-low:high
       critic:    xai/grok-4.3:high                              # + 3표 교차벤더 critic 패널(독립투표→본체집계). ⚠xai :xhigh는 high로 침묵 클램프라 미사용
       # (v1.3까지의 critic :xhigh는 no-op 클램프였음 — xhigh는 grok-build 프로바이더 전용이며 effort 서픽스 미지원)
+
+  cyber-cop:                           # 🚨 reviewer 모드 — PR 리뷰·보안 감사 (author 모드의 역상)
+    required_providers: [anthropic, openai-codex, google-antigravity, xai]
+    model_mapping:
+      default:   anthropic/claude-opus-4-8:high                 # 불변식 준수 + 1M ctx. 집계자 제한 — critic raw verdict 보존·노출(routing-rules 계약)
+      executor:  openai-codex/gpt-5.5:high                      # 조연 — 재현 PoC·failing test·harness (Terminal-Bench 82.7)
+      planner:   google-antigravity/gemini-3.1-pro-low:high     # 리뷰 체크리스트·감사 범위 (critic과 cross-family)
+      architect: anthropic/claude-opus-4-8:high                 # 주연1 — 1차 코드리뷰 판정자, 1M 실효검색(MRCR 76% vs Gemini 26%)
+      critic:    openai-codex/gpt-5.5:high                      # 주연2 — 머지 게이트, Claude-작성 코드와 cross-family
+      # 고위험 PR·보안 감사: critic 3표 병렬 패널 {openai-codex/gpt-5.5:high, xai/grok-4.3:high,
+      # google-antigravity/gemini-3.1-pro-low:high} — 독립 투표 후 본체 집계(토론 금지), 2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단
 
   eco:                                 # 최저가 — 본체만 Opus(effort 절감), 위임은 초저가/구독 모델(전부 검증✅)
     required_providers: [anthropic, opencode-go, google-antigravity, xai]

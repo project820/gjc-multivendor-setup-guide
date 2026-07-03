@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1088" height="1034" viewBox="0 0 1088 1034" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img">
-<title>GJC 멀티벤더 — 12 프로필 × 5 역할 매트릭스</title>
-<rect width="1088" height="1034" rx="18" fill="#ffffff"/><rect width="1088" height="1034" rx="18" fill="none" stroke="#ECECF1"/>
-<text x="24" y="46" font-size="22" font-weight="700" fill="#1A1A28">GJC 멀티벤더 — 12 프로필 × 5 역할</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1088" height="1100" viewBox="0 0 1088 1100" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img">
+<title>GJC 멀티벤더 — 13 프로필 × 5 역할 매트릭스</title>
+<rect width="1088" height="1100" rx="18" fill="#ffffff"/><rect width="1088" height="1100" rx="18" fill="none" stroke="#ECECF1"/>
+<text x="24" y="46" font-size="22" font-weight="700" fill="#1A1A28">GJC 멀티벤더 — 13 프로필 × 5 역할</text>
 <text x="24" y="72" font-size="13" fill="#6B6B7B">행=프로필 · 열=역할 · 색=벤더 · 모든 셀 라이브 실호출 검증 ✓ (2026-07-02)</text>
 <rect x="24" y="90" width="14" height="14" rx="3" fill="#FBE9E4" stroke="#D9583E"/>
 <text x="44" y="102" font-size="12" fill="#444">Anthropic</text>
@@ -126,105 +126,123 @@
 <text x="906" y="529" font-size="12.5" font-weight="700" fill="#2D3A4D">Grok 4.3</text>
 <text x="906" y="546" font-size="10.5" fill="#2D3A4D" opacity="0.8">:high</text>
 <rect x="24" y="568" width="1040" height="58" rx="10" fill="#FFFFFF"/>
-<text x="34" y="601" font-size="13.5" font-weight="700" fill="#1A1A28">💸 eco</text>
+<text x="34" y="595" font-size="13.5" font-weight="700" fill="#1A1A28">🚨 cyber-cop</text>
+<text x="34" y="613" font-size="10.5" fill="#D9583E" font-weight="600">reviewer 모드</text>
 <rect x="188" y="573" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="188" y="573" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="202" y="595" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
-<text x="202" y="612" font-size="10.5" fill="#8A2B1A" opacity="0.8">:low</text>
-<rect x="364" y="573" width="168" height="48" rx="8" fill="#DFF3F4"/><rect x="364" y="573" width="4.5" height="48" rx="2" fill="#0E7490"/>
-<text x="378" y="602" font-size="11" font-weight="700" fill="#155E63">DeepSeek V4 Flash</text>
-<rect x="540" y="573" width="168" height="48" rx="8" fill="#EEF1F5"/><rect x="540" y="573" width="4.5" height="48" rx="2" fill="#475569"/>
-<text x="554" y="595" font-size="11" font-weight="700" fill="#2D3A4D">Grok 4.1 Fast</text>
-<text x="554" y="612" font-size="10.5" fill="#2D3A4D" opacity="0.8">:high</text>
-<rect x="716" y="573" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="573" width="4.5" height="48" rx="2" fill="#4285F4"/>
-<text x="730" y="595" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
-<text x="730" y="612" font-size="10.5" fill="#1A56C4" opacity="0.8">-low (저effort)</text>
-<rect x="892" y="573" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="892" y="573" width="4.5" height="48" rx="2" fill="#4285F4"/>
-<text x="906" y="602" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.5 Flash-low</text>
+<text x="202" y="612" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<rect x="364" y="573" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="364" y="573" width="4.5" height="48" rx="2" fill="#10A37F"/>
+<text x="378" y="595" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="378" y="612" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
+<rect x="540" y="573" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="540" y="573" width="4.5" height="48" rx="2" fill="#4285F4"/>
+<text x="554" y="595" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
+<text x="554" y="612" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
+<rect x="716" y="573" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="573" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="730" y="595" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
+<text x="730" y="612" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<rect x="892" y="573" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="892" y="573" width="4.5" height="48" rx="2" fill="#10A37F"/>
+<text x="906" y="595" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="906" y="612" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="24" y="634" width="1040" height="58" rx="10" fill="#FAFAFC"/>
-<text x="34" y="667" font-size="13.5" font-weight="700" fill="#1A1A28">🗺 monorepo</text>
+<text x="34" y="667" font-size="13.5" font-weight="700" fill="#1A1A28">💸 eco</text>
 <rect x="188" y="639" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="188" y="639" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="202" y="661" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
-<text x="202" y="678" font-size="10.5" fill="#8A2B1A" opacity="0.8">:medium</text>
-<rect x="364" y="639" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="364" y="639" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="378" y="661" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
-<text x="378" y="678" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
-<rect x="540" y="639" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="540" y="639" width="4.5" height="48" rx="2" fill="#4285F4"/>
-<text x="554" y="661" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
-<text x="554" y="678" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
-<rect x="716" y="639" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="639" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="730" y="661" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
-<text x="730" y="678" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
-<rect x="892" y="639" width="168" height="48" rx="8" fill="#DFF3F4"/><rect x="892" y="639" width="4.5" height="48" rx="2" fill="#0E7490"/>
-<text x="906" y="668" font-size="12.5" font-weight="700" fill="#155E63">GLM-5.2</text>
+<text x="202" y="678" font-size="10.5" fill="#8A2B1A" opacity="0.8">:low</text>
+<rect x="364" y="639" width="168" height="48" rx="8" fill="#DFF3F4"/><rect x="364" y="639" width="4.5" height="48" rx="2" fill="#0E7490"/>
+<text x="378" y="668" font-size="11" font-weight="700" fill="#155E63">DeepSeek V4 Flash</text>
+<rect x="540" y="639" width="168" height="48" rx="8" fill="#EEF1F5"/><rect x="540" y="639" width="4.5" height="48" rx="2" fill="#475569"/>
+<text x="554" y="661" font-size="11" font-weight="700" fill="#2D3A4D">Grok 4.1 Fast</text>
+<text x="554" y="678" font-size="10.5" fill="#2D3A4D" opacity="0.8">:high</text>
+<rect x="716" y="639" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="639" width="4.5" height="48" rx="2" fill="#4285F4"/>
+<text x="730" y="661" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
+<text x="730" y="678" font-size="10.5" fill="#1A56C4" opacity="0.8">-low (저effort)</text>
+<rect x="892" y="639" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="892" y="639" width="4.5" height="48" rx="2" fill="#4285F4"/>
+<text x="906" y="668" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.5 Flash-low</text>
 <rect x="24" y="700" width="1040" height="58" rx="10" fill="#FFFFFF"/>
-<text x="34" y="727" font-size="13.5" font-weight="700" fill="#1A1A28">🧱 solo-anthropic</text>
-<text x="34" y="745" font-size="10.5" fill="#D9583E" font-weight="600">전 역할 Opus</text>
+<text x="34" y="733" font-size="13.5" font-weight="700" fill="#1A1A28">🗺 monorepo</text>
 <rect x="188" y="705" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="188" y="705" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="202" y="727" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
-<text x="202" y="744" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<text x="202" y="744" font-size="10.5" fill="#8A2B1A" opacity="0.8">:medium</text>
 <rect x="364" y="705" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="364" y="705" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="378" y="727" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
-<text x="378" y="744" font-size="10.5" fill="#8A2B1A" opacity="0.8">:max</text>
-<rect x="540" y="705" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="540" y="705" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="554" y="727" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
-<text x="554" y="744" font-size="10.5" fill="#8A2B1A" opacity="0.8">:max</text>
+<text x="378" y="744" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<rect x="540" y="705" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="540" y="705" width="4.5" height="48" rx="2" fill="#4285F4"/>
+<text x="554" y="727" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
+<text x="554" y="744" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
 <rect x="716" y="705" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="705" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="730" y="727" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
 <text x="730" y="744" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
-<rect x="892" y="705" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="892" y="705" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="906" y="727" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
-<text x="906" y="744" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<rect x="892" y="705" width="168" height="48" rx="8" fill="#DFF3F4"/><rect x="892" y="705" width="4.5" height="48" rx="2" fill="#0E7490"/>
+<text x="906" y="734" font-size="12.5" font-weight="700" fill="#155E63">GLM-5.2</text>
 <rect x="24" y="766" width="1040" height="58" rx="10" fill="#FAFAFC"/>
-<text x="34" y="799" font-size="13.5" font-weight="700" fill="#1A1A28">🤖 solo-openai</text>
-<rect x="188" y="771" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="188" y="771" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="202" y="793" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
-<text x="202" y="810" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
-<rect x="364" y="771" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="364" y="771" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="378" y="793" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
-<text x="378" y="810" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
-<rect x="540" y="771" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="771" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="554" y="793" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
-<text x="554" y="810" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
-<rect x="716" y="771" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="716" y="771" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="730" y="793" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.4</text>
-<text x="730" y="810" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
-<rect x="892" y="771" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="892" y="771" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="906" y="793" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.4</text>
-<text x="906" y="810" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
+<text x="34" y="793" font-size="13.5" font-weight="700" fill="#1A1A28">🧱 solo-anthropic</text>
+<text x="34" y="811" font-size="10.5" fill="#D9583E" font-weight="600">전 역할 Opus</text>
+<rect x="188" y="771" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="188" y="771" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="202" y="793" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
+<text x="202" y="810" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<rect x="364" y="771" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="364" y="771" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="378" y="793" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
+<text x="378" y="810" font-size="10.5" fill="#8A2B1A" opacity="0.8">:max</text>
+<rect x="540" y="771" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="540" y="771" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="554" y="793" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
+<text x="554" y="810" font-size="10.5" fill="#8A2B1A" opacity="0.8">:max</text>
+<rect x="716" y="771" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="771" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="730" y="793" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
+<text x="730" y="810" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<rect x="892" y="771" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="892" y="771" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="906" y="793" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
+<text x="906" y="810" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
 <rect x="24" y="832" width="1040" height="58" rx="10" fill="#FFFFFF"/>
-<text x="34" y="865" font-size="13.5" font-weight="700" fill="#1A1A28">🤝 claude-codex</text>
-<rect x="188" y="837" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="188" y="837" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="202" y="859" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
-<text x="202" y="876" font-size="10.5" fill="#8A2B1A" opacity="0.8">:medium</text>
-<rect x="364" y="837" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="364" y="837" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="378" y="859" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
-<text x="378" y="876" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<text x="34" y="865" font-size="13.5" font-weight="700" fill="#1A1A28">🤖 solo-openai</text>
+<rect x="188" y="837" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="188" y="837" width="4.5" height="48" rx="2" fill="#10A37F"/>
+<text x="202" y="859" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="202" y="876" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
+<rect x="364" y="837" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="364" y="837" width="4.5" height="48" rx="2" fill="#10A37F"/>
+<text x="378" y="859" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="378" y="876" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
 <rect x="540" y="837" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="837" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="554" y="859" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
-<text x="554" y="876" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
-<rect x="716" y="837" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="837" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="730" y="859" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
-<text x="730" y="876" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<text x="554" y="876" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
+<rect x="716" y="837" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="716" y="837" width="4.5" height="48" rx="2" fill="#10A37F"/>
+<text x="730" y="859" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.4</text>
+<text x="730" y="876" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="892" y="837" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="892" y="837" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="906" y="859" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.4</text>
 <text x="906" y="876" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="24" y="898" width="1040" height="58" rx="10" fill="#FAFAFC"/>
-<text x="34" y="931" font-size="13.5" font-weight="700" fill="#1A1A28">🥇 claude-codex-max</text>
+<text x="34" y="931" font-size="13.5" font-weight="700" fill="#1A1A28">🤝 claude-codex</text>
 <rect x="188" y="903" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="188" y="903" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="202" y="925" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
-<text x="202" y="942" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<text x="202" y="942" font-size="10.5" fill="#8A2B1A" opacity="0.8">:medium</text>
 <rect x="364" y="903" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="364" y="903" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="378" y="925" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
-<text x="378" y="942" font-size="10.5" fill="#8A2B1A" opacity="0.8">:max</text>
+<text x="378" y="942" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
 <rect x="540" y="903" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="903" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="554" y="925" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
-<text x="554" y="942" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
+<text x="554" y="942" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="716" y="903" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="903" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="730" y="925" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
 <text x="730" y="942" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
 <rect x="892" y="903" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="892" y="903" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="906" y="925" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="906" y="925" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.4</text>
 <text x="906" y="942" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
-<text x="24" y="992" font-size="11.5" fill="#6B6B7B">불변식: 멀티벤더 프로필 default = Anthropic 플래그십(Opus/Fable) 고정 · critic = 본체와 다른 벤더 · solo-* 는 단일 벤더 최강(독립성 트레이드오프)</text>
-<text x="24" y="1012" font-size="11.5" fill="#6B6B7B">엔진 effort 하드룰 합법 · ⚡ ultimate-f5 = Fable 5 구독 포함 이벤트(~2026-07-07, 이후 usage credits $10/$50) · gjc 0.7.10</text>
+<rect x="24" y="964" width="1040" height="58" rx="10" fill="#FFFFFF"/>
+<text x="34" y="997" font-size="13.5" font-weight="700" fill="#1A1A28">🥇 claude-codex-max</text>
+<rect x="188" y="969" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="188" y="969" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="202" y="991" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
+<text x="202" y="1008" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<rect x="364" y="969" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="364" y="969" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="378" y="991" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
+<text x="378" y="1008" font-size="10.5" fill="#8A2B1A" opacity="0.8">:max</text>
+<rect x="540" y="969" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="969" width="4.5" height="48" rx="2" fill="#10A37F"/>
+<text x="554" y="991" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="554" y="1008" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
+<rect x="716" y="969" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="969" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="730" y="991" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
+<text x="730" y="1008" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<rect x="892" y="969" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="892" y="969" width="4.5" height="48" rx="2" fill="#10A37F"/>
+<text x="906" y="991" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="906" y="1008" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
+<text x="24" y="1058" font-size="11.5" fill="#6B6B7B">불변식: 멀티벤더 프로필 default = Anthropic 플래그십(Opus/Fable) 고정 · critic = 본체와 다른 벤더 · solo-* 는 단일 벤더 최강(독립성 트레이드오프)</text>
+<text x="24" y="1078" font-size="11.5" fill="#6B6B7B">엔진 effort 하드룰 합법 · ⚡ ultimate-f5 = Fable 5 구독 포함 이벤트(~2026-07-07, 이후 usage credits $10/$50) · gjc 0.7.10</text>
 </svg>
