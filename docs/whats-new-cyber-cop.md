@@ -57,6 +57,21 @@ cyber-cop:                             # 🚨 reviewer 모드 — PR 리뷰·보
 
 ## 3. 사용법 — 3단계
 
+### 0단계 · 원커맨드 (가장 쉬움, v1.6+) — `gjc-cop`
+
+클론도 `$GUIDE`도 필요 없다. 원라이너 설치에 `GJC_SETUP_COP=1`만 붙이면 `routing-rules.md`·오케스트레이터·trusted validator가 `~/.gjc/agent/cyber-cop/`에 배송되고 `gjc-cop` 래퍼가 `~/.local/bin`에 등록된다:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | GJC_SETUP_COP=1 bash
+cd <리뷰할-레포>
+gjc-cop 123               # PR #123 → 4섹션 verdict (REPO는 cwd에서 자동 감지, 머지 안 함)
+gjc-cop --panel 123       # 고위험: 3표 cross-family 패널
+gjc-cop shell             # 대화형 리뷰어 세션(신뢰 계약 자동 주입)
+gjc-cop watch             # 신규 PR 폴링·자동 리뷰(머지 절대 안 함, 사람이 결정)
+```
+
+래퍼가 **항상 신뢰 경로를 주입**하므로 §1단계의 상대경로 인젝션 풋건(#6 클래스)이 구조적으로 소멸한다. 아래 1~3단계는 클론/수동 경로(래퍼 없이도 동작하는 원리)다.
+
 ### 1단계 · 수동 (지금 바로)
 
 ```bash
