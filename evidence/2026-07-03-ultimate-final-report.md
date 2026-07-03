@@ -167,7 +167,7 @@ profiles:
   # Composer 2.5 STANDARD only, never Fast
   ultimate-fast:
     default:   anthropic/claude-opus-4-8:high
-    executor:  grok-build/composer-2.5           # Standard tier ~$0.50/$2.50 per Mtok
+    executor:  grok-build/composer-2.5           # ILLUSTRATIVE — NOT catalog-verified: 2026-07-02-catalog.txt lists only `grok-build/grok-composer-2.5-fast`; Standard-tier grok-build access is UNVERIFIED (see 2026-07-03-redteam-report.md). Do not copy verbatim; validate the selector + Standard access first.
     planner:   openai-codex/gpt-5.5:high
     architect: google-antigravity/gemini-3.1-pro-low:high
     critic:    xai/grok-4.3:high
