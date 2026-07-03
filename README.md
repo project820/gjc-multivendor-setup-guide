@@ -432,6 +432,8 @@ gjc -p --no-session --no-tools --model "openai-codex/gpt-5.4:high" "Reply exactl
 
 > 출처: [vals.ai GPQA](https://www.vals.ai/benchmarks/gpqa) · [vals.ai SWE-bench](https://www.vals.ai/benchmarks/swebench) · [vals.ai MMMU](https://www.vals.ai/benchmarks/mmmu) · [Gemini 3.1 Pro card (MRCR)](https://deepmind.google/models/model-cards/gemini-3-1-pro/) · [Gemini thinking docs](https://ai.google.dev/gemini-api/docs/thinking) · [Opus 4.6 (MRCR 76%@1M)](https://www.anthropic.com/news/claude-opus-4-6) · [long-context 보드](https://awesomeagents.ai/leaderboards/long-context-benchmarks-leaderboard/) · [llm-stats ARC-AGI-2](https://llm-stats.com/benchmarks/arc-agi-v2) · [xAI Composer 2.5](https://x.ai/news/composer-2-5)
 
+> 📑 **전체 리서치 리포트 (1차 출처 인용 포함)** — 이 배치 근거의 원문 3종: [딥리서치 벤치마크](./evidence/2026-07-03-deep-research-benchmarks.md) · [컨설턴트 리포트](./evidence/2026-07-03-consultant-report.md) · [통합 최종 리포트](./evidence/2026-07-03-ultimate-final-report.md). "왜 이 모델셋업인가"의 근거 전문·council 합의·확정 답변(Grok=critic / Composer Fast≠executor)이 여기에 있다.
+
 ---
 
 ### 6-3. 잔여 공백 검토 (gap 1~3 · GJC 실효 컨텍스트 실측)

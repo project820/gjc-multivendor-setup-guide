@@ -11,6 +11,15 @@
 
 ---
 
+## v1.5.2 — 2026-07-03
+
+### Docs
+- **역할→모델 배치 근거 리서치 리포트 3종 공개** (`evidence/`) — 사용자에게 "왜 이 모델셋업인가"의 1차 출처 기반 근거를 제공. deep-research + dev-idea-consultant + model-council 파이프라인의 원문.
+  - `evidence/2026-07-03-deep-research-benchmarks.md` — Fable 5 / Opus 4.8 / GPT-5.5 / Gemini 3.1 Pro / Grok 4.3 / Composer 2.5 벤치·가격·컨텍스트·effort 실측 (Vals·Anthropic·OpenAI·xAI·DeepMind·arXiv·Terminal-Bench·LiveCodeBench 인용).
+  - `evidence/2026-07-03-consultant-report.md` — dev-idea-consultant 6섹션 포맷: 실현가능성·역할 배치 권고·마이그레이션 로드맵.
+  - `evidence/2026-07-03-ultimate-final-report.md` — 통합 최종 리포트: 두 커뮤니티 질문("Grok 4.3=critic?", "Composer 2.5 Fast=executor?") 확정 답변 + 구조적 발견(effort-ladder·architect 셀렉터·failover).
+  - README §6-2에서 상호 참조. `evidence/`는 재작성 불가 감사 추적이므로 이후 재검증은 신규 dated 리포트로 추가한다.
+
 ## v1.5.1 — 2026-07-03
 
 ### Added
