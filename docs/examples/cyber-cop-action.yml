@@ -25,7 +25,8 @@ on:
 
 permissions:
   contents: read
-  issues: write
+  issues: write         # post the verdict comment (issue-comment API)
+  pull-requests: read   # gjc-cop needs gh pr view/diff; keep WRITE disabled (approve power)
 
 concurrency:
   group: cyber-cop-${{ github.event.pull_request.number }}
@@ -52,11 +53,17 @@ jobs:
           \`\`\`
           _cyber-cop never merges — merge stays a human decision._"
           gh api "repos/$REPO/issues/$PR/comments" -f body="$body" >/dev/null
-          # make the check itself carry the verdict, so it can serve as a required status:
-          case "$out" in
-            *"MERGE RECOMMENDATION: MERGE"*) exit 0 ;;
-            *) echo "cyber-cop: DO-NOT-MERGE (or unparseable) — failing the check"; exit 1 ;;
-          esac
+          # Make the check itself carry the verdict, so it can serve as a required status.
+          # SECURITY: never substring-match the whole transcript — it contains model raw
+          # text derived from attacker-controlled PR data, which can quote/reflect
+          # "MERGE RECOMMENDATION: MERGE" and forge a PASS. Parse ONLY the LAST anchored
+          # authoritative line (§4 is printed at the END, after all raw seat output).
+          verdict_line="$(grep -E '^## 4\. MERGE RECOMMENDATION:' <<<"$out" | tail -n1 || true)"
+          if [ "$verdict_line" = "## 4. MERGE RECOMMENDATION: MERGE" ]; then
+            exit 0
+          fi
+          echo "cyber-cop: '$verdict_line' — failing the check (DO-NOT-MERGE or unparseable)"
+          exit 1
 
 # ── EXTREME-AUTOMATION RECIPE (bot still never merges) ─────────────────────────
 # 1) Branch protection → require the "cyber-cop / review" status check.
