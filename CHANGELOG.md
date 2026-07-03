@@ -11,6 +11,14 @@
 
 ---
 
+## v1.5.3 — 2026-07-03 (docs)
+
+### Docs
+- **`docs/whats-new-cyber-cop.md`** — cyber-cop reviewer 모드 공지(KO 정본, non-normative): 갭 논증(12종 author 모드·자기선호 편향·역할 가중치 반전) ·
+  Use case · 사용법 3단계(수동 / 세션 상주 오케스트레이션 / 상설 PR-cop 세션) · 고위험 3표 패널과 xai 강등 경로 ·
+  보안 수칙(PR 입력 비신뢰 규칙, `gh api`+`jq` 이스케이프, 토큰 최소 스코프, 자동 머지 금지, curl|bash 고지).
+- README 4종 상단에 What's New 발견성 배너 1줄(번역본은 KO 정본 표기). YAML embed·표·배지 무변경.
+
 ## v1.5.2 — 2026-07-03
 
 ### Docs
