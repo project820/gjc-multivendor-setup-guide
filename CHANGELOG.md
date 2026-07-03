@@ -11,6 +11,11 @@
 
 ---
 
+## v1.5.7 — 2026-07-03 (docs errata)
+
+### Fixed
+- **`evidence/2026-07-03-errata.md` 신설 (append-only 정정)** — ultimate-final-report §2 벤치 표에서 Composer 2.5의 `74.7% → 54.0%` 붕괴 수치가 **SWE-bench Verified 열에 오배치**(정답: **Pro**; 같은 문서 §3.2·deep-research는 Pro로 정확히 인용). `evidence/`는 재작성 불가 감사추적이므로 **원본은 verbatim 보존**하고 dated errata 리포트로 정정. 판정 영향 없음. (codex-bot P2, PR #5 post-merge — repo 전체 미회신 코멘트 스윕에서 발견.)
+
 ## v1.5.6 — 2026-07-03
 
 ### Fixed
