@@ -240,7 +240,9 @@ INV_APPLICABLE=1
 # PATH from this local checkout (so Python's sys.path[0] is the trusted scripts dir, not the
 # PR tree — a hostile PR's scripts/yaml.py can't shadow the stdlib import), passing the PR
 # head only as DATA via --root. A PR that changes validate-profiles.py itself needs human review.
-TRUSTED_VALIDATOR="$REPO_ROOT/scripts/validate-profiles.py"
+# $CYBER_COP_VALIDATOR lets the installed gjc-cop wrapper point at the shipped trusted
+# validator (~/.gjc/agent/cyber-cop/validate-profiles.py) when there's no repo checkout.
+TRUSTED_VALIDATOR="${CYBER_COP_VALIDATOR:-$REPO_ROOT/scripts/validate-profiles.py}"
 # P1 (#11 codex-bot): reject symlinked data files under an untrusted PR-head worktree —
 # a hostile fork could symlink gjc-profiles.yml/README*.md to host paths (/dev/zero → OOM,
 # or a secret whose parse error is echoed). Only enforced when validating a fetched worktree.

@@ -11,6 +11,11 @@
 
 ---
 
+## v1.6.0 — 2026-07-03
+
+### Added
+- **`gjc-cop` 원커맨드 reviewer (#9 Lv.1)** — `install.sh`에 **`GJC_SETUP_COP=1`** 플래그 추가: `routing-rules.md` + `scripts/cyber-cop-review.sh` + trusted `validate-profiles.py` + `scripts/gjc-cop` 래퍼를 `~/.gjc/agent/cyber-cop/`에 배송하고 `gjc-cop` 심링크를 `~/.local/bin`에 등록(멱등). **클론·`$GUIDE` 불요**: `gjc-cop <PR>`(REPO cwd 자동감지→4섹션 verdict) · `--panel <PR>`(3표 패널) · `shell`(대화형 리뷰어 세션) · `watch [interval]`(신규 PR 폴링·리뷰, 머지 금지). 래퍼가 **항상 신뢰 로컬 경로를 주입**하므로 #6 상대경로 인젝션 풋건이 구조적으로 소멸. 신규 셀렉터 0. `cyber-cop-review.sh`는 `$CYBER_COP_VALIDATOR` env로 배송된 trusted validator 위치를 수용. 문서: 공지 §3 0단계 · MAINTAINING §2.
+
 ## v1.5.6 — 2026-07-03
 
 ### Fixed

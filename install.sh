@@ -10,6 +10,9 @@
 #    GJC_SETUP_DEFAULT=ultimate  # 기본 프로필 지정(기본값: daily). none 이면 기본설정 건너뜀
 #      예) curl -fsSL <url>/install.sh | GJC_SETUP_DEFAULT=ultimate bash
 #    GJC_CODING_AGENT_DIR=...    # GJC 에이전트 디렉터리 override (기본: ~/.gjc/agent)
+#    GJC_SETUP_COP=1             # cyber-cop reviewer 도구 설치: routing-rules.md + 오케스트레이터 +
+#                               #   trusted validator 를 ~/.gjc/agent/cyber-cop/ 에 배송하고
+#                               #   `gjc-cop` 래퍼를 ~/.local/bin 에 등록 (클론 없이 PR 리뷰)
 #
 #  안전장치: 기존 models.yml / config.yml 자동 백업 · 관리블록 sentinel 로 재실행 시 깔끔 교체.
 #  ⚠ GJC 0.7.10 의 프리셋 rename/delete 는 models.yml 주석(sentinel 포함)을 전부 제거함 —
@@ -151,6 +154,29 @@ print(f"  · 기본 프로필 = {prof} (config.yml)")
 PY
 fi
 
+# 5) cyber-cop reviewer 도구 (opt-in: GJC_SETUP_COP=1) — clone 없이 `gjc-cop <PR>` 리뷰
+if [ "${GJC_SETUP_COP:-0}" = "1" ]; then
+  b "▶ cyber-cop reviewer 도구 설치 (GJC_SETUP_COP=1)"
+  COP_HOME="$DIR/cyber-cop"
+  BIN_DIR="${GJC_COP_BIN_DIR:-$HOME/.local/bin}"
+  mkdir -p "$COP_HOME" "$BIN_DIR"
+  cop_fetch() {  # $1=repo-relative path  $2=dest ; local dir via GJC_SETUP_SRC_DIR for testing
+    if [ -n "${GJC_SETUP_SRC_DIR:-}" ]; then cp "$GJC_SETUP_SRC_DIR/$1" "$2"
+    else command -v curl >/dev/null 2>&1 || die "curl 필요"; curl -fsSL "$REPO_RAW/$1" -o "$2" || die "다운로드 실패: $1"; fi
+  }
+  cop_fetch routing-rules.md             "$COP_HOME/routing-rules.md"
+  cop_fetch scripts/cyber-cop-review.sh  "$COP_HOME/cyber-cop-review.sh"
+  cop_fetch scripts/validate-profiles.py "$COP_HOME/validate-profiles.py"
+  cop_fetch scripts/gjc-cop              "$COP_HOME/gjc-cop"
+  chmod +x "$COP_HOME/cyber-cop-review.sh" "$COP_HOME/gjc-cop"
+  ln -sf "$COP_HOME/gjc-cop" "$BIN_DIR/gjc-cop"   # idempotent PATH wrapper
+  g "  · cyber-cop 배송 → $COP_HOME"
+  g "  · 래퍼 → $BIN_DIR/gjc-cop  (사용: gjc-cop <PR> · gjc-cop --panel <PR> · gjc-cop shell · gjc-cop watch)"
+  case ":$PATH:" in
+    *":$BIN_DIR:"*) : ;;
+    *) y "  ⚠ $BIN_DIR 가 PATH에 없습니다 — 셸 rc에 추가: export PATH=\"$BIN_DIR:\$PATH\"" ;;
+  esac
+fi
 echo
 g "✓ 설치 완료"
 echo

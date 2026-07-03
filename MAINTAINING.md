@@ -29,6 +29,7 @@ Every claim in `README.md` is **time-sensitive (catalog at validation date)** �
 | `scripts/revalidate.sh` | yes (`/login`) | Live battery: every profile selector via real `gjc -p`; records `evidence/<date>-selectors.md`; non-zero exit on regression. `SELECTORS_ONLY=1` skips long-context probes. |
 | `scripts/catalog-snapshot.sh` | yes | Dumps the live catalog to `evidence/<date>-catalog.txt`; `--diff` compares the two newest snapshots (new/retired models, ctx/effort drift — snapshots carry no price data; verify prices against official pages). |
 | `scripts/cyber-cop-review.sh` | yes (`/login` + `gh`) | Headless cyber-cop reviewer-mode PR review, **seat orchestrator**: per-seat `gjc -p --model …` calls so the critic really runs on `openai-codex/gpt-5.5` (cross-family vs the Claude author) — not role-played by the default model (#10). Each section names its executing model; INVARIANTS run by the script itself; `--panel` adds the 3-vote high-risk critic panel. Never merges. |
+| `scripts/gjc-cop` | yes (`/login` + `gh`) | One-command reviewer wrapper shipped by `install.sh GJC_SETUP_COP=1` to `~/.local/bin/gjc-cop` (deps in `~/.gjc/agent/cyber-cop/`). `gjc-cop <PR>` / `--panel <PR>` / `shell` / `watch` — clone-free; always injects trusted local paths (kills the #6 relative-path injection class by construction). Wraps `cyber-cop-review.sh`; never merges. |
 
 ```bash
 python3 scripts/validate-profiles.py          # before every commit / in CI

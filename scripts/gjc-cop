@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# gjc-cop — one-command cyber-cop reviewer (shipped by install.sh GJC_SETUP_COP=1).
+#
+# No clone / no $GUIDE needed: the trusted contract + orchestrator + validator live in
+# ~/.gjc/agent/cyber-cop/. The wrapper always injects the trusted local paths, so the
+# relative-path prompt-injection footgun (issue #6) cannot occur here by construction.
+#
+# Usage:
+#   gjc-cop <PR#>              headless 4-section verdict for a PR (REPO auto-detected from cwd)
+#   gjc-cop --panel <PR#>      + high-risk 3-vote cross-family panel
+#   gjc-cop shell              interactive reviewer session (cyber-cop preset + reviewer contract)
+#   gjc-cop watch [interval]   poll open PRs and review new ones (never merges; default 300s)
+#   REPO=owner/name gjc-cop …  review a specific repo instead of the cwd repo
+set -euo pipefail
+
+DIR="${GJC_CODING_AGENT_DIR:-$HOME/.gjc/agent}"
+COP_HOME="$DIR/cyber-cop"
+ORCH="$COP_HOME/cyber-cop-review.sh"
+CONTRACT_FILE="$COP_HOME/routing-rules.md"
+VALIDATOR="$COP_HOME/validate-profiles.py"
+
+# (installed-check happens per-command below so `gjc-cop --help` works before install)
+
+detect_repo() {
+  [ -n "${REPO:-}" ] && { printf '%s' "$REPO"; return; }
+  gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null || true
+}
+
+run_review() {  # args: [--panel] <PR#>
+  [ -f "$ORCH" ] || { echo "gjc-cop: not installed. Re-run install.sh with GJC_SETUP_COP=1." >&2; exit 1; }
+  local repo; repo="$(detect_repo)"
+  [ -n "$repo" ] || { echo "gjc-cop: set REPO=owner/name or run inside a gh-recognized repo." >&2; exit 2; }
+  CYBER_COP_VALIDATOR="$VALIDATOR" REPO="$repo" bash "$ORCH" "$@"
+}
+
+sub="${1:-}"
+case "$sub" in
+  ""|-h|--help)
+    sed -n '8,13p' "$0" | sed 's/^# \{0,1\}//'
+    ;;
+  shell)
+    [ -f "$ORCH" ] || { echo "gjc-cop: not installed. Re-run install.sh with GJC_SETUP_COP=1." >&2; exit 1; }
+    # interactive reviewer: cyber-cop preset + the reviewer contract from the TRUSTED local copy
+    [ -f "$CONTRACT_FILE" ] || { echo "gjc-cop: $CONTRACT_FILE missing." >&2; exit 1; }
+    exec gjc --mpreset cyber-cop --append-system-prompt "@$CONTRACT_FILE"
+    ;;
+  watch)
+    [ -f "$ORCH" ] || { echo "gjc-cop: not installed. Re-run install.sh with GJC_SETUP_COP=1." >&2; exit 1; }
+    interval="${2:-300}"
+    case "$interval" in ''|*[!0-9]*) echo "gjc-cop watch: interval must be seconds (integer)" >&2; exit 2 ;; esac
+    repo="$(detect_repo)"; [ -n "$repo" ] || { echo "gjc-cop watch: set REPO=owner/name or run inside a repo." >&2; exit 2; }
+    echo "gjc-cop watch: polling $repo every ${interval}s — reviews new open PRs, NEVER merges (human decides)."
+    seen=" "
+    # baseline current open PRs silently so watch only surfaces genuinely new ones
+    for pr in $(gh pr list -R "$repo" --state open --json number -q '.[].number' 2>/dev/null); do seen="$seen$pr "; done
+    echo "  (armed; ${seen# } already open — will review PRs opened from now)"
+    while true; do
+      for pr in $(gh pr list -R "$repo" --state open --json number -q '.[].number' 2>/dev/null); do
+        case "$seen" in *" $pr "*) continue ;; esac
+        seen="$seen$pr "
+        echo; echo "════ gjc-cop: reviewing new PR #$pr ($repo) ════"
+        CYBER_COP_VALIDATOR="$VALIDATOR" REPO="$repo" bash "$ORCH" "$pr" || true
+      done
+      sleep "$interval"
+    done
+    ;;
+  --panel)
+    run_review --panel "${2:?usage: gjc-cop --panel <PR#>}"
+    ;;
+  *)
+    case "$sub" in ''|*[!0-9]*) echo "gjc-cop: unknown command '$sub' (try: gjc-cop --help)" >&2; exit 2 ;; esac
+    run_review "$sub"
+    ;;
+esac
