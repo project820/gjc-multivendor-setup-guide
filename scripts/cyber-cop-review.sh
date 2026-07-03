@@ -64,13 +64,28 @@ run_seat() {
   # (*.jsonl), never the model-controlled stdout/stderr. Portable Python (no grep flags).
   local short; short="${model%%:*}"; short="${short##*/}"
   if [ "$rc" -eq 0 ] && ! MODEL_SHORT="$short" SEAT_DIR="$dir" python3 - <<'PY'
-import os, glob, re, sys
+import os, glob, json, sys
 d = os.environ["SEAT_DIR"]; short = os.environ["MODEL_SHORT"]
+# Inspect ONLY structured `model` fields set by GJC — never free-text message/attachment
+# content (the PR diff is recorded as a message string, so a hostile PR embedding
+# "model":"gpt-5.5" in its diff must NOT be able to satisfy this check).
+def model_fields(obj):
+    if isinstance(obj, dict):
+        v = obj.get("model")
+        if isinstance(v, str): yield v
+        msg = obj.get("message")
+        if isinstance(msg, dict):
+            mv = msg.get("model")
+            if isinstance(mv, str): yield mv
 for f in glob.glob(os.path.join(d, "**", "*.jsonl"), recursive=True):
     try:
         with open(f, encoding="utf-8", errors="ignore") as fh:
             for line in fh:
-                if any(short in m for m in re.findall(r'"model"\s*:\s*"([^"]*)"', line)):
+                line = line.strip()
+                if not line: continue
+                try: obj = json.loads(line)
+                except Exception: continue
+                if any(short in m for m in model_fields(obj)):
                     sys.exit(0)
     except OSError:
         pass
@@ -162,10 +177,14 @@ INV_TREE="$REPO_ROOT"; INV_NOTE=""; INV_OK_FETCH=1
 if git -C "$REPO_ROOT" rev-parse --git-dir >/dev/null 2>&1 && git -C "$REPO_ROOT" fetch -q "https://github.com/${REPO}.git" "pull/${PR}/head" 2>/dev/null; then
   if git -C "$REPO_ROOT" worktree add -q --detach "$WORK/prhead" FETCH_HEAD 2>/dev/null; then
     INV_TREE="$WORK/prhead"; INV_NOTE=" (PR head worktree @ ${REPO})"
+  else
+    # fetched but couldn't materialize the worktree → do NOT silently validate local checkout
+    INV_OK_FETCH=0
+    INV_NOTE=" (WARNING: fetched ${REPO} PR head but worktree add failed; not validating local checkout)"
   fi
 else
   INV_OK_FETCH=0
-  INV_NOTE=" (WARNING: could not fetch ${REPO} PR head; ran against local checkout — invariant result may not reflect the PR)"
+  INV_NOTE=" (WARNING: could not fetch ${REPO} PR head; invariant result would not reflect the PR)"
 fi
 INV_OK=1
 # SECURITY: never execute or import the PR's code. Run the TRUSTED validator by ABSOLUTE
