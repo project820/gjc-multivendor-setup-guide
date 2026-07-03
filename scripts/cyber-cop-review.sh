@@ -57,34 +57,40 @@ run_seat() {
   # to the default model — the #10 class). Whitespace-tolerant JSON, dot/regex-escaped id.
   local short; short="${model%%:*}"; short="${short##*/}"
   local esc; esc="$(printf '%s' "$short" | sed 's/[][().^$*+?{}\\|]/\\&/g')"
-  if [ "$rc" -eq 0 ] && ! grep -rqE "\"model\"[[:space:]]*:[[:space:]]*\"[^\"]*${esc}[^\"]*\"" "$dir" 2>/dev/null; then
+  # Search ONLY GJC's trusted session metadata (*.jsonl), never the model-controlled
+  # stdout/stderr — else a fallback model could print {"model":"gpt-5.5"} to fake the check.
+  if [ "$rc" -eq 0 ] && ! grep -rqE --include='*.jsonl' "\"model\"[[:space:]]*:[[:space:]]*\"[^\"]*${esc}[^\"]*\"" "$dir" 2>/dev/null; then
     out="$out
 [seat error: $model identity NOT found in session log — possible silent model fallback]"
   fi
   printf '%s' "$out"
 }
 
-# Extract the seat verdict from its FIRST non-empty line only (the prompt mandates the token
-# there), with a SAFETY PRECEDENCE that fails toward blocking — a hedged line like
-# "cannot APPROVE; BLOCK because…" resolves to BLOCK, not APPROVE. Seat error or an
-# unparseable critic line resolves to BLOCK (fail-closed).
-first_line() { printf '%s\n' "$1" | grep -vE '^[[:space:]]*$' | head -n1 || true; }
+# Extract the seat verdict from its first non-empty line (see first_tok below).
+# First non-empty line, uppercased, leading space stripped. The prompt mandates the FIRST
+# LINE be exactly the verdict token, so we anchor at the start of that line. A non-compliant
+# first line (hedge/preamble/negation) is unparseable → architect WATCH (advisory),
+# critic BLOCK (fail-closed). Seat error → BLOCK.
+first_tok() { printf '%s\n' "$1" | grep -vE '^[[:space:]]*$' | head -n1 | sed 's/^[[:space:]]*//' | tr '[:lower:]' '[:upper:]' || true; }
 arch_verdict() {
   case "$1" in *"[seat error:"*) echo BLOCK; return ;; esac
-  local L; L="$(first_line "$1")"
-  printf '%s' "$L" | grep -qiE 'BLOCK' && { echo BLOCK; return; }
-  printf '%s' "$L" | grep -qiE 'WATCH' && { echo WATCH; return; }
-  printf '%s' "$L" | grep -qiE 'CLEAR' && { echo CLEAR; return; }
-  echo WATCH
+  case "$(first_tok "$1")" in
+    BLOCK*) echo BLOCK ;;
+    WATCH*) echo WATCH ;;
+    CLEAR*) echo CLEAR ;;
+    *) echo WATCH ;;
+  esac
 }
 crit_verdict() {
   case "$1" in *"[seat error:"*) echo BLOCK; return ;; esac
-  local L; L="$(first_line "$1")"
-  printf '%s' "$L" | grep -qiE 'BLOCK' && { echo BLOCK; return; }
-  printf '%s' "$L" | grep -qiE 'REQUEST[_ ]CHANGES' && { echo REQUEST_CHANGES; return; }
-  printf '%s' "$L" | grep -qiE 'APPROVE' && { echo APPROVE; return; }
-  echo BLOCK
+  case "$(first_tok "$1")" in
+    BLOCK*) echo BLOCK ;;
+    REQUEST_CHANGES*|"REQUEST CHANGES"*) echo REQUEST_CHANGES ;;
+    APPROVE*) echo APPROVE ;;
+    *) echo BLOCK ;;
+  esac
 }
+
 
 echo "=== cyber-cop review (seat orchestrator): PR #${PR} @ ${REPO} ==="
 echo "(cross-family by call structure — each verdict below names its real executing model)"
@@ -145,15 +151,13 @@ else
   INV_NOTE=" (WARNING: could not fetch ${REPO} PR head; ran against local checkout — invariant result may not reflect the PR)"
 fi
 INV_OK=1
-# SECURITY: never execute the PR's code. Run the TRUSTED validator (from this local
-# checkout) against the PR-head DATA (gjc-profiles.yml + READMEs in the worktree) by
-# overwriting the worktree's copy with the trusted one before running. A PR that itself
-# changes validate-profiles.py cannot gain RCE here and must be reviewed by a human.
+# SECURITY: never execute or import the PR's code. Run the TRUSTED validator by ABSOLUTE
+# PATH from this local checkout (so Python's sys.path[0] is the trusted scripts dir, not the
+# PR tree — a hostile PR's scripts/yaml.py can't shadow the stdlib import), passing the PR
+# head only as DATA via --root. A PR that changes validate-profiles.py itself needs human review.
 TRUSTED_VALIDATOR="$REPO_ROOT/scripts/validate-profiles.py"
 if [ -f "$TRUSTED_VALIDATOR" ] && [ -d "$INV_TREE" ]; then
-  mkdir -p "$INV_TREE/scripts"
-  cp "$TRUSTED_VALIDATOR" "$INV_TREE/scripts/validate-profiles.py"
-  inv_out="$(cd "$INV_TREE" && python3 scripts/validate-profiles.py 2>&1)" || INV_OK=0
+  inv_out="$(python3 "$TRUSTED_VALIDATOR" --root "$INV_TREE" 2>&1)" || INV_OK=0
 else
   inv_out="trusted validate-profiles.py not available"; INV_OK=0
 fi

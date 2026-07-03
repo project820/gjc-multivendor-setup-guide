@@ -15,6 +15,7 @@
 
 ### Fixed
 - **`scripts/cyber-cop-review.sh` 단일 모델 붕괴 교정 (#10, BLOCK급)** — 기존 헬퍼는 단일 `gjc -p --mpreset cyber-cop` 세션에 "4섹션 verdict"를 요구했고, 좌석 위임이 일어나지 않아 **본체(Opus)가 critic verdict까지 롤플레이**했다(세션 로그: task 위임 0·비-anthropic 좌석 0). cross-family 자기선호 방어가 라벨만 남고 위조되던 결함. **좌석 오케스트레이터로 재작성(Option A)**: architect=`anthropic/claude-opus-4-8:high`·critic=`openai-codex/gpt-5.5:high`를 좌석별 `gjc -p --model …`로 개별 호출 → critic이 **실제 cross-family로 실행**됨(호출 구조로 보장). 각 섹션 헤더에 실행 모델 명기, 불변식은 스크립트가 직접 `validate-profiles.py` 실행, 머지 권고는 verdict·불변식에서 결정론적 산출. `--panel` 플래그로 고위험 3표 cross-family 패널(+grok-4.3·gemini-3.1-pro-low). 페이로드는 기존 `@`-첨부·비신뢰 데이터 계약 유지. MAINTAINING §2·공지 문서 §3 정합.
+- **`scripts/validate-profiles.py` `--root <dir>` 인자 추가** — 신뢰 검증기를 임의 트리의 데이터(gjc-profiles.yml + README*.md)에 대해 실행. cyber-cop 오케스트레이터가 PR head를 **코드 실행 없이 데이터로만** 검증하는 데 사용(RCE·import 셰도잉 차단).
 
 ## v1.5.5 — 2026-07-03 (docs)
 

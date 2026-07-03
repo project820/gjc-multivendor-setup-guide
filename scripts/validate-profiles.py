@@ -18,6 +18,12 @@ from __future__ import annotations
 import re, sys, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+# Optional --root <dir>: validate a different tree's DATA (gjc-profiles.yml + README*.md)
+# while THIS trusted script executes. Used by cyber-cop-review.sh to check a PR head's
+# data without executing the PR's code (no cd into / import from an untrusted tree).
+if "--root" in sys.argv:
+    _i = sys.argv.index("--root")
+    ROOT = pathlib.Path(sys.argv[_i + 1]).resolve()
 PROFILES = ROOT / "gjc-profiles.yml"
 README = ROOT / "README.md"
 ROLES = {"default", "executor", "architect", "planner", "critic"}
