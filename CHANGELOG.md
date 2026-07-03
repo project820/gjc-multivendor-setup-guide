@@ -24,6 +24,14 @@
   default=집계자 제한(critic raw verdict 보존·노출) · 증거 계약(critic 1표당 file-backed blocking issue 또는 no-finding rationale) ·
   provenance fallback(작성 모델 unknown이면 non-default family ≥2 호출) · 근거 없는 LGTM 금지. `escalation`(author-side 게이트)과의 역할 구분 명시.
 
+### Verified / Changed (red-team 딥리서치 2026-07-03)
+- **12프로필 재검증**: deep-interview→ralplan→ultragoal 파이프라인으로 재감사. 결과 **12 인큐번트 12/12 KEEP**(모델 배치 무변경) — 아키텍처가 근거기반임을 확인. `cyber-cop`은 이 12종 감사와 별개로 추가된 13번째 reviewer-side 프로필이다.
+- **L3 행동실측**: Fable-default 라우터 A/B(`ultimate` vs `legend`, 8쌍) — Fable-default는 품질 근소우위이나 **Opus 대비 1.83× 비용 + benign 과제 1건 refusal/error**. → Opus=권장 default, Fable=opt-in premium 재확인(ultimate-f5/legend 주석에 반영).
+- **Composer**: Fast는 executor 부적합 재확인(=Standard 6×가·effort knob 없음·200k·reward-hacking 붕괴). grok-build Standard 접근성 미검증으로 `ultimate-fast`는 조건부 보류.
+- **council 4대 권고 판정**: effort-ladder=ACCEPT, architect 셀렉터=RESOLVED(`-low:high` 유지), 메타심판 2차critic=ACCEPT(문서), ultimate-fast=조건부.
+- **능력/비용정규화 이중 순위표(7/7 전후 2국면)**: Opus가 두 국면 모두 비용정규화 1위 — v1.4 split이 7/7 이후 더 방어적이 됨.
+- 증거: `evidence/2026-07-03-l3-fable-rolefit.{jsonl,md}` · `evidence/2026-07-03-redteam-report.md`.
+
 ### Fixed
 - **GitHub 앵커 VS16 결함 교정**: GitHub 슬러거는 이모지를 제거하되 **U+FE0F(변이 선택자)를 보존**한다(라이브 렌더링 HTML로 실측).
   `🗂️`(U+1F5C2 U+FE0F) 헤딩을 가리키는 §5 카탈로그 앵커 8곳(README×4)과 KO `#7-…-설치--제거`(🛠️) 앵커를 실동작 슬러그로 교정.
