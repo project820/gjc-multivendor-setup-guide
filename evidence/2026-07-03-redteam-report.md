@@ -64,7 +64,7 @@ Every selector in all 12 profiles was OK in the 2026-07-02 live matrix (re-confi
 ## 5. Invariant red-team result
 
 - **default=Anthropic-flagship** invariant: **HELD** — L3 shows Fable(also Anthropic) default is quality-viable but cost/reliability-worse; Opus remains best router. Invariant not broken, refined to "Opus recommended / Fable premium".
-- **critic=cross-family** invariant: **HELD** — no evidence to drop it; single-vendor exceptions already documented.
+- **cross-family independence** invariant (as enforced by `validate-profiles.py`: `executor≠architect` for code-review independence, `planner≠critic` for plan-critique independence, plus `critic` cross-family vs the Anthropic default author): **HELD** — no L3 evidence to drop it; documented single-vendor exceptions (`solo-anthropic`/`solo-openai`) and the `SAME_FAMILY_OK` allowlist stand.
 
 ## 6. Confidence & gaps
 - **High**: default-router cost 1.83× (measured), Composer economics (external primary), 12-profile selector validity (live).
