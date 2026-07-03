@@ -231,41 +231,37 @@ else
   INV_OK_FETCH=0
   INV_NOTE=" (WARNING: could not fetch ${REPO}@${PIN_SHA:0:12}; invariant result would not reflect the PR)"
 fi
-INV_OK=1
-# P2 (#11 codex-bot): guide-specific invariants only apply when the reviewed tree IS this
-# guide (has gjc-profiles.yml). For a non-guide REPO target, mark N/A and DON'T gate merge.
-INV_APPLICABLE=1
-[ -f "$INV_TREE/gjc-profiles.yml" ] || INV_APPLICABLE=0
-# SECURITY: never execute or import the PR's code. Run the TRUSTED validator by ABSOLUTE
-# PATH from this local checkout (so Python's sys.path[0] is the trusted scripts dir, not the
-# PR tree — a hostile PR's scripts/yaml.py can't shadow the stdlib import), passing the PR
-# head only as DATA via --root. A PR that changes validate-profiles.py itself needs human review.
 # $CYBER_COP_VALIDATOR lets the installed gjc-cop wrapper point at the shipped trusted
 # validator (~/.gjc/agent/cyber-cop/validate-profiles.py) when there's no repo checkout.
+# SECURITY: run it by ABSOLUTE PATH from the trusted checkout so Python's sys.path[0] stays
+# the trusted scripts dir (a hostile PR's scripts/yaml.py can't shadow the stdlib import);
+# the PR head is passed only as DATA via --root, never executed/imported.
 TRUSTED_VALIDATOR="${CYBER_COP_VALIDATOR:-$REPO_ROOT/scripts/validate-profiles.py}"
-# P1 (#11 codex-bot): reject symlinked data files under an untrusted PR-head worktree —
-# a hostile fork could symlink gjc-profiles.yml/README*.md to host paths (/dev/zero → OOM,
-# or a secret whose parse error is echoed). Only enforced when validating a fetched worktree.
-SYMLINK_BAD=0
-if [ "$INV_TREE" != "$REPO_ROOT" ]; then
-  for df in "$INV_TREE"/gjc-profiles.yml "$INV_TREE"/README*.md; do
-    [ -L "$df" ] && SYMLINK_BAD=1
-  done
-fi
-if [ "$INV_APPLICABLE" = 0 ]; then
-  inv_out="N/A — target tree has no gjc-profiles.yml; guide-specific invariants do not apply to this repo (arch/critic verdicts still gate)."
-  INV_STATUS="N/A"
-elif [ "$SYMLINK_BAD" = 1 ]; then
-  inv_out="refusing to validate: a PR-head data file (gjc-profiles.yml / README*.md) is a symlink"; INV_OK=0
-elif [ -f "$TRUSTED_VALIDATOR" ] && [ -d "$INV_TREE" ]; then
-  inv_out="$(python3 "$TRUSTED_VALIDATOR" --root "$INV_TREE" 2>&1)" || INV_OK=0
+INV_OK=1
+if [ "$INV_OK_FETCH" = 0 ]; then
+  # Could not fetch/verify the PR head → we know NOTHING about it → FAIL CLOSED (never MERGE).
+  # (Determining applicability from the un-fetched $REPO_ROOT would wrongly report N/A for a
+  # guide PR under a standalone gjc-cop install where REPO_ROOT=~/.gjc/agent — issue #12.)
+  inv_out="could not fetch the PR head — cannot verify invariants; failing closed"; INV_OK=0; INV_STATUS="FAIL"
 else
-  inv_out="trusted validate-profiles.py not available"; INV_OK=0
+  # Applicability is judged ONLY from the actually-fetched PR head: guide-specific invariants
+  # apply iff the reviewed repo ships gjc-profiles.yml; otherwise N/A (arch/critic still gate).
+  INV_APPLICABLE=1; [ -f "$INV_TREE/gjc-profiles.yml" ] || INV_APPLICABLE=0
+  # P1 (#11): reject symlinked data files in the untrusted fetched tree (→ /dev/zero / secrets).
+  SYMLINK_BAD=0
+  for df in "$INV_TREE"/gjc-profiles.yml "$INV_TREE"/README*.md; do [ -L "$df" ] && SYMLINK_BAD=1; done
+  if [ "$INV_APPLICABLE" = 0 ]; then
+    inv_out="N/A — reviewed repo has no gjc-profiles.yml; guide-specific invariants do not apply (arch/critic still gate)."; INV_STATUS="N/A"
+  elif [ "$SYMLINK_BAD" = 1 ]; then
+    inv_out="refusing to validate: a PR-head data file (gjc-profiles.yml / README*.md) is a symlink"; INV_OK=0; INV_STATUS="FAIL"
+  elif [ -f "$TRUSTED_VALIDATOR" ]; then
+    inv_out="$(python3 "$TRUSTED_VALIDATOR" --root "$INV_TREE" 2>&1)" || INV_OK=0
+    INV_STATUS=$([ "$INV_OK" = 1 ] && echo PASS || echo FAIL)
+  else
+    inv_out="trusted validate-profiles.py not available"; INV_OK=0; INV_STATUS="FAIL"
+  fi
 fi
-# fail-closed: if we could not validate the actual PR head of a GUIDE repo, it's untrustworthy
-[ "$INV_APPLICABLE" = 1 ] && [ "$INV_OK_FETCH" = 0 ] && INV_OK=0
 echo "$inv_out"
-[ "$INV_APPLICABLE" = 1 ] && INV_STATUS=$([ "$INV_OK" = 1 ] && echo PASS || echo FAIL)
 echo "→ ${INV_STATUS}${INV_NOTE}"; echo
 
 # --- 4. MERGE RECOMMENDATION (deterministic from verdicts + invariants) ---

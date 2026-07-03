@@ -13,8 +13,15 @@
 #   REPO=owner/name gjc-cop …  review a specific repo instead of the cwd repo
 set -euo pipefail
 
-DIR="${GJC_CODING_AGENT_DIR:-$HOME/.gjc/agent}"
-COP_HOME="$DIR/cyber-cop"
+# Derive COP_HOME from THIS wrapper's own installed location (resolve the ~/.local/bin
+# symlink), so a custom GJC_CODING_AGENT_DIR= install still works even when that env var
+# isn't re-exported at run time (#12). Fall back to the env/default path if resolution fails.
+self="$0"
+[ -L "$self" ] && self="$(readlink "$self" 2>/dev/null || echo "$self")"
+COP_HOME="$(cd "$(dirname "$self")" 2>/dev/null && pwd || true)"
+if [ -z "${COP_HOME:-}" ] || [ ! -f "$COP_HOME/cyber-cop-review.sh" ]; then
+  COP_HOME="${GJC_CODING_AGENT_DIR:-$HOME/.gjc/agent}/cyber-cop"
+fi
 ORCH="$COP_HOME/cyber-cop-review.sh"
 CONTRACT_FILE="$COP_HOME/routing-rules.md"
 VALIDATOR="$COP_HOME/validate-profiles.py"
