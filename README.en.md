@@ -37,7 +37,9 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 
 **Start clone-free in 2 commands (v1.6+)**
 ```bash
+# prereqs: gh CLI installed & authed (gh auth login) + gjc provider /login done
 curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | GJC_SETUP_COP=1 bash
+export PATH="$HOME/.local/bin:$PATH"   # once, if the installer warned about PATH
 cd <repo-under-review>
 gjc-cop 123               # PR #123 → 4-section verdict (REPO auto-detected from cwd — never merges)
 # gjc-cop --panel 123     # high-risk: 3-vote cross-family panel

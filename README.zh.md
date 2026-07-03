@@ -37,7 +37,9 @@
 
 **免克隆，两条命令开始（v1.6+）**
 ```bash
+# 前提：已安装并认证 gh CLI（gh auth login）+ gjc 各提供方 /login 完成
 curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | GJC_SETUP_COP=1 bash
+export PATH="$HOME/.local/bin:$PATH"   # 若安装器提示 PATH 警告则执行一次
 cd <待审查仓库>
 gjc-cop 123               # PR #123 → 4 段判定（REPO 从 cwd 自动检测 —— 绝不合并）
 # gjc-cop --panel 123     # 高风险：3 票跨族评审团

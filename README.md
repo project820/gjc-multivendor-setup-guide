@@ -37,7 +37,9 @@
 
 **클론 없이 2커맨드로 시작 (v1.6+)**
 ```bash
+# 전제: gh CLI 설치·인증(gh auth login) + gjc 프로바이더 /login 완료
 curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | GJC_SETUP_COP=1 bash
+export PATH="$HOME/.local/bin:$PATH"   # 설치기가 PATH 경고를 출력한 경우 1회
 cd <리뷰할-레포>
 gjc-cop 123               # PR #123 → 4섹션 verdict (REPO는 cwd 자동 감지 — 머지는 절대 안 함)
 # gjc-cop --panel 123     # 고위험: 3표 cross-family 패널

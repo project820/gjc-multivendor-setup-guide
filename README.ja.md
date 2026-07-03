@@ -37,7 +37,9 @@
 
 **クローン不要、2 コマンドで開始（v1.6+）**
 ```bash
+# 前提：gh CLI インストール·認証済み（gh auth login）+ gjc プロバイダ /login 完了
 curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | GJC_SETUP_COP=1 bash
+export PATH="$HOME/.local/bin:$PATH"   # インストーラが PATH 警告を出した場合は一度実行
 cd <レビュー対象リポジトリ>
 gjc-cop 123               # PR #123 → 4 セクション判定（REPO は cwd から自動検出 —— マージは絶対しない）
 # gjc-cop --panel 123     # 高リスク：3 票 cross-family パネル
