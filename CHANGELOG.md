@@ -14,7 +14,7 @@
 ## v1.8.0 — 2026-07-03
 
 ### Added
-- **GitHub Actions 봇 예시 `docs/examples/cyber-cop-action.yml` (#9 Lv.3)** — 셀프호스티드 러너(gjc/gjc-cop 설치·로그인) 전제의 PR 자동 리뷰 워크플로. **pwn-request 구조적 회피**: PR 코드를 체크아웃/실행하지 않고 데이터로만 리뷰하므로 `pull_request_target`(fork PR 코멘트 가능)이 안전 — checkout 스텝 금지 명시. 권한은 `issues: write`(코멘트 전용) 최소. verdict가 check 결과를 겸해(**MERGE=pass / DO-NOT-MERGE=fail**) required status로 쓸 수 있고, 사람이 PR별 네이티브 auto-merge를 켜는 방식으로 **봇 never-merge 계약을 유지한 채** 극한 자동화 가능. API-키 `cyber-cop-ci` 변형은 신규 셀렉터 라이브 검증 선행 전 미출하(파일 내 문서화). 신규 셀렉터 0.
+- **GitHub Actions 봇 예시 `docs/examples/cyber-cop-action.yml` (#9 Lv.3)** — 셀프호스티드 러너(gjc/gjc-cop 설치·로그인) 전제의 PR 자동 리뷰 워크플로. **pwn-request 구조적 회피**: PR 코드를 체크아웃/실행하지 않고 데이터로만 리뷰하므로 `pull_request_target`(fork PR 코멘트 가능)이 안전 — checkout 스텝 금지 명시. 권한은 `issues: write`(verdict 코멘트) + `pull-requests: read`(gh pr view/diff) 최소 — `pull-requests: write`(approve 권한)는 금지. verdict가 check 결과를 겸해(**MERGE=pass / DO-NOT-MERGE=fail**) required status로 쓸 수 있고, 사람이 PR별 네이티브 auto-merge를 켜는 방식으로 **봇 never-merge 계약을 유지한 채** 극한 자동화 가능. API-키 `cyber-cop-ci` 변형은 신규 셀렉터 라이브 검증 선행 전 미출하(파일 내 문서화). 신규 셀렉터 0.
 
 ## v1.7.0 — 2026-07-03
 
