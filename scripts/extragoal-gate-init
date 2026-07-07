@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+# extragoal-gate-init — prepare a dedicated review working directory for the
+# Extragoal external gate (upstream: docs/extragoal-skill-template.md).
+#
+# The gate contract requires the reviewer invocation's working directory to
+# contain a .gjc/config.yml that disables the injected `goal` tool:
+#   "the review working directory must contain a `.gjc/config.yml` with
+#    `goal:` / `  enabled: false` (verified to remove the injected tool)"
+# Keeping this directory OUTSIDE the repo under review keeps the repo tree
+# clean (nothing to accidentally commit) and lets one gate dir serve every
+# project. Reviewer prompts must then reference bundle/repo paths ABSOLUTELY.
+set -eu
+GATE_DIR="${1:-$HOME/.gjc/extragoal-gate}"
+CFG="$GATE_DIR/.gjc/config.yml"
+WANT='goal:
+  enabled: false'
+if [ -f "$CFG" ]; then
+  if grep -qE '^goal:' "$CFG"; then
+    if awk '/^goal:/{ing=1;next} /^[^ ]/{ing=0} ing && /^[[:space:]]+enabled:[[:space:]]*false[[:space:]]*$/{ok=1} END{exit ok?0:1}' "$CFG"; then
+      echo "ok: $CFG already disables the goal tool"
+      exit 0
+    fi
+    echo "refusing: $CFG has a goal: block that does NOT disable the tool." >&2
+    echo "fix it manually to contain:" >&2
+    printf '%s\n' "$WANT" >&2
+    exit 1
+  fi
+  printf '\n%s\n' "$WANT" >> "$CFG"
+  echo "appended goal-disable block to existing $CFG"
+else
+  mkdir -p "$GATE_DIR/.gjc"
+  printf '%s\n' "$WANT" > "$CFG"
+  echo "gate dir ready: $GATE_DIR"
+fi
+echo "reviewer invocations must run with this directory as cwd, e.g.:"
+echo "  cd \"$GATE_DIR\" && gjc -p --no-session --model openai-codex/gpt-5.5:high \\"
+echo "    --tools read,search,find \"<review prompt with ABSOLUTE bundle paths + verdict contract>\""
