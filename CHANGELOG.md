@@ -11,6 +11,11 @@
 
 ---
 
+## v1.9.0 — 2026-07-06
+
+### Added
+- **Extragoal maximalist edition (opt-in: `GJC_SETUP_EXTRAGOAL=1`)** — GPT-5.5 Pro 구독자가 Pro의 심층 추론을 개발·QA·보안점검에 활용하도록, 상류 gajae-code의 extragoal 외부 리뷰 게이트를 이 가이드에서 설치 가능한 경험으로 포장한다. `install.sh`가 상류 스킬 템플릿을 **커밋 SHA 핀**으로 fetch·추출(frontmatter-first, fail-loud 검증)하고 courier 레인 도구 4종(`extragoal-gate-init`·`extragoal-courier-{pack,secret-scan,verdict}`)을 `~/.gjc/agent/extragoal/`에 배송, `~/.local/bin`에 등록한다. **상류 기본 레인(headless GJC 리뷰어)은 항상 바닥으로 남고 Pro 레인은 어느 단계에서도 전제조건이 아니다.** `docs/extragoal-maximalist.md`가 3단 사다리(수동 courier → `--check-env` 반자동 → 상주 브라우저)와 회전수-1 Pro 활용 독트린을 문서화. courier 도구는 전부 fail-closed(시크릿 히트 차단, verdict 마지막-비공백-줄 파싱, 인용/CRITICAL-동반 APPROVE malformed 처리, Stage 0 클린트리·기본브랜치·빈diff 거부). insane-review는 fivetaku 소유(MIT)라 설치하지 않고 마켓플레이스 경로·env 계약만 안내. 프로필 변경 0, 신규 셀렉터 0.
+
 ## v1.8.0 — 2026-07-03
 
 ### Added

@@ -1,0 +1,107 @@
+#!/usr/bin/env sh
+# extragoal-courier-pack — assemble the Stage 1 review bundle with git only
+# (rung 1 "manual courier" of the maximalist ladder; zero extra installs).
+# Usage: extragoal-courier-pack <base-ref> [out-dir] [spec-file...]
+#   out-dir: "" (or omitted) = out-of-repo default under ~/.gjc/extragoal-gate/
+#            (or set EXTRAGOAL_COURIER_DIR)
+# Gate Stage 0 (all three requirements of the upstream contract, fail closed):
+#   - all changes committed on a FEATURE branch (never the default branch)
+#   - never gate uncommitted work (tracked OR untracked)
+#   - the gate reviews the branch against its MERGE BASE (an empty diff means
+#     nothing to gate; an empty bundle would trivially APPROVE — refuse)
+set -eu
+BASE="${1:?usage: extragoal-courier-pack <base-ref> [out-dir] [spec-file...]}"
+OUT_ARG="${2:-}"
+if [ "$#" -ge 2 ]; then shift 2; else shift "$#"; fi
+git rev-parse --verify -q HEAD >/dev/null || { echo "not a git repo" >&2; exit 1; }
+# Validate the base ref up front — otherwise `git diff --quiet <bad>...HEAD`
+# exits 128, the Stage 0c `if` reads that as "non-empty diff", and the script
+# would die mid-write leaving a partial bundle.
+git rev-parse --verify -q "$BASE^{commit}" >/dev/null || { echo "refusing: base ref '$BASE' does not resolve to a commit" >&2; exit 1; }
+# Stage 0a: never gate uncommitted work — including untracked paths, which a
+# tracked-only diff check silently misses (a forgotten `git add` would ship an
+# incomplete bundle for the reviewer to sign).
+DIRTY="$(git status --porcelain)"
+if [ -n "$DIRTY" ]; then
+  echo "refusing: working tree not clean (uncommitted or untracked paths) — the gate never runs on uncommitted work:" >&2
+  printf '%s\n' "$DIRTY" | head -10 >&2
+  exit 1
+fi
+# Stage 0b: never run the gate loop directly on the default branch.
+if [ "${EXTRAGOAL_ALLOW_BRANCH:-0}" != "1" ]; then
+  BR="$(git branch --show-current)"
+  DEF="$(git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null | sed 's|.*/||' || true)"
+  if { [ -n "$DEF" ] && [ "$BR" = "$DEF" ]; } \
+     || { [ -z "$DEF" ] && { [ "$BR" = "main" ] || [ "$BR" = "master" ]; }; }; then
+    echo "refusing: HEAD is on the default branch ($BR) — the gate reviews a feature branch against its merge base, never the default branch (EXTRAGOAL_ALLOW_BRANCH=1 to override)" >&2
+    exit 1
+  fi
+fi
+# Stage 0c: an empty merge-base diff means there is nothing to gate. Require a
+# real merge base first — with unrelated histories `git diff A...HEAD` errors
+# (exit 128), which a bare `if` would misread as "non-empty diff".
+git merge-base "$BASE" HEAD >/dev/null 2>&1 || { echo "refusing: no merge base between $BASE and HEAD (unrelated histories)" >&2; exit 1; }
+if git diff --quiet "$BASE"...HEAD; then
+  echo "refusing: empty merge-base diff vs $BASE — nothing to gate (an empty bundle would trivially APPROVE)" >&2
+  exit 1
+fi
+# Bundle hygiene (upstream: gate artifacts are sensitive — never commit them).
+# Default the bundle dir OUT of the repo; if an override places it inside the
+# repo, register it in .git/info/exclude and warn.
+OUT="${OUT_ARG:-${EXTRAGOAL_COURIER_DIR:-$HOME/.gjc/extragoal-gate/bundles/$(basename "$PWD")-$(git rev-parse --short HEAD)}}"
+mkdir -p "$OUT"
+# NB: compare PHYSICAL paths — git prints the physical toplevel, and on macOS
+# /var is a symlink to /private/var, so a logical pwd would never match it.
+TOP="$(git rev-parse --show-toplevel)"
+ABS_OUT="$(cd "$OUT" && pwd -P)"
+case "$ABS_OUT/" in
+  "$TOP"/*)
+    REL="${ABS_OUT#"$TOP"/}"
+    EXCL="$(git rev-parse --git-path info/exclude)"
+    mkdir -p "$(dirname "$EXCL")"
+    grep -qxF "$REL/" "$EXCL" 2>/dev/null || echo "$REL/" >> "$EXCL"
+    echo "warning: bundle dir is inside the repo ($REL/) — registered in $EXCL; bundle content is sensitive, never commit it (upstream gate-artifact rule)" >&2
+    ;;
+esac
+BUNDLE="$OUT/bundle.md"
+{
+  echo "# Extragoal review bundle"
+  echo
+  echo "HEAD: $(git rev-parse HEAD)"
+  echo "merge-base($BASE): $(git merge-base "$BASE" HEAD)"
+  echo
+  echo "## Diff stat"
+  echo '```'
+  git diff --stat "$BASE"...HEAD
+  echo '```'
+  echo
+  echo "## Merge-base diff (git diff $BASE...HEAD)"
+  echo '```diff'
+  git diff "$BASE"...HEAD
+  echo '```'
+  echo
+  echo "## Full content of changed files"
+  git diff --name-only "$BASE"...HEAD | while IFS= read -r f; do
+    echo
+    if [ ! -f "$f" ]; then
+      echo "### $f (deleted in this change)"
+    elif grep -Iq . "$f" 2>/dev/null; then
+      echo "### $f"
+      echo '```'
+      cat "$f"
+      echo '```'
+    else
+      echo "### $f (binary file omitted — see the diff stat above)"
+    fi
+  done
+  for spec in "$@"; do
+    echo
+    echo "## Spec/plan artifact: $spec"
+    echo '```'
+    cat "$spec"
+    echo '```'
+  done
+} > "$BUNDLE"
+wc -c "$BUNDLE"
+echo "bundle: $BUNDLE"
+echo "next (mandatory before it leaves the machine): extragoal-courier-secret-scan \"$BUNDLE\""

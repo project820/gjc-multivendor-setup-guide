@@ -13,6 +13,12 @@
 #    GJC_SETUP_COP=1             # cyber-cop reviewer 도구 설치: routing-rules.md + 오케스트레이터 +
 #                               #   trusted validator 를 ~/.gjc/agent/cyber-cop/ 에 배송하고
 #                               #   `gjc-cop` 래퍼를 ~/.local/bin 에 등록 (클론 없이 PR 리뷰)
+#    GJC_SETUP_EXTRAGOAL=1      # extragoal 로컬 스킬 + GPT-5.5 Pro courier 리뷰 레인 설치:
+#                               #   상류 extragoal 스킬(SHA-핀 fetch) + courier 도구 4종을
+#                               #   ~/.gjc/agent/extragoal/ 에 배송하고 ~/.local/bin 에 등록.
+#                               #   상류 기본 레인(headless GJC 리뷰어)은 이것 없이도 항상 동작 —
+#                               #   Pro 레인은 어느 단계에서도 전제조건이 아님.
+#    GJC_XG_BIN_DIR=...         # extragoal 도구 심링크 위치 override (기본: ~/.local/bin)
 #
 #  안전장치: 기존 models.yml / config.yml 자동 백업 · 관리블록 sentinel 로 재실행 시 깔끔 교체.
 #  ⚠ GJC 0.7.10 의 프리셋 rename/delete 는 models.yml 주석(sentinel 포함)을 전부 제거함 —
@@ -180,6 +186,58 @@ if [ "${GJC_SETUP_COP:-0}" = "1" ]; then
   if ! python3 -c "import yaml" >/dev/null 2>&1; then
     y "  ⚠ PyYAML 미설치 — 가이드 레포 PR 리뷰 시 invariants 단계가 실패합니다: pip3 install pyyaml"
   fi
+fi
+
+# 6) Extragoal + Pro final-review lane (opt-in: GJC_SETUP_EXTRAGOAL=1)
+#    상류 기본 레인(headless GJC 리뷰어)은 항상 바닥으로 남고, 이 섹션은 그 위에
+#    extragoal 스킬 + courier 레인 도구만 얹는다.
+if [ "${GJC_SETUP_EXTRAGOAL:-0}" = "1" ]; then
+  b "▶ Extragoal skill + Pro courier lane (GJC_SETUP_EXTRAGOAL=1)"
+  XG_SKILL_DIR="$DIR/skills/extragoal"
+  XG_HOME="$DIR/extragoal"
+  mkdir -p "$XG_SKILL_DIR" "$XG_HOME"
+  # 6a) 스킬 본문 — 상류 템플릿에서 추출(공개 레포, MIT). 커밋 SHA 로 핀:
+  #     이 문서는 현재 dev 브랜치에만 있고, SHA 핀이 설치 재현성·리뷰 안정성을 준다.
+  XG_UPSTREAM_SHA="${GJC_XG_UPSTREAM_SHA:-9fa1088671d209d6e9e301ae7ed301bcb236bc60}"
+  XG_TMPL="$(mktemp)"
+  # rm the temp on any failure path so a failed fetch/copy doesn't leak it
+  # (the top-level EXIT trap only cleans the profile backup, not this).
+  if [ -n "${GJC_XG_TEMPLATE_SRC:-}" ]; then
+    cp "$GJC_XG_TEMPLATE_SRC" "$XG_TMPL" || { rm -f "$XG_TMPL"; die "extragoal 템플릿 로컬 복사 실패: $GJC_XG_TEMPLATE_SRC"; }
+  else
+    command -v curl >/dev/null 2>&1 || { rm -f "$XG_TMPL"; die "curl 필요"; }
+    curl -fsSL "https://raw.githubusercontent.com/Yeachan-Heo/gajae-code/$XG_UPSTREAM_SHA/docs/extragoal-skill-template.md" -o "$XG_TMPL" \
+      || { rm -f "$XG_TMPL"; die "extragoal 템플릿 다운로드 실패 (SHA=$XG_UPSTREAM_SHA)"; }
+  fi
+  sed -n '/^---$/,$p' "$XG_TMPL" > "$XG_SKILL_DIR/SKILL.md"
+  rm -f "$XG_TMPL"
+  # 스킬 스캔은 frontmatter 가 1행이 아니면 조용히 건너뛴다 — 여기서 fail-loud 로 잡는다.
+  [ "$(head -n 1 "$XG_SKILL_DIR/SKILL.md")" = "---" ] || die "extragoal SKILL.md 추출 실패: frontmatter 가 1행에 없음"
+  [ "$(sed -n 2p "$XG_SKILL_DIR/SKILL.md")" = "name: extragoal" ] || die "extragoal SKILL.md 추출 실패: name frontmatter 없음"
+  g "  · extragoal skill → $XG_SKILL_DIR/SKILL.md (upstream @${XG_UPSTREAM_SHA})"
+  # 6b) courier 레인 도구 + gate-init
+  xg_fetch() {
+    if [ -n "${GJC_SETUP_SRC_DIR:-}" ]; then cp "$GJC_SETUP_SRC_DIR/$1" "$2"
+    else command -v curl >/dev/null 2>&1 || die "curl 필요"; curl -fsSL "$REPO_RAW/$1" -o "$2" || die "다운로드 실패: $1"; fi
+  }
+  xg_fetch docs/extragoal-maximalist.md          "$XG_HOME/extragoal-maximalist.md"
+  xg_fetch scripts/extragoal-gate-init           "$XG_HOME/extragoal-gate-init"
+  xg_fetch scripts/extragoal-courier-pack        "$XG_HOME/extragoal-courier-pack"
+  xg_fetch scripts/extragoal-courier-secret-scan "$XG_HOME/extragoal-courier-secret-scan"
+  xg_fetch scripts/extragoal-courier-verdict     "$XG_HOME/extragoal-courier-verdict"
+  chmod +x "$XG_HOME/extragoal-gate-init" "$XG_HOME"/extragoal-courier-*
+  # GJC_XG_BIN_DIR 은 이 섹션 전용 knob (cop 의 GJC_COP_BIN_DIR 을 폴백으로만 공유).
+  XG_BIN_DIR="${GJC_XG_BIN_DIR:-${GJC_COP_BIN_DIR:-$HOME/.local/bin}}"
+  mkdir -p "$XG_BIN_DIR"
+  for _t in extragoal-gate-init extragoal-courier-pack extragoal-courier-secret-scan extragoal-courier-verdict; do
+    ln -sf "$XG_HOME/$_t" "$XG_BIN_DIR/$_t"
+  done
+  g "  · Pro courier guide → $XG_HOME/extragoal-maximalist.md"
+  g "  · gate-init + courier tools → $XG_BIN_DIR/  (extragoal-gate-init · extragoal-courier-{pack,secret-scan,verdict})"
+  case ":$PATH:" in
+    *":$XG_BIN_DIR:"*) : ;;
+    *) y "  ⚠ $XG_BIN_DIR 이(가) PATH 에 없음 — 셸 rc 에 추가: export PATH=\"$XG_BIN_DIR:\$PATH\"" ;;
+  esac
 fi
 echo
 g "✓ 설치 완료"

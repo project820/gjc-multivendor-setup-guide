@@ -1,0 +1,31 @@
+#!/usr/bin/env sh
+# extragoal-courier-verdict — parse the saved reviewer reply per the Extragoal
+# verdict contract. Fail closed on anything that is not a clean verdict.
+#   exit 0 = APPROVE, exit 1 = REQUEST_CHANGES, exit 2 = MALFORMED (escalate)
+# Contract points implemented:
+#   - verdict is read from the LAST NON-EMPTY line; trailing whitespace-only
+#     lines AND trailing whitespace on the verdict line itself are tolerated
+#     (the contract's stated reason for last-non-empty-line parsing is that
+#     pipelines routinely append trailing whitespace)
+#   - APPROVE accompanied by CRITICAL/HIGH findings is malformed (fail closed;
+#     the severity grep is intentionally over-broad — false positives escalate,
+#     which is the safe direction)
+#   - anything else is malformed; never map an unparsable reply to APPROVE
+set -eu
+REPLY="${1:?usage: extragoal-courier-verdict <saved-reply-file>}"
+LAST="$(awk 'NF{sub(/[[:space:]]+$/,""); last=$0} END{print last}' "$REPLY")"
+case "$LAST" in
+  "VERDICT: APPROVE")
+    if grep -qwE 'CRITICAL|HIGH' "$REPLY"; then
+      echo "MALFORMED: APPROVE alongside CRITICAL/HIGH mentions — fail closed, human triage required" >&2
+      exit 2
+    fi
+    echo "VERDICT=APPROVE"
+    exit 0 ;;
+  "VERDICT: REQUEST_CHANGES")
+    echo "VERDICT=REQUEST_CHANGES"
+    exit 1 ;;
+  *)
+    echo "MALFORMED: last non-empty line is not a verdict token (got: ${LAST}) — fail closed" >&2
+    exit 2 ;;
+esac
