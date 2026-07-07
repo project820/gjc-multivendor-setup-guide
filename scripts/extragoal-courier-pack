@@ -21,7 +21,10 @@ git rev-parse --verify -q "$BASE^{commit}" >/dev/null || { echo "refusing: base 
 # Stage 0a: never gate uncommitted work — including untracked paths, which a
 # tracked-only diff check silently misses (a forgotten `git add` would ship an
 # incomplete bundle for the reviewer to sign).
-DIRTY="$(git status --porcelain)"
+# --untracked-files=all forces untracked to show even under a user's
+# status.showUntrackedFiles=no config (which would otherwise hide a forgotten
+# file and let an incomplete bundle get signed).
+DIRTY="$(git status --porcelain --untracked-files=all)"
 if [ -n "$DIRTY" ]; then
   echo "refusing: working tree not clean (uncommitted or untracked paths) — the gate never runs on uncommitted work:" >&2
   printf '%s\n' "$DIRTY" | head -10 >&2
@@ -31,6 +34,12 @@ fi
 if [ "${EXTRAGOAL_ALLOW_BRANCH:-0}" != "1" ]; then
   BR="$(git branch --show-current)"
   DEF="$(git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null | sed 's|.*/||' || true)"
+  # A detached HEAD yields an empty BR: there is no feature branch to re-sign or
+  # merge, so refuse it too (Stage 0 requires work on a feature branch).
+  if [ -z "$BR" ]; then
+    echo "refusing: detached HEAD — the gate reviews a feature branch against its merge base (EXTRAGOAL_ALLOW_BRANCH=1 to override)" >&2
+    exit 1
+  fi
   if { [ -n "$DEF" ] && [ "$BR" = "$DEF" ]; } \
      || { [ -z "$DEF" ] && { [ "$BR" = "main" ] || [ "$BR" = "master" ]; }; }; then
     echo "refusing: HEAD is on the default branch ($BR) — the gate reviews a feature branch against its merge base, never the default branch (EXTRAGOAL_ALLOW_BRANCH=1 to override)" >&2

@@ -215,6 +215,18 @@ if [ "${GJC_SETUP_EXTRAGOAL:-0}" = "1" ]; then
   [ "$(head -n 1 "$XG_SKILL_DIR/SKILL.md")" = "---" ] || die "extragoal SKILL.md 추출 실패: frontmatter 가 1행에 없음"
   [ "$(sed -n 2p "$XG_SKILL_DIR/SKILL.md")" = "name: extragoal" ] || die "extragoal SKILL.md 추출 실패: name frontmatter 없음"
   g "  · extragoal skill → $XG_SKILL_DIR/SKILL.md (upstream @${XG_UPSTREAM_SHA})"
+  # Filesystem skill discovery is off by default (skills.enabled / enablePiUser
+  # default false), so the skill above would not load even though it is now in
+  # the scanned dir. Enable the user-level scan to match this user-level install
+  # (NOT enablePiProject — that would opt every future session into repo-local
+  # .gjc/skills discovery). Fail-soft: if gjc is not on PATH, tell the user.
+  if command -v gjc >/dev/null 2>&1; then
+    gjc config set skills.enabled true >/dev/null 2>&1 || y "  ⚠ gjc config set skills.enabled 실패 — 수동 실행 필요"
+    gjc config set skills.enablePiUser true >/dev/null 2>&1 || y "  ⚠ gjc config set skills.enablePiUser 실패 — 수동 실행 필요"
+    g "  · skill discovery 활성화: skills.enabled=true · skills.enablePiUser=true"
+  else
+    y "  ⚠ gjc 가 PATH 에 없음 — 스킬 로드에 다음이 필요: gjc config set skills.enabled true && gjc config set skills.enablePiUser true"
+  fi
   # 6b) courier 레인 도구 + gate-init
   xg_fetch() {
     if [ -n "${GJC_SETUP_SRC_DIR:-}" ]; then cp "$GJC_SETUP_SRC_DIR/$1" "$2"
