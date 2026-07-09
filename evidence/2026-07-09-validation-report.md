@@ -14,7 +14,7 @@ Branch: `feat/grok-4-5-critic-refresh` (tip hash intentionally omitted because t
   - `gjc -p --no-session --no-tools --model xai/grok-4.5:medium "Reply with exactly: OK"` — exit 0, `OK`.
   - `gjc -p --no-session --no-tools --model xai/grok-4.5:high "Reply with exactly: OK"` — exit 0, `OK`.
   - `gjc -p --no-session --no-tools --model xai/grok-4.5:bogus "Reply with exactly: OK"` — exit 1, model not found.
-- `bash scripts/revalidate.sh` — PASS after rate-limit classification fix; wrote `evidence/2026-07-09-selectors-rerun-2.md`.
+- `SELECTORS_ONLY=1 bash scripts/revalidate.sh` — PASS after rate-limit classification and expected-fail canary enforcement fixes; wrote `evidence/2026-07-09-selectors-rerun-3.md`.
   - Grok 4.5 `:medium` and `:high` OK.
   - OpenAI, Gemini, opencode rows OK.
   - Anthropic rows are `blocked(creds/rate-limit)` due 7d quota, not model regression.
@@ -25,6 +25,10 @@ Branch: `feat/grok-4-5-critic-refresh` (tip hash intentionally omitted because t
 - QA/red-team review `agent://14-QA-Final-Grok45` — passed/passed/passed, blockers `[]`.
   - Residual cost-table drift was fixed afterward in README x4.
   - `python3 scripts/validate-profiles.py` and `git diff --check` were rerun clean after the fix.
+- PR #18 cyber-cop panel first pass returned DO-NOT-MERGE; blockers were fixed in this branch:
+  - `scripts/cyber-cop-review.sh` now voids the optional Grok 4.5 panel seat when PR diff bytes exceed the documented ~400K-token exact-diff guard.
+  - `scripts/revalidate.sh` now enforces expected-failure canaries: an unexpected `ok` for `xai/grok-4.5:bogus` or other fail rows is a regression.
+  - README x4 effort/latency tables now state Grok 4.5 native efforts as `low/medium/high` and high-effort latency as ~50s total / ~48s TTFT from the 2026-07-09 streaming bench.
 
 ## Contract coverage
 

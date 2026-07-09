@@ -138,7 +138,7 @@ Opus 4.6/4.7/4.8        minimal low medium high xhigh max   ← 全6段
 Fable 5                 minimal low medium high xhigh       ← :max は xhigh へサイレントクランプ · thinking 常時オン
 Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max は high へサイレントクランプ
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 は既定 xhigh
-Grok 4.x（xai）          minimal low medium high              ← grok-4.5 の :xhigh/:max は high へサイレントクランプ
+Grok 4.5（xai）          low medium high                      ← :xhigh/:max は high へサイレントクランプ · minimal はネイティブ effort ではない
 grok-build/grok-4.3     ── bare セレクタのみ（effort サフィックス非解釈）──
 opencode-go deepseek-v4  minimal low medium high xhigh
 opencode-go その他       ── effort サフィックス省略（既定）──
@@ -399,7 +399,7 @@ profiles:
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **全体最速** |
 | `opus-4-8:high` | 4.0s | 3.9s | |
 | `fable-5:medium`~`:max(→xhigh)` | 6.7~7.7s | 3.5~6.3s | コーディングで sonnet-5 比 +3~4s |
-| `grok-4.5:high` | 5.6s | 4.0s | |
+| `grok-4.5:medium` / `:high` | ~14s / ~50s | TTFT ~13s / ~48s | 2026-07-09 streaming bench；high は高リスク critic 専用 |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | コーディング遅延の外れ値 |
 | `glm-5.2` | **21.9s** | 4.0s | コーディング最遅 — critic には支障なし |

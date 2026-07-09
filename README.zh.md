@@ -138,7 +138,7 @@ Opus 4.6/4.7/4.8        minimal low medium high xhigh max   ← 全 6 档
 Fable 5                 minimal low medium high xhigh       ← :max 被静默夹取到 xhigh · thinking 常开
 Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max 被静默夹取到 high
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 默认 xhigh
-Grok 4.x（xai）          minimal low medium high              ← grok-4.5 :xhigh/:max 被静默夹取到 high
+Grok 4.5（xai）          low medium high                      ← :xhigh/:max 静默夹取到 high · minimal 不是原生 effort
 grok-build/grok-4.3     ── 仅裸选择器（effort 后缀不解析）──
 opencode-go deepseek-v4  minimal low medium high xhigh
 opencode-go 其他         ── 省略 :effort 后缀（用默认）──
@@ -399,7 +399,7 @@ profiles:
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **全场最快** |
 | `opus-4-8:high` | 4.0s | 3.9s | |
 | `fable-5:medium`~`:max(→xhigh)` | 6.7~7.7s | 3.5~6.3s | 编码比 sonnet-5 慢 +3~4s |
-| `grok-4.5:high` | 5.6s | 4.0s | |
+| `grok-4.5:medium` / `:high` | ~14s / ~50s | TTFT ~13s / ~48s | 2026-07-09 流式 bench；high 仅用于高风险 critic |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | 编码延迟离群值 |
 | `glm-5.2` | **21.9s** | 4.0s | 编码最慢 — 当 critic 无妨 |

@@ -138,7 +138,7 @@ Opus 4.6/4.7/4.8        minimal low medium high xhigh max   ← all 6 tiers
 Fable 5                 minimal low medium high xhigh       ← :max silently clamps to xhigh · thinking always-on
 Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max silently clamp to high
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 defaults to xhigh
-Grok 4.x (xai)          minimal low medium high              ← grok-4.5 :xhigh/:max silently clamps to high
+Grok 4.5 (xai)          low medium high                      ← :xhigh/:max silently clamps to high · minimal is not a native effort
 grok-build/grok-4.3     ── bare selector only (effort suffixes don't resolve) ──
 opencode-go deepseek-v4  minimal low medium high xhigh
 opencode-go others       ── omit the :effort suffix (default) ──
@@ -399,7 +399,7 @@ For the per-profile design rationale — including the `ultimate-f5` event terms
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **fastest overall** |
 | `opus-4-8:high` | 4.0s | 3.9s | |
 | `fable-5:medium`~`:max(→xhigh)` | 6.7~7.7s | 3.5~6.3s | +3~4s vs sonnet-5 on coding |
-| `grok-4.5:high` | 5.6s | 4.0s | |
+| `grok-4.5:medium` / `:high` | ~14s / ~50s | TTFT ~13s / ~48s | 2026-07-09 streaming bench; high only for high-risk critic |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | coding-latency outlier |
 | `glm-5.2` | **21.9s** | 4.0s | slowest at coding — fine for critic |

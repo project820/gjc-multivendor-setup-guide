@@ -164,7 +164,7 @@ Opus 4.6/4.7/4.8        minimal low medium high xhigh max   ← 6단계 전부
 Fable 5                 minimal low medium high xhigh       ← :max는 xhigh로 침묵 클램프 · thinking 상시-온
 Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max는 high로 침묵 클램프
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 기본 xhigh
-Grok 4.x (xai)          minimal low medium high              ← grok-4.5 :xhigh/:max는 high로 침묵 클램프
+Grok 4.5 (xai)          low medium high                      ← :xhigh/:max는 high로 침묵 클램프 · minimal은 네이티브 effort 아님
 grok-build/grok-4.3     ── bare 셀렉터만 (effort 서픽스 미해석) ──
 opencode-go deepseek-v4  minimal low medium high xhigh
 opencode-go 기타         ── effort 접미사 생략(기본값) ──
@@ -442,7 +442,7 @@ profiles:
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **전체 최속** |
 | `opus-4-8:high` | 4.0s | 3.9s | |
 | `fable-5:medium`~`:max(→xhigh)` | 6.7~7.7s | 3.5~6.3s | 코딩에서 sonnet-5 대비 +3~4s |
-| `grok-4.5:high` | 5.6s | 4.0s | |
+| `grok-4.5:medium` / `:high` | ~14s / ~50s | TTFT ~13s / ~48s | 2026-07-09 streaming bench; high는 고위험 critic 전용 |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | 코딩 지연 아웃라이어 |
 | `glm-5.2` | **21.9s** | 4.0s | 코딩 최저속 — critic엔 무방 |

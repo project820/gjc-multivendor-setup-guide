@@ -36,13 +36,20 @@ P(){ local sel="$1" expect="$2" r a
   else
     a="fail[$(printf '%s' "$r" | tr '\n' ' ' | grep -oiE 'not supported|404|500|400|did not resolve' | head -1)]"; fi
   printf '| `%s` | %s | %s |\n' "$sel" "$expect" "$a" >> "$OUT"
-  if [ "$expect" = ok ]; then
-    case "$a" in
-      ok) ;;
-      blocked*) echo "BLOCKED(creds/rate-limit): $sel — run /login or wait for quota reset, then re-run" ;;
-      *) echo "REGRESSION: $sel expected ok, got $a"; FAIL=1;;
-    esac
-  fi
+  case "$expect" in
+    ok)
+      case "$a" in
+        ok) ;;
+        blocked*) echo "BLOCKED(creds/rate-limit): $sel — run /login or wait for quota reset, then re-run" ;;
+        *) echo "REGRESSION: $sel expected ok, got $a"; FAIL=1 ;;
+      esac ;;
+    fail)
+      case "$a" in
+        fail*) ;;
+        blocked*) echo "BLOCKED(creds/rate-limit): $sel — cannot verify expected rejection until credentials/quota recover" ;;
+        *) echo "REGRESSION: $sel expected fail, got $a"; FAIL=1 ;;
+      esac ;;
+  esac
 }
 
 # --- catalog selectors used by the current profiles, plus documented compatibility canaries (must stay ok) ---
