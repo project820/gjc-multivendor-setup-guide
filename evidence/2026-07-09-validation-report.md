@@ -14,7 +14,7 @@ Branch: `feat/grok-4-5-critic-refresh` (tip hash intentionally omitted because t
   - `gjc -p --no-session --no-tools --model xai/grok-4.5:medium "Reply with exactly: OK"` — exit 0, `OK`.
   - `gjc -p --no-session --no-tools --model xai/grok-4.5:high "Reply with exactly: OK"` — exit 0, `OK`.
   - `gjc -p --no-session --no-tools --model xai/grok-4.5:bogus "Reply with exactly: OK"` — exit 1, model not found.
-- `SELECTORS_ONLY=1 bash scripts/revalidate.sh` — PASS after rate-limit classification and expected-fail canary enforcement fixes; wrote `evidence/2026-07-09-selectors-rerun-3.md`.
+- `SELECTORS_ONLY=1 bash scripts/revalidate.sh` — PASS after rate-limit classification and expected-fail canary fail-closed fixes; wrote `evidence/2026-07-09-selectors-rerun-4.md`.
   - Grok 4.5 `:medium` and `:high` OK.
   - OpenAI, Gemini, opencode rows OK.
   - Anthropic rows are `blocked(creds/rate-limit)` due 7d quota, not model regression.
@@ -31,6 +31,7 @@ Branch: `feat/grok-4-5-critic-refresh` (tip hash intentionally omitted because t
   - README x4 effort/latency tables now state Grok 4.5 native efforts as `low/medium/high` and high-effort latency as ~50s total / ~48s TTFT from the 2026-07-09 streaming bench.
 - PR #18 cyber-cop second pass cleared the high-risk panel but requested wording changes for Anthropic quota-blocked rows; README x4 badges/§6 now say the 2026-07-09 rerun covers Grok/OpenAI/Gemini/opencode and Anthropic remains 2026-07-02 last-good due rate-limit.
 - PR #18 cyber-cop third pass found the same verification-scope overclaim in `gjc-profiles.yml` and `assets/profiles-matrix.svg`; those now use the same scoped wording and `scripts/gen_svgs.py` was rerun.
+- PR #18 cyber-cop fourth pass requested fail-closed expected-fail canaries; `scripts/revalidate.sh` now exits nonzero when a fail canary is blocked/inconclusive, and `selectors-rerun-4.md` proves the current canaries fail as expected.
 
 ## Contract coverage
 

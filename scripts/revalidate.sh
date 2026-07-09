@@ -46,7 +46,7 @@ P(){ local sel="$1" expect="$2" r a
     fail)
       case "$a" in
         fail*) ;;
-        blocked*) echo "BLOCKED(creds/rate-limit): $sel — cannot verify expected rejection until credentials/quota recover" ;;
+        blocked*) echo "INCONCLUSIVE: $sel expected fail but got $a — canary not proven"; FAIL=1 ;;
         *) echo "REGRESSION: $sel expected fail, got $a"; FAIL=1 ;;
       esac ;;
   esac
