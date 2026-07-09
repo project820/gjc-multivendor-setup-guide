@@ -12,8 +12,13 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 DATE="$(date +%Y-%m-%d)"
-OUT="evidence/${DATE}-selectors.md"
 mkdir -p evidence
+OUT="evidence/${DATE}-selectors.md"
+if [ -e "$OUT" ]; then
+  n=2
+  while [ -e "evidence/${DATE}-selectors-rerun-${n}.md" ]; do n=$((n+1)); done
+  OUT="evidence/${DATE}-selectors-rerun-${n}.md"
+fi
 command -v gjc >/dev/null 2>&1 || { echo "gjc not found"; exit 2; }
 command -v perl >/dev/null 2>&1 || { echo "perl not found (used for per-call timeout)"; exit 2; }
 
@@ -26,21 +31,28 @@ FAIL=0
 P(){ local sel="$1" expect="$2" r a
   r="$(perl -e 'alarm 100; exec @ARGV' gjc -p --no-session --no-tools --model "$sel" "Reply with exactly: OK" 2>&1)"
   if printf '%s' "$r" | grep -qw OK; then a="ok"
-  elif printf '%s' "$r" | tr '\n' ' ' | grep -qiE 'credential|expired|invalidated|unauthorized|401|login|sign|no api key'; then
-    a="blocked(creds)"   # auth problem (expired OAuth token / provider not configured), NOT a model regression
+  elif printf '%s' "$r" | tr '\n' ' ' | grep -qiE 'credential|expired|invalidated|unauthorized|401|429|rate[_ -]?limit|login|sign|no api key'; then
+    a="blocked(creds/rate-limit)"   # auth/rate-limit problem, NOT a model regression
   else
     a="fail[$(printf '%s' "$r" | tr '\n' ' ' | grep -oiE 'not supported|404|500|400|did not resolve' | head -1)]"; fi
   printf '| `%s` | %s | %s |\n' "$sel" "$expect" "$a" >> "$OUT"
-  if [ "$expect" = ok ]; then
-    case "$a" in
-      ok) ;;
-      "blocked(creds)") echo "BLOCKED(creds): $sel — run /login for its provider, then re-run" ;;
-      *) echo "REGRESSION: $sel expected ok, got $a"; FAIL=1;;
-    esac
-  fi
+  case "$expect" in
+    ok)
+      case "$a" in
+        ok) ;;
+        blocked*) echo "BLOCKED(creds/rate-limit): $sel — run /login or wait for quota reset, then re-run" ;;
+        *) echo "REGRESSION: $sel expected ok, got $a"; FAIL=1 ;;
+      esac ;;
+    fail)
+      case "$a" in
+        fail*) ;;
+        blocked*) echo "INCONCLUSIVE: $sel expected fail but got $a — canary not proven"; FAIL=1 ;;
+        *) echo "REGRESSION: $sel expected fail, got $a"; FAIL=1 ;;
+      esac ;;
+  esac
 }
 
-# --- bundled-catalog selectors used by the v1.4 profiles (must stay ok) ---
+# --- catalog selectors used by the current profiles, plus documented compatibility canaries (must stay ok) ---
 for s in \
   "anthropic/claude-opus-4-8:high" "anthropic/claude-sonnet-4-6:high" \
   "anthropic/claude-fable-5:high" "anthropic/claude-fable-5:xhigh" \
@@ -48,10 +60,11 @@ for s in \
   "openai-codex/gpt-5.5:high" "openai-codex/gpt-5.4:high" \
   "google-antigravity/gemini-3.1-pro-low" "google-antigravity/gemini-3.1-pro-low:high" \
   "google-antigravity/gemini-3.5-flash-low" \
-  "xai/grok-4.3:high" "xai/grok-4-1-fast:high" "xai/grok-4-fast:high" \
+  "xai/grok-4.5:medium" "xai/grok-4.5:high" "xai/grok-4.3:high" "xai/grok-4-1-fast:high" "xai/grok-4-fast:high" \
   "opencode-go/deepseek-v4-flash" "opencode-go/deepseek-v4-pro" \
   "opencode-go/glm-5.2" ; do P "$s" ok; done
-# (glm-5.2 moved to bundled: in the 0.7.10 bundled catalog — old 'live-catalog only' caveat retired)
+# (glm-5.2 bundled since 0.7.10; grok-4.5 added to the catalog 2026-07-09 = xai/grok-4.5, xai API only, no grok-build variant.
+#  grok-4.5 native efforts low/med/high; :xhigh/:max exit 0 but clamp to high — shipped selectors are :medium/:high only.)
 
 # --- fuzzy/dynamic selectors (informational; not counted as regression) ---
 # bare gemini-3.5-flash is NOT a literal catalog id — resolves via fuzzy match to -low today;
@@ -60,7 +73,7 @@ for s in "google-antigravity/gemini-3.5-flash"; do P "$s" ok-live; done
 
 # --- known rejections (documented; expected to FAIL) ---
 # gemini-3.1-pro-high: appears in the catalog LISTING since 0.7.10 but the live call still 400s (trap).
-for s in "google-antigravity/gemini-3.1-pro-high" "openai-codex/gpt-5.3-codex:high"; do P "$s" fail; done
+for s in "google-antigravity/gemini-3.1-pro-high" "openai-codex/gpt-5.3-codex:high" "xai/grok-4.5:bogus"; do P "$s" fail; done
 
 if [ "${SELECTORS_ONLY:-0}" != 1 ]; then
   { echo; echo "## Single-message @file input limit (separate from the 1M context window)"; echo

@@ -49,10 +49,12 @@ FAMILY = {
 }
 # Legal effort suffixes by model class. Matchers take (provider, model_id) so
 # per-provider ceilings can differ (same model id can clamp differently by provider).
-# Sets encode GJC-EFFECTIVE ceilings (0.7.10, live-verified 2026-07-02), NOT the API ones:
+# Sets encode GJC-EFFECTIVE ceilings (0.9.1, live-verified 2026-07-09), NOT the API ones:
 #   fable-5 <=xhigh (:max silently clamps) · sonnet-5 <=high (API allows max — upstream gap)
-#   xai grok <=high (:xhigh silently clamps; xhigh exists only on the grok-build provider,
-#   whose effort suffixes don't resolve at all — bare grok-build selectors only).
+#   xai grok-4.3 <=high (:xhigh silently clamps; xhigh exists only on the grok-build provider,
+#   whose effort suffixes don't resolve at all — bare grok-build selectors only)
+#   xai grok-4.5 <=high (native reasoning_efforts=low/med/high per models_cache.json;
+#   :xhigh/:max exit 0 but silently clamp to high — never shipped)
 def _eff_rules():
     return [
         (lambda p, m: m.startswith("claude-fable-5"), {"minimal","low","medium","high","xhigh"}),   # :max -> silent clamp to xhigh
@@ -65,6 +67,7 @@ def _eff_rules():
         (lambda p, m: m.startswith("gpt-5"), {"minimal","low","medium","high"}),  # base gpt-5/gpt-5.1 (catalog: minimal..high)
         (lambda p, m: "gemini" in m and "pro" in m, {"low","high"}),
         (lambda p, m: "gemini" in m and "flash" in m, {"minimal","low","medium","high"}),
+        (lambda p, m: p == "xai" and m.startswith("grok-4.5"), {"low","medium","high"}),  # native low/med/high (models_cache.json); :xhigh/:max clamp to high — not shipped
         (lambda p, m: p == "xai" and m.startswith("grok"), {"minimal","low","medium","high"}),      # :xhigh -> silent clamp to high
         (lambda p, m: p == "grok-build" and m.startswith("grok"), set()),  # catalog lists xhigh but effort suffixes don't resolve — bare selectors only
     ]

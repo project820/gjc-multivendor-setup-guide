@@ -7,11 +7,11 @@
 Stop agonizing over model choice. **Install in one line** and let each role get its best-fit model automatically.
 
 [![GJC](https://img.shields.io/badge/for-Gajae%20Code%20(GJC)-e23?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code)
-[![Version](https://img.shields.io/badge/version-1.5.5-2496ED?style=flat-square)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.10.0-2496ED?style=flat-square)](./CHANGELOG.md)
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/profiles-13-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
-![Verified](https://img.shields.io/badge/selectors-live%20tested%202026--07--02-brightgreen?style=flat-square)
+![Verified](https://img.shields.io/badge/rerun-grok%2Fopenai%2Fgemini%2Fopencode%202026--07--09-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
 <img src="assets/role-winners.svg" alt="legend setup — strongest model per role" width="100%">
@@ -30,7 +30,7 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 **What's different**
 - In PR review / security audits the role weighting **inverts** → **architect (first-pass verdict: CLEAR/WATCH/BLOCK) and critic (merge gate) lead**; executor drops to a supporting repro-PoC / failing-test role.
 - The critic runs **cross-family vs the code author (assumed Claude)** (GPT-5.5) → structurally counters self-preference bias ([arXiv 2410.21819](https://arxiv.org/abs/2410.21819)).
-- High-risk / security PRs convene a **3-vote parallel panel** (`gpt-5.5` · `grok-4.3` · `gemini-3.1-pro`), independent votes → 2/3 dissent or any CRITICAL/BLOCK blocks.
+- High-risk / security PRs convene a **3-vote parallel panel** (`gpt-5.5` · `grok-4.5` · `gemini-3.1-pro`), independent votes → 2/3 dissent or any CRITICAL/BLOCK blocks.
 
 **Proof it works — this repo dogfooded it**
 > Across PRs #4–#7 the review gate **blocked 10 defects before merge** (#4: 5 · #6: 5 · #7: passed on first vote). The review helper was BLOCKed by *its own* prompt-injection flaw (fixed, then passed), and two overclaims the Anthropic base model waved through (a relative-path injection surface and a permission overclaim) were **correctly BLOCKed by the cross-family critic (GPT-5.5)**. (One more was caught *after* #6 merged → fixed immediately in #7.) The self-preference-bias defense works in practice.
@@ -131,14 +131,14 @@ Three design principles:
 
 ### 3-2. Effort cheatsheet
 
-These are the **GJC 0.7.10 effective** tiers — some differ from the official API spec (footnote below):
+These are the **GJC 0.9.1 effective** tiers — some differ from the official API spec (footnote below):
 
 ```text
 Opus 4.6/4.7/4.8        minimal low medium high xhigh max   ← all 6 tiers
 Fable 5                 minimal low medium high xhigh       ← :max silently clamps to xhigh · thinking always-on
 Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max silently clamp to high
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 defaults to xhigh
-Grok 4.x (xai)          minimal low medium high              ← grok-4.3 :xhigh silently clamps to high
+Grok 4.5 (xai)          low medium high                      ← :xhigh/:max silently clamps to high · minimal is not a native effort
 grok-build/grok-4.3     ── bare selector only (effort suffixes don't resolve) ──
 opencode-go deepseek-v4  minimal low medium high xhigh
 opencode-go others       ── omit the :effort suffix (default) ──
@@ -146,9 +146,9 @@ google-antigravity Gemini  gemini-3.1-pro-low:high (high reasoning) · gemini-3.
 ```
 
 > [!IMPORTANT]
-> **Five hard rules**: ① Gemini Pro supports only `low`/`high` ② openai-codex ctx is **per-model** — `gpt-5.4`=**1M** · `gpt-5.5`=**272K** (shrank from 400K; the old blanket "codex 272k" rule is retired) ③ Sonnet (4.6/5) cannot do `xhigh`/`max` in GJC · **Fable 5 cannot do `max`** (clamped to high / xhigh respectively) ④ opencode-go: omit `:effort` (only the deepseek-v4 family supports it) ⑤ xai `grok-4.3` caps at `high` (`:xhigh` silently clamps — xhigh exists only on the grok-build provider, where effort suffixes don't resolve at all). Out-of-range tiers are **clamped**, not errored.
+> **Five hard rules**: ① Gemini Pro supports only `low`/`high` ② openai-codex ctx is **per-model** — `gpt-5.4`=**1M** · `gpt-5.5`=**272K** (shrank from 400K; the old blanket "codex 272k" rule is retired) ③ Sonnet (4.6/5) cannot do `xhigh`/`max` in GJC · **Fable 5 cannot do `max`** (clamped to high / xhigh respectively) ④ opencode-go: omit `:effort` (only the deepseek-v4 family supports it) ⑤ xai `grok-4.5` caps at `high` (`:xhigh` silently clamps — xhigh exists only on the grok-build provider, where effort suffixes don't resolve at all). Out-of-range tiers are **clamped**, not errored.
 >
-> **Footnote (upstream gap)**: per the official API, both Claude 5 models support up to `max`. The GJC 0.7.10 parser doesn't know the fable family (falls back to inferred rules) and sonnet-5 inherits the 4.6 clamp — an **engine-side gap, reported upstream** with a repro. This guide records the GJC-effective tiers.
+> **Footnote (upstream gap)**: per the official API, both Claude 5 models support up to `max`. The GJC 0.9.1 parser doesn't know the fable family (falls back to inferred rules) and sonnet-5 inherits the 4.6 clamp — an **engine-side gap, reported upstream** with a repro. This guide records the GJC-effective tiers.
 
 ### 3-3. Subscription → provider
 
@@ -207,7 +207,7 @@ opencode-go/<model>                           (omit effort = model default)
 <img src="assets/profiles-matrix.svg" alt="profiles × roles matrix" width="100%">
 </div>
 
-> ★ = everyday recommendation. The top banner = the **`legend` setup** (sustainable strongest — only `default` on Fable 5). The everyday cost-balanced pick is **`daily`** (executor·critic swapped to cheaper). Multi-vendor profiles keep `default = Anthropic flagship (Opus/Fable)` and `critic = cross-family` (solo-* use the single vendor's strongest); all pass the engine effort hard-rules and **every selector is live-verified** ([§6](#6--verification-matrix)).
+> ★ = everyday recommendation. The top banner = the **`legend` setup** (sustainable strongest — only `default` on Fable 5). The everyday cost-balanced pick is **`daily`** (executor·critic swapped to cheaper). Multi-vendor profiles keep `default = Anthropic flagship (Opus/Fable)` and `critic = cross-family` (solo-* use the single vendor's strongest); all pass the engine effort hard-rules and **track selector verification status** ([§6](#6--verification-matrix); the 2026-07-09 rerun covers Grok/OpenAI/Gemini/opencode, while Anthropic remains 2026-07-02 last-good due quota).
 
 | Profile | One-liner | Use when |
 |---|---|---|
@@ -238,7 +238,7 @@ profiles:
       executor:  openai-codex/gpt-5.4:high                      # coding-focused · mid price ($2.5/15) · vendor spread (verified✅)
       planner:   google-antigravity/gemini-3.1-pro-low:high     # verified #1 reasoning (GPQA 94.3 / ARC-AGI-2 77.1)
       architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx · multimodal (MMMU-Pro 81%)
-      critic:    xai/grok-4.3:medium                            # cross-family cheap independent critic ($1.25/2.5)
+      critic:    xai/grok-4.5:medium                            # cross-family independent critic. grok-4.5 $2/$6 (effective ~$0.84/$6.2); medium≈1.7k reasoning/~14s
 
   ultimate:                            # cost-no-object, best per role + vendor spread (sustainable edition — event edition is ultimate-f5)
     required_providers: [anthropic, openai-codex, google-antigravity, xai]
@@ -247,7 +247,7 @@ profiles:
       executor:  anthropic/claude-opus-4-8:max                  # strongest subscription-included coder (SWE-bench Verified 88.6)
       planner:   openai-codex/gpt-5.5:xhigh                     # top reasoning + OpenAI diversity
       architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx · multimodal
-      critic:    xai/grok-4.3:high                              # cross-family independent critic
+      critic:    xai/grok-4.5:high                              # cross-family independent critic
 
   ultimate-f5:                         # 🔥 event: Fable 5-centric — subscription-included through ~2026-07-07 (50% weekly-limit cap), then usage credits ($10/$50)
     required_providers: [anthropic, openai-codex, google-antigravity, xai]
@@ -256,7 +256,7 @@ profiles:
       executor:  anthropic/claude-fable-5:xhigh                 # SWE-bench Verified 95.0 new #1. ⚠never :max (silently clamps to xhigh)
       planner:   openai-codex/gpt-5.5:xhigh                     # reasoning axis unproven for Fable (ARC-AGI-2 unpublished) — keep GPT
       architect: google-antigravity/gemini-3.1-pro-low:high     # keeps the verified multimodal lead (Fable vision is vendor-claimed)
-      critic:    xai/grok-4.3:high                              # cross-family invariant — no Fable self-review
+      critic:    xai/grok-4.5:high                              # cross-family invariant — no Fable self-review
       # after 7/7: lower default to opus-4-8:high for the same sustainable structure as legend
 
   legend:                              # 👑 Ultimate Legend — strongest that stays viable after 7/7 (fable on the default seat only)
@@ -267,7 +267,7 @@ profiles:
       executor:  anthropic/claude-opus-4-8:max                  # strongest subscription-included coder (88.6)
       planner:   openai-codex/gpt-5.5:xhigh
       architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    xai/grok-4.3:high
+      critic:    xai/grok-4.5:high
       # to avoid credits cost: set default to opus-4-8:high — becomes identical to ultimate
 
   coding-sprint:                       # implementation throughput. executor-led + coding-aware critic
@@ -286,7 +286,7 @@ profiles:
       executor:  anthropic/claude-fable-5:xhigh                 # rescue pitcher for failed tasks (SWE-V 95.0). intermittent use also fits credits billing
       planner:   openai-codex/gpt-5.5:xhigh
       architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    xai/grok-4.3:high                              # + 3-vote cross-vendor critic panel (independent vote → main loop tallies). ⚠xai :xhigh silently clamps to high, so unused
+      critic:    xai/grok-4.5:high                              # + 3-vote cross-vendor critic panel (independent vote → main loop tallies). grok-4.5 :xhigh/:max silently clamp to high, so unused
       # (the critic :xhigh used through v1.3 was a no-op clamp — xhigh exists only on the grok-build provider, which doesn't resolve effort suffixes)
 
   cyber-cop:                           # 🚨 reviewer mode — PR review & security audit (inverse of author mode)
@@ -297,11 +297,11 @@ profiles:
       planner:   google-antigravity/gemini-3.1-pro-low:high     # review checklists & audit scoping (cross-family vs critic)
       architect: anthropic/claude-opus-4-8:high                 # lead #1 — primary code-review judge, 1M effective retrieval (MRCR 76% vs Gemini 26%)
       critic:    openai-codex/gpt-5.5:high                      # lead #2 — merge gate, cross-family vs Claude-authored code
-      # High-risk PRs / security audits: 3-vote parallel critic panel {openai-codex/gpt-5.5:high, xai/grok-4.3:high,
+      # High-risk PRs / security audits: 3-vote parallel critic panel {openai-codex/gpt-5.5:high, xai/grok-4.5:high,
       # google-antigravity/gemini-3.1-pro-low:high} — independent votes aggregated by the main loop (no debate); block on 2/3 rejection or any CRITICAL/BLOCK
       # (3rd vote (grok) requires xai login — without it, 2 votes {gpt-5.5, gemini} still meet the provenance minimum of ≥2 non-default families)
 
-  eco:                                 # cheapest — only the main loop is Opus (effort trimmed), delegation ultra-cheap/subscription (all verified✅)
+  eco:                                 # cheapest — only the main loop is Opus (effort trimmed), delegation ultra-cheap/subscription (verification-tracked✅)
     required_providers: [anthropic, opencode-go, google-antigravity, xai]
     model_mapping:
       default:   anthropic/claude-opus-4-8:low                  # can't lower the router, only its effort
@@ -375,31 +375,31 @@ For the per-profile design rationale — including the `ultimate-f5` event terms
 
 ## 6. ✅ Verification matrix
 
-> Every selector was **actually called** in this environment via `gjc -p --no-session --no-tools --model <sel> "..."` (**final verification 2026-07-02, gjc 0.7.10** — entries without an explicit date were verified 2026-06-18; core selectors were re-verified by the 0.7.10 regression battery (marked 07-02✅)). "Works" means a real call, not a guess.
+> In the 2026-07-09 (gjc 0.9.1) rerun, Grok/OpenAI/Gemini/opencode core selectors were **actually called** via `gjc -p --no-session --no-tools --model <sel> "..."`. Anthropic seats returned `blocked(creds/rate-limit)` due the 7-day quota, so they remain backed by 2026-07-02 last-good evidence. "Works" means a real call or explicitly named last-good evidence, not a guess.
 
 | Provider | Verified selectors (✅ working) |
 |---|---|
-| `anthropic` | `claude-fable-5` (bare·low·medium·high — `:max` works but **silently clamps to xhigh**, 07-02✅) · `claude-sonnet-5` (bare·medium·high — `:max` works but **silently clamps to high**, 07-02✅) · `claude-opus-4-8` (low·medium·high·max; `:high` re-verified 07-02✅) · `claude-sonnet-4-6:high` (re-verified 07-02✅) |
+| `anthropic` | `claude-fable-5` (bare·low·medium·high — `:max` works but **silently clamps to xhigh**, 07-02✅) · `claude-sonnet-5` (bare·medium·high — `:max` works but **silently clamps to high**, 07-02✅) · `claude-opus-4-8` (low·medium·high·max; `:high` re-verified 07-02✅) · `claude-sonnet-4-6:high` (re-verified 07-02✅) · 07-09 rerun blocked by account rate-limit (not a model regression) |
 | `openai-codex` | `gpt-5.5:high` (**re-verified 07-02 after re-auth✅**) · `gpt-5.5:xhigh` · `gpt-5.4:high` · `gpt-5.4-mini:high` |
-| `xai` | `grok-4.3:high` (re-verified 07-02✅ — `:xhigh` silently clamps to high) · `grok-4-1-fast:high` (07-02✅) · `grok-4-fast:high` (07-02✅) · `grok-code-fast-1` · `grok-composer-2.5-fast` |
+| `xai` | `grok-4.5:medium`/`:high` (07-09✅ — `:xhigh`/`:max` clamp to high; xai-only, provider 500K / GJC 222K floor, $2/$6) · `grok-4-1-fast:high` (07-02✅) · `grok-4-fast:high` (07-02✅) · `grok-code-fast-1` · `grok-composer-2.5-fast` |
 | `grok-build` | `grok-4.3` (**bare selector only** — effort suffixes don't resolve, 07-02✅. SuperGrok OAuth) |
 | `google-antigravity` | `gemini-3.1-pro-low` (±`:high`, re-verified 07-02✅) · `gemini-3.5-flash-low` (**newly pinned**, 07-02✅) · `gemini-3.5-flash` (works via fuzzy matching, 07-02✅) · `gemini-3-flash` · `claude-opus-4-6-thinking` (06-18 — bundle composition not re-checked since the Claude 5 launch) |
 | `opencode-go` | `deepseek-v4-flash`·`deepseek-v4-pro` (re-verified 07-02✅) · `glm-5.2` (**in the 0.7.10 bundled catalog**, 07-02✅) · `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` (needs `OPENCODE_API_KEY`) |
 
 > [!WARNING]
-> **Selectors that did NOT work here** (avoid): `openai-codex/gpt-5.3-codex`·`gpt-5.2-codex`·`gpt-5.1-codex-max`·`gpt-5.1-codex-mini` (unsupported on ChatGPT accounts) · `google-antigravity/gemini-3.1-pro-high` (**appears in the 0.7.10 catalog listing but calls still return 400** — the documented trap stands; the engine uses `gemini-3.1-pro-low:high`) · `gemini-3-pro` (retired) · `claude-sonnet-4-6-thinking` (404) · `gpt-oss-120b` (500). `opencode-go/*` fails **only when `OPENCODE_API_KEY` is unset** (works per the table once set). Note: `fable-5:max`·`sonnet-5:xhigh/max`·`grok-4.3:xhigh` are not failures — they **silently clamp** ([§3-2](#3-2-effort-cheatsheet)).
+> **Selectors that did NOT work here** (avoid): `openai-codex/gpt-5.3-codex`·`gpt-5.2-codex`·`gpt-5.1-codex-max`·`gpt-5.1-codex-mini` (unsupported on ChatGPT accounts) · `google-antigravity/gemini-3.1-pro-high` (**appears in the 0.7.10 catalog listing but calls still return 400** — the documented trap stands; the engine uses `gemini-3.1-pro-low:high`) · `gemini-3-pro` (retired) · `claude-sonnet-4-6-thinking` (404) · `gpt-oss-120b` (500). `opencode-go/*` fails **only when `OPENCODE_API_KEY` is unset** (works per the table once set). Note: `fable-5:max`·`sonnet-5:xhigh/max`·`grok-4.5:xhigh/max` are not failures — they **silently clamp** ([§3-2](#3-2-effort-cheatsheet)).
 
 > [!NOTE]
 > `opencode-go/glm-5.2` joined the **bundled catalog in 0.7.10** (the old "live-catalog only" caveat is retired). Conversely, the `google-antigravity/gemini-3.5-flash` literal id is not in the catalog (only `-low`/`-extra-low` exist) and **worked only via fuzzy matching**, so the v1.4 profiles pin `gemini-3.5-flash-low`. With a stale discovery cache, activation can fail with `selector did not resolve` — re-login/retry to refresh the catalog, or substitute a bundled id (`opencode-go/deepseek-v4-pro` for the critic, or `zai/glm-5.2` — add `zai` to `required_providers`).
 
-**Latency reference** (micro-bench 2026-07-02 — identical coding/reasoning prompts, every selector correct):
+**Latency reference** (micro-bench 2026-07-02; Grok 4.5 row uses the 2026-07-09 streaming bench):
 
 | Selector | Coding | Reasoning | Notes |
 |---|---|---|---|
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **fastest overall** |
 | `opus-4-8:high` | 4.0s | 3.9s | |
 | `fable-5:medium`~`:max(→xhigh)` | 6.7~7.7s | 3.5~6.3s | +3~4s vs sonnet-5 on coding |
-| `grok-4.3:high` | 5.6s | 4.0s | |
+| `grok-4.5:medium` / `:high` | ~14s / ~50s | TTFT ~13s / ~48s | 2026-07-09 streaming bench; high only for high-risk critic |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | coding-latency outlier |
 | `glm-5.2` | **21.9s** | 4.0s | slowest at coding — fine for critic |
@@ -508,7 +508,7 @@ parallel independent, 5 (OR-success): 1-(0.01)^5 ≈ 100%  → diversity raises 
 
 **Design principles**
 - critic = **different vendor from the main loop, parallel independent vote, then the main loop tallies** (no debate — meta-judge wins).
-- critic panel example: `{xai/grok-4.3, openai-codex/gpt-5.4, google-antigravity/gemini-3.1-pro-low:high}` in parallel → discard if 2/3 reject.
+- critic panel example: `{xai/grok-4.5:high, openai-codex/gpt-5.4, google-antigravity/gemini-3.1-pro-low:high}` in parallel → discard if 2/3 reject.
 - executor fan-out only when **the work is truly independent** (no shared state).
 - keep chains short, main loop as the single source of truth (no direct sub-agent consensus).
 
@@ -525,7 +525,7 @@ Gemini (`google-antigravity`) runs on the **Google AI Pro/Ultra subscription tok
 | Claude Sonnet 5 | 3 / 15 (intro 2/10 through 2026-08-31)‡ | eco executor alternative |
 | GPT-5.5 | 5 / 30 | planner (ultimate) |
 | GPT-5.4 | 2.5 / 15 | executor/critic (daily·sprint) |
-| Grok 4.3 | 1.25 / 2.5 | critic |
+| Grok 4.5 | 2 / 6 (effective input ~$0.84 @88% cache) | critic (v1.10) |
 | Grok 4.1 Fast | 0.2 / 0.5 | eco planner |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | eco executor · >400k single-paste fallback |

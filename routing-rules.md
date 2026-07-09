@@ -24,7 +24,7 @@
 - 최저 합리 등급으로 시작 (단순=low, executor/planner=high).
 - 실패신호(테스트 깨짐·자기모순·재시도 루프·critic 반려)에서만 1단계 격상: high → xhigh → max.
 - 단, 사다리 상한은 모델별(GJC 실효): max는 Opus 전용 최상단 · Fable 5=**xhigh**(`:max`는 침묵 클램프) ·
-  Sonnet(4.6/5)=**high** · xai grok-4.3=**high**(`:xhigh` 침묵 클램프) · Gemini Pro는 low↔high 2단뿐 ·
+  Sonnet(4.6/5)=**high** · xai grok-4.3=**high**(`:xhigh` 침묵 클램프) · xai grok-4.5=**high**(`:xhigh`/`:max` 침묵 클램프) · Gemini Pro는 low↔high 2단뿐 ·
   opencode-go는 effort 자체를 생략. 상한 위 등급을 써도 에러 없이 조용히 깎이니 "올렸다"고 착각 금지.
 - minimal 금지(-23점 급락). "안전하니 올리자"식 무조건 max 금지.
 
@@ -36,7 +36,7 @@
 ## 리뷰어 계약 — cyber-cop 프로필 전용 (PR 리뷰·보안 감사 세션)
 - **위임 순서**: 리뷰 진입 → **architect 선호출**(1차 코드리뷰 판정자: CLEAR/WATCH/BLOCK) →
   머지 게이트 → **critic**. 고위험 PR·보안 감사는 critic **3표 병렬 패널**
-  `{openai-codex/gpt-5.5:high, xai/grok-4.3:high, google-antigravity/gemini-3.1-pro-low:high}` —
+  `{openai-codex/gpt-5.5:high, xai/grok-4.5:high, google-antigravity/gemini-3.1-pro-low:high}` —
   독립 투표 후 본체가 집계(토론 금지), **2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단**.
   (3표째 grok은 xai 로그인 시 — 미보유면 2표 {gpt-5.5, gemini}로 강등 운영, provenance 최소치(non-default family ≥2)는 유지된다.)
 - **default=집계자 제한**: 본체는 critic/패널의 raw verdict를 **요약·은폐 없이 보존·노출**한다.
@@ -56,8 +56,11 @@
 - Gemini 고추론 = `google-antigravity/gemini-3.1-pro-low:high`  (★ `gemini-3.1-pro-high` 는 카탈로그 목록엔 떠도 호출은 여전히 400)
 - openai-codex 는 base GPT만 (`gpt-5.5` / `gpt-5.4`) — `-codex` 변종(gpt-5.3-codex 등) 미지원.
   ctx는 모델별: **gpt-5.4=1M / gpt-5.5=272K**(400K→272K 축소 — "codex 272k" 일괄 룰 폐기). 대용량 입력은 gpt-5.4.
-- xai `grok-4.3` — 상한 = **high** (`:xhigh`는 침묵 클램프. xhigh는 grok-build 프로바이더 전용이나
-  거긴 effort 서픽스가 미해석 — bare `grok-build/grok-4.3`만 동작)
+- xai `grok-4.5` (canonical `grok-4-5`) — **xai API(XAI_API_KEY) 전용** · grok-build/OAuth 변종 **없음**(grok-4.3와 다름).
+  GJC 실효 상한 = **high** (native low/med/high; `:xhigh`/`:max`는 high로 침묵 클램프 — 광고 금지).
+  provider ctx **500K**(auto-compact 80% → exact-diff 안전 ~**400K**)이나 GJC `--list-models`는 **222K/8.9K**로 스테일 표기(보수적 하한). 가격 **$2/$6** per 1M(실효 ~$0.84/$6.2 @88% cache).
+  운영 노트: critic 이 exact-diff 안전선(~400K)을 넘는 diff/입력을 심판해야 하면 grok-4.5 에 붓지 말고 **1M 레인(Opus/Gemini/GPT-5.4/GLM)** 으로 라우팅한다.
+- xai `grok-4.3` — 상한 = **high** (`:xhigh` 침묵 클램프). SuperGrok OAuth 옵션은 bare `grok-build/grok-4.3`만 동작(effort 서픽스 미해석).
 - opencode-go 는 effort 접미사 생략, `OPENCODE_API_KEY` 필요
 - critic 은 항상 본체와 다른 벤더(cross-family). 멀티 critic 은 병렬 독립 투표 후 본체가 집계(토론 금지)
 
