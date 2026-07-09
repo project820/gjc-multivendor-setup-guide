@@ -29,6 +29,7 @@ Branch: `feat/grok-4-5-critic-refresh` (tip hash intentionally omitted because t
   - `scripts/cyber-cop-review.sh` now voids the optional Grok 4.5 panel seat when PR diff bytes exceed the documented ~400K-token exact-diff guard.
   - `scripts/revalidate.sh` now enforces expected-failure canaries: an unexpected `ok` for `xai/grok-4.5:bogus` or other fail rows is a regression.
   - README x4 effort/latency tables now state Grok 4.5 native efforts as `low/medium/high` and high-effort latency as ~50s total / ~48s TTFT from the 2026-07-09 streaming bench.
+- PR #18 cyber-cop second pass cleared the high-risk panel but requested wording changes for Anthropic quota-blocked rows; README x4 badges/§6 now say the 2026-07-09 rerun covers Grok/OpenAI/Gemini/opencode and Anthropic remains 2026-07-02 last-good due rate-limit.
 
 ## Contract coverage
 

@@ -11,7 +11,7 @@
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/profiles-13-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
-![Verified](https://img.shields.io/badge/selectors-live%20tested%202026--07--09-brightgreen?style=flat-square)
+![Verified](https://img.shields.io/badge/rerun-grok%2Fopenai%2Fgemini%2Fopencode%202026--07--09-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
 <img src="assets/role-winners.svg" alt="legend 構成 — 役割ごとの最強モデル" width="100%">
@@ -207,7 +207,7 @@ opencode-go/<model>                           （effort 省略 = モデル既定
 <img src="assets/profiles-matrix.svg" alt="プロファイル × 役割 マトリクス" width="100%">
 </div>
 
-> ★ = 日常推奨。上部バナー = **`legend` 構成**（持続可能な最強 — default のみ Fable 5）。コスト均衡の日常推奨は **`daily`**（executor·critic のみ安価に置換）。マルチベンダー構成は `default = Anthropic フラッグシップ（Opus/Fable）`·`critic=クロスファミリー`（solo-* は単一ベンダー最強）を維持し、全てエンジンの effort ハードルールを通過、**全セレクタを実呼び出し検証**済み（[§6](#6--検証マトリクス)）。
+> ★ = 日常推奨。上部バナー = **`legend` 構成**（持続可能な最強 — default のみ Fable 5）。コスト均衡の日常推奨は **`daily`**（executor·critic のみ安価に置換）。マルチベンダー構成は `default = Anthropic フラッグシップ（Opus/Fable）`·`critic=クロスファミリー`（solo-* は単一ベンダー最強）を維持し、全てエンジンの effort ハードルールを通過、**セレクタ検証状態を追跡**（[§6](#6--検証マトリクス)。2026-07-09 rerun は Grok/OpenAI/Gemini/opencode、Anthropic は quota により 2026-07-02 last-good 維持）。
 
 | プロファイル | 一言 | こんな時 |
 |---|---|---|
@@ -375,11 +375,11 @@ profiles:
 
 ## 6. ✅ 検証マトリクス
 
-> 全セレクタを本環境で `gjc -p --no-session --no-tools --model <sel> "..."` により**実呼び出し**して動作確認した（**最終検証 2026-07-09、gjc 0.9.1** — 特記なき項目は 2026-06-18 検証分。核心セレクタは 0.9.1 回帰バッテリーで再検証済み（07-02✅ 表記））。「動く」は推測ではなく実呼び出しの結果。
+> 2026-07-09（gjc 0.9.1）rerun では、Grok/OpenAI/Gemini/opencode の核心セレクタを `gjc -p --no-session --no-tools --model <sel> "..."` で**実呼び出し**して再検証した。Anthropic 席は 7日 quota/rate-limit により `blocked(creds/rate-limit)` のため、2026-07-02 last-good 証拠を維持する。「動く」は推測ではなく、実呼び出しまたは明記された last-good 証拠に基づく。
 
 | プロバイダ | 検証済みセレクタ（✅ 動作） |
 |---|---|
-| `anthropic` | `claude-fable-5`（bare·low·medium·high — `:max` は **xhigh へサイレントクランプ**され動作、07-02✅）· `claude-sonnet-5`（bare·medium·high — `:max` は **high へサイレントクランプ**され動作、07-02✅）· `claude-opus-4-8`（low·medium·high·max、`:high` は 07-02 再検証✅）· `claude-sonnet-4-6:high`（07-02 再検証✅） |
+| `anthropic` | `claude-fable-5`（bare·low·medium·high — `:max` は **xhigh へサイレントクランプ**され動作、07-02✅）· `claude-sonnet-5`（bare·medium·high — `:max` は **high へサイレントクランプ**され動作、07-02✅）· `claude-opus-4-8`（low·medium·high·max、`:high` は 07-02 再検証✅）· `claude-sonnet-4-6:high`（07-02 再検証✅）· 07-09 rerun はアカウント rate-limit で blocked（モデル回帰ではない） |
 | `openai-codex` | `gpt-5.5:high`（**07-02 再認証後に再検証✅**）· `gpt-5.5:xhigh` · `gpt-5.4:high` · `gpt-5.4-mini:high` |
 | `xai` | `grok-4.5:medium`/`:high`（07-09✅ — `:xhigh`/`:max` は high へクランプ；xai 専用、provider 500K / GJC 222K floor、$2/$6）· `grok-4-1-fast:high`（07-02✅）· `grok-4-fast:high`（07-02✅）· `grok-code-fast-1` · `grok-composer-2.5-fast` |
 | `grok-build` | `grok-4.3`（**bare セレクタのみ** — effort サフィックス非解釈、07-02✅。SuperGrok OAuth） |

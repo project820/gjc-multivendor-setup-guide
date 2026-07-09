@@ -11,7 +11,7 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/profiles-13-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
-![Verified](https://img.shields.io/badge/selectors-live%20tested%202026--07--09-brightgreen?style=flat-square)
+![Verified](https://img.shields.io/badge/rerun-grok%2Fopenai%2Fgemini%2Fopencode%202026--07--09-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
 <img src="assets/role-winners.svg" alt="legend setup — strongest model per role" width="100%">
@@ -207,7 +207,7 @@ opencode-go/<model>                           (omit effort = model default)
 <img src="assets/profiles-matrix.svg" alt="profiles × roles matrix" width="100%">
 </div>
 
-> ★ = everyday recommendation. The top banner = the **`legend` setup** (sustainable strongest — only `default` on Fable 5). The everyday cost-balanced pick is **`daily`** (executor·critic swapped to cheaper). Multi-vendor profiles keep `default = Anthropic flagship (Opus/Fable)` and `critic = cross-family` (solo-* use the single vendor's strongest); all pass the engine effort hard-rules and **every selector is live-verified** ([§6](#6--verification-matrix)).
+> ★ = everyday recommendation. The top banner = the **`legend` setup** (sustainable strongest — only `default` on Fable 5). The everyday cost-balanced pick is **`daily`** (executor·critic swapped to cheaper). Multi-vendor profiles keep `default = Anthropic flagship (Opus/Fable)` and `critic = cross-family` (solo-* use the single vendor's strongest); all pass the engine effort hard-rules and **track selector verification status** ([§6](#6--verification-matrix); the 2026-07-09 rerun covers Grok/OpenAI/Gemini/opencode, while Anthropic remains 2026-07-02 last-good due quota).
 
 | Profile | One-liner | Use when |
 |---|---|---|
@@ -375,11 +375,11 @@ For the per-profile design rationale — including the `ultimate-f5` event terms
 
 ## 6. ✅ Verification matrix
 
-> Every selector was **actually called** in this environment via `gjc -p --no-session --no-tools --model <sel> "..."` (**final verification 2026-07-09, gjc 0.9.1** — entries without an explicit date were verified 2026-06-18; core selectors were re-verified by the 0.9.1 regression battery (marked 07-02✅)). "Works" means a real call, not a guess.
+> In the 2026-07-09 (gjc 0.9.1) rerun, Grok/OpenAI/Gemini/opencode core selectors were **actually called** via `gjc -p --no-session --no-tools --model <sel> "..."`. Anthropic seats returned `blocked(creds/rate-limit)` due the 7-day quota, so they remain backed by 2026-07-02 last-good evidence. "Works" means a real call or explicitly named last-good evidence, not a guess.
 
 | Provider | Verified selectors (✅ working) |
 |---|---|
-| `anthropic` | `claude-fable-5` (bare·low·medium·high — `:max` works but **silently clamps to xhigh**, 07-02✅) · `claude-sonnet-5` (bare·medium·high — `:max` works but **silently clamps to high**, 07-02✅) · `claude-opus-4-8` (low·medium·high·max; `:high` re-verified 07-02✅) · `claude-sonnet-4-6:high` (re-verified 07-02✅) |
+| `anthropic` | `claude-fable-5` (bare·low·medium·high — `:max` works but **silently clamps to xhigh**, 07-02✅) · `claude-sonnet-5` (bare·medium·high — `:max` works but **silently clamps to high**, 07-02✅) · `claude-opus-4-8` (low·medium·high·max; `:high` re-verified 07-02✅) · `claude-sonnet-4-6:high` (re-verified 07-02✅) · 07-09 rerun blocked by account rate-limit (not a model regression) |
 | `openai-codex` | `gpt-5.5:high` (**re-verified 07-02 after re-auth✅**) · `gpt-5.5:xhigh` · `gpt-5.4:high` · `gpt-5.4-mini:high` |
 | `xai` | `grok-4.5:medium`/`:high` (07-09✅ — `:xhigh`/`:max` clamp to high; xai-only, provider 500K / GJC 222K floor, $2/$6) · `grok-4-1-fast:high` (07-02✅) · `grok-4-fast:high` (07-02✅) · `grok-code-fast-1` · `grok-composer-2.5-fast` |
 | `grok-build` | `grok-4.3` (**bare selector only** — effort suffixes don't resolve, 07-02✅. SuperGrok OAuth) |

@@ -11,7 +11,7 @@
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/profiles-13-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
-![Verified](https://img.shields.io/badge/selectors-live%20tested%202026--07--09-brightgreen?style=flat-square)
+![Verified](https://img.shields.io/badge/rerun-grok%2Fopenai%2Fgemini%2Fopencode%202026--07--09-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
 <img src="assets/role-winners.svg" alt="legend 셋업 — 역할별 최강 모델" width="100%">
@@ -233,7 +233,7 @@ opencode-go/<model>                           (effort 생략 = 모델 기본값)
 <img src="assets/profiles-matrix.svg" alt="프로필 × 역할 매트릭스" width="100%">
 </div>
 
-> ★ = 평소 권장. 상단 배너 = **`legend` 셋업**(지속 가능 최강 — default만 Fable 5). 비용 균형의 평소 권장은 **`daily`**(executor·critic을 저가로 교체). 멀티벤더 프로필은 `default = Anthropic 플래그십(Opus/Fable)`·`critic=cross-family`(solo-* 는 단일 벤더 최강), 전부 엔진 effort 하드룰 통과 + **모든 셀렉터 실호출 검증**([§6](#6--검증-매트릭스)).
+> ★ = 평소 권장. 상단 배너 = **`legend` 셋업**(지속 가능 최강 — default만 Fable 5). 비용 균형의 평소 권장은 **`daily`**(executor·critic을 저가로 교체). 멀티벤더 프로필은 `default = Anthropic 플래그십(Opus/Fable)`·`critic=cross-family`(solo-* 는 단일 벤더 최강), 전부 엔진 effort 하드룰 통과 + **셀렉터 검증 상태 추적**([§6](#6--검증-매트릭스); 07-09 rerun은 Grok/OpenAI/Gemini/opencode, Anthropic은 quota로 07-02 last-good 유지).
 
 | 프로필 | 한 줄 정의 | 이럴 때 |
 |---|---|---|
@@ -418,11 +418,11 @@ profiles:
 
 ## 6. ✅ 검증 매트릭스
 
-> 모든 셀렉터를 이 환경에서 `gjc -p --no-session --no-tools --model <sel> "..."` 로 **실제 호출**해 동작을 확인했다(**최종 검증 2026-07-09, gjc 0.9.1** — 별도 표기 없는 항목은 2026-06-18 검증분, 핵심 셀렉터는 0.9.1 회귀 배터리로 재검증(07-02✅ 표기)). "동작함"의 근거는 추정이 아니라 실호출이다.
+> 2026-07-09(gjc 0.9.1)에는 Grok/OpenAI/Gemini/opencode 핵심 셀렉터를 `gjc -p --no-session --no-tools --model <sel> "..."` 로 **실제 호출**해 재검증했다. Anthropic 좌석은 7일 quota/rate-limit로 `blocked(creds/rate-limit)`였으므로 2026-07-02 last-good 증거를 유지한다. "동작함"의 근거는 추정이 아니라 실호출 또는 명시된 last-good 증거다.
 
 | 프로바이더 | 검증된 셀렉터 (✅ 동작) |
 |---|---|
-| `anthropic` | `claude-fable-5`(bare·low·medium·high — `:max`는 **xhigh로 침묵 클램프**되어 동작, 07-02✅) · `claude-sonnet-5`(bare·medium·high — `:max`는 **high로 침묵 클램프**되어 동작, 07-02✅) · `claude-opus-4-8`(low·medium·high·max, `:high` 07-02 재검증✅) · `claude-sonnet-4-6:high`(07-02 재검증✅) |
+| `anthropic` | `claude-fable-5`(bare·low·medium·high — `:max`는 **xhigh로 침묵 클램프**되어 동작, 07-02✅) · `claude-sonnet-5`(bare·medium·high — `:max`는 **high로 침묵 클램프**되어 동작, 07-02✅) · `claude-opus-4-8`(low·medium·high·max, `:high` 07-02 재검증✅) · `claude-sonnet-4-6:high`(07-02 재검증✅) · 07-09 rerun은 계정 rate-limit로 blocked(모델 회귀 아님) |
 | `openai-codex` | `gpt-5.5:high`(**07-02 재인증 후 재검증✅**) · `gpt-5.5:xhigh` · `gpt-5.4:high` · `gpt-5.4-mini:high` |
 | `xai` | `grok-4.5:medium`/`:high`(07-09✅ — `:xhigh`/`:max`는 high로 침묵 클램프; xai 전용, provider 500K/GJC 222K floor, $2/$6) · `grok-4-1-fast:high`(07-02✅) · `grok-4-fast:high`(07-02✅) · `grok-code-fast-1` · `grok-composer-2.5-fast` |
 | `grok-build` | `grok-4.3`(**bare 셀렉터만** — effort 서픽스 미해석, 07-02✅. SuperGrok OAuth) |

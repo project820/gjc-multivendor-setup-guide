@@ -11,7 +11,7 @@
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/profiles-13-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
-![Verified](https://img.shields.io/badge/selectors-live%20tested%202026--07--09-brightgreen?style=flat-square)
+![Verified](https://img.shields.io/badge/rerun-grok%2Fopenai%2Fgemini%2Fopencode%202026--07--09-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
 <img src="assets/role-winners.svg" alt="legend 配置 — 各角色最强模型" width="100%">
@@ -207,7 +207,7 @@ opencode-go/<model>                           （省略 effort = 模型默认）
 <img src="assets/profiles-matrix.svg" alt="配置 × 角色 矩阵" width="100%">
 </div>
 
-> ★ = 日常推荐。顶部横幅 = **`legend` 配置**（可持续最强 — 仅 default 用 Fable 5）。按成本平衡的日常推荐是 **`daily`**（executor·critic 换成低价模型）。多厂商配置保持 `default = Anthropic 旗舰（Opus/Fable）`、`critic=跨厂商`（solo-* 用单厂商最强），全部通过引擎 effort 硬规则，且**每个选择器都经真实调用验证**（[§6](#6--验证矩阵)）。
+> ★ = 日常推荐。顶部横幅 = **`legend` 配置**（可持续最强 — 仅 default 用 Fable 5）。按成本平衡的日常推荐是 **`daily`**（executor·critic 换成低价模型）。多厂商配置保持 `default = Anthropic 旗舰（Opus/Fable）`、`critic=跨厂商`（solo-* 用单厂商最强），全部通过引擎 effort 硬规则，并**追踪每个选择器的验证状态**（[§6](#6--验证矩阵)；2026-07-09 rerun 覆盖 Grok/OpenAI/Gemini/opencode，Anthropic 因 quota 保持 2026-07-02 last-good）。
 
 | 配置 | 一句话 | 何时用 |
 |---|---|---|
@@ -375,11 +375,11 @@ profiles:
 
 ## 6. ✅ 验证矩阵
 
-> 每个选择器都在本环境通过 `gjc -p --no-session --no-tools --model <sel> "..."` **真实调用**确认过（**最终验证 2026-07-09，gjc 0.9.1** — 未单独标注的条目为 2026-06-18 验证；核心选择器已由 0.9.1 回归测试重新验证（标注 07-02✅））。「能用」的依据是真实调用，不是猜测。
+> 2026-07-09（gjc 0.9.1）rerun 中，Grok/OpenAI/Gemini/opencode 核心选择器已通过 `gjc -p --no-session --no-tools --model <sel> "..."` **真实调用**复验。Anthropic 席位因 7 日 quota/rate-limit 返回 `blocked(creds/rate-limit)`，因此沿用 2026-07-02 last-good 证据。「可用」的依据是真实调用或明确标注的 last-good 证据，不是猜测。
 
 | 提供方 | 已验证选择器（✅ 可用） |
 |---|---|
-| `anthropic` | `claude-fable-5`（bare·low·medium·high — `:max` 会被**静默夹取到 xhigh**后照常工作，07-02✅）· `claude-sonnet-5`（bare·medium·high — `:max` 会被**静默夹取到 high**后照常工作，07-02✅）· `claude-opus-4-8`（low·medium·high·max，`:high` 07-02 复验✅）· `claude-sonnet-4-6:high`（07-02 复验✅） |
+| `anthropic` | `claude-fable-5`（bare·low·medium·high — `:max` 会被**静默夹取到 xhigh**后照常工作，07-02✅）· `claude-sonnet-5`（bare·medium·high — `:max` 会被**静默夹取到 high**后照常工作，07-02✅）· `claude-opus-4-8`（low·medium·high·max，`:high` 07-02 复验✅）· `claude-sonnet-4-6:high`（07-02 复验✅）· 07-09 rerun 因账号 rate-limit blocked（不是模型回归） |
 | `openai-codex` | `gpt-5.5:high`（**07-02 重新认证后复验✅**）· `gpt-5.5:xhigh` · `gpt-5.4:high` · `gpt-5.4-mini:high` |
 | `xai` | `grok-4.5:medium`/`:high`（07-09✅ — `:xhigh`/`:max` 夹取到 high；仅 xai，provider 500K / GJC 222K floor，$2/$6）· `grok-4-1-fast:high`（07-02✅）· `grok-4-fast:high`（07-02✅）· `grok-code-fast-1` · `grok-composer-2.5-fast` |
 | `grok-build` | `grok-4.3`（**仅裸选择器** — effort 后缀不解析，07-02✅。SuperGrok OAuth） |
