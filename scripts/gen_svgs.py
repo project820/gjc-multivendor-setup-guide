@@ -184,7 +184,7 @@ def gen_profiles_matrix():
     s += (f'<text x="24" y="46" font-size="22" font-weight="700" fill="#1A1A28">'
           f'GJC 멀티벤더 — {n} 프로필 × 5 역할</text>\n')
     s += (f'<text x="24" y="72" font-size="13" fill="#6B6B7B">행=프로필 · 열=역할 · '
-          f'색=벤더 · 모든 셀 라이브 실호출 검증 ✓ ({VERIFY_DATE})</text>\n')
+          f'색=벤더 · 07-09 rerun: Grok/OpenAI/Gemini/opencode OK · Anthropic 07-02 last-good</text>\n')
     # 벤더 범례 (헤더 행과 분리 — 자체 라인 + 구분선)
     lx = 24
     for key, label in VENDOR_LABELS:

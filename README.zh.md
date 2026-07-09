@@ -301,7 +301,7 @@ profiles:
       # google-antigravity/gemini-3.1-pro-low:high} — 独立投票后由主体聚合（禁止辩论），2/3 反对或出现任一 CRITICAL/BLOCK 即阻断
       # (第 3 票 grok 需要 xai 登录 — 未登录时 2 票 {gpt-5.5, gemini} 仍满足 provenance 最低要求：非 default 家族 ≥2)
 
-  eco:                                 # 最省 — 仅主循环用 Opus(降 effort)，委派全用超低价/订阅模型(全部已验证✅)
+  eco:                                 # 最省 — 仅主循环用 Opus(降 effort)，委派全用超低价/订阅模型(按验证矩阵追踪✅)
     required_providers: [anthropic, opencode-go, google-antigravity, xai]
     model_mapping:
       default:   anthropic/claude-opus-4-8:low                  # 路由不能降，只降 effort
@@ -392,7 +392,7 @@ profiles:
 > [!NOTE]
 > `opencode-go/glm-5.2` **自 0.7.10 起进入捆绑目录**（旧「仅实时目录」注意事项作废）。相反，`google-antigravity/gemini-3.5-flash` 这个字面 id 不在目录里（只有 `-low`/`-extra-low`），**是靠模糊匹配碰巧可用**，所以 v1.4 配置改钉 `gemini-3.5-flash-low`。发现（discovery）未刷新时激活可能以 `selector did not resolve` 失败 — 重新登录/重试以刷新目录，或替换为捆绑 id（critic 用 `opencode-go/deepseek-v4-pro`，GLM 用 `zai/glm-5.2` — 把 `zai` 加入 `required_providers`）。
 
-**延迟参考**（微基准 2026-07-02 — 同一组编码·推理提示词，全部选择器答对）：
+**延迟参考**（微基准 2026-07-02；Grok 4.5 行使用 2026-07-09 流式 bench）：
 
 | 选择器 | 编码 | 推理 | 备注 |
 |---|---|---|---|

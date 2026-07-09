@@ -6,7 +6,7 @@
 # grok-4.5 팩트(2026-07-09, gjc 0.9.1): xai/grok-4.5 = xai API 전용(grok-build/OAuth 변종 없음) · provider ctx 500K(auto-compact 80% → exact-diff 안전 ~400K) · GJC --list-models 는 222K/8.9K 로 표기(스테일 메타, 보수적 하한) · reasoning low/med/high(기본 high) · 가격 $2/$6 per 1M(캐시 $0.5; 실효 ~$0.84/$6.2 @88% cache, OpenRouter/xAI).
 # openai-codex ctx: gpt-5.4=1M · gpt-5.5=272K (모델별 상이 — "codex 272k" 일괄 룰 폐기).
 # Gemini 는 google-antigravity 프로바이더(Google AI Pro/Ultra 구독 토큰).
-# ★ 모든 셀렉터는 이 머신에서 `gjc -p`로 실호출 동작 검증 완료(2026-07-09, gjc 0.9.1).
+# ★ 2026-07-09(gjc 0.9.1) rerun: Grok/OpenAI/Gemini/opencode 실호출 OK · Anthropic은 7d quota로 blocked(07-02 last-good 유지).
 #   openai-codex 는 ChatGPT 계정에서 base GPT(gpt-5.5/5.4)만 동작 — '-codex' 변종은 미지원이라 미사용.
 # 설치 후 GJC 에서 /login: anthropic · openai-codex · google-antigravity · xai.
 # 가이드: https://github.com/project820/gjc-multivendor-setup-guide
@@ -83,7 +83,7 @@ profiles:
       # google-antigravity/gemini-3.1-pro-low:high} — 독립 투표 후 본체 집계(토론 금지), 2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단
       # (3표째 grok은 xai 로그인 시 — 미보유면 2표 {gpt-5.5, gemini}로도 provenance 최소치(non-default family ≥2) 충족)
 
-  eco:                                 # 최저가 — 본체만 Opus(effort 절감), 위임은 초저가/구독 모델(전부 검증✅)
+  eco:                                 # 최저가 — 본체만 Opus(effort 절감), 위임은 초저가/구독 모델(검증표 기준✅)
     required_providers: [anthropic, opencode-go, google-antigravity, xai]
     model_mapping:
       default:   anthropic/claude-opus-4-8:low                  # 라우터는 못 내림, effort만 절감

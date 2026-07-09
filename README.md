@@ -121,7 +121,7 @@ claude·gpt·grok·gemini·opencode go 를 다 구독해놓고 한 모델만 쓰
 
 > **벤치마크 기준일: 2026-07-02** (Claude 5 패밀리 출시 직후 재검증). † 추론·architect 축은 "후계자 임박" — GPT-5.6 Sol이 파트너 프리뷰 중(6/26, `max` effort + `ultra` 서브에이전트 모드, GA 수 주 내), Gemini 3.5 Pro(2M ctx, Deep Think)는 7월 GA로 연기. 출시 시 재검증 예정.
 
-> 한 벤더로 5역할을 다 채우면 1등이 아닌 자리가 반드시 생긴다. 이 가이드는 그 5자리를 각각의 최적 벤더로 채우되, 비용·접근성·신뢰성까지 따져 **실제로 작동하는 조합**으로 정리한 결과다. GPT-5.5 · Claude Opus 4.8 · Gemini 3.1 Pro 기반 3종 독립 딥리서치를 교차검증하고, **모든 프로필의 셀렉터를 실제 호출로 검증**했다([§6](#6--검증-매트릭스)).
+> 한 벤더로 5역할을 다 채우면 1등이 아닌 자리가 반드시 생긴다. 이 가이드는 그 5자리를 각각의 최적 벤더로 채우되, 비용·접근성·신뢰성까지 따져 **실제로 작동하는 조합**으로 정리한 결과다. GPT-5.5 · Claude Opus 4.8 · Gemini 3.1 Pro 기반 3종 독립 딥리서치를 교차검증하고, 셀렉터 검증 상태를 [§6](#6--검증-매트릭스)에 명시한다.
 
 ---
 
@@ -327,7 +327,7 @@ profiles:
       # google-antigravity/gemini-3.1-pro-low:high} — 독립 투표 후 본체 집계(토론 금지), 2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단
       # (3표째 grok은 xai 로그인 시 — 미보유면 2표 {gpt-5.5, gemini}로도 provenance 최소치(non-default family ≥2) 충족)
 
-  eco:                                 # 최저가 — 본체만 Opus(effort 절감), 위임은 초저가/구독 모델(전부 검증✅)
+  eco:                                 # 최저가 — 본체만 Opus(effort 절감), 위임은 초저가/구독 모델(검증표 기준✅)
     required_providers: [anthropic, opencode-go, google-antigravity, xai]
     model_mapping:
       default:   anthropic/claude-opus-4-8:low                  # 라우터는 못 내림, effort만 절감
@@ -435,7 +435,7 @@ profiles:
 > [!NOTE]
 > `opencode-go/glm-5.2` 는 **0.7.10부터 번들 카탈로그에 편입**됐다(구 "라이브 카탈로그 전용" 캐비앗 폐기). 반면 `google-antigravity/gemini-3.5-flash` 리터럴 id는 카탈로그에 없고(`-low`/`-extra-low`만 존재) **퍼지 매칭으로 우연히 동작**하는 것이라, v1.4 프로필은 `gemini-3.5-flash-low`로 핀했다. 디스커버리 미갱신 상태에선 `selector did not resolve` 로 활성화가 실패할 수 있다 — 재로그인/재시도로 카탈로그를 갱신하거나 번들 id로 대체하라(critic 은 `opencode-go/deepseek-v4-pro`, GLM 은 `zai/glm-5.2` — `zai` 를 `required_providers` 에 추가).
 
-**지연 참고** (마이크로벤치 2026-07-02 — 동일 코딩·추론 프롬프트, 전 셀렉터 정답):
+**지연 참고** (마이크로벤치 2026-07-02; Grok 4.5 행만 2026-07-09 streaming bench):
 
 | 셀렉터 | 코딩 | 추론 | 비고 |
 |---|---|---|---|

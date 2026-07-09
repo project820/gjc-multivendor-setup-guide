@@ -301,7 +301,7 @@ profiles:
       # google-antigravity/gemini-3.1-pro-low:high} — independent votes aggregated by the main loop (no debate); block on 2/3 rejection or any CRITICAL/BLOCK
       # (3rd vote (grok) requires xai login — without it, 2 votes {gpt-5.5, gemini} still meet the provenance minimum of ≥2 non-default families)
 
-  eco:                                 # cheapest — only the main loop is Opus (effort trimmed), delegation ultra-cheap/subscription (all verified✅)
+  eco:                                 # cheapest — only the main loop is Opus (effort trimmed), delegation ultra-cheap/subscription (verification-tracked✅)
     required_providers: [anthropic, opencode-go, google-antigravity, xai]
     model_mapping:
       default:   anthropic/claude-opus-4-8:low                  # can't lower the router, only its effort
@@ -392,7 +392,7 @@ For the per-profile design rationale — including the `ultimate-f5` event terms
 > [!NOTE]
 > `opencode-go/glm-5.2` joined the **bundled catalog in 0.7.10** (the old "live-catalog only" caveat is retired). Conversely, the `google-antigravity/gemini-3.5-flash` literal id is not in the catalog (only `-low`/`-extra-low` exist) and **worked only via fuzzy matching**, so the v1.4 profiles pin `gemini-3.5-flash-low`. With a stale discovery cache, activation can fail with `selector did not resolve` — re-login/retry to refresh the catalog, or substitute a bundled id (`opencode-go/deepseek-v4-pro` for the critic, or `zai/glm-5.2` — add `zai` to `required_providers`).
 
-**Latency reference** (micro-bench 2026-07-02 — identical coding/reasoning prompts, every selector correct):
+**Latency reference** (micro-bench 2026-07-02; Grok 4.5 row uses the 2026-07-09 streaming bench):
 
 | Selector | Coding | Reasoning | Notes |
 |---|---|---|---|
