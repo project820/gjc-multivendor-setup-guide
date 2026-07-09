@@ -11,6 +11,21 @@
 
 ---
 
+## v1.10.0 — 2026-07-09
+
+### Changed
+- **Grok 4.5 critic refresh (Tier 1)** — grok-4.5 입점(2026-07-09, gjc 0.9.1)에 맞춰 critic 슬롯을 grok-4.3 → **xai/grok-4.5** like-for-like 스왑: `daily.critic`=`:medium`, `ultimate`/`ultimate-f5`/`legend`/`escalation`.critic + cyber-cop 고위험 xai 패널 좌석=`:high`. cross-family 불변 유지, cyber-cop.critic(gpt-5.5)·eco(grok-4-1-fast)·기타 프로필 무변경.
+- grok-4.5 팩트 반영: xai API 전용(grok-build/OAuth 변종 없음) · provider ctx 500K(auto-compact 80% → exact-diff 안전 ~400K) · GJC `--list-models` 스테일 222K/8.9K(보수적 하한) · effort 천장 high(`:xhigh`/`:max`는 high로 침묵 클램프 → 미출하) · 가격 $2/$6 실효 $0.84/$6.2(@88% cache). 엔진 하드룰 헤더 0.7.10 → 0.9.1, README×4·routing-rules·MAINTAINING·gen_svgs 동기화.
+
+### Validation
+- 실호출(2026-07-09, gjc 0.9.1): `xai/grok-4.5:medium`·`:high` ok · `:xhigh`/`:max` high 클램프 · `:bogus` 거부. `scripts/revalidate.sh` → `evidence/2026-07-09-selectors-rerun-2.md`(첫 `2026-07-09-selectors.md`는 rate-limit 분류 보강 전 false-regression 스냅샷으로 보존). `python3 scripts/validate-profiles.py` green(파리티 + grok-4.5 `:xhigh`/`:max` 거부). README 4종 배지 version-1.10.0 + 셀렉터 날짜 2026-07-09.
+
+### Evidence
+- `evidence/2026-07-09-catalog.txt`(diff: grok-4.5 추가만) · `evidence/2026-07-09-selectors-rerun-2.md`(authoritative rerun; Anthropic seats blocked by 7d rate-limit, grok/openai/gemini/opencode OK) · `evidence/2026-07-09-grok-4.5-notes.md`(models_cache 500K/auto-compact/네이티브 effort low-med-high, 카탈로그 불일치, xhigh/max 클램프, 지연 벤치, 가격, AA 벤치 GPQA 93.1 등 — 출처 명시).
+
+### Not shipped
+- grok-4.5의 executor/planner/architect/default 승격 없음 — 벤더/벤치 주장만으로 주력 역할 출하 금지. 주력 배치는 별도 Tier 2 L3 rolefit(planner/executor/architect + critic high/medium A/B) 실측 후 후속 PR. `:xhigh`/`:max` 셀렉터 미출하.
+
 ## v1.9.0 — 2026-07-06
 
 ### Added

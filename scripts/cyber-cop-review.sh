@@ -14,7 +14,7 @@
 # Seats (from the `cyber-cop` profile in gjc-profiles.yml):
 #   architect = anthropic/claude-opus-4-8:high   (first-pass code-review adjudicator)
 #   critic    = openai-codex/gpt-5.5:high        (merge gate, cross-family vs Claude author)
-#   --panel   → high-risk 3-vote panel adds xai/grok-4.3:high + google-antigravity/gemini-3.1-pro-low:high
+#   --panel   → high-risk 3-vote panel adds xai/grok-4.5:high + google-antigravity/gemini-3.1-pro-low:high
 # INVARIANTS are run by THIS script against the PR HEAD (not the local checkout), never model-claimed.
 # It NEVER merges — the verdict is surfaced to a human for the merge decision.
 set -euo pipefail
@@ -187,12 +187,12 @@ if [ "$PANEL" = "1" ]; then
   # 2-vote {gpt-5.5, gemini} panel). A failed/unavailable GEMINI seat is NOT voidable —
   # that would silently change the documented panel composition — it FAILS CLOSED (BLOCK).
   panel_valid=1   # critic (gpt-5.5) is one valid non-default vote
-  for pm in "xai/grok-4.3:high" "google-antigravity/gemini-3.1-pro-low:high"; do
+  for pm in "xai/grok-4.5:high" "google-antigravity/gemini-3.1-pro-low:high"; do
     p_out="$(run_seat "$pm" "You are an independent cyber-cop panel CRITIC for PR #${PR}. ${CONTRACT}
 First line = exactly one of: APPROVE | REQUEST_CHANGES | BLOCK. Then one file-backed reason. Vote independently; no debate.")"
     case "$p_out" in
       *"[seat error:"*)
-        if [ "$pm" = "xai/grok-4.3:high" ]; then
+        if [ "$pm" = "xai/grok-4.5:high" ]; then
           echo "### panel vote (${pm}): VOID (optional seat unavailable — 2-vote downgrade per routing-rules)"; echo
           continue
         fi

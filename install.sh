@@ -21,7 +21,7 @@
 #    GJC_XG_BIN_DIR=...         # extragoal 도구 심링크 위치 override (기본: ~/.local/bin)
 #
 #  안전장치: 기존 models.yml / config.yml 자동 백업 · 관리블록 sentinel 로 재실행 시 깔끔 교체.
-#  ⚠ GJC 0.7.10 의 프리셋 rename/delete 는 models.yml 주석(sentinel 포함)을 전부 제거함 —
+#  ⚠ GJC 0.7.10~0.9.1 의 프리셋 rename/delete 는 models.yml 주석(sentinel 포함)을 전부 제거함 —
 #    sentinel 이 사라진 파일에서는 이름 기반 교체로 동작하며, GJC 에서 삭제한 가이드 프로필이
 #    재설치 시 부활함(설치 전 경고 출력).
 # ============================================================================
@@ -70,12 +70,12 @@ PROFILE_COUNT="$(printf '%s' "$PROFILE_NAMES" | wc -w | tr -d ' ')"
 
 mkdir -p "$DIR"
 
-# 1c) sentinel 소실 감지 — GJC 0.7.10 의 프리셋 rename/delete 는 models.yml 의 모든 주석을
+# 1c) sentinel 소실 감지 — GJC 0.7.10~0.9.1 의 프리셋 rename/delete 는 models.yml 의 모든 주석을
 #     제거하므로 관리블록 sentinel 도 사라짐. 그 경우 병합은 '이름 기반 교체'로 격하됨.
 if [ -f "$TARGET" ] && ! grep -q "$SENTINEL" "$TARGET"; then
   for _n in $PROFILE_NAMES; do
     if grep -qE "^  ${_n}:" "$TARGET"; then
-      y "⚠ 기존 models.yml 에 관리블록 sentinel 이 없습니다 (GJC 0.7.10 프리셋 편집이 주석을 제거한 것으로 보임)."
+      y "⚠ 기존 models.yml 에 관리블록 sentinel 이 없습니다 (GJC 0.7.10~0.9.1 프리셋 편집이 주석을 제거한 것으로 보임)."
       y "  → 이름 기반 교체로 병합합니다: 가이드와 같은 이름의 프로필은 원본으로 덮어써지고,"
       y "    GJC 에서 삭제했던 가이드 프로필도 재설치로 부활합니다. (백업: $TARGET.bak-<ts>)"
       break
@@ -270,7 +270,7 @@ echo "  GJC를 켠 뒤 아래를 한 번씩(브라우저 OAuth):"
 echo "    /login anthropic           # claude"
 echo "    /login openai-codex        # gpt(base GPT: gpt-5.5/5.4)"
 echo "    /login google-antigravity  # gemini (Google AI Pro/Ultra 구독)"
-echo "    /login xai                 # grok 전체(grok-4.3 등)"
+echo "    /login xai                 # grok 전체(grok-4.5 등)"
 echo "  opencode-go 는 /provider add 또는 OPENCODE_API_KEY"
 [ "$DEFAULT_PROFILE" != "none" ] && y "현재 기본 프로필이 '$DEFAULT_PROFILE' 로 설정됨 (config.yml). 새 세션부터 자동 적용."
 echo

@@ -151,7 +151,8 @@ gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
 
 고위험 PR·보안 감사의 머지 게이트는 critic **3표 병렬 패널**이 맡는다 (인용 — 규범: routing-rules.md 리뷰어 계약):
 
-- 패널: `{openai-codex/gpt-5.5:high, xai/grok-4.3:high, google-antigravity/gemini-3.1-pro-low:high}`
+- 패널: `{openai-codex/gpt-5.5:high, xai/grok-4.5:high, google-antigravity/gemini-3.1-pro-low:high}`
+  - v1.10.0에서 xai 패널 좌석은 `grok-4.5:high`로 갱신했다. high effort는 고위험/옵트인 패널 전용(2026-07-09 벤치: ~7.6k reasoning, TTFT ~48s).
 - **독립 투표 후 본체 집계 (토론 금지)** — 토론형 합의는 편향을 증폭한다
 - **2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단**
 - 각 표는 **file-backed blocking issue 최소 1건 또는 명시적 no-finding rationale** 필수 — 근거 없는 표는 무효표

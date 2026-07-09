@@ -30,7 +30,7 @@
 <rect x="1000" y="92" width="232" height="152" rx="14" fill="#EEF1F5"/><rect x="1000" y="92" width="232" height="6" rx="3" fill="#475569"/>
 <text x="1016" y="124" font-size="15" font-weight="700" fill="#2D3A4D">⚖ critic</text>
 <text x="1016" y="145" font-size="11.5" fill="#5a5a6a">독립 적대 비평</text>
-<text x="1016" y="176" font-size="16" font-weight="800" fill="#1A1A28">Grok 4.3</text>
+<text x="1016" y="176" font-size="16" font-weight="800" fill="#1A1A28">Grok 4.5</text>
 <text x="1016" y="198" font-size="12.5" font-weight="700" fill="#475569">:high</text>
 <text x="1016" y="222" font-size="10.8" fill="#2D3A4D" opacity="0.85">xAI · cross-family(vs Anthropic)</text>
 </svg>
