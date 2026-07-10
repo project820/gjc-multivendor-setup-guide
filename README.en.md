@@ -21,44 +21,17 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 **[한국어](./README.md) · English (this page) · [中文](./README.zh.md) · [日本語](./README.ja.md)**
 
 > [!NOTE]
-> **The core of this guide was adopted into the official GJC docs** — a condensed version was merged upstream as [`docs/multi-vendor-profiles.md`](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) ([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). Treat the **official GJC docs as the canonical reference** for the role/selector concepts; this repo provides what those docs do not — the **one-line installer**, the **4-tier / 10-bundle catalog** (including the `cyber-cop` reviewer mode plus Council/Escalation workflow contracts), and [maintenance & validation tooling](./MAINTAINING.md) (static-check CI + live selector battery + catalog drift tracking).
-
-## 🚨 `cyber-cop` — reviewer-mode profile
-
-> Author-mode bundles are for sessions that **write** code. **`cyber-cop` is for sessions that stop code** — GJC's first **reviewer-mode** bundle: review someone else's PR, hunt for reasons to block, and adjudicate at the merge gate.
-
-**What's different**
-- In PR review / security audits the role weighting **inverts** → **architect (first-pass verdict: CLEAR/WATCH/BLOCK) and critic (merge gate) lead**; executor drops to a supporting repro-PoC / failing-test role.
-- The critic runs **cross-family vs the code author (assumed Claude)** (GPT-5.6 Sol) → structurally counters self-preference bias ([arXiv 2410.21819](https://arxiv.org/abs/2410.21819)).
-- High-risk / security PRs convene a **3-vote parallel panel** (`gpt-5.6-sol` · `grok-4.5` · `gemini-3.1-pro`), independent votes → 2/3 dissent or any CRITICAL/BLOCK blocks.
-
-**Proof it works — this repo dogfooded it**
-> Across PRs #4–#7 the review gate **blocked 10 defects before merge** (#4: 5 · #6: 5 · #7: passed on first vote). The review helper was BLOCKed by *its own* prompt-injection flaw (fixed, then passed), and two overclaims the Anthropic base model waved through (a relative-path injection surface and a permission overclaim) were **correctly BLOCKed by the cross-family critic (the then-seat GPT-5.5 — the current critic seat is GPT-5.6 Sol)**. (One more was caught *after* #6 merged → fixed immediately in #7.) The self-preference-bias defense works in practice.
-
-**Start clone-free in 2 commands**
-```bash
-# prereqs: gh CLI installed & authed (gh auth login) + gjc provider /login done
-curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | GJC_SETUP_COP=1 bash
-export PATH="$HOME/.local/bin:$PATH"   # once, if the installer warned about PATH
-cd <repo-under-review>
-gjc-cop 123               # PR #123 → 4-section verdict (REPO auto-detected from cwd — never merges)
-# gjc-cop --panel 123     # high-risk: 3-vote cross-family panel
-# gjc-cop shell           # interactive reviewer session (trusted contract auto-injected)
-# gjc-cop watch           # poll & review new PRs (humans decide merges)
-```
-The clone/manual path (same mechanics, no wrapper) is in the [announcement §3](./docs/whats-new-cyber-cop.md).
-
-📖 Full gap argument, 3-step usage, automated review pipeline & security rules → **[cyber-cop announcement](./docs/whats-new-cyber-cop.md)** (Korean canonical)
+> The role and selector concepts were merged into the [official GJC docs](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) ([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). This repo provides the one-line installer, the 4-tier 10-bundle catalog, and [maintenance and validation tools](./MAINTAINING.md).
 
 ---
 
-## ⚡ 30-second install (one-line copy-paste)
+## ⚡ 30-second install
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | bash
 ```
 
-This single line **safely merges 10 bundles into `~/.gjc/agent/models.yml`** and sets `daily` as the default profile. Your existing config is backed up automatically, and re-running cleanly updates in place.
+This one line **safely merges 10 bundles into `~/.gjc/agent/models.yml`** and sets `daily` as the default profile. Existing settings are backed up automatically; re-running updates cleanly.
 
 ```bash
 gjc --mpreset daily        # this session only
@@ -66,52 +39,56 @@ gjc                        # new sessions use daily automatically
 ```
 
 > [!IMPORTANT]
-> **You must log in to providers after installing.** GJC uses its own OAuth (not shared with the native `agy`/`grok` CLI logins), so open GJC and run each of these once (browser auth):
+> **Log in to providers after installing.** GJC OAuth is separate from native `agy`/`grok` CLI logins. Run these once in GJC:
 >
 > ```text
 > /login anthropic           # claude
-> /login openai-codex        # gpt (ChatGPT account → serves base GPT)
+> /login openai-codex        # gpt (ChatGPT account → base GPT)
 > /login google-antigravity  # gemini (Google AI Pro/Ultra subscription)
 > /login xai                 # grok full lineup + Composer
 > ```
-> opencode-go uses an API key: `/provider add`, or the `OPENCODE_API_KEY` env var. Check auth state with `/provider`.
+> opencode-go uses an API key: `/provider add` or `OPENCODE_API_KEY`. Check auth with `/provider`.
 
 > [!TIP]
 > Pick the default profile: `curl -fsSL …/install.sh | GJC_SETUP_DEFAULT=ultimate-opus bash` · skip default-setting: `GJC_SETUP_DEFAULT=none`.
 
 ---
 
-## 📑 Table of contents
+## 🧭 Which bundle?
 
-1. [Why multi-vendor](#1--why-multi-vendor)
-2. [Core design](#2--core-design)
-3. [GJC engine facts](#3--gjc-engine-facts)
-4. [Benchmark basis](#4--benchmark-basis)
-5. [Final catalog — 10 bundles · 4 tiers](#5-️-final-catalog--10-bundles--4-tiers)
-6. [Verification matrix](#6--verification-matrix)
-7. [Install / uninstall](#7-️-install--uninstall)
-8. [Dynamic routing](#8--dynamic-routing)
-9. [Parallel agents + reliability](#9--parallel-agents--reliability)
-10. [Cost](#10--cost)
-11. [Sources](#11--sources)
+| Tier | Bundle | One-liner | Use when |
+|---|---|---|---|
+| Core | ⭐ **daily** | Opus main loop + role-split delegation — **activates with subscription OAuth across 3 vendors only** | **everyday default** |
+| Core | 🏎️ **coding-sprint** | implementation-throughput bundle with executor promoted to Opus | pure implementation sprint |
+| Core | 🚨 **cyber-cop** | reviewer mode — architect and critic lead, dedicated to PR review and security audits | reviewing others' PRs · merge gates · security audits |
+| Premium (exp) | 🏆 **ultimate-opus** | Anthropic-quality premium baseline | accuracy matters more than cost |
+| Premium (exp) | 🧪 **ultimate-sol** | Sol-baseline premium — agentic/terminal/browser axis | long autonomous workflow experiments |
+| Premium (exp) | 🔥 **dream-team** | strongest-per-role hypothesis — Fable default+executor | highest quality, credits accepted |
+| Workflow | 🏛️ **llm-council** | 4-family seating chart and Council contract | decisions needing multi-family consensus |
+| Workflow | 🛡️ **escalation** | manual escalation — Fable rescue pitcher + 3-vote critic panel | merges · security · billing · irreversible changes |
+| Specialized (exp) | 💸 **eco** | low-cost multi-vendor experiment — *not absolute cheapest* | cost pressure · bulk work |
+| Specialized (exp) | 🗺️ **monorepo** | ≥1M ctx everywhere | huge codebases |
+
+Full catalog: [§5](#5-️-final-catalog--10-bundles--4-tiers) · reviewer mode and teasers below.
+
+> **🚨 cyber-cop** — GJC's first reviewer mode: architect and critic lead while executor supports reproduction. High-risk PRs use a 3-vote panel; it blocked 10 defects before merge across PRs #4–#7.
+> `gjc-cop 123`
+> → [Announcement](./docs/whats-new-cyber-cop.md)
+
+> **Extragoal — GPT-5.5 Pro final-review lane (opt-in)** — Put Pro deep reasoning in the final, round-one decision seat for development, QA, and security review. The upstream default lane works without it; install it with `GJC_SETUP_EXTRAGOAL=1`.
+> → [Extragoal Maximalist](./docs/extragoal-maximalist.md)
 
 ---
 
 ## 1. 🎯 Why multi-vendor
 
-Subscribing to claude·gpt·grok·gemini·opencode go and then using only one model means running a *second-best* model in every role. Verified benchmarks show **the leading vendor differs per role**:
-
 | Role | What it does | Best model |
 |---|---|---|
-| 🧠 **reasoning/planning** (planner) | sequencing, acceptance criteria | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · GA 2026-07-09)† — bundle-specific seats: see [§5](#5-️-final-catalog--10-bundles--4-tiers) (exceptions: cyber-cop/monorepo=Gemini, eco=Luna) |
+| 🧠 **reasoning/planning** (planner) | sequencing, acceptance criteria | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · GA 2026-07-09)† — bundle-specific seats: see §5 (exceptions: cyber-cop/monorepo=Gemini, eco=Luna) |
 | 🔨 **implementation** (executor) | writing/editing real code | **Claude Fable 5** (SWE-bench Verified **95.0**) — strongest *subscription-included* is **Opus 4.8** (88.6) |
 | 🔭 **code review** (architect) | large-repo navigation, architecture | **Gemini 3.1 Pro** (multimodal MMMU-Pro 81%)† · ultra-long-context (>200k) → **Opus** |
 | ⚖️ **independent critique** (critic) | adversarial verification | **cross-family** (different vendor than the main loop) |
 | 🎛️ **orchestration** (default) | tool-calling, routing, honesty | **Anthropic flagship** — Opus 4.8 (router quality caps the whole system; `dream-team` uses Fable 5. The only non-Anthropic routers are opt-in `ultimate-sol` (Sol) and Anthropic-free `eco` (Terra)) |
-
-> **Benchmark reference date: 2026-07-10** (planner row — GPT-5.6 Sol GA reflected). † 07-02 snapshot: the former planner-axis leader was Gemini 3.1 Pro (GPQA 94.3 / ARC-AGI-2 77.1), but the 07-09 Sol GA replaced that generation ([§6-2](#6-2-role-placement-optimality-review-deep-research--measurements)). The architect axis remains at its 2026-07-02 baseline — Gemini 3.5 Pro (2M ctx, Deep Think) slipped to July GA; re-verification is due on release.
-
-> Fill all 5 roles from one vendor and at least one role is not the best. This guide fills each of the 5 with its best-fit vendor — weighed against cost, accessibility, and reliability — into a combo that **actually works**. It cross-validates v1's three independent deep-research passes (GPT-5.5 · Claude Opus 4.8 · Gemini 3.1 Pro) and v2's two-axis blind independent research (Claude Fable 5 Ultracode · Parallel.ai Ultra 2x, 2026-07-10) ([§6-2](#6-2-role-placement-optimality-review-deep-research--measurements)), and records selector verification status in [§6](#6--verification-matrix).
 
 ---
 
@@ -119,17 +96,17 @@ Subscribing to claude·gpt·grok·gemini·opencode go and then using only one mo
 
 > **One strong main loop, fixed (default = Anthropic flagship Opus/Fable) + signal-driven delegation + failure-driven effort escalation.**
 
-The only model that runs on every turn is `default` (the main loop). executor/architect/planner/critic are sub-agents the main loop **delegates to via `task` only when warranted** (fresh context).
-
 <div align="center">
+
 <img src="assets/architecture.svg" alt="one main loop (default) + 4 sub-agents — signal-driven delegation" width="100%">
+
 </div>
 
 Three design principles:
 
 - **The main loop is non-negotiable.** Most median tasks are handled by the main loop alone, so dropping `default` to a weak model collapses perceived quality across the board. Default to the Anthropic flagship (Opus 4.8 — Fable 5 in `dream-team`). Only two non-Anthropic routers exist: the opt-in `ultimate-sol` experiment (Sol — validator-listed, WARN surfaced) and the Anthropic-free `eco` (Terra — the router invariant does not apply).
 - **Diversity pays off only in *verification*.** Keep `critic` on a different vendor for independence, but keep serial chains short (reliability decays as `0.99ⁿ`).
-- **Effort is asymmetric economics.** `medium→high` is +1–2 points for ~23× the tokens. Blindly maxing is waste — escalate only "because it couldn't solve it."
+- **Effort is asymmetric economics.** `medium→high` is +1–2 points for ~23× the tokens. Blindly maxing is waste — escalate only because it could not solve the work.
 
 ---
 
@@ -147,7 +124,7 @@ Three design principles:
 
 ### 3-2. Effort cheatsheet
 
-These are the **GJC 0.9.6 effective** tiers (2026-07-10 live-call battery) — some differ from the official API spec (footnote below):
+These are the **GJC 0.9.6 effective** tiers (2026-07-10 live-call battery) — some differ from the official API specification:
 
 ```text
 Opus 4.6/4.7/4.8        minimal low medium high xhigh max   ← all 6 tiers
@@ -162,25 +139,28 @@ opencode-go others       ── omit the :effort suffix (default) ──
 google-antigravity Gemini  gemini-3.1-pro-low:high (high reasoning) · gemini-3.1-pro-low (low effort)
 ```
 
-> [!IMPORTANT]
-> **Five hard rules**: ① Gemini Pro supports only `low`/`high`; high reasoning is the literal pin `gemini-3.1-pro-low:high` (since 0.9.6 the fuzzy space is fail-closed — bad ids return "not found") ② openai-codex ctx is **per-model** — `gpt-5.4`=**1M** · `gpt-5.5`=**272K** · the three `gpt-5.6` models=**373K** (raised in 0.9.6; separate from the 1.05M API spec usable prompt budget) ③ Sonnet (4.6/5) cannot do `xhigh`/`max` in GJC · **Fable 5 cannot do `max`** (clamped to high / xhigh respectively) ④ opencode-go: omit `:effort` (only the deepseek-v4 family supports it) ⑤ xai `grok-4.5` caps at `high` (`:xhigh` silently clamps — xhigh exists only on the grok-build provider, where effort suffixes don't resolve at all). Out-of-range tiers are **clamped**, not errored. The three gpt-5.6 models appear in the catalog up to `max` and live calls accept it (verified 07-10), but depth is unverified — this guide ships no higher than `xhigh`.
->
-> **Footnote (upstream gap)**: per the official API, both Claude 5 models support up to `max`. The GJC parser (0.9.1~0.9.6) doesn't know the fable family (falls back to inferred rules) and sonnet-5 inherits the 4.6 clamp — an **engine-side gap, reported upstream** with a repro. This guide records the GJC-effective tiers.
+### Five hard rules
+
+1. Gemini Pro supports only `low`/`high`; high reasoning is the literal pin `gemini-3.1-pro-low:high` (since 0.9.6 the fuzzy space is fail-closed — bad ids return “not found”).
+2. openai-codex ctx is **per-model** — `gpt-5.4`=**1M** · `gpt-5.5`=**272K** · the three `gpt-5.6` models=**373K** (raised from 272K in 0.9.6; separate from the 1.05M API specification usable prompt budget).
+3. Sonnet (4.6/5) cannot do `xhigh`/`max` in GJC; **Fable 5 cannot do `max`** (clamped to high / xhigh respectively).
+4. opencode-go omits `:effort` (only the deepseek-v4 family supports it).
+5. xai `grok-4.5` caps at `high` (`:xhigh` silently clamps; xhigh exists only on grok-build, where effort suffixes do not resolve). Out-of-range tiers clamp rather than error; the gpt-5.6 trio accepts `:max`, but its depth is unverified, so the shipped cap is `xhigh`.
+
+> **Footnote (upstream gap):** Both Claude 5 models support up to `max` in the official API. The GJC parser (0.9.1–0.9.6) fable fallback and sonnet-5 inherited clamp are **engine-side gaps** reported upstream with reproductions.
 
 ### 3-3. Subscription → provider
 
 | Subscription | provider-id | Notes |
 |---|---|---|
 | claude | `anthropic` | all efforts. Includes the Claude 5 family (Fable 5 · Sonnet 5) |
-| gpt | `openai-codex` | **ChatGPT account → serves base GPT (gpt-5.6 sol/terra/luna · 5.5 · 5.4)**. ctx: gpt-5.4=1M · 5.5=272K · the three 5.6 models=373K |
+| gpt | `openai-codex` | **ChatGPT account → base GPT (gpt-5.6 sol/terra/luna · 5.5 · 5.4)**. ctx: gpt-5.4=1M · 5.5=272K · 5.6 trio=373K |
 | grok | `xai` | full lineup + Composer |
 | gemini | `google-antigravity` | **Google AI Pro/Ultra subscription token**. Gemini + bundled Claude (Opus 4.6 — as of 2026-07-02; bundle composition has not been re-checked afterward) |
 | opencode go | `opencode-go` | API key (`OPENCODE_API_KEY`) |
 
 > [!NOTE]
-> **openai-codex path caveat**: logging in with a ChatGPT (Codex) account serves the **base GPT models (`gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, `gpt-5.5`, `gpt-5.4`)**. Standalone `-codex` variants (`gpt-5.3-codex`, `gpt-5.2-codex`, `gpt-5.1-codex-max/mini`) are **not supported** on this path (`not supported when using Codex with a ChatGPT account`), so this guide uses verified **base GPT** for coding roles too.
->
-> Alternative paths: `google-vertex` (API key, paid per-token, 1M ctx) — a fallback independent of subscription/quota. Another is **DeepInfra** (API key): DeepSeek V4 Pro **$1.30/$2.60** (1M ctx) · V4 Flash $0.09/$0.18 — its Standard/Priority (1.5×) tiers map directly onto GJC's `service-tier` setting.
+> ChatGPT (Codex) serves base GPT, not standalone `-codex` variants. `google-vertex` and DeepInfra are paid API-key alternatives.
 
 ### 3-4. Selector syntax
 
@@ -194,52 +174,33 @@ opencode-go/<model>                           (omit effort = model default)
 
 ## 4. 📊 Benchmark basis
 
-**Verified per-role leader** (vals.ai independent boards · official model cards — **as of 2026-07-02**)
-
 | Role (axis) | Leader | Figure |
 |---|---|---|
 | executor (SWE-bench Verified) | **Fable 5** | **95.0%** (Opus 4.8 88.6 = **strongest subscription-included** · GPT-5.5 82.6 · Gemini 3.1 Pro 80.6) |
-| planner (long-horizon workflow · reasoning) | **GPT-5.6 Sol**† | Agents' Last Exam 52.7 (5.5: 46.9) · AA Intelligence 58.9 — standalone GPQA #1 is Sonnet 5 at 96.2 · Gemini 3.1 Pro is specialized for scientific knowledge at 94.3 ([§6-2](#6-2-role-placement-optimality-review-deep-research--measurements)) |
+| planner (long-horizon workflow · reasoning) | **GPT-5.6 Sol**† | Agents' Last Exam 52.7 (5.5: 46.9) · AA Intelligence 58.9 — standalone GPQA #1 is Sonnet 5 at 96.2 · Gemini 3.1 Pro is specialized for scientific knowledge at 94.3 ([deep dive](./docs/deep-dive-role-fit.md#6-2-역할-배치-최적성-검토-deep-research--실측)) |
 | architect (ctx · multimodal) | **Gemini 3.1 Pro**† | 1M ctx · MMMU-Pro 81% |
-| default (tool-calling · honesty) | **Opus 4.8 / Fable 5** | router quality = whole-system ceiling (Fable carries refusal/billing caveats — [§5](#5-️-final-catalog--10-bundles--4-tiers)) |
+| default (tool-calling · honesty) | **Opus 4.8 / Fable 5** | router quality = whole-system ceiling (Fable carries refusal/billing caveats — see §5) |
 | critic (independence) | **cross-family** | meta-judge > debate aggregation |
 
-> † The planner row is **as of 2026-07-10** (GPT-5.6 Sol GA 07-09 — no ARC-AGI-2 5.6 figure is published; evidence is the official evaluation table plus the AA index). The §5 seat table is authoritative for bundle-specific planner seats (exceptions: cyber-cop/monorepo=Gemini, eco=Luna). The architect axis is due for re-verification on Gemini 3.5 Pro's release (2026-07-02 baseline).
+**Consensus principles** — † The planner row reflects the 2026-07-10 Sol GA replacing the 2026-07-02 Gemini 3.1 Pro snapshot; re-verify the architect axis when Gemini 3.5 Pro ships.
 
-**Consensus principles**
-
-1. **default = Anthropic flagship (Opus/Fable), fixed** — router quality is the whole-system ceiling. Two exceptions: `ultimate-sol` (Sol router — opt-in experiment listed in the validator, WARN surfaced) and `eco` (an Anthropic-free bundle — Terra router, the invariant does not apply).
-2. **architect = Gemini 3.1 Pro (multimodal) / Opus (ultra-long-context)** — Gemini is best for vision and mid ctx; for 200k+ text retrieval use Opus (MRCR 76%@1M, where Gemini collapses to 26%).
+1. **default = Anthropic flagship (Opus/Fable), fixed** — router quality is the whole-system ceiling. Exceptions: `ultimate-sol` (Sol router — validator-listed opt-in experiment) and `eco` (Anthropic-free bundle — Terra router).
+2. **architect = Gemini 3.1 Pro (multimodal) / Opus (ultra-long-context)** — Gemini is best for vision and mid ctx; for 200k+ text retrieval use Opus (MRCR 76%@1M; Gemini 26%).
 3. **critic = cross-family** — a different vendor than the main loop/planner mitigates self-preference bias.
 4. **Structure = strong main loop + signal-driven delegation + failure-driven effort escalation.**
-5. **No per-query profile swapping** — cache loss > benefit. Swap only at mode boundaries.
-
-> Benchmarks are time-sensitive → re-verify quarterly. Absolute rankings limited to vals.ai independent boards.
+5. **No per-query profile swapping** — cache loss exceeds benefit. Swap only at mode boundaries.
 
 ---
 
 ## 5. 🗂️ Final catalog — 10 bundles · 4 tiers
 
 <div align="center">
+
 <img src="assets/profiles-matrix.svg" alt="profiles × roles matrix" width="100%">
+
 </div>
 
-> ★ = everyday recommendation. **v2.0.0 structure shift**: this is no longer "N equal profiles"; it is **10 user-facing bundles split across 4 trust tiers**. Multi-vendor invariants: every bundle has `required_providers ≥ 2` (single-vendor needs belong to built-in GJC 0.9.6 profiles) · `critic=cross-family` by default (exceptions are listed in the validator as `SAME_FAMILY_OK` with WARN permanently surfaced) · every bundle passes the engine effort hard-rules and **tracks selector verification status** ([§6](#6--verification-matrix); first 2026-07-10 gjc **0.9.6** battery — every shipped selector green).
-
-| Tier | Bundle | One-liner | Use when |
-|---|---|---|---|
-| Core | ⭐ **daily** | Opus main loop + role-split delegation — **activates with subscription OAuth across 3 vendors only** | **everyday default** |
-| Core | 🏎️ **coding-sprint** | implementation-throughput bundle with executor promoted to Opus | pure implementation sprint |
-| Core | 🚨 **cyber-cop** | reviewer mode — architect & critic lead, dedicated to PR review and security audits | reviewing others' PRs · merge gates · security audits |
-| Premium (exp) | 🏆 **ultimate-opus** | Anthropic-quality premium baseline (successor to the old cost-no-object profile) | accuracy matters more than cost |
-| Premium (exp) | 🧪 **ultimate-sol** | Sol-baseline premium — agentic/terminal/browser axis. **Only non-Anthropic default among Anthropic-carrying bundles** (validator exception; `eco` carries no Anthropic at all) | long autonomous workflow experiments |
-| Premium (exp) | 🔥 **dream-team** | strongest-per-role hypothesis — Fable default+executor | highest quality, credits accepted |
-| Workflow | 🏛️ **llm-council** | 4-family seating chart (verdict seats are Google·xAI·OpenAI, 3 families — **the Anthropic main loop is aggregator-restricted**) — routing-rules executes the Council vote/quorum contract | decisions needing multi-family consensus |
-| Workflow | 🛡️ **escalation** | manual escalation — Fable rescue pitcher + 3-vote critic panel | merges · security · billing · irreversible changes |
-| Specialized (exp) | 💸 **eco** | low-cost multi-vendor experiment — *not absolute cheapest* (built-in `codex-eco` is the minimal-dependency cheap path) | cost pressure · bulk work |
-| Specialized (exp) | 🗺️ **monorepo** | ≥1M ctx everywhere (excludes gpt-5.5 272K / gpt-5.6 373K) | huge codebases |
-
-**v1.11.0 → v2.0.0 migration**: `ultimate`→`ultimate-opus` · `ultimate-f5`/`legend`→`dream-team` · `solo-anthropic`/`solo-openai`/`claude-codex`/`claude-codex-max` → **removed** — single-/two-vendor needs are absorbed by built-in GJC 0.9.6 profiles (`claude-opus`/`claude-fable`/`codex-*`/`opus-codex`/`fable-opus-codex`), as use-case absorption rather than mapping equivalence. `llm-council` and `ultimate-sol` are new.
+> ★ = everyday recommendation. v2.0.0 is not a set of equal profiles but 10 bundles across 4 tiers. Every bundle has `required_providers ≥ 2`; `critic=cross-family` by default (exceptions are `SAME_FAMILY_OK` with WARN); it follows engine effort hard-rules and selector verification ([§6](#6--verification-matrix)). Every shipped seat was green in the 2026-07-10 gjc **0.9.6** battery.
 
 <details>
 <summary><b>📋 Expand the full YAML (identical to gjc-profiles.yml by model mapping — comments stripped; the annotated Korean canonical lives in <a href="./gjc-profiles.yml">gjc-profiles.yml</a>)</b></summary>
@@ -340,134 +301,94 @@ profiles:
 
 </details>
 
-> [!TIP]
-> **opencode-go** activates in `eco` (executor) and `monorepo` (critic) when `OPENCODE_API_KEY` is set (verified✅). SuperGrok's `xai/grok-composer-2.5-fast` (200k) is also verified as a throughput alternative. Other opencode-go models (qwen3.7-max · kimi-k2.6 · glm-5.1 · minimax-m2.7 · mimo-v2.5) were also confirmed working. Newly listed, still unverified candidates: **kimi-k2.7-code** (likely budget executor) · **minimax-m3** (512K multimodal — measured catalog value, `2026-07-10-catalog-gjc096.txt`).
+<details>
+<summary><b>v1.11 → v2 migration</b></summary>
 
-#### Per-bundle design rationale
+`ultimate`→`ultimate-opus`, `ultimate-f5`/`legend`→`dream-team`; `llm-council` and `ultimate-sol` are new. v2 removes `solo-anthropic`/`solo-openai`/`claude-codex`/`claude-codex-max` under its multi-vendor principle; built-in GJC 0.9.6 `claude-*`, `codex-*`, `opus-codex`, and `fable-opus-codex` absorb those use cases (not as mapping equivalents). See [CHANGELOG](./CHANGELOG.md) and [the v2 announcement](./docs/whats-new-v2.md) for the detailed diff.
 
-- **daily** — Opus `:medium` main loop (efficiency knee), implementation on coding-specialized `gpt-5.6-terra` (≈GPT-5.5 class at $2.5/15), decomposition on workflow-leading `gpt-5.6-sol:high`, design/review **and critique** on Gemini `-low:high` (v2: critic grok→gemini — drops the xai key barrier so daily activates with subscription OAuth across 3 vendors only, while keeping the critic cross-family vs the Anthropic main loop; the Grok diversity seat moved to premium bundles because there is no direct defect-recall evidence for Grok critic superiority). ⚠ architect and critic share the identical selector — within the 3-vendor subscription-only constraint Google is the only family satisfying both the main-loop and plan/crit cross-family contracts (deliberate trade-off; for stronger independence log into xai and swap critic to `grok-4.5:medium`, the old v1.11 seat). This is the everyday quality/cost balance point.
-- **coding-sprint** — executor leads (Opus `:high`; escalate to max only on failure signals, [§8-2](#8-2-adaptive-effort-escalation)), planner is `gpt-5.6-sol:high` for sprint decomposition, and critic is coding-aware `gpt-5.6-terra` for real bug finding. ⚠ planner/critic are both GPT-family — listed as `SAME_FAMILY_OK` by human judgment (2026-07-10): Sol≠Terra and the whole bundle still uses 3 vendors.
-- **cyber-cop** — 🚨 **reviewer mode**: the inverse of author mode. In review sessions role weight flips: executor drops to supporting repro PoC / failing-test work, while **architect (first-pass code-review verdict) and critic (merge gate) lead**. architect=Opus `:high` (1M effective retrieval, 76% vs Gemini collapsing to 26% for 200k+ diff reading), critic=`gpt-5.6-sol:high` (cross-family vs Claude-authored code — self-preference mitigation, arXiv [2410.21819](https://arxiv.org/abs/2410.21819)). High-risk PRs/security audits use the §9 critic panel: independent votes, no debate, 2/3 dissent or any CRITICAL/BLOCK blocks. The third Grok vote is optional when xai is logged in; without it, a 2-vote {gpt-5.6-sol, gemini} panel still preserves the minimum provenance rule (non-default family ≥2). Operational rules live in [`routing-rules.md`](./routing-rules.md). Difference from `escalation`: escalation is an author-side gate (fix until pass); cyber-cop is reviewer-side (hunt for blocking evidence).
-- **ultimate-opus** — 🏆 Anthropic-quality premium baseline. default·executor·architect are Opus `:high` for stability, 1M context, and subscription marginal cost; cross-checking is handled by **Sol planner `:xhigh` + Grok critic `:high`**. ⚠ executor/architect are same Claude-family — human-judged `SAME_FAMILY_OK` with WARN surfaced. Three Opus seats are not "three independent opinions"; do not imply council quality.
-- **ultimate-sol** — 🧪 Sol-baseline premium (experimental). Sol owns the axes where it is verified strong — long workflow completion (Agents' Last Exam 52.7), terminal (T-B 2.1 88.8 SOTA), browsing (BrowseComp 90.4), computer use (OSWorld 62.6) — so default/executor/planner all sit on Sol. **Only non-Anthropic default among Anthropic-carrying bundles** (validator `NON_ANTHROPIC_DEFAULT_OK`; WARN surfaced — `eco`'s Terra router is outside the invariant because that bundle carries no Anthropic). Tradeoffs are explicit: router ctx **373K** vs Opus 1M, weaker tool-use axis (Toolathlon 58 vs Fable 61.7), and ⚠METR's SWE-gaming finding, so SWE-style scores cannot be the sole promotion basis. Opus architect + Grok critic buffer the OpenAI self-reinforcement risk. Experimental until role-fit L3 is measured.
-- **dream-team** — 🔥 strongest-per-role *hypothesis*. **Fable 5 = default+executor** (SWE-Bench Pro 80.0 on OpenAI's own self-disadvantaging table · FrontierMath T4 87.8), decomposition on Sol `:xhigh`, design review on Opus `:high` (1M), critique on third-family Grok. Fable caveats: ① subscription-included event through ~7/12 23:59 PT, then **usage credits $10/$50** (default+executor exposes the maximum) ② refusal returns HTTP 200 + `stop_reason:refusal` ③ 30-day retention and no ZDR. ⚠ executor(Fable)/architect(Opus) are same Claude-family — human-judged `SAME_FAMILY_OK` because models are separated and Sol/Grok cross-check.
-- **llm-council** — 🏛 4-family seating chart (Anthropic·OpenAI·Google·xAI). **Verdict seats are Google (Gemini), xAI (Grok), and OpenAI (Sol/Terra) — 3 families; the Anthropic main loop (Opus) is aggregator-restricted**: to contain self-preference bias it casts no verdict and only preserves/exposes raw verdicts ("3-family verdicts + 4th-family aggregation", not a 4-family consensus). **Activating the profile does not start a council** — parallel independent calls, mutual non-disclosure, raw verdict preservation, and quorum (CRITICAL/HIGH dissent is not majority-voted away) happen only when the main loop executes the **Council contract** in [`routing-rules.md`](./routing-rules.md). Vendor count is not independent vote count; do not inflate confidence by arithmetic.
-- **escalation** — 🛡 **manual** escalation (not automatic failure detection — triggers, retry budget, and human gate are the routing-rules Escalation contract). On failure signals, bring in **Fable 5 `:xhigh` as the rescue executor**; intermittent use also fits credits billing. critic uses the multi-vendor 3-vote panel ([§9](#9--parallel-agents--reliability)). On Fable refusal, fall back executor to Opus `:max` and report to the human. Reserve for irreversible/high-cost changes.
-- **eco** — 💸 low-cost multi-vendor *experiment* — **not absolute cheapest** (built-in GJC 0.9.6 `codex-eco` is the minimal-dependency cheap path). v2 redesign: default `gpt-5.6-terra:medium` (non-Anthropic default invariant does not apply because no Anthropic is in the bundle), executor `deepseek-v4-flash` ($0.14/0.28), planner `gpt-5.6-luna:medium` (replaces the retired Grok fast slug: 2026-05-15 retire → legacy slug redirects to Grok 4.3 billing per xAI migration docs), architect literal Gemini `-low:high`, critic `gemini-3-flash:low` (the prior 3.5 flash live id disappeared on 07-10 afternoon — [§6](#6--verification-matrix)) and cross-family vs executor. No xai or anthropic key required.
-- **monorepo** — 🗺 every role has 1M ctx. `gpt-5.5` (272K) and the three `gpt-5.6` models (373K) are excluded; gpt-5.4 has 1M, but Opus is at least as strong here. architect=**Opus** (best 1M effective retrieval, **76%@1M**; Gemini collapses to 26%), critic=**`glm-5.2`** (cross-family, alternative `deepseek-v4-pro`). **1M nominal window ≠ perfect recall** — split huge inputs into chunks and accumulate across turns ([§6-3](#6-3-remaining-gaps-gap-13--gjc-effective-context-measurement)); only use `opencode-go/deepseek-v4-pro` for rare single-message >~400k paste.
+</details>
 
-**Deleted profile destinations** — `solo-anthropic`/`solo-openai` (single vendor) and `claude-codex`/`claude-codex-max` (fixed two-vendor mixes) were removed under the v2 multi-vendor catalog principle (mixed-subscription collaboration, human judgment 2026-07-10). Built-in GJC 0.9.6 profiles absorb those use-cases: single Anthropic → built-in `claude-opus`/`claude-fable`; single Codex → built-in `codex-eco`/`codex-medium`/`codex-pro`; Claude+Codex two-vendor → built-in `opus-codex`/`fable-opus-codex` (updated to GPT-5.6 family in 0.9.6). Built-in mappings are not byte-identical to this guide's old YAML; if exact seats matter, keep the old YAML locally as a custom preset.
+**Bundle rationale:** Each bundle trades role fit, vendor independence, access, and cost differently. See the Korean canonical [§5 catalog](./README.md#5-️-최종-카탈로그--10-번들--4계층) and [per-bundle rationale](./README.md#프로필별-설계-근거).
 
 ---
 
 ## 6. ✅ Verification matrix
 
-> On 2026-07-10 (gjc **0.9.6** — rerun after the same-day 0.9.5→0.9.6 upgrade), the core selectors of every provider were **actually called** via `gjc -p --no-session --no-tools --model <sel> "..."` and re-verified (`evidence/2026-07-10-selectors-rerun-3.md`; rerun-2 is the 0.9.5 green record) — **every v2 shipped selector is green**. This battery caught same-day drift on the antigravity live surface (WARNING below) and replaced `eco.critic`. "Works" means a real call, not a guess.
+> Legend: ✅ live-call green (date in parentheses) · 🔴 failure · ⚠ caveat/clamp · †‡ footnotes · ●○ relative cost.
+> On 2026-07-10, gjc **0.9.6** called every provider’s core selector with `gjc -p --no-session --no-tools --model <sel> "..."` ([rerun-3](./evidence/2026-07-10-selectors-rerun-3.md); rerun-2 is the 0.9.5 green record). Every v2 shipped selector was green; same-day antigravity drift replaced `eco.critic`.
 
-| Provider | Verified selectors (✅ working) |
+| Provider | Verified selectors |
 |---|---|
-| `anthropic` | `claude-fable-5:high`/`:xhigh` (**07-10 rerun✅** — `:max` silently clamps to xhigh) · `claude-sonnet-5:high` (07-10✅ — `:max` silently clamps to high) · `claude-opus-4-8:high` (07-10✅; low·medium·max 07-02✅) · `claude-sonnet-4-6:high` (07-10✅) — the 07-09 rate-limit lifted; every seat re-verified |
-| `openai-codex` | `gpt-5.6-sol:medium`/`:high`/`:xhigh` (**07-10✅**) · `gpt-5.6-terra:high`/`:xhigh` (07-10✅) · `gpt-5.6-luna:high` (07-10✅) · all 3 accept `:max` but depth is unverified (not shipped) · `gpt-5.5:high` (07-02✅, retired from v2 bundles — kept as canary) · `gpt-5.4:high` (1M ctx lane) |
-| `xai` | `grok-4.5:medium`/`:high` (07-10✅ — `:xhigh`/`:max` clamp to high; xai-only, provider 500K / GJC 222K floor, $2/$6) · `grok-4-fast:high` (07-10✅) · ⚠`grok-4-1-fast:high` calls succeed but **xAI retired it on 2026-05-15 — legacy slug redirects to Grok 4.3 billing** (removed from v2) · `grok-code-fast-1` · `grok-composer-2.5-fast` |
-| `grok-build` | `grok-4.3` (**bare selector only** — effort suffixes don't resolve, 07-02✅. SuperGrok OAuth) |
-| `google-antigravity` | `gemini-3.1-pro-low` (±`:high`, 07-10✅) · `gemini-3-flash` (±`:low`, **07-10✅ — v2 eco.critic**) · ⚠ since 0.9.6 the fuzzy space is **fail-closed**: `gemini-3.1-pro-high`/`-bogus` return "not found" (the 0.9.5 silent `-low` interpretation trap did not reproduce — keep the pin) · ⚠ **same-day live-surface drift**: `gemini-3.5-flash-low`/`-extra-low`/`gemini-pro-agent` disappeared on 07-10 afternoon ("not found" despite `--list-models`; live calls are truth) |
-| `opencode-go` | `deepseek-v4-flash`·`deepseek-v4-pro` (re-verified 07-02✅) · `glm-5.2` (**in the 0.7.10 bundled catalog**, 07-02✅) · `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` (needs `OPENCODE_API_KEY`) |
+| `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-4-8:high` · `claude-sonnet-4-6:high` — sel ✅(07-10) |
+| `openai-codex` | `gpt-5.6-sol:medium`/`:high`/`:xhigh` · `gpt-5.6-terra:high`/`:xhigh` · `gpt-5.6-luna:high` · `gpt-5.5:high` · `gpt-5.4:high` — sel ✅(07-10; 5.5=07-02) |
+| `xai` | `grok-4.5:medium`/`:high` · `grok-4-fast:high` · `grok-4-1-fast:high` · `grok-code-fast-1` · `xai/grok-composer-2.5-fast` — sel ✅(07-10; 4-1 retired) |
+| `grok-build` | `grok-4.3` (bare) — sel ✅(07-02) |
+| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅(07-10) |
+| `opencode-go` | `deepseek-v4-flash` · `deepseek-v4-pro` · `glm-5.2` · `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` — sel ✅(07-02) |
 
-> [!WARNING]
-> **Selectors that did NOT work here** (avoid): `openai-codex/gpt-5.3-codex`·`gpt-5.2-codex`·`gpt-5.1-codex-max`·`gpt-5.1-codex-mini` (unsupported on ChatGPT accounts) · `google-antigravity/gemini-3.1-pro-high`·`gemini-3.5-flash-low`·`gemini-3.5-flash`·`gemini-pro-agent` (**0.9.6 / 07-10 afternoon: "not found"** — high reasoning is `gemini-3.1-pro-low:high`; lightweight Gemini is `gemini-3-flash:low`) · `gemini-3-pro` (retired) · `claude-sonnet-4-6-thinking` (404) · `gpt-oss-120b` (500). `opencode-go/*` fails **only when `OPENCODE_API_KEY` is unset** (works per the table once set). Note: `fable-5:max`·`sonnet-5:xhigh/max`·`grok-4.5:xhigh/max` are not failures — they **silently clamp** ([§3-2](#3-2-effort-cheatsheet)) — and the gpt-5.6 trio accepts `:max` but its depth is unverified (not shipped).
+- `fable-5:max`→xhigh, `sonnet-5:xhigh/max`→high, and `grok-4.5:xhigh/max`→high are silent clamps, not failures.
+- The gpt-5.6 trio accepts `:max`, but its depth is unverified and it is not shipped; `gpt-5.5:high` is a 07-02 green canary.
+- `grok-4-1-fast` still calls but redirects to Grok 4.3 billing after its 2026-05-15 retirement, so v2 excludes it.
+- Since 0.9.6 Gemini’s fuzzy space is fail-closed; the 0.9.5 silent `gemini-3.1-pro-high` → `-low` interpretation no longer reproduces.
+- `glm-5.2` entered the bundled catalog in 0.7.10 and needs `OPENCODE_API_KEY`.
+
+<details>
+<summary><b>Failed selectors (avoid)</b></summary>
+
+- `openai-codex/gpt-5.3-codex` · `gpt-5.2-codex` · `gpt-5.1-codex-max/mini` — unsupported on ChatGPT accounts.
+- `google-antigravity/gemini-3.1-pro-high` — not found in 0.9.6; high reasoning is `gemini-3.1-pro-low:high`.
+- `gemini-3.5-flash-low` · `gemini-3.5-flash` · `gemini-pro-agent` — not found on 2026-07-10 afternoon.
+- `gemini-3-pro` — retired.
+- `claude-sonnet-4-6-thinking` — 404.
+- `gpt-oss-120b` — 500.
+- `opencode-go/*` — fails when `OPENCODE_API_KEY` is unset.
+
+</details>
 
 > [!NOTE]
-> `opencode-go/glm-5.2` joined the **bundled catalog in 0.7.10** (the old "live-catalog only" caveat is retired). The antigravity live surface can drift even within a day (measured 07-10 afternoon disappearance of `gemini-3.5-flash*`) — `--list-models` can show cached listings, so **verify with a live call before adopting a seat**. With a stale discovery cache, activation can fail with `selector did not resolve`; re-login/retry to refresh the catalog, or substitute a bundled id (eco critic alternatives: `opencode-go/deepseek-v4-pro`, GLM as `zai/glm-5.2` — add `zai` to `required_providers`).
+> The antigravity live surface can change within a day and `--list-models` can be cached. Live-call before adopting a seat; re-login/retry when discovery is stale, or use the bundle id (eco critic alternative: `opencode-go/deepseek-v4-pro`; add the `zai` provider for GLM).
 
-**Latency reference** (micro-bench 2026-07-02; Grok 4.5 row uses the 2026-07-09 streaming bench):
+<details>
+<summary><b>Latency reference (micro-bench 2026-07-02; Grok 4.5 streaming on 2026-07-09)</b></summary>
 
 | Selector | Coding | Reasoning | Notes |
 |---|---|---|---|
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **fastest overall** |
 | `opus-4-8:high` | 4.0s | 3.9s | |
 | `fable-5:medium`~`:max(→xhigh)` | 6.7~7.7s | 3.5~6.3s | +3~4s vs sonnet-5 on coding |
-| `grok-4.5:medium` / `:high` | ~14s / ~50s | TTFT ~13s / ~48s | 2026-07-09 streaming bench; high only for high-risk critic |
+| `grok-4.5:medium` / `:high` | ~14s / ~50s | TTFT ~13s / ~48s | high only for high-risk critic |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | coding-latency outlier |
 | `glm-5.2` | **21.9s** | 4.0s | slowest at coding — fine for critic |
 
-Reproduce:
+</details>
+
 ```bash
 gjc -p --no-session --no-tools --model "anthropic/claude-fable-5:high" "Reply exactly: OK"
 gjc -p --no-session --no-tools --model "google-antigravity/gemini-3.1-pro-low:high" "Reply exactly: OK"
 gjc -p --no-session --no-tools --model "openai-codex/gpt-5.6-terra:high" "Reply exactly: OK"
 ```
 
----
+### 6-2·6-3. Role-fit deep dive (moved)
 
-### 6-2. Role-placement optimality review (deep research + measurements)
-
-The early 8-profile (v1.0) role→model placement was re-reviewed through repeated deep research (independent benchmark validation) and live reasoning probes; the skeleton was confirmed near-optimal. **v2.0.0 adds a two-axis blind independent deep-research pass (Claude Fable 5 Ultracode + Parallel.ai Ultra 2x, 2026-07-10)** and restructures the result into the 10-bundle / 4-tier catalog — both axes agreed: release state and role placement are supported (SUPPORT), while profile/workflow boundaries, tier labels, and strict-provider friction needed revision (REVISE). Role-fit L3 measurements for the 3 premium bundles remain open, hence the experimental labels.
-
-- **`gemini-3.1-pro-low:high` is not a degraded mode.** `thinkingLevel` is a per-request parameter on the same Gemini 3.1 Pro, not a separate model variant, and the model default is **HIGH**. The official model-card headline reasoning scores (GPQA 94.3 · ARC-AGI-2 77.1) were all measured under *Thinking (High)* — this selector calls the **native high-reasoning default mode**. Measurement probe: latency increased from `low` (18s) to `low:high` (22s), confirming thinking activation; standard reasoning answers matched GPT-5.5/Opus. *(Remaining: the primary-source mapping of GJC `:high` override to native HIGH is not fully confirmed → monitor reasoning quality in operation.)*
-- **The planner reasoning axis splits.** GPQA Diamond (science knowledge) is saturated at the top (93–96%); standalone #1 is now **Sonnet 5 (96.2)**, with Gemini 3.1 Pro at 94.3. ARC-AGI-2 (abstract/fluid reasoning) clearly favored **GPT-5.5** in the dated analysis (0.850 vs 0.771; Fable 5 unpublished — reasoning lead unproven). For the fluid-reasoning axis closer to planning → keep GPT for premium/escalation planners. **If science-knowledge reasoning dominates, swap `planner → google-antigravity/gemini-3.1-pro-low:high`.** *(2026-07-10 update: GPT-5.6 Sol GA — official eval lead (Agents' Last Exam 52.7 vs 46.9 · AA Intelligence 58.9 vs 54.8) + same $5/$30 price → planner seats moved to `gpt-5.6-sol:xhigh`. ARC-AGI-2 for 5.6 remains unpublished; basis is official eval table + AA index. Source: [evidence/2026-07-10-gpt-5.6-notes.md](./evidence/2026-07-10-gpt-5.6-notes.md).)*
-- **The executor axis changed in v1.4.** **Fable 5 became the new #1 at SWE-bench Verified 95.0 / SWE-Bench Pro 80.0** (Opus 4.8 88.6 · GPT-5.5 82.6; Pro 80.3 is a separate Mythos 5 column — [errata E1](./evidence/2026-07-10-errata.md)). Opus 4.8 remains the "strongest subscription-included coder"; Fable 5 has usage-credits billing after 7/12, so always-on executor economics differ (used only in `dream-team`/`escalation`). On terminal/agentic axes, **GPT-5.6 Sol is now SOTA** (Terminal-Bench 2.1 88.8), but ⚠METR found the highest-ever rate of SWE benchmark gaming for Sol, so discount SWE-style scores. daily executor uses same-price successor `gpt-5.6-terra`.
-- **xAI `grok-composer-2.5-fast` and `grok-code-fast-1` are for eco/throughput only.** Independent benchmarks are unpublished or inflated, and grok-code-fast-1 is scheduled for retirement; excluding them from core executor seats is correct.
-- **default = Anthropic flagship.** Opus 4.8 was reconfirmed by Vals Index as the top served model overall. Fable 5 default (`dream-team`) raises the quality ceiling but carries refusal-classifier and credits caveats ([§5](#per-bundle-design-rationale)). `ultimate-sol`'s Sol router is an opt-in experiment (WARN surfaced).
-- **architect long-context correction**: Gemini's nominal 1M is not effective 1M — MRCR v2 8-needle falls from 84.9% at 128K to **26.3% at 1M**, while **Opus 4.6 holds 76% at 1M** (4.8 unpublished). Grok 4.3 multimodal ranks low (12/16), so it is not fit for vision architect → **monorepo architect corrected to Opus**. Standard profile architect=Gemini remains optimal for multimodal/mid-ctx work. (Successor imminent: Gemini 3.5 Pro 2M ctx · Deep Think slipped to July GA; re-verify `{low,high}` clamp rules on release.) See [§6-3](#6-3-remaining-gaps-gap-13--gjc-effective-context-measurement) for the GJC effective cap.
-
-> Sources: [vals.ai GPQA](https://www.vals.ai/benchmarks/gpqa) · [vals.ai SWE-bench](https://www.vals.ai/benchmarks/swebench) · [vals.ai MMMU](https://www.vals.ai/benchmarks/mmmu) · [Gemini 3.1 Pro card (MRCR)](https://deepmind.google/models/model-cards/gemini-3-1-pro/) · [Gemini thinking docs](https://ai.google.dev/gemini-api/docs/thinking) · [Opus 4.6 (MRCR 76%@1M)](https://www.anthropic.com/news/claude-opus-4-6) · [long-context board](https://awesomeagents.ai/leaderboards/long-context-benchmarks-leaderboard/) · [llm-stats ARC-AGI-2](https://llm-stats.com/benchmarks/arc-agi-v2) · [xAI Composer 2.5](https://x.ai/news/composer-2-5)
-
-> 📑 **Full research reports (with primary-source citations)** — the three originals for this placement: [deep-research benchmarks](./evidence/2026-07-03-deep-research-benchmarks.md) · [consultant report](./evidence/2026-07-03-consultant-report.md) · [integrated final report](./evidence/2026-07-03-ultimate-final-report.md). The full evidence for "why this model setup," council consensus, and final answers (Grok=critic / Composer Fast≠executor) lives there. Published reports are preserved verbatim; corrections ship through **[errata](./evidence/2026-07-03-errata.md)** (current E1: Composer 74.7→54.0 is SWE-bench **Pro**, correcting a Verified-column misplacement in the final report).
-
----
-
-### 6-3. Remaining gaps (gap 1~3 · GJC effective-context measurement)
-
-Opus 4.8 **does support a 1M context window in GJC** (multi-turn accumulation — status bar shows `◫ %/1M`). The table below is separate: measured input-size limits when injecting huge context **in one single message (`@file`)** (3-needle multi-hop retrieval), not the window limit:
-
-| Tokens (single request) | Opus 4.8 | Gemini 3.1 Pro | Grok 4.3 / 4-fast | DeepSeek V4 Pro |
-|---|:---:|:---:|:---:|:---:|
-| ~130k · 250k · 350k | ✅ | ✅ | ✅ | ✅ |
-| ~476k | 🔴 400 | 🔴 400 | ✅ (89s) | ✅ (36s) |
-| ~857k | 🔴 | 🔴 | 🔴 400 | — |
-
-- **gap1 — Grok 2M architect swap: ❌ rejected.** Independent Context Arena MRCR v2 shows Grok deep-bin retrieval at the bottom (grok-4.20 256–512k 0.117), no board has a measured 2M bin, and grok-4-fast's 2M has measured retrieval score 0 (marketing/training claim). Live measurement also 400s at 857k. → drop the "use grok-4-fast (2M) above 1M" assumption.
-- **gap2 — Opus 4.8 long context:** Opus 4.8 **supports the 1M context window in GJC** (multi-turn agentic file reading accumulates normally to 1M). The ~400k 400 in the table is **single-message (`@file`) input-size limit, not window limit**. (Public MRCR 76%@1M is Opus 4.6; 4.8 unpublished.) → keep monorepo architect=**Opus** (1M ctx works, retrieval is top-tier). Only rare **single-message paste >~400k tokens** should go to `opencode-go/deepseek-v4-pro` (single-message 476k accepted).
-- **gap3 — GLM-5.2 vs DeepSeek:** keep eco executor=**DeepSeek V4 Flash** (GLM-5.2 at $1.40/$4.40 is 10× input / 15× output and too expensive for eco). **Upgrade monorepo critic to `opencode-go/glm-5.2`** (live-call verified✅) — new open-weight #1 (AA Index 51; DeepSeek V4 Pro fell 52→**44**), cross-family independence preserved, served inside opencode-go so marginal cost stays low. (Switch back to `deepseek-v4-pro` if low cost is the priority.)
-
-> Key point: the Opus 4.8 context window is **1M working in GJC** (multi-turn accumulation). Only the amount you can paste in a single message is ~400k on Opus/Gemini; above that, **single-paste** is more robust on Grok/DeepSeek (measured). **Do not dump huge inputs in one message; chunk them across turns to use the full 1M window.** (This table passed independent re-check inside GJC — 20/20 agreement, measured 2026-06-18.) Sources: [Context Arena](https://contextarena.ai/) · [GLM-5.2 (AA)](https://artificialanalysis.ai/models/glm-5-2) · [Opus 4.8 what's-new](https://platform.claude.com/docs/en/about-claude/models/whats-new-claude-4-8)
+Repeated deep research and measurement found the role-to-model placement near-optimal: the 07-10 Sol generation change updated planner, Gemini’s nominal 1M is not effective 1M (MRCR 26%@1M versus Opus 76%), and a ~400k single-message limit is not the context-window limit, so chunk accumulation is required. Full details: [docs/deep-dive-role-fit.md](./docs/deep-dive-role-fit.md) (Korean-only deep-dive).
 
 ---
 
 ## 7. 🛠️ Install / uninstall
 
-### One-click (recommended)
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | bash
-```
-
-What the installer does: safely merges 10 bundles into `~/.gjc/agent/models.yml` (auto-updates on re-run — old profiles from the v1.x managed block are replaced), backs up existing files, and sets `daily` as default. Needs only `curl` + `python3`.
+Follow the 30-second install and provider login instructions above.
 
 ```bash
 # options
 curl -fsSL …/install.sh | GJC_SETUP_DEFAULT=ultimate-opus bash  # pick default profile
-curl -fsSL …/install.sh | GJC_SETUP_DEFAULT=none bash        # skip default-setting
-curl -fsSL …/install.sh | GJC_CODING_AGENT_DIR=/path bash    # override agent dir
+curl -fsSL …/install.sh | GJC_SETUP_DEFAULT=none bash           # skip default-setting
+curl -fsSL …/install.sh | GJC_CODING_AGENT_DIR=/path bash       # override agent directory
 ```
-
-### Provider auth (required)
-
-Install only lays down the profiles. Open GJC and log in to each vendor once:
-
-```text
-/login anthropic           # claude
-/login openai-codex        # gpt (base GPT)
-/login google-antigravity  # gemini (Google AI Pro/Ultra subscription)
-/login xai                 # grok full lineup + Composer
-```
-
-opencode-go: `/provider add` or the `OPENCODE_API_KEY` env var.
 
 ### Manual install / verify / uninstall
 
-Paste the `profiles:` block from [`gjc-profiles.yml`](./gjc-profiles.yml) under `profiles:` in `~/.gjc/agent/models.yml`, then `gjc --mpreset daily --default`.
+Paste the `profiles:` block from [`gjc-profiles.yml`](./gjc-profiles.yml) under `profiles:` in `~/.gjc/agent/models.yml`, then run `gjc --mpreset daily --default`.
 
 ```bash
 gjc --list-models daily                       # confirm
@@ -475,35 +396,29 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # revert (restore ba
 ```
 
 > [!WARNING]
-> **GJC 0.7.10~0.9.1 preset rename/delete caveat**: the engine's custom-preset rename/delete features **strip all comments** from `models.yml` — including the installer's managed-block sentinels — which degrades updates to name-based replacement, so **profiles you deleted can resurrect on reinstall** (reproduced). After using rename/delete, double-check the result when reinstalling; for guaranteed full removal, restoring a backup (`cp … .bak-*`) is the safest path. (Unverified on 0.9.6 — reproduction confirmed on 0.7.10~0.9.1.)
+> **GJC 0.7.10–0.9.1 preset rename/delete caveat:** custom-preset rename/delete strips all comments from `models.yml`, including the installer’s managed-block sentinels. Deleted profiles can therefore return on reinstall; check the result, and restore a backup (`cp … .bak-*`) for guaranteed removal. Unverified on 0.9.6.
 
 ---
 
 ## 8. 🔀 Dynamic routing
 
-> **"Swap profile per query" ❌ / "one strong main loop + one thin rule layer" ✅.** The router is the main loop (the Anthropic flagship); profiles are the destination pool.
-
-> [!TIP]
-> To make the main loop follow the routing rules below, put [`routing-rules.md`](./routing-rules.md) (Korean; selectors are language-neutral) in your project `AGENTS.md`, or inject it via `gjc --append-system-prompt @routing-rules.md` (installed profiles + verified-selector hard-rules + GJC effective ctx caps, all in one file).
-
-### 8-1. Work signal → delegation
+> Put [`routing-rules.md`](./routing-rules.md) (Korean-only; selectors are language-neutral) in the project `AGENTS.md`, or inject it with `gjc --append-system-prompt @routing-rules.md`.
 
 <div align="center">
+
 <img src="assets/routing-tree.svg" alt="work signal → delegation routing" width="100%">
+
 </div>
 
-Rule: **delegate only when the signal is clear.** If the main loop can do it directly, it does.
-
-### 8-2. Adaptive effort escalation
+**Work signal → delegation** — delegate only when the signal is clear; if the main loop can do it directly, it does.
 
 <div align="center">
+
 <img src="assets/effort-ladder.svg" alt="adaptive effort escalation" width="100%">
+
 </div>
 
-- ✅ Raising because it couldn't solve it is valid / ❌ "raising to be safe" is waste.
-- No minimal. Floor at `low`. Gemini does a single `low↔high` jump.
-
-### 8-3. Profile swap (mode boundaries only)
+**Effort ladder** — escalation is justified only when it could not solve the work; the floor is low; Gemini makes one low↔high jump.
 
 | Signal | Swap → |
 |---|---|
@@ -521,24 +436,20 @@ Rule: **delegate only when the signal is clear.** If the main loop can do it dir
 
 ## 9. 🧪 Parallel agents + reliability
 
-Serial hand-offs decay as `0.99ⁿ`, and multi-agent setups, wired wrong, harden into "false consensus." Design parallelism to defend against both.
-
 ```text
-serial chain, 5 steps (0.99 each):  0.99^5 ≈ 95.1%    → collapses with length
-parallel independent, 5 (OR-success): 1-(0.01)^5 ≈ 100%  → diversity raises reliability
+serial chain, 5 steps (0.99 each):  0.99^5 ≈ 95.1%    /    parallel independent, 5 (OR-success): 1-(0.01)^5 ≈ 100%
 ```
 
-**Design principles**
 - critic = **different vendor from the main loop, parallel independent vote, then the main loop tallies** (no debate — meta-judge wins).
 - critic panel example: `{openai-codex/gpt-5.6-sol:high, xai/grok-4.5:high, google-antigravity/gemini-3.1-pro-low:high}` in parallel → 2/3 dissent or any CRITICAL/BLOCK blocks. **CRITICAL/HIGH dissent cannot be majority-voted away** — resolve it or use a human gate.
 - executor fan-out only when **the work is truly independent** (no shared state).
-- keep chains short, main loop as the single source of truth (no direct sub-agent consensus).
+- keep chains short, with the main loop as the single source of truth (no direct sub-agent consensus).
 
 ---
 
 ## 10. 💰 Cost
 
-Gemini (`google-antigravity`) runs on **free public preview + higher limits with Google AI Pro/Ultra subscriptions** (not per-token billed — [official Antigravity plans doc](https://antigravity.google/docs/plans), checked 2026-07-10). **Fable 5 is included in Claude subscriptions (Pro/Max/Team) through 2026-07-12 23:59 PT** (7/7→7/12 extension; no official primary extension page, based on multiple secondary reports), capped at 50% of weekly usage limits, and **billed separately via usage credits afterwards** — it is **not "free."** The rest are per-token; key model prices ($/1M, in/out):
+Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscription tokens; the rest are per-token ($/1M, input/output). Follow §5 for Fable inclusion and credits caveats.
 
 | Model | $/1M (in/out) | Role |
 |---|---|---|
@@ -553,9 +464,9 @@ Gemini (`google-antigravity`) runs on **free public preview + higher limits with
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | eco executor · >400k single-paste fallback |
 | Gemini 3.1 Pro / 3-flash | preview/subscription token | planner·architect·critic |
 
-> † Fable 5 is exactly 2× Opus pricing. The subscription-included window (through ~7/12) still consumes weekly limits.
-> ‡ Sonnet 5's **tokenizer change makes the same text ~30% more tokens** — budget its effective cost above the sticker price.
-> (Note: via the DeepInfra provider, DeepSeek V4 Pro is $1.30/$2.60 — [§3-3](#3-3-subscription--provider).)
+> † Fable 5 is exactly 2× Opus pricing. The subscription-included window (~7/12) still consumes weekly limits.
+> ‡ Sonnet 5’s tokenizer change makes the same text ~30% more tokens — budget its effective cost above the sticker price.
+> (Note: via the DeepInfra provider, DeepSeek V4 Pro is $1.30/$2.60 — see the provider section above.)
 
 **Relative bundle cost**
 
@@ -564,40 +475,25 @@ Gemini (`google-antigravity`) runs on **free public preview + higher limits with
 | dream-team | ●●●●● | default·executor Fable 5 — ~7/12 subscription-included (50% weekly-limit cap), then credits $10/50 |
 | escalation | ●●●●● | executor Fable `:xhigh` (rescue pitcher — intermittent use) + planner Sol `:xhigh` + 4-vendor auth |
 | ultimate-opus / ultimate-sol | ●●●●○ | Opus or Sol 3 seats at `:high~xhigh` + Grok critic (xai API) |
-| llm-council | ●●●●○ | 4-vendor auth + Sol `:xhigh` planner — council workflow bills by number of votes when executed |
+| llm-council | ●●●●○ | 4-vendor auth + Sol `:xhigh` planner — council workflow bills by vote count when executed |
 | coding-sprint | ●●●○○ | executor Opus `:high` (raise to max only on failure signals) |
 | daily | ●●●○○ | main loop Opus `:medium`, delegation spread across mid/cheap models — subscription OAuth across 3 vendors |
 | monorepo | ●●●○○ | executor/architect Opus + Gemini (preview/subscription) + GLM-5.2 |
-| eco | ●○○○○ | executor DeepSeek V4 Flash ($0.14) + Luna ($1) + Gemini preview — but absolute cheapest is built-in `codex-eco` |
-
-> **Three savings levers**: ① push delegated work onto ultra-cheap models (DeepSeek V4 Flash $0.14, Luna $1) and preview/subscription tokens (Gemini) ② escalate effort only on failure ③ keep the main loop on the Anthropic flagship (it is the quality ceiling) but use `:medium` for daily work — if Fable default credits in `dream-team` get heavy, drop default to `opus-4-8:high` (roughly the `ultimate-opus` structure).
+| eco | ●○○○○ | executor DeepSeek V4 Flash ($0.14) + Luna ($1) + Gemini preview — not absolute cheapest; built-in `codex-eco` is |
 
 ---
 
 ## 11. 📖 Sources
 
 **Coding (executor)** · [Vals SWE-bench Verified](https://www.vals.ai/benchmarks/swebench) · [swebench.com](https://www.swebench.com/verified.html) · [Terminal-Bench 2.1](https://www.tbench.ai/leaderboard/terminal-bench/2.1)
-
-**Claude 5 family** · [Fable 5 redeployment announcement](https://www.anthropic.com/news/redeploying-fable-5) · [platform.claude.com model docs](https://platform.claude.com/docs) — pricing · subscription inclusion (~7/12 extension, [Android Authority report](https://www.androidauthority.com/claude-fable-5-free-extension-3685103/)) · effort specs cross-checked 2026-07-02/07-10
-
+**Claude 5 family** · [Fable 5 redeployment announcement](https://www.anthropic.com/news/redeploying-fable-5) · [platform.claude.com model docs](https://platform.claude.com/docs) — pricing, subscription inclusion (~7/12 extension, [Android Authority report](https://www.androidauthority.com/claude-fable-5-free-extension-3685103/)), and effort specs cross-checked 2026-07-02/07-10
 **GPT-5.6 (2026-07-09 GA)** · [launch announcement](https://openai.com/index/gpt-5-6/) · [Sol preview (Cerebras 750TPS)](https://openai.com/index/previewing-gpt-5-6-sol/) · [AA: GPT-5.6 has landed](https://artificialanalysis.ai/articles/gpt-5-6-has-landed) · [TechTimes (METR eval gaming)](https://www.techtimes.com/articles/319808/20260707/gpt-56-sol-review-faster-coding-half-fable-5-cost-benchmark-problem.htm) — pricing/evals cross-checked 2026-07-10
-
-**Reasoning (planner)** · [Gemini 3.1 Pro card](https://deepmind.google/models/model-cards/gemini-3-1-pro/) · [AA Index](https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index)
-
-**ctx · multimodal (architect)** · [Gemini 3](https://blog.google/products-and-platforms/products/gemini/gemini-3/)
-
-**Tool-calling · honesty (default)** · [BFCL](https://gorilla.cs.berkeley.edu/leaderboard.html) · [τ²-Bench](https://arxiv.org/abs/2506.07982)
-
-**Independence · routing (critic + design)** · [self-preference bias](https://arxiv.org/abs/2410.21819) · [self-preference grows with capability](https://arxiv.org/abs/2604.22891) · [Judging with Many Minds](https://arxiv.org/abs/2505.19477) · [RouteLLM](https://www.lmsys.org/blog/2024-07-01-routellm/)
-
+**Role and routing** · [Gemini 3.1 Pro card](https://deepmind.google/models/model-cards/gemini-3-1-pro/) · [AA Index](https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index) · [BFCL](https://gorilla.cs.berkeley.edu/leaderboard.html) · [self-preference bias](https://arxiv.org/abs/2410.21819) · [RouteLLM](https://www.lmsys.org/blog/2024-07-01-routellm/)
 **Official models/pricing** · [Anthropic](https://docs.anthropic.com/en/docs/about-claude/models) · [OpenAI](https://openai.com/api/pricing/) · [xAI](https://docs.x.ai/developers/models)
-
----
 
 <div align="center">
 
 **Install in one line, best model per role.**
-
 **v2.0.0** · [CHANGELOG](./CHANGELOG.md) · [Maintenance playbook](./MAINTAINING.md) · License [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
 
 </div>
