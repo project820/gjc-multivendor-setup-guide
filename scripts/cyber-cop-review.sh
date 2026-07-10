@@ -169,8 +169,11 @@ ARCH_V="$(arch_verdict "$arch_out")"
 echo "## 1. ARCHITECT VERDICT (${ARCH_MODEL}): ${ARCH_V}"
 echo "$arch_out"; echo
 
-# --- 2. CRITIC (openai-codex/gpt-5.6-sol:high — cross-family merge gate) ---
-CRIT_MODEL="openai-codex/gpt-5.6-sol:high"
+# --- 2. CRITIC (default openai-codex/gpt-5.6-sol:high — cross-family merge gate) ---
+# Seat override: CYBER_COP_CRIT_MODEL env pins a different cross-family critic (e.g. the
+# previous openai-codex/gpt-5.5:high) — escape hatch added per PR #19 critic finding
+# (Sol role-fit not yet A/B-measured; availability + n=1 live defect-recall only).
+CRIT_MODEL="${CYBER_COP_CRIT_MODEL:-openai-codex/gpt-5.6-sol:high}"
 crit_out="$(run_seat "$CRIT_MODEL" "You are the cyber-cop CRITIC (merge gate), running cross-family vs the assumed-Claude author. ${CONTRACT}
 Each vote MUST cite at least one file-backed blocking issue OR an explicit no-finding rationale; unsupported verdicts are void. Output your verdict token on the FIRST line, exactly one of: APPROVE | REQUEST_CHANGES | BLOCK. Then terse file-backed findings.")"
 CRIT_V="$(crit_verdict "$crit_out")"

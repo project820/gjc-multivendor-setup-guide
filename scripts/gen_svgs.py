@@ -294,6 +294,7 @@ def gen_effort_ladder():
         "Opus 4.8 = minimal..max",
         "Fable 5 ≤ xhigh (GJC, :max 클램프)",
         "Sonnet 4.6/5 ≤ high",
+        "GPT-5.6 3종 = 출하 ≤ xhigh (:max 수용·심도 미검증)",
         "xai Grok 4.5 ≤ high",
         "Gemini Pro = {low, high}",
         "opencode-go = effort 생략",

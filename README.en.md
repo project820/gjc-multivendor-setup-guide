@@ -131,7 +131,7 @@ Three design principles:
 
 ### 3-2. Effort cheatsheet
 
-These are the **GJC 0.9.1 effective** tiers — some differ from the official API spec (footnote below):
+These are the **GJC 0.9.1~0.9.5 effective** tiers — some differ from the official API spec (footnote below):
 
 ```text
 Opus 4.6/4.7/4.8        minimal low medium high xhigh max   ← all 6 tiers
@@ -148,7 +148,7 @@ google-antigravity Gemini  gemini-3.1-pro-low:high (high reasoning) · gemini-3.
 > [!IMPORTANT]
 > **Five hard rules**: ① Gemini Pro supports only `low`/`high` ② openai-codex ctx is **per-model** — `gpt-5.4`=**1M** · `gpt-5.5`·the three `gpt-5.6` models=**272K** (5.6's API spec is 1.05M — codex shows the lower floor) ③ Sonnet (4.6/5) cannot do `xhigh`/`max` in GJC · **Fable 5 cannot do `max`** (clamped to high / xhigh respectively) ④ opencode-go: omit `:effort` (only the deepseek-v4 family supports it) ⑤ xai `grok-4.5` caps at `high` (`:xhigh` silently clamps — xhigh exists only on the grok-build provider, where effort suffixes don't resolve at all). Out-of-range tiers are **clamped**, not errored. The three gpt-5.6 models appear in the catalog up to `max` and live calls accept it (verified 07-10), but depth is unverified — this guide ships no higher than `xhigh`.
 >
-> **Footnote (upstream gap)**: per the official API, both Claude 5 models support up to `max`. The GJC 0.9.1 parser doesn't know the fable family (falls back to inferred rules) and sonnet-5 inherits the 4.6 clamp — an **engine-side gap, reported upstream** with a repro. This guide records the GJC-effective tiers.
+> **Footnote (upstream gap)**: per the official API, both Claude 5 models support up to `max`. The GJC parser (0.9.1~0.9.5) doesn't know the fable family (falls back to inferred rules) and sonnet-5 inherits the 4.6 clamp — an **engine-side gap, reported upstream** with a repro. This guide records the GJC-effective tiers.
 
 ### 3-3. Subscription → provider
 
@@ -526,7 +526,7 @@ Gemini (`google-antigravity`) runs on the **Google AI Pro/Ultra subscription tok
 | Claude Fable 5 | 10 / 50 (batch 5/25 · cache hits 1)† | ultimate-f5 default·executor · legend default · escalation executor |
 | Claude Opus 4.8 | 5 / 25 | default·executor |
 | Claude Sonnet 5 | 3 / 15 (intro 2/10 through 2026-08-31)‡ | eco executor alternative |
-| GPT-5.6 Sol | 5 / 30 (Fast mode is 12.5/75) | planner (ultimate·legend·escalation) · cyber-cop lead · solo-openai |
+| GPT-5.6 Sol | 5 / 30 (Fast mode is 12.5/75) | planner (ultimate·legend·escalation) · cyber-cop critic·executor · solo-openai |
 | GPT-5.6 Terra | 2.5 / 15 | executor/critic (daily·sprint·claude-codex) |
 | GPT-5.4 | 2.5 / 15 | solo-openai architect (only 1M ctx lane) |
 | Grok 4.5 | 2 / 6 (effective input ~$0.84 @88% cache) | critic (v1.10) |
@@ -558,7 +558,7 @@ Gemini (`google-antigravity`) runs on the **Google AI Pro/Ultra subscription tok
 
 ## 11. 📖 Sources
 
-**Coding (executor)** · [Vals SWE-bench Verified](https://www.vals.ai/benchmarks/swebench) · [swebench.com](https://www.swebench.com/verified.html) · [Terminal-Bench 2.0](https://www.tbench.ai/leaderboard/terminal-bench/2.0)
+**Coding (executor)** · [Vals SWE-bench Verified](https://www.vals.ai/benchmarks/swebench) · [swebench.com](https://www.swebench.com/verified.html) · [Terminal-Bench 2.1](https://www.tbench.ai/leaderboard/terminal-bench/2.1)
 
 **Claude 5 family** · [Fable 5 redeployment announcement](https://www.anthropic.com/news/redeploying-fable-5) · [platform.claude.com model docs](https://platform.claude.com/docs) — pricing · subscription inclusion (~7/12 extension, [Android Authority report](https://www.androidauthority.com/claude-fable-5-free-extension-3685103/)) · effort specs cross-checked 2026-07-02/07-10
 

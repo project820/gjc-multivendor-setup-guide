@@ -18,6 +18,7 @@
 - **Fable 5 이벤트 연장 반영** — 구독 포함 종료 ~7/7 → **~2026-07-12 23:59 PT(연장 확정)** 전면 정정(profiles 주석 · README×4 표/불릿/비용 · SVG 스탬프). Anthropic "capacity 확보 시 구독 복귀 방침(비확정)" 병기.
 - **gemini-3.1-pro-high 함정 형태 변화 (0.9.5)** — 카탈로그 delisting + 실측: 이제 400이 아니라 **퍼지 매칭으로 `-low` 기본 effort에 침묵 해석되어 "성공"**(`-bogus`도 성공). 문서를 "호출 400" → "성공하지만 고추론 아님" 함정으로 재작성, revalidate 카나리를 expect-fail → informational ok-live 재분류.
 - README 배지 정정: v1.6 이후 누락됐던 version 배지 → 1.11.0.
+- **리뷰어 좌석 escape hatch** — PR #19 critic(gpt-5.6-sol) HIGH 지적("머지 게이트 좌석을 rolefit 실측 없이 교체") 절충: `CYBER_COP_CRIT_MODEL`(cyber-cop-review.sh) / `GJC_COP_HOOK_MODEL`(gjc-cop pre-push 훅) env로 critic 좌석을 즉시 다른 cross-family 모델(예: gpt-5.5:high)로 핀 가능. 판정 원문·반론·수용 내역은 `evidence/2026-07-10-gpt-5.6-notes.md` §8.
 
 ### Validation
 - 실호출(2026-07-10, gjc 0.9.5): gpt-5.6-sol `:medium`/`:high`/`:xhigh` · terra `:high`/`:xhigh` · luna `:high` 전부 ok · 3종 `:max` 수용(심도 미검증 — 미출하) · `:bogus` 거부. `SELECTORS_ONLY=1 revalidate.sh` → `evidence/2026-07-10-selectors-rerun-2.md` **전 프로바이더 그린**(Anthropic rate-limit 해제 — fable-5/sonnet-5/opus/sonnet-4-6 재검증, 07-02 last-good 캐비앗 해소). 첫 `2026-07-10-selectors.md`는 gemini-3.1-pro-high 행동 변화를 fail-closed로 잡은 스냅샷으로 보존. `python3 scripts/validate-profiles.py` green(README×4 파리티).
