@@ -33,7 +33,7 @@
 <line x1="929" y1="108" x2="954" y2="88" stroke="#9AA0AE" stroke-width="1.5" marker-end="url(#ah)"/>
 <text x="941.5" y="64" font-size="9.5" fill="#7A7F8C" text-anchor="middle">실패신호</text>
 <text x="941.5" y="75" font-size="9.5" fill="#7A7F8C" text-anchor="middle">필요 단계만큼 ↑</text>
-<text x="24" y="270" font-size="12.5" font-weight="700" fill="#33334a">모델별 effort 상한 — GJC 0.9.5 실효 (검증 2026-07-10)</text>
+<text x="24" y="270" font-size="12.5" font-weight="700" fill="#33334a">모델별 effort 상한 — GJC 0.9.6 실효 (검증 2026-07-10)</text>
 <rect x="24" y="282" width="185" height="26" rx="13" fill="#F6F6FA" stroke="#E2E2EA"/>
 <text x="116.5" y="299" font-size="11" fill="#3A3A4C" text-anchor="middle">Opus 4.8 = minimal..max</text>
 <rect x="221" y="282" width="263" height="26" rx="13" fill="#F6F6FA" stroke="#E2E2EA"/>

@@ -5,12 +5,15 @@ Checks the durable invariants of the multi-vendor profile catalog so they can be
 enforced in CI and by any future maintenance session:
 
   1. YAML parses; every profile has the 5 roles (default/executor/architect/planner/critic).
-  2. Router invariant: if `anthropic` is in required_providers, `default` must be Anthropic.
+  2. Router invariant: if `anthropic` is in required_providers, `default` must be Anthropic
+     (documented exceptions via NON_ANTHROPIC_DEFAULT_OK — surfaced as WARN, never silent).
   3. Cross-family review: executor-family != architect-family AND planner-family != critic-family
      (skipped for single-vendor profiles where it is impossible by construction).
   4. Effort-tier legality against the engine hard-rules (see EFFORT_RULES below).
   5. required_providers covers every provider actually used by the mapping.
-  6. README.md embedded ```yaml profiles block == gjc-profiles.yml (drift guard).
+  6. Multi-vendor collaboration (v2, human ruling 2026-07-10): every bundle spans >= 2 vendors —
+     single-vendor demand belongs to GJC built-in profiles.
+  7. README.md embedded ```yaml profiles block == gjc-profiles.yml (drift guard).
 
 Exit non-zero on any hard violation. Usage: python3 scripts/validate-profiles.py
 """
@@ -33,11 +36,18 @@ ROLES = {"default", "executor", "architect", "planner", "critic"}
 # Documented intentional same-family pairs (design choices, not bugs).
 # (profile, pair) -> rationale ; pair in {"exec_arch","plan_crit"}.
 SAME_FAMILY_OK = {
-    ("monorepo", "exec_arch"): "all roles >=1M ctx; gpt-5.5/5.6 (272K) excluded — gpt-5.4 is 1M but Opus ranks at least equal",
-    ("claude-codex", "exec_arch"): "2-vendor: Anthropic = execution/context lane",
-    ("claude-codex", "plan_crit"): "2-vendor: Codex = reasoning/critique lane",
-    ("claude-codex-max", "exec_arch"): "2-vendor: Anthropic = execution/context lane",
-    ("claude-codex-max", "plan_crit"): "2-vendor: Codex = reasoning/critique lane",
+    ("monorepo", "exec_arch"): "all roles >=1M ctx; gpt-5.5 (272K)/5.6 (373K) excluded — gpt-5.4 is 1M but Opus ranks at least equal",
+    ("ultimate-opus", "exec_arch"): "human ruling 2026-07-10: Opus quality base; Sol planner + Grok critic carry cross-family verification (bundle stays 3-vendor)",
+    ("dream-team", "exec_arch"): "human ruling 2026-07-10: Fable executor vs Opus architect are distinct models; Sol planner + Grok critic carry cross-family verification",
+    ("coding-sprint", "plan_crit"): "human ruling 2026-07-10: Sol planner + Terra critic are distinct models; bundle stays 3-vendor mixed collaboration",
+}
+
+# Documented non-Anthropic default routers (profile -> rationale). Surfaced as WARN.
+NON_ANTHROPIC_DEFAULT_OK = {
+    "ultimate-sol": "opt-in experimental Sol-base premium: Sol leads long-horizon workflow completion "
+    "(Agents' Last Exam 52.7 vs Fable 40.5, OpenAI launch table incl. competitor rows); trade-offs stay "
+    "surfaced — 373K codex-surface router ctx (vs 1M) and weaker tool-calling axis (Toolathlon 58 vs "
+    "Fable 61.7). Role-fit L3 pending (evidence/2026-07-10-selectors-rerun-3.md, two-axis synthesis A1).",
 }
 
 # provider-id -> vendor family (for cross-family checks)
@@ -108,9 +118,20 @@ def main() -> int:
             continue
         fam = {r: family_of(v) for r, v in mm.items()}
         used_prov = {v.split('/',1)[0] for v in mm.values()}
-        # 2. router invariant
+        # 2. router invariant (documented exceptions -> WARN)
         if "anthropic" in req and fam["default"] != "claude":
-            errors.append(f"[{name}] default must be Anthropic when anthropic is available (got {mm['default']})")
+            if name in NON_ANTHROPIC_DEFAULT_OK:
+                warns.append(f"[{name}] non-Anthropic default ({mm['default']}) — documented exception: {NON_ANTHROPIC_DEFAULT_OK[name]}")
+            else:
+                errors.append(f"[{name}] default must be Anthropic when anthropic is available (got {mm['default']})")
+        # 2b. multi-vendor collaboration invariant (v2): no single-vendor bundles.
+        # Checked against providers ACTUALLY USED by the mapping (not required_providers,
+        # which could be padded with unused entries to game the check — PR #21 critic).
+        if len(used_prov) < 2:
+            errors.append(f"[{name}] single-vendor bundle (mapping uses only {sorted(used_prov)}) — v2 catalog requires >=2 vendors; single-vendor demand belongs to GJC built-ins")
+        padding = req - used_prov
+        if padding:
+            warns.append(f"[{name}] required_providers lists providers the mapping never uses: {sorted(padding)} — activation burden without a seat; drop or justify")
         # 3. cross-family (skip single-vendor; allow documented exceptions)
         if len(req) > 1:
             if fam["executor"] == fam["architect"]:
@@ -144,7 +165,9 @@ def main() -> int:
         if uncovered:
             errors.append(f"[{name}] uses providers not in required_providers: {sorted(uncovered)}")
 
-    # 6. README embed sync — every README*.md with an embedded yaml block must match gjc-profiles.yml
+    # 6. README embed sync — every README*.md with an embedded yaml block must match gjc-profiles.yml.
+    # Comparison is on PARSED model_mapping dicts (not text), so localized READMEs may embed a
+    # comment-stripped variant (scripts/sync-readme-yaml.py) and still stay parity-green.
     import yaml
     file_map = {n: p["model_mapping"] for n, p in profiles.items()}
     readmes = sorted(ROOT.glob("README*.md"))
