@@ -128,7 +128,7 @@
   - `evidence/2026-07-03-deep-research-benchmarks.md` — Fable 5 / Opus 4.8 / GPT-5.5 / Gemini 3.1 Pro / Grok 4.3 / Composer 2.5 벤치·가격·컨텍스트·effort 실측 (Vals·Anthropic·OpenAI·xAI·DeepMind·arXiv·Terminal-Bench·LiveCodeBench 인용).
   - `evidence/2026-07-03-consultant-report.md` — dev-idea-consultant 6섹션 포맷: 실현가능성·역할 배치 권고·마이그레이션 로드맵.
   - `evidence/2026-07-03-ultimate-final-report.md` — 통합 최종 리포트: 두 커뮤니티 질문("Grok 4.3=critic?", "Composer 2.5 Fast=executor?") 확정 답변 + 구조적 발견(effort-ladder·architect 셀렉터·failover).
-  - README §6-2에서 상호 참조. `evidence/`는 재작성 불가 감사 추적이므로 이후 재검증은 신규 dated 리포트로 추가한다.
+  - docs/deep-dive-role-fit.md(구 README §6-2)에서 상호 참조. `evidence/`는 재작성 불가 감사 추적이므로 이후 재검증은 신규 dated 리포트로 추가한다.
 
 ## v1.5.1 — 2026-07-03
 

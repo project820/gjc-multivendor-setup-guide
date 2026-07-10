@@ -42,7 +42,7 @@ bash scripts/catalog-snapshot.sh               # snapshot; later: scripts/catalo
 ```
 
 `evidence/` is the durable audit trail — committed, dated, never rewritten. It backs the README's "verified" claims.
-It also holds the dated deep-research / consultant / model-council reports that justify the role→model assignments (`evidence/<date>-deep-research-benchmarks.md`, `-consultant-report.md`, `-ultimate-final-report.md`), cross-linked from README §6-2. Re-validation ships as a *new* dated report — never edit a published one.
+It also holds the dated deep-research / consultant / model-council reports that justify the role→model assignments (`evidence/<date>-deep-research-benchmarks.md`, `-consultant-report.md`, `-ultimate-final-report.md`), cross-linked from docs/deep-dive-role-fit.md (formerly README §6-2). Re-validation ships as a *new* dated report — never edit a published one.
 
 ---
 
@@ -63,7 +63,7 @@ It also holds the dated deep-research / consultant / model-council reports that 
 - **MAJOR** — structural redesign (role model, setup flow, routing).
 - Every release: `python3 scripts/validate-profiles.py` green → update `CHANGELOG.md` → tag `vX.Y.Z`.
 - **Adding or moving a profile touches a 5-file set that must move together**: `gjc-profiles.yml` + the embedded YAML blocks in **all four** `README*.md` (the validator enforces README↔file parity and fails CI on any mismatch). `install.sh` derives its profile count/roster from the downloaded YAML (since v1.4), so it needs no manual edit — but sanity-check its output once.
-- **i18n**: when `gjc-profiles.yml` or the catalog changes, update the YAML block + tables in **all** language READMEs (`README.md` KO canonical · `README.en.md` · `README.zh.md` · `README.ja.md`). `validate-profiles.py` enforces YAML parity across every `README*.md`. Prose/comments translate; selectors stay verbatim. **KO-only blocks (intentional — do not "fix" translations by re-adding them)**: the §5 per-profile design-rationale block, the §5 `opencode-go`/grok-composer TIP, the table of contents, and the deep §6-2/§6-3 analysis (translations carry a summary paragraph + links to the KO canonical instead). `routing-rules.md` ships **Korean-only** by design — selectors/profile names in it are language-neutral; keep a language note next to the injection command in EN/ZH/JA.
+- **i18n**: when `gjc-profiles.yml` or the catalog changes, update the YAML block + tables in **all** language READMEs (`README.md` KO canonical · `README.en.md` · `README.zh.md` · `README.ja.md`). `validate-profiles.py` enforces YAML parity across every `README*.md`. Prose/comments translate; selectors stay verbatim. **KO-only blocks (intentional — do not "fix" translations by re-adding them)**: the §5 per-profile design-rationale block, the §5 `opencode-go`/grok-composer TIP, the table of contents, and the deep §6-2/§6-3 analysis (now `docs/deep-dive-role-fit.md`, KO-only doc) (translations carry a summary paragraph + links to the KO canonical instead). `routing-rules.md` ships **Korean-only** by design — selectors/profile names in it are language-neutral; keep a language note next to the injection command in EN/ZH/JA.
 
 ---
 
