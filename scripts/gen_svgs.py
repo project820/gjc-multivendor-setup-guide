@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""gen_svgs.py — GJC 멀티벤더 가이드 SVG 자산 재생성기 (v1.11.0)
+"""gen_svgs.py — GJC 멀티벤더 가이드 SVG 자산 재생성기 (v1.12.0)
 
 assets/ 아래 4개 SVG 를 데이터 기반으로 재생성한다:
   - role-winners.svg     : 👑 legend (Ultimate Legend) 역할별 최강 배너
-  - profiles-matrix.svg  : 13 프로필 × 5 역할 매트릭스
+  - profiles-matrix.svg  : 14 프로필 × 5 역할 매트릭스
   - effort-ladder.svg    : effort 6단계 사다리 + 모델별 클램프 스트립
   - architecture.svg     : 본체 1 + 서브에이전트 4 (본체 라벨 프로필-중립)
 
@@ -14,7 +14,7 @@ routing-tree.svg 는 모델명 하드코딩이 없어 재생성 대상이 아니
   python3 scripts/gen_svgs.py            # repo 루트 기준 assets/ 에 출력
   python3 scripts/gen_svgs.py --out DIR  # 다른 디렉터리에 출력
 
-데이터 원천: gjc-profiles.yml (v1.11.0, 13 프로필). 프로필이 바뀌면
+데이터 원천: gjc-profiles.yml (v1.12.0, 14 프로필). 프로필이 바뀌면
 아래 PROFILES 테이블을 yml 과 동기화한 뒤 재실행한다.
 검증 스탬프 날짜는 VERIFY_DATE 하나만 고치면 된다.
 """
@@ -67,6 +67,10 @@ PROFILES = [
     ("👑 legend", "Ultimate Legend", [
         (A, "Fable 5", ":high"), (A, "Opus 4.8", ":max"),
         (O, "GPT-5.6 Sol", ":xhigh"), GEM_HI, (X, "Grok 4.5", ":high")]),
+    ("🌞 ultimate-sol", "투트랙 B (실험적)", [
+        (O, "GPT-5.6 Sol", ":high"), (O, "GPT-5.6 Sol", ":xhigh"),
+        (A, "Fable 5", ":xhigh"), (A, "Opus 4.8", ":high"),
+        (X, "Grok 4.5", ":high")]),
     ("🏎 coding-sprint", None, [
         (A, "Opus 4.8", ":medium"), (A, "Opus 4.8", ":max"),
         GEM_HI, GEM_HI, (O, "GPT-5.6 Terra", ":high")]),

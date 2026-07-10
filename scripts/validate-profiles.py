@@ -40,6 +40,17 @@ SAME_FAMILY_OK = {
     ("claude-codex-max", "plan_crit"): "2-vendor: Codex = reasoning/critique lane",
 }
 
+# Documented explicit exceptions to the "default = Anthropic flagship" router invariant.
+# The invariant is NOT retired — every exception needs a rationale here, is surfaced as a
+# permanent WARN, and anything unlisted still hard-errors. First exception shipped in v1.12.0.
+NON_ANTHROPIC_DEFAULT_OK = {
+    "ultimate-sol": "two-track B (opt-in, experimental): Sol leads long-horizon workflow completion "
+                    "(Agents' Last Exam 52.7 vs Fable 40.5, OpenAI launch table incl. competitor rows); "
+                    "explicit trade-offs stay surfaced — 272K codex-surface router ctx (vs 1M) and weaker "
+                    "tool-calling axis (Toolathlon 58 vs Fable 61.7). L3 rolefit pending "
+                    "(evidence/2026-07-10-two-track-sol-notes.md).",
+}
+
 # provider-id -> vendor family (for cross-family checks)
 FAMILY = {
     "anthropic": "claude", "openai-codex": "gpt", "openai": "gpt",
@@ -108,9 +119,13 @@ def main() -> int:
             continue
         fam = {r: family_of(v) for r, v in mm.items()}
         used_prov = {v.split('/',1)[0] for v in mm.values()}
-        # 2. router invariant
+        # 2. router invariant (default = Anthropic flagship), with an explicit documented
+        #    exception allowlist — exceptions WARN so the trade-off never goes silent.
         if "anthropic" in req and fam["default"] != "claude":
-            errors.append(f"[{name}] default must be Anthropic when anthropic is available (got {mm['default']})")
+            if name in NON_ANTHROPIC_DEFAULT_OK:
+                warns.append(f"[{name}] non-Anthropic default ({mm['default']}) — documented exception: {NON_ANTHROPIC_DEFAULT_OK[name]}")
+            else:
+                errors.append(f"[{name}] default must be Anthropic when anthropic is available (got {mm['default']})")
         # 3. cross-family (skip single-vendor; allow documented exceptions)
         if len(req) > 1:
             if fam["executor"] == fam["architect"]:

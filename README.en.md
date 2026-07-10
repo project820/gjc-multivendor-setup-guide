@@ -7,9 +7,9 @@
 Stop agonizing over model choice. **Install in one line** and let each role get its best-fit model automatically.
 
 [![GJC](https://img.shields.io/badge/for-Gajae%20Code%20(GJC)-e23?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code)
-[![Version](https://img.shields.io/badge/version-1.11.0-2496ED?style=flat-square)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.12.0-2496ED?style=flat-square)](./CHANGELOG.md)
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
-![Profiles](https://img.shields.io/badge/profiles-13-blue?style=flat-square)
+![Profiles](https://img.shields.io/badge/profiles-14-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--07--10-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
@@ -21,7 +21,7 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 **[한국어](./README.md) · English (this page) · [中文](./README.zh.md) · [日本語](./README.ja.md)**
 
 > [!NOTE]
-> **The core of this guide was adopted into the official GJC docs** — a condensed version was merged upstream as [`docs/multi-vendor-profiles.md`](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) ([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). Treat the **official GJC docs as the canonical reference** for the role/selector concepts; this repo provides what those docs do not — the **one-line installer**, the **full set of 13 profiles** (incl. `solo-*` / `claude-codex*` / `legend` / `cyber-cop`), and [maintenance & validation tooling](./MAINTAINING.md) (static-check CI + live selector battery + catalog drift tracking).
+> **The core of this guide was adopted into the official GJC docs** — a condensed version was merged upstream as [`docs/multi-vendor-profiles.md`](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) ([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). Treat the **official GJC docs as the canonical reference** for the role/selector concepts; this repo provides what those docs do not — the **one-line installer**, the **full set of 14 profiles** (incl. `solo-*` / `claude-codex*` / `legend` / `ultimate-sol` / `cyber-cop`), and [maintenance & validation tooling](./MAINTAINING.md) (static-check CI + live selector battery + catalog drift tracking).
 
 ## 🚨 NEW · `cyber-cop` — the first reviewer-mode profile
 
@@ -58,7 +58,7 @@ The clone/manual path (same mechanics, no wrapper) is in the [announcement §3](
 curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | bash
 ```
 
-This single line **safely merges 13 profiles into `~/.gjc/agent/models.yml`** and sets `daily` as the default profile. Your existing config is backed up automatically, and re-running cleanly updates in place.
+This single line **safely merges 14 profiles into `~/.gjc/agent/models.yml`** and sets `daily` as the default profile. Your existing config is backed up automatically, and re-running cleanly updates in place.
 
 ```bash
 gjc --mpreset daily        # this session only
@@ -184,10 +184,10 @@ opencode-go/<model>                           (omit effort = model default)
 | executor (SWE-bench Verified) | **Fable 5** | **95.0%** (Opus 4.8 88.6 = **strongest subscription-included** · GPT-5.5 82.6 · Gemini 3.1 Pro 80.6) |
 | planner (reasoning GPQA/ARC-AGI) | **Gemini 3.1 Pro**† | GPQA 94.3 · ARC-AGI-2 77.1 (fluid reasoning: GPT-5.5 — [§6-2 (KO)](./README.md#6-2-역할-배치-최적성-검토-deep-research--실측) · standalone GPQA #1 is Sonnet 5 at 96.2) |
 | architect (ctx · multimodal) | **Gemini 3.1 Pro**† | 1M ctx · MMMU-Pro 81% |
-| default (tool-calling · honesty) | **Opus 4.8 / Fable 5** | router quality = whole-system ceiling (Fable carries refusal/billing caveats — [§5](#5-️-final-catalog-13-profiles)) |
+| default (tool-calling · honesty) | **Opus 4.8 / Fable 5** | router quality = whole-system ceiling (Fable carries refusal/billing caveats — [§5](#5-️-final-catalog-14-profiles)). v1.12: `ultimate-sol` is the only explicit exception (two-track B — Sol router, 272K/tool-call tradeoff) |
 | critic (independence) | **cross-family** | meta-judge > debate aggregation |
 
-> † **Successors imminent**: on the planner axis, GPT-5.6 Sol is in partner preview (2026-06-26, `max` effort + `ultra` sub-agent mode — GA weeks away); on the architect axis, Gemini 3.5 Pro (2M ctx, Deep Think) slipped to July GA. Either release puts this table up for re-verification.
+> † **Successor reflected**: the planner-axis successor GPT-5.6 Sol was reflected immediately after GA (2026-07-09) — v1.11 swapped planner seats to the new generation, and v1.12 adds two-track B (`ultimate-sol` 🌞) (basis: [evidence/2026-07-10-two-track-sol-notes.md](./evidence/2026-07-10-two-track-sol-notes.md)). On the architect axis, Gemini 3.5 Pro (2M ctx, Deep Think) slipped to July GA; this table will be re-verified on release.
 
 **Consensus principles**
 
@@ -201,7 +201,7 @@ opencode-go/<model>                           (omit effort = model default)
 
 ---
 
-## 5. 🗂️ Final catalog (13 profiles)
+## 5. 🗂️ Final catalog (14 profiles)
 
 <div align="center">
 <img src="assets/profiles-matrix.svg" alt="profiles × roles matrix" width="100%">
@@ -215,6 +215,7 @@ opencode-go/<model>                           (omit effort = model default)
 | 🏆 **ultimate** | cost-no-object, best per role (sustainable edition) | accuracy matters more than cost |
 | 🔥 **ultimate-f5** | Fable 5-centric event edition — **subscription-included through 2026-07-12 23:59 PT (extension confirmed)** | peak accuracy during the event window |
 | 👑 **legend** | only the main loop on Fable 5; the rest stays sustainable | strongest setup that remains viable after 7/12 |
+| 🌞 **ultimate-sol** | **two-track B (experimental)** — Sol main loop & execution + Fable planning + Opus 1M lane | long autonomous workflows · terminal · cyber focus, when 272K is enough |
 | 🏎️ **coding-sprint** | executor-led + coding-aware critic | pure implementation throughput |
 | 🛡️ **escalation** | Fable 5 rescue pitcher on failure signals + multi-vendor critic panel | merges · security · billing · irreversible changes |
 | 🚨 **cyber-cop** | reviewer mode — architect & critic in the lead, dedicated to PR review & security audits | reviewing others' PRs · merge gates · security audits |
@@ -269,6 +270,16 @@ profiles:
       architect: google-antigravity/gemini-3.1-pro-low:high
       critic:    xai/grok-4.5:high
       # to avoid credits cost: set default to opus-4-8:high — becomes identical to ultimate
+
+  ultimate-sol:                        # 🌞 Two-track B (opt-in·experimental) — centered on GPT-5.6 Sol. first explicit non-Anthropic default exception · L3 rolefit pre-shipped (based on OpenAI's own table — adjust after measurement)
+    required_providers: [openai-codex, anthropic, xai]
+    model_mapping:
+      default:   openai-codex/gpt-5.6-sol:high                  # #1 long-workflow completion (Agents' Last Exam 52.7 vs Fable 40.5) · token efficiency. ⚠ctx 272K (not 1M) · weaker tool-call axis (Toolathlon 58 vs Fable 61.7)
+      executor:  openai-codex/gpt-5.6-sol:xhigh                 # terminal/agentic SOTA (T-B 2.1 88.8 · DeepSWE 72.7 · CTF 96.7). ⚠repo-grade coding (SWE-Pro 64.6 vs Fable 80.0) goes to escalation
+      planner:   anthropic/claude-fable-5:xhigh                 # #1 intelligence/deep-reasoning axis (AA-Int 59.9 · GDPval 1759.6 · FrontierMath T4 87.8) — cross-family planning
+      architect: anthropic/claude-opus-4-8:high                 # 1M ctx · MRCR 76% — long-context supplement lane for the 272K main loop (subscription-included)
+      critic:    xai/grok-4.5:high                              # preserve 3 families — cross-family vs both executor (gpt) and planner (claude)
+      # track boundary: repo-grade coding · 1M sessions · tool-call reliability = track A (ultimate/legend/escalation)
 
   coding-sprint:                       # implementation throughput. executor-led + coding-aware critic
     required_providers: [anthropic, openai-codex, google-antigravity]
@@ -372,7 +383,7 @@ profiles:
 
 </details>
 
-For the per-profile design rationale — including the `ultimate-f5` event terms (**subscription-included through 2026-07-12 23:59 PT**, extended from the planned 7/7 end date, capped at 50% of weekly limits, then usage credits $10/$50 — never "free"), the `legend` default-seat-only Fable placement, the `escalation` rescue-pitcher redesign (and the honest record that its v1.3 critic `:xhigh` was a no-op clamp), and the all-Opus `solo-anthropic` caveat (research shows **stronger models exhibit stronger self-preference bias** — arXiv [2410.21819](https://arxiv.org/abs/2410.21819) · [2604.22891](https://arxiv.org/abs/2604.22891) — so all-Opus is a capability-first choice and **cross-family profiles remain the quality path**) — plus the opencode-go extras, see the **[Korean canonical README](./README.md#5-️-최종-카탈로그-13종)** and the official **[GJC docs](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md)**.
+For the per-profile design rationale — including the `ultimate-f5` event terms (**subscription-included through 2026-07-12 23:59 PT**, extended from the planned 7/7 end date, capped at 50% of weekly limits, then usage credits $10/$50 — never "free"), the `legend` default-seat-only Fable placement, the v1.12 `ultimate-sol` 🌞 two-track B (opt-in·experimental): Sol owns the main loop and execution (long-workflow completion + terminal SOTA), Fable plans, Opus provides the 1M lane — the only explicit exception to the default=Anthropic principle (WARNs always surface the 272K router/tool-call tradeoff, L3 rolefit pre-shipped), the `escalation` rescue-pitcher redesign (and the honest record that its v1.3 critic `:xhigh` was a no-op clamp), and the all-Opus `solo-anthropic` caveat (research shows **stronger models exhibit stronger self-preference bias** — arXiv [2410.21819](https://arxiv.org/abs/2410.21819) · [2604.22891](https://arxiv.org/abs/2604.22891) — so all-Opus is a capability-first choice and **cross-family profiles remain the quality path**) — plus the opencode-go extras, see the **[Korean canonical README](./README.md#5-️-최종-카탈로그-14종)** and the official **[GJC docs](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md)**.
 
 ---
 
@@ -426,7 +437,7 @@ gjc -p --no-session --no-tools --model "openai-codex/gpt-5.6-terra:high" "Reply 
 curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | bash
 ```
 
-What the installer does: safely merges the 13 profiles into `~/.gjc/agent/models.yml` (auto-updates on re-run), backs up existing files, and sets `daily` as default. Needs only `curl` + `python3`.
+What the installer does: safely merges the 14 profiles into `~/.gjc/agent/models.yml` (auto-updates on re-run), backs up existing files, and sets `daily` as default. Needs only `curl` + `python3`.
 
 ```bash
 # options
@@ -494,6 +505,7 @@ Rule: **delegate only when the signal is clear.** If the main loop can do it dir
 | pre-merge/release · security · billing | `escalation` |
 | PR review / security-audit session | `cyber-cop` |
 | accuracy above all (Fable 5 event through 2026-07-12) | `ultimate-f5` → afterwards `legend` |
+| long autonomous workflows · terminal · cyber (272K enough) | `ultimate-sol` 🌞 (two-track B · experimental) |
 | bulk refactor · migration | `eco` |
 | entering a huge codebase | `monorepo` |
 | single-vendor operation | `solo-anthropic` |
@@ -546,6 +558,7 @@ Gemini (`google-antigravity`) runs on the **Google AI Pro/Ultra subscription tok
 | ultimate-f5 | ●●●●● | default·executor Fable 5 — subscription-included through ~7/12 (50% weekly-limit cap), then credits $10/50 |
 | legend | ●●●●● | default Fable 5 (credits after 7/12) + executor Opus `:max` |
 | ultimate / escalation | ●●●●● | executor Opus `:max` / Fable `:xhigh` (rescue pitcher) + planner GPT-5.6 Sol `:xhigh` |
+| ultimate-sol | ●●●●○ | default·executor Sol (subscription quota) + planner Fable (credits after 7/12 — low-frequency seat) + architect Opus |
 | coding-sprint | ●●●●○ | executor Opus `:max` |
 | solo-anthropic | ●●●●○ | all roles Opus (executor/planner `:max`) |
 | daily | ●●●○○ | main loop Opus `:medium`, delegation mid/cheap |
@@ -580,6 +593,6 @@ Gemini (`google-antigravity`) runs on the **Google AI Pro/Ultra subscription tok
 
 **Install in one line, best model per role.**
 
-**v1.11.0** · [CHANGELOG](./CHANGELOG.md) · [Maintenance playbook](./MAINTAINING.md) · License [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
+**v1.12.0** · [CHANGELOG](./CHANGELOG.md) · [Maintenance playbook](./MAINTAINING.md) · License [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
 
 </div>

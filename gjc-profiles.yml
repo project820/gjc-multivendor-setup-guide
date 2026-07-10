@@ -1,5 +1,5 @@
-# GJC 멀티벤더 셋업 v1.11.0 — 13 프로필 (claude · gpt · grok · gemini · opencode go)
-# 설계 원칙: default=Anthropic 플래그십(Opus/Fable) · critic=cross-family · 무조건 max 금지 · 매쿼리 스왑 금지.
+# GJC 멀티벤더 셋업 v1.12.0 — 14 프로필 (claude · gpt · grok · gemini · opencode go)
+# 설계 원칙: default=Anthropic 플래그십(Opus/Fable) — 단, 명시 예외 allowlist(validate-profiles NON_ANTHROPIC_DEFAULT_OK, 현재 ultimate-sol 1건) · critic=cross-family · 무조건 max 금지 · 매쿼리 스왑 금지.
 # 엔진 하드룰(GJC 0.9.1~0.9.5 실효): Gemini Pro={low,high} · Sonnet(4.6/5) 최대 high · Fable 5 최대 xhigh(:max는 xhigh로 침묵 클램프)
 #             · xai grok-4.3 최대 high(:xhigh 침묵 클램프) · xai grok-4.5 최대 high(:xhigh/:max 침묵 클램프) · opencode-go effort 생략
 #             · antigravity Gemini 고추론 = gemini-3.1-pro-low:high (★gemini-3.1-pro-high 는 0.9.5에서 카탈로그 제거 + 이제 퍼지 매칭으로 -low 기본 effort에 침묵 해석 — "성공"하지만 고추론 아님, 리터럴 -low:high 핀)
@@ -52,6 +52,16 @@ profiles:
       architect: google-antigravity/gemini-3.1-pro-low:high
       critic:    xai/grok-4.5:high
       # credits 비용 회피 시: default를 opus-4-8:high로 — ultimate와 동일해짐
+
+  ultimate-sol:                        # 🌞 투트랙 B (opt-in·실험적) — GPT-5.6 Sol 중심. default 비-Anthropic 첫 명시 예외 · L3 rolefit 사전(事前) 출하(OpenAI 자사표 기반 — 실측 후 조정). 근거: evidence/2026-07-10-two-track-sol-notes.md
+    required_providers: [openai-codex, anthropic, xai]
+    model_mapping:
+      default:   openai-codex/gpt-5.6-sol:high                  # 장기 워크플로 완주 1위(Agents' Last Exam 52.7 vs Fable 40.5)·토큰효율. ⚠ctx 272K(1M 아님)·툴콜 축 열세(Toolathlon 58 vs Fable 61.7) — 장문맥·툴 신뢰성 중심이면 track A
+      executor:  openai-codex/gpt-5.6-sol:xhigh                 # 터미널·에이전틱 SOTA(T-B 2.1 88.8·DeepSWE 72.7·CTF 96.7). ⚠레포급은 비적합(SWE-Pro 64.6 vs Fable 80.0, OpenAI 자사표) — 대형 마이그레이션·구원투수는 escalation
+      planner:   anthropic/claude-fable-5:xhigh                 # 지능·심층추론 축 1위(AA-Int 59.9·GDPval 1759.6·FrontierMath T4 87.8) — cross-family 계획. 7/12 후 credits($10/$50), 저빈도 좌석이라 노출 제한적
+      architect: anthropic/claude-opus-4-8:high                 # 1M ctx·MRCR 76% 실측 — 272K 본체의 장문맥 보완 레인(구독 포함)
+      critic:    xai/grok-4.5:high                              # 3족 보존 — executor(gpt)·planner(claude) 모두와 cross-family
+      # track 경계: 레포급 코딩·1M 세션·툴콜 신뢰성 = track A(ultimate/legend/escalation) / 장기 자율 워크플로·터미널·브라우저·사이버 + 272K로 충분 = 여기
 
   coding-sprint:                       # 순수 구현 처리량. executor 주연 + 코딩인지 critic
     required_providers: [anthropic, openai-codex, google-antigravity]

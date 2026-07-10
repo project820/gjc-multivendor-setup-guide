@@ -11,6 +11,21 @@
 
 ---
 
+## v1.12.0 — 2026-07-10
+
+### Added
+- **`ultimate-sol` 🌞 — 투트랙 B (14번째 프로필, opt-in·실험적)** — "Fable·Opus 중심(track A) vs GPT-5.6 Sol 중심(track B)" 이원 운영 도입. 배치: default=`gpt-5.6-sol:high`(장기 워크플로 완주 1위 — Agents' Last Exam 52.7 vs Fable 40.5) · executor=`gpt-5.6-sol:xhigh`(터미널·에이전틱 SOTA — T-B 2.1 88.8·DeepSWE 72.7·CTF 96.7) · planner=`claude-fable-5:xhigh`(AA-Int 59.9·GDPval 1759.6·FrontierMath T4 87.8) · architect=`claude-opus-4-8:high`(1M 레인 — 272K 본체 보완) · critic=`xai/grok-4.5:high`(3족 보존). 신규 셀렉터 0(전 좌석 07-10 배터리 기검증). **L3 rolefit 사전(事前) 출하** — OpenAI 자사표 기반 배치, 실측 후 조정(ultimate-f5 v1.4 선례).
+
+### Changed
+- **default 불변식 개정 (폐기 아님)** — "default=Anthropic 플래그십"을 `NON_ANTHROPIC_DEFAULT_OK` **명시 예외 allowlist**(rationale 필수·영구 WARN 표면화·미등록은 계속 하드 에러)로 확장. 첫 예외 = ultimate-sol. 트레이드오프 명문화: codex 표면 라우터 ctx **272K**(1M 아님) + 툴콜 축 열세(Toolathlon 58 vs Fable 61.7) — 장문맥·툴 신뢰성 세션은 track A 유지.
+- §4 스테일 각주 정정: "GPT-5.6 Sol 파트너 프리뷰 중 — GA 수 주 내" → GA(07-09) 반영 완료.
+
+### Evidence
+- `evidence/2026-07-10-two-track-sol-notes.md` — **1차 출처 직접 확보**(openai.com/index/gpt-5-6 헤드리스 렌더 — CSR이라 리더모드 불가): 경쟁사 열 포함 공식 평가표 전문 발췌. **errata 2건**: ① "OpenAI가 Sol SWE-Bench Pro 미공표"(TechTimes 경유, 07-10 notes §2-1) → 공표됨(Sol 64.6 · **Fable 80.0** · Opus 69.2 — 자사표의 자기불리 진술이라 Fable 레포급 우위는 오히려 최상급 근거로 승격) ② "SWE-Pro 1위 Fable 80.3" → 80.3은 **Claude Mythos 5**(Fable 동일 기저·세이프가드 해제 변종·Project Glasswing 한정 — 일반 판매 없음·카탈로그 미입점 확인 → 프로필 채용 불가). 축 분할 결론: Sol=완주·터미널·컴퓨터사용·사이버 / Fable=레포급 코딩·지능지수·툴사용·최고난도 수학 — 투트랙의 정량 근거.
+
+### Not shipped
+- track B의 L3 rolefit 실측(사후 조정 예정) · Sol `:max`(심도 미검증 불변) · Mythos 5(접근 불가).
+
 ## v1.11.0 — 2026-07-10
 
 ### Changed

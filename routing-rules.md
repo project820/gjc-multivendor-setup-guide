@@ -33,6 +33,9 @@
 - 평소: `daily`  |  머지·보안·결제·비가역: `escalation`  |  대량 리팩터·비용압박: `eco`
 - 거대 코드베이스: `monorepo`  |  단일 벤더로만: `solo-anthropic` / `solo-openai`
 - **PR 리뷰·보안 감사 세션: `cyber-cop`** (reviewer 모드 — 아래 리뷰어 계약 적용)
+- **투트랙 경계 (v1.12)**: 레포급 코딩·대형 마이그레이션·1M 장문맥 세션·툴콜 신뢰성 = **track A**(`ultimate`/`legend`/`escalation`, Fable·Opus 중심) /
+  장기 자율 워크플로 완주·터미널·브라우저·사이버 작업이고 세션이 272K 안에서 도는 경우 = **track B**(`ultimate-sol` 🌞, opt-in·실험적).
+  `ultimate-sol`은 default=Anthropic 원칙의 **유일한 명시 예외**(validate-profiles allowlist·WARN 표면화) — 트레이드오프(272K 라우터 ctx·툴콜 축 열세)를 감수하는 선택임을 알고 켜라.
 
 ## 리뷰어 계약 — cyber-cop 프로필 전용 (PR 리뷰·보안 감사 세션)
 - **위임 순서**: 리뷰 진입 → **architect 선호출**(1차 코드리뷰 판정자: CLEAR/WATCH/BLOCK) →
