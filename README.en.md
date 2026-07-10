@@ -466,7 +466,7 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 
 > † Fable 5 is exactly 2× Opus pricing. The subscription-included window (~7/12) still consumes weekly limits.
 > ‡ Sonnet 5’s tokenizer change makes the same text ~30% more tokens — budget its effective cost above the sticker price.
-> (Note: via the DeepInfra provider, DeepSeek V4 Pro is $1.30/$2.60 — see the provider section above.)
+> (Note: via the DeepInfra provider (API key), DeepSeek V4 Pro is $1.30/$2.60.)
 
 **Relative bundle cost**
 
