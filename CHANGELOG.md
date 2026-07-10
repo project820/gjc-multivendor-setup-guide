@@ -11,6 +11,22 @@
 
 ---
 
+## v2.0.1 — 2026-07-10
+
+### Changed (PATCH — 문서 개편, 매핑/좌석 불변)
+- **README×4 정보구조 개편**: 퍼널 재정렬(hero → 30초 설치 → 번들 선택 티저 → 목차 → 카탈로그 → 운영 → 링크), cyber-cop/Extragoal 티저 카드 강등(+EN 미러에 누락돼 있던 Extragoal 티저 신설), 중복(설치 원라이너·`/login`·마이그레이션) 정본 1곳화, §5 설계근거 벽문단 → 번들당 1줄 요점, §6 셀 다이어트 + 표기 범례 + `<details>`(실패 셀렉터·지연·마이그레이션). KO 641→552줄, EN 603→499, ZH 614→492, JA 613→489.
+- **딥다이브 이관**: §6-2/§6-3 → 신설 [`docs/deep-dive-role-fit.md`](./docs/deep-dive-role-fit.md)(KO 정본, non-normative 헤더 + dated provenance). README×4는 요약+링크 잔류. EN/ZH/JA의 KO-only 블록(TOC·§5 근거·§5 TIP·§6-2/6-3 전문 번역 — 계약 위반 드리프트)을 MAINTAINING §4 계약대로 제거(TOC 삭제, 나머지 요약+링크). 라이브 §6-2/6-3 포인터 재지정: MAINTAINING:45/:66 · routing-rules:110 · CHANGELOG v1.5.2 항목; 과거 릴리스 노트의 §6-2/6-3 프로즈는 역사 기록으로 verbatim 보존.
+- 버전 표기 2.0.0→2.0.1(배지·footer ×4; `2026-07-10` 검증 배지 불변).
+
+### Fixed (정합성·최신성 — research/2026-07-10-readme-frontend-review.md §G)
+- G1-1 KO 설치 문구 "13개 프로필"→"10개 번들" · G1-2 KO TIP `GJC_SETUP_DEFAULT=ultimate`→`ultimate-opus` · G2-1 §1/§4 **planner 행**만 07-10 기준(GPT-5.6 Sol, 07-02 Gemini 스냅샷은 각주 강등; architect 행 Gemini/Opus 불변; 헤드라인은 §5 좌석표 지시 + 예외 명기) · G2-2 리서치 서사 v1 3종+v2 2축 병기 · G2-3 cyber-cop 실증 문단 critic 좌석 시제 명시(당시 GPT-5.5 — 현행 Sol) · G2-4 planner effort 좌석별 정밀화(딥다이브) · G3-1 DeepInfra "0.7.9 신규" 프레이밍 제거 · G3-2 프리셋 rename/delete 경고 범위화(0.7.10~0.9.1, 0.9.6 미재검) · G3-4 antigravity 번들 Claude 날짜 명시(2026-07-02 기준) · G3-5 "(v1.6+)"/"(v1.9+)" 버전 태그 노이즈 제거.
+
+### Unchanged (보호 목록)
+- Extragoal 'GPT-5.5 Pro' 명칭(별도 모델 존속 — `evidence/2026-07-10-gpt-5.6-notes.md`) · Fable ~7/12 이벤트 문구 · `2026-07-10` 검증 배지 · ctx 하드룰(5.4=1M/5.5=272K/5.6=373K) · architect 좌석(Gemini/Opus) · CHANGELOG 과거 §6-2/6-3 프로즈. **모델/좌석/셀렉터/`gjc-profiles.yml`/`evidence/` 불변.**
+
+### Validation
+- `validate-profiles.py` 그린(의도된 WARN 5개 정확) · `sync-readme-yaml.py` 2회실행 멱등 no-op ×4 + yaml 펜스 정확히 1개/파일 + parsed-mapping(required_providers 포함) 일치 · 앵커/링크/프로즈 포인터 무결성(라이브 인바운드 세트 재지정 + 역사 예외 보존, 내부 앵커 결손 0) · 미러 KO-only 계약 준수 검사.
+
 ## v2.0.0 — 2026-07-10
 
 ### Changed (MAJOR — 카탈로그 구조 재설계)
@@ -128,7 +144,7 @@
   - `evidence/2026-07-03-deep-research-benchmarks.md` — Fable 5 / Opus 4.8 / GPT-5.5 / Gemini 3.1 Pro / Grok 4.3 / Composer 2.5 벤치·가격·컨텍스트·effort 실측 (Vals·Anthropic·OpenAI·xAI·DeepMind·arXiv·Terminal-Bench·LiveCodeBench 인용).
   - `evidence/2026-07-03-consultant-report.md` — dev-idea-consultant 6섹션 포맷: 실현가능성·역할 배치 권고·마이그레이션 로드맵.
   - `evidence/2026-07-03-ultimate-final-report.md` — 통합 최종 리포트: 두 커뮤니티 질문("Grok 4.3=critic?", "Composer 2.5 Fast=executor?") 확정 답변 + 구조적 발견(effort-ladder·architect 셀렉터·failover).
-  - README §6-2에서 상호 참조. `evidence/`는 재작성 불가 감사 추적이므로 이후 재검증은 신규 dated 리포트로 추가한다.
+  - docs/deep-dive-role-fit.md(구 README §6-2)에서 상호 참조. `evidence/`는 재작성 불가 감사 추적이므로 이후 재검증은 신규 dated 리포트로 추가한다.
 
 ## v1.5.1 — 2026-07-03
 
