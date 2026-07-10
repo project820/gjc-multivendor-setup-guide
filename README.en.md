@@ -256,7 +256,7 @@ profiles:
       executor:  openai-codex/gpt-5.6-terra:high                # 코딩특화 $2.5/15에 ≈GPT-5.5급(공식 5.6 평가표)·벤더분산
       planner:   openai-codex/gpt-5.6-sol:high                  # 장기 워크플로 완주 1위(Agents' Last Exam 52.7)·tool-heavy 분해
       architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx·멀티모달(MMMU-Pro)·GPQA 94.3 — Gemini 전문좌석
-      critic:    anthropic/claude-opus-4-8:high                 # v2: grok→Opus 교체 — xai 키 장벽 제거(구독-only daily), Grok critic 은 defect-recall 직접근거 0건(2축 리서치 합의)
+      critic:    google-antigravity/gemini-3.1-pro-low:high     # v2: grok→Gemini — xai 키 장벽 제거(구독-only daily) + 본체(Opus)와 cross-family 유지. PR #21 패널 지적 반영(본체=critic 동일벤더 금지). Grok critic 은 defect-recall 직접근거 0건(2축 리서치 합의)
 
   coding-sprint:                       # 🏎 순수 구현 처리량 — daily 대비 executor 를 Opus 로 승격
     required_providers: [anthropic, openai-codex, google-antigravity]
@@ -345,7 +345,7 @@ profiles:
       default:   anthropic/claude-opus-4-8:medium               # 1M
       executor:  anthropic/claude-opus-4-8:high                 # 1M
       planner:   google-antigravity/gemini-3.1-pro-low:high     # 추론(스코프 입력). 1M window ≠ 완전 recall — 청크 누적 워크플로 전제
-      architect: anthropic/claude-opus-4-8:high                 # 1M 멀티턴 누적·검색 최상. 단일 메시지 paste ~350-400k 한도 — 한 방 >400k 는 opencode-go/deepseek-v4-pro
+      architect: anthropic/claude-opus-4-8:high                 # 1M 멀티턴 누적·검색 최상. 단일 메시지 paste ~400k 한도(실측 350k ✅/476k 🔴) — 한 방 >400k 는 opencode-go/deepseek-v4-pro
       critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51), cross-family vs anthropic. effort 무핀(opencode-go 규칙)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -374,7 +374,7 @@ profiles:
 
 #### Per-bundle design rationale
 
-- **daily** — Opus `:medium` main loop (efficiency knee), implementation on coding-specialized `gpt-5.6-terra` (≈GPT-5.5 class at $2.5/15), decomposition on workflow-leading `gpt-5.6-sol:high`, design/review on 1M-ctx multimodal Gemini, critique on Opus `:high` so daily activates with subscription OAuth across 3 vendors only; the Grok diversity seat moved to premium bundles because there is no direct defect-recall evidence for Grok critic superiority. This is the everyday quality/cost balance point.
+- **daily** — Opus `:medium` main loop (efficiency knee), implementation on coding-specialized `gpt-5.6-terra` (≈GPT-5.5 class at $2.5/15), decomposition on workflow-leading `gpt-5.6-sol:high`, design/review **and critique** on Gemini `-low:high` (v2: critic grok→gemini — drops the xai key barrier so daily activates with subscription OAuth across 3 vendors only, while keeping the critic cross-family vs the Anthropic main loop; the Grok diversity seat moved to premium bundles because there is no direct defect-recall evidence for Grok critic superiority). This is the everyday quality/cost balance point.
 - **coding-sprint** — executor leads (Opus `:high`; escalate to max only on failure signals, [§8-2](#8-2-adaptive-effort-escalation)), planner is `gpt-5.6-sol:high` for sprint decomposition, and critic is coding-aware `gpt-5.6-terra` for real bug finding. ⚠ planner/critic are both GPT-family — listed as `SAME_FAMILY_OK` by human judgment (2026-07-10): Sol≠Terra and the whole bundle still uses 3 vendors.
 - **cyber-cop** — 🚨 **reviewer mode**: the inverse of author mode. In review sessions role weight flips: executor drops to supporting repro PoC / failing-test work, while **architect (first-pass code-review verdict) and critic (merge gate) lead**. architect=Opus `:high` (1M effective retrieval, 76% vs Gemini collapsing to 26% for 200k+ diff reading), critic=`gpt-5.6-sol:high` (cross-family vs Claude-authored code — self-preference mitigation, arXiv [2410.21819](https://arxiv.org/abs/2410.21819)). High-risk PRs/security audits use the §9 critic panel: independent votes, no debate, 2/3 dissent or any CRITICAL/BLOCK blocks. The third Grok vote is optional when xai is logged in; without it, a 2-vote {gpt-5.6-sol, gemini} panel still preserves the minimum provenance rule (non-default family ≥2). Operational rules live in [`routing-rules.md`](./routing-rules.md). Difference from `escalation`: escalation is an author-side gate (fix until pass); cyber-cop is reviewer-side (hunt for blocking evidence).
 - **ultimate-opus** — 🏆 Anthropic-quality premium baseline. default·executor·architect are Opus `:high` for stability, 1M context, and subscription marginal cost; cross-checking is handled by **Sol planner `:xhigh` + Grok critic `:high`**. ⚠ executor/architect are same Claude-family — human-judged `SAME_FAMILY_OK` with WARN surfaced. Three Opus seats are not "three independent opinions"; do not imply council quality.

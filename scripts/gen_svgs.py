@@ -57,7 +57,7 @@ GEM_HI = (G, "Gemini 3.1 Pro-low", ":high")
 PROFILES = [
     ("⭐ daily", "Core · 구독 3벤더", [
         (A, "Opus 4.8", ":medium"), (O, "GPT-5.6 Terra", ":high"),
-        (O, "GPT-5.6 Sol", ":high"), GEM_HI, (A, "Opus 4.8", ":high")]),
+        (O, "GPT-5.6 Sol", ":high"), GEM_HI, GEM_HI]),
     ("🏎 coding-sprint", "Core", [
         (A, "Opus 4.8", ":medium"), (A, "Opus 4.8", ":high"),
         (O, "GPT-5.6 Sol", ":high"), GEM_HI, (O, "GPT-5.6 Terra", ":high")]),
@@ -125,17 +125,17 @@ def gen_role_winners():
          "Anthropic · SWE-Bench Pro 80.0"),
         ("🧠 planner", "최상위 추론·설계", O, "GPT-5.6 Sol", ":xhigh",
          "OpenAI · 5.6 플래그십 추론"),
-        ("🔭 architect", "멀티모달·1M ctx 리뷰", G, "Gemini 3.1 Pro-low", ":high",
-         "Google · MMMU 81% 검증 우위"),
+        ("🔭 architect", "1M 실효검색·설계 리뷰", A, "Claude Opus 4.8", ":high",
+         "Anthropic · MRCR 76%@1M"),
         ("⚖ critic", "독립 적대 비평", X, "Grok 4.5", ":high",
-         "xAI · cross-family(vs Anthropic)"),
+         "xAI · 제3계열 독립 dissent"),
     ]
     s = svg_open(W, H, "🔥 dream-team 셋업 — 역할별 최강 가설 (Premium · experimental)")
     s += (f'<text x="24" y="44" font-size="22" font-weight="700" fill="#1A1A28">'
           f'🔥 dream-team 셋업 — 역할별 최강 가설 (Premium · experimental)</text>\n')
     s += ('<text x="24" y="70" font-size="13" fill="#6B6B7B">한 벤더가 모든 역할에서 '
-          '1위는 아니다 — 5역할을 강점별로 4개 벤더에 분산(Anthropic·OpenAI·Google·xAI)'
-          '</text>\n')
+          '1위는 아니다 — 5역할을 강점별로 3개 벤더에 분산(Anthropic·OpenAI·xAI) · '
+          'role-fit L3 실측 전 experimental</text>\n')
     cw, ch, gap, y0 = 232, 152, 12, 92
     for i, (role, desc, vendor, model, effort, why) in enumerate(cards):
         fill, accent, dark = VENDORS[vendor]

@@ -266,7 +266,7 @@ profiles:
       executor:  openai-codex/gpt-5.6-terra:high                # 코딩특화 $2.5/15에 ≈GPT-5.5급(공식 5.6 평가표)·벤더분산
       planner:   openai-codex/gpt-5.6-sol:high                  # 장기 워크플로 완주 1위(Agents' Last Exam 52.7)·tool-heavy 분해
       architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx·멀티모달(MMMU-Pro)·GPQA 94.3 — Gemini 전문좌석
-      critic:    anthropic/claude-opus-4-8:high                 # v2: grok→Opus 교체 — xai 키 장벽 제거(구독-only daily), Grok critic 은 defect-recall 직접근거 0건(2축 리서치 합의)
+      critic:    google-antigravity/gemini-3.1-pro-low:high     # v2: grok→Gemini — xai 키 장벽 제거(구독-only daily) + 본체(Opus)와 cross-family 유지. PR #21 패널 지적 반영(본체=critic 동일벤더 금지). Grok critic 은 defect-recall 직접근거 0건(2축 리서치 합의)
 
   coding-sprint:                       # 🏎 순수 구현 처리량 — daily 대비 executor 를 Opus 로 승격
     required_providers: [anthropic, openai-codex, google-antigravity]
@@ -355,7 +355,7 @@ profiles:
       default:   anthropic/claude-opus-4-8:medium               # 1M
       executor:  anthropic/claude-opus-4-8:high                 # 1M
       planner:   google-antigravity/gemini-3.1-pro-low:high     # 추론(스코프 입력). 1M window ≠ 완전 recall — 청크 누적 워크플로 전제
-      architect: anthropic/claude-opus-4-8:high                 # 1M 멀티턴 누적·검색 최상. 단일 메시지 paste ~350-400k 한도 — 한 방 >400k 는 opencode-go/deepseek-v4-pro
+      architect: anthropic/claude-opus-4-8:high                 # 1M 멀티턴 누적·검색 최상. 단일 메시지 paste ~400k 한도(실측 350k ✅/476k 🔴) — 한 방 >400k 는 opencode-go/deepseek-v4-pro
       critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51), cross-family vs anthropic. effort 무핀(opencode-go 규칙)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -384,7 +384,7 @@ profiles:
 
 #### プロファイル別の設計理由
 
-- **daily** — 本体 Opus `:medium`（効率 knee）、実装はコーディング特化 `gpt-5.6-terra`（$2.5/15 で ≈GPT-5.5 級）、分解は長期ワークフロー 1 位 `gpt-5.6-sol:high`（v2: gemini→sol — Agents' Last Exam 52.7）、設計・レビューは 1M ctx・マルチモーダル Gemini、批評は Opus `:high`（v2: grok→opus — **xai キー障壁を消し、サブスク OAuth 3 ベンダーだけで activation**）。日常作業の品質/コストの均衡点。
+- **daily** — 本体 Opus `:medium`（効率 knee）、実装はコーディング特化 `gpt-5.6-terra`（$2.5/15 で ≈GPT-5.5 級）、分解は長期ワークフロー 1 位 `gpt-5.6-sol:high`（v2: gemini→sol — Agents' Last Exam 52.7）、設計・レビュー**と批評**は Gemini `-low:high`（v2: critic grok→gemini — **xai キー障壁を消し、サブスク OAuth 3 ベンダーだけで activation**、かつ critic は Anthropic 本体と cross-family を維持；Grok critic に defect-recall の直接根拠は 0 件のため diversity 席は premium 系へ移動）。日常作業の品質/コストの均衡点。
 - **coding-sprint** — executor 主役（Opus `:high` — v2 では `:max` 常時ではなく失敗シグナル時だけ昇格、[§8-2](#8-2-適応的-effort-エスカレーション)）、planner は `gpt-5.6-sol:high`、critic は*コードを知る* `gpt-5.6-terra`で実バグを拾う。⚠planner/critic が同じ gpt 系列 — 人間判定（2026-07-10）で `SAME_FAMILY_OK` 登載（Sol≠Terra、バンドル全体は 3 ベンダー）。
 - **cyber-cop** — 🚨 **reviewer モード**：author モード（default+executor 重視）の逆相。レビューセッションでは役割の重みが反転し、executor は再現 PoC・failing test の脇役、**architect（一次コードレビュー判定者）と critic（マージゲート）が主役**になる。architect=Opus `:high`（1M 実効検索 76% vs Gemini 26% 崩壊）、critic=`gpt-5.6-sol:high`（Claude 作成コードと cross-family）。高リスク PR・セキュリティ監査は critic 3 票パネル（§9 規則 — 独立投票、討論禁止、2/3 反対または CRITICAL/BLOCK 1 件なら遮断）。運用規則は [`routing-rules.md`](./routing-rules.md) の reviewer 契約を参照。
 - **ultimate-opus** — 🏆 Anthropic 品質基盤プレミアム（旧 `ultimate` 後継）。default·executor·architect を Opus `:high` で統一し、安定性・1M・サブスク限界費用を取る。交差検証は **Sol planner `:xhigh` + Grok critic `:high`** が担当。⚠executor/architect 同一 claude 系列 — 人間判定 `SAME_FAMILY_OK`（WARN 永続表面化）。Opus 3 席は「3つの独立意見」ではない — council 品質を示唆しないこと。

@@ -266,7 +266,7 @@ profiles:
       executor:  openai-codex/gpt-5.6-terra:high                # 코딩특화 $2.5/15에 ≈GPT-5.5급(공식 5.6 평가표)·벤더분산
       planner:   openai-codex/gpt-5.6-sol:high                  # 장기 워크플로 완주 1위(Agents' Last Exam 52.7)·tool-heavy 분해
       architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx·멀티모달(MMMU-Pro)·GPQA 94.3 — Gemini 전문좌석
-      critic:    anthropic/claude-opus-4-8:high                 # v2: grok→Opus 교체 — xai 키 장벽 제거(구독-only daily), Grok critic 은 defect-recall 직접근거 0건(2축 리서치 합의)
+      critic:    google-antigravity/gemini-3.1-pro-low:high     # v2: grok→Gemini — xai 키 장벽 제거(구독-only daily) + 본체(Opus)와 cross-family 유지. PR #21 패널 지적 반영(본체=critic 동일벤더 금지). Grok critic 은 defect-recall 직접근거 0건(2축 리서치 합의)
 
   coding-sprint:                       # 🏎 순수 구현 처리량 — daily 대비 executor 를 Opus 로 승격
     required_providers: [anthropic, openai-codex, google-antigravity]
@@ -355,7 +355,7 @@ profiles:
       default:   anthropic/claude-opus-4-8:medium               # 1M
       executor:  anthropic/claude-opus-4-8:high                 # 1M
       planner:   google-antigravity/gemini-3.1-pro-low:high     # 추론(스코프 입력). 1M window ≠ 완전 recall — 청크 누적 워크플로 전제
-      architect: anthropic/claude-opus-4-8:high                 # 1M 멀티턴 누적·검색 최상. 단일 메시지 paste ~350-400k 한도 — 한 방 >400k 는 opencode-go/deepseek-v4-pro
+      architect: anthropic/claude-opus-4-8:high                 # 1M 멀티턴 누적·검색 최상. 단일 메시지 paste ~400k 한도(실측 350k ✅/476k 🔴) — 한 방 >400k 는 opencode-go/deepseek-v4-pro
       critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51), cross-family vs anthropic. effort 무핀(opencode-go 규칙)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -384,7 +384,7 @@ profiles:
 
 #### 프로필별 설계 근거
 
-- **daily** — 본체 Opus `:medium`(효율 knee), 구현은 코딩특화 `gpt-5.6-terra`($2.5/15에 ≈GPT-5.5급), 분해는 장기 워크플로 1위 `gpt-5.6-sol:high`(v2: gemini→sol — Agents' Last Exam 52.7), 설계·리뷰는 1M ctx·멀티모달 Gemini, 비평은 Opus `:high`(v2: grok→opus — **xai 키 장벽 제거로 구독 OAuth 3벤더만으로 activation**; Grok critic 은 defect-recall 직접근거 0건이라 diversity 좌석은 프리미엄 계열로 이동). 일상 작업의 품질/비용 균형점.
+- **daily** — 본체 Opus `:medium`(효율 knee), 구현은 코딩특화 `gpt-5.6-terra`($2.5/15에 ≈GPT-5.5급), 분해는 장기 워크플로 1위 `gpt-5.6-sol:high`(v2: gemini→sol — Agents' Last Exam 52.7), 설계·리뷰와 비평은 Gemini `-low:high`(v2: critic grok→gemini — **xai 키 장벽 제거로 구독 OAuth 3벤더만으로 activation** + 본체(Anthropic)와 cross-family 유지; Grok critic 은 defect-recall 직접근거 0건이라 diversity 좌석은 프리미엄 계열로 이동). 일상 작업의 품질/비용 균형점.
 - **coding-sprint** — executor 주연(Opus `:high` — v2: `:max` 상시 대신 실패신호 시에만 격상, [§8-2](#8-2-적응형-effort-에스컬레이션)), planner 는 `gpt-5.6-sol:high`(v2: gemini→sol — 스프린트 분해는 Sol 축), critic은 *코딩을 아는* `gpt-5.6-terra`로 실버그를 잡는다. ⚠planner/critic 이 같은 gpt 계열 — 인간 판정(2026-07-10)으로 `SAME_FAMILY_OK` 등재(모델은 Sol≠Terra 분리, 번들 전체는 3벤더).
 - **cyber-cop** — 🚨 **reviewer 모드**: author 모드(default+executor 가중)의 역상. 리뷰 세션에선 역할 가중치가 반전된다 — executor는 재현 PoC·failing test용 조연으로 내려가고, **architect(1차 코드리뷰 판정자)와 critic(머지 게이트)이 주연**이 된다. architect=Opus `:high`(1M 실효검색 76% vs Gemini 26% 붕괴 — 200k+ diff 통독), critic=`gpt-5.6-sol:high`(Claude-작성 코드와 cross-family — 자기선호 편향 완화, arXiv [2410.21819](https://arxiv.org/abs/2410.21819)). 고위험 PR·보안 감사는 critic 3표 패널(§9 규칙 — 독립 투표, 토론 금지, 2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단; 3표째 grok은 xai 로그인 시 — 그래서 xai는 `required_providers`에 없고, 미보유자도 2표 {gpt-5.6-sol, gemini}로 provenance 최소치를 지키며 운영 가능). 운영 규칙(위임 순서·증거 계약·집계자 제한·provenance fallback·LGTM 금지)은 [`routing-rules.md`](./routing-rules.md)의 리뷰어 계약 참조. `escalation`과의 차이: escalation은 author-side 게이트(고쳐서 통과), cyber-cop은 reviewer-side(반대 근거 탐색). v1.11.0 매핑 그대로(KEEP).
 - **ultimate-opus** — 🏆 Anthropic 품질 기저 프리미엄(구 `ultimate` 후계). default·executor·architect 를 Opus `:high`로 통일해 안정성·1M·구독 한계비용을 취하고, 교차검증은 **Sol planner `:xhigh` + Grok critic `:high`** 가 담당한다. ⚠executor/architect 동일 claude 계열 — 인간 판정 `SAME_FAMILY_OK`(WARN 영구 표면화). Opus 3좌석은 "세 독립 의견"이 아니다 — council 품질을 암시하지 말 것.
@@ -581,7 +581,7 @@ Gemini(`google-antigravity`)는 **무료 공개 프리뷰 + Google AI Pro/Ultra 
 | 모델 | $/1M (in/out) | 역할 |
 |---|---|---|
 | Claude Fable 5 | 10 / 50 (배치 5/25 · 캐시 히트 1)† | dream-team default·executor · escalation executor |
-| Claude Opus 4.8 | 5 / 25 | default·executor·critic 기간산업 |
+| Claude Opus 4.8 | 5 / 25 | default·executor 기간산업 |
 | Claude Sonnet 5 | 3 / 15 (인트로 2/10 ~2026-08-31)‡ | eco executor 대안 |
 | GPT-5.6 Sol | 5 / 30 (Fast 모드는 12.5/75) | planner(전 번들) · ultimate-sol 3좌석 · cyber-cop executor·critic |
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
