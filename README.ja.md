@@ -84,9 +84,9 @@ gjc                        # 新規セッションは自動で daily
 
 | 役割 | 何をするか | 最適モデル |
 |---|---|---|
-| 🧠 **推論・設計**（planner） | 手順・受け入れ基準 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA）† — 席は [§5](#5-️-最終カタログ--10-バンドル--4階層) を参照（例外：cyber-cop・monorepo=Gemini、eco=Luna） |
+| 🧠 **推論・設計**（planner） | 手順・受け入れ基準 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 席は [§5](#5-️-最終カタログ--10-バンドル--4階層) を参照（例外：cyber-cop・monorepo=Gemini、eco=Luna） |
 | 🔨 **実装**（executor） | 実際のコード作成・修正 | **Claude Fable 5**（SWE-bench Verified **95.0**）— サブスク込み最強は **Opus 4.8**（88.6） |
-| 🔭 **コードレビュー**（architect） | 大規模リポ探索・アーキ | **Gemini 3.1 Pro**（マルチモーダル MMMU-Pro 81%）† · 超長文脈（>200k）→ **Opus** |
+| 🔭 **コードレビュー**（architect） | 大規模リポ探索・アーキ | **Gemini 3.1 Pro**（マルチモーダル MMMU-Pro 81%） · 超長文脈（>200k）→ **Opus** |
 | ⚖️ **独立批評**（critic） | 敵対的検証 | **クロスファミリー**（メインループと別ベンダー） |
 | 🎛️ **オーケストレーション**（default） | ツール呼び出し・ルーティング・誠実性 | **Anthropic フラッグシップ** — Opus 4.8（`dream-team` は Fable 5。非 Anthropic は `ultimate-sol`（Sol）と `eco`（Terra）のみ） |
 

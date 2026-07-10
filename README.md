@@ -102,9 +102,9 @@ gjc                        # 새 세션은 자동으로 daily 사용
 
 | 역할 | 무엇을 하나 | 최적 모델 |
 |---|---|---|
-| 🧠 **추론·설계**(planner) | 순서·수용기준 짜기 | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · 2026-07-09 GA)† — 번들별 좌석은 [§5](#5-️-최종-카탈로그--10-번들--4계층) 참조(예외: cyber-cop·monorepo=Gemini, eco=Luna) |
+| 🧠 **추론·설계**(planner) | 순서·수용기준 짜기 | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · 2026-07-09 GA) — 번들별 좌석은 [§5](#5-️-최종-카탈로그--10-번들--4계층) 참조(예외: cyber-cop·monorepo=Gemini, eco=Luna) |
 | 🔨 **구현**(executor) | 실제 코드 작성·수정 | **Claude Fable 5** (SWE-bench Verified **95.0**) — 구독 포함 최강은 **Opus 4.8**(88.6) |
-| 🔭 **코드리뷰**(architect) | 대형 리포 탐색·아키텍처 | **Gemini 3.1 Pro** (멀티모달 MMMU-Pro 81%)† · 초장문맥(>200k)은 **Opus** |
+| 🔭 **코드리뷰**(architect) | 대형 리포 탐색·아키텍처 | **Gemini 3.1 Pro** (멀티모달 MMMU-Pro 81%) · 초장문맥(>200k)은 **Opus** |
 | ⚖️ **독립 비평**(critic) | 결과 적대 검증 | **cross-family** (본체와 다른 벤더) |
 | 🎛️ **오케스트레이션**(default) | 도구호출·라우팅·정직성 | **Anthropic 플래그십** — Opus 4.8 (라우터 품질 = 전체 상한; `dream-team`은 Fable 5. 비-Anthropic 라우터는 opt-in `ultimate-sol`(Sol)과 Anthropic 미포함 `eco`(Terra)뿐) |
 

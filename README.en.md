@@ -84,9 +84,9 @@ Full catalog: [§5](#5-️-final-catalog--10-bundles--4-tiers) · reviewer mode 
 
 | Role | What it does | Best model |
 |---|---|---|
-| 🧠 **reasoning/planning** (planner) | sequencing, acceptance criteria | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · GA 2026-07-09)† — bundle-specific seats: see §5 (exceptions: cyber-cop/monorepo=Gemini, eco=Luna) |
+| 🧠 **reasoning/planning** (planner) | sequencing, acceptance criteria | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · GA 2026-07-09) — bundle-specific seats: see §5 (exceptions: cyber-cop/monorepo=Gemini, eco=Luna) |
 | 🔨 **implementation** (executor) | writing/editing real code | **Claude Fable 5** (SWE-bench Verified **95.0**) — strongest *subscription-included* is **Opus 4.8** (88.6) |
-| 🔭 **code review** (architect) | large-repo navigation, architecture | **Gemini 3.1 Pro** (multimodal MMMU-Pro 81%)† · ultra-long-context (>200k) → **Opus** |
+| 🔭 **code review** (architect) | large-repo navigation, architecture | **Gemini 3.1 Pro** (multimodal MMMU-Pro 81%) · ultra-long-context (>200k) → **Opus** |
 | ⚖️ **independent critique** (critic) | adversarial verification | **cross-family** (different vendor than the main loop) |
 | 🎛️ **orchestration** (default) | tool-calling, routing, honesty | **Anthropic flagship** — Opus 4.8 (router quality caps the whole system; `dream-team` uses Fable 5. The only non-Anthropic routers are opt-in `ultimate-sol` (Sol) and Anthropic-free `eco` (Terra)) |
 

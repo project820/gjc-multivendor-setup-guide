@@ -84,9 +84,9 @@ gjc                        # 新会话自动使用 daily
 
 | 角色 | 做什么 | 最佳模型 |
 |---|---|---|
-| 🧠 **推理/规划**（planner） | 排序、验收标准 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA）† — 各捆绑席位见[§5](#5-️-最终目录--10-个捆绑--4-层级)（例外：cyber-cop·monorepo=Gemini，eco=Luna） |
+| 🧠 **推理/规划**（planner） | 排序、验收标准 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 各捆绑席位见[§5](#5-️-最终目录--10-个捆绑--4-层级)（例外：cyber-cop·monorepo=Gemini，eco=Luna） |
 | 🔨 **实现**（executor） | 真正写/改代码 | **Claude Fable 5**（SWE-bench Verified **95.0**）— 订阅内最强是 **Opus 4.8**（88.6） |
-| 🔭 **代码评审**（architect） | 大型仓库导航、架构 | **Gemini 3.1 Pro**（多模态 MMMU-Pro 81%）† · 超长上下文（>200k）→ **Opus** |
+| 🔭 **代码评审**（architect） | 大型仓库导航、架构 | **Gemini 3.1 Pro**（多模态 MMMU-Pro 81%） · 超长上下文（>200k）→ **Opus** |
 | ⚖️ **独立批评**（critic） | 对抗式验证 | **cross-family**（与主循环不同厂商） |
 | 🎛️ **编排**（default） | 工具调用、路由、诚实性 | **Anthropic 旗舰** — Opus 4.8（路由质量 = 全系统上限；`dream-team` 用 Fable 5。非 Anthropic 路由只有 opt-in `ultimate-sol`（Sol）与不含 Anthropic 的 `eco`（Terra）） |
 
