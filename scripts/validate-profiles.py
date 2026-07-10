@@ -124,9 +124,14 @@ def main() -> int:
                 warns.append(f"[{name}] non-Anthropic default ({mm['default']}) — documented exception: {NON_ANTHROPIC_DEFAULT_OK[name]}")
             else:
                 errors.append(f"[{name}] default must be Anthropic when anthropic is available (got {mm['default']})")
-        # 2b. multi-vendor collaboration invariant (v2): no single-vendor bundles
-        if len(req) < 2:
-            errors.append(f"[{name}] single-vendor bundle (required_providers={sorted(req)}) — v2 catalog requires >=2 vendors; single-vendor demand belongs to GJC built-ins")
+        # 2b. multi-vendor collaboration invariant (v2): no single-vendor bundles.
+        # Checked against providers ACTUALLY USED by the mapping (not required_providers,
+        # which could be padded with unused entries to game the check — PR #21 critic).
+        if len(used_prov) < 2:
+            errors.append(f"[{name}] single-vendor bundle (mapping uses only {sorted(used_prov)}) — v2 catalog requires >=2 vendors; single-vendor demand belongs to GJC built-ins")
+        padding = req - used_prov
+        if padding:
+            warns.append(f"[{name}] required_providers lists providers the mapping never uses: {sorted(padding)} — activation burden without a seat; drop or justify")
         # 3. cross-family (skip single-vendor; allow documented exceptions)
         if len(req) > 1:
             if fam["executor"] == fam["architect"]:

@@ -363,7 +363,7 @@ profiles:
 # v1.11.0 → v2.0.0 마이그레이션:
 #   ultimate → ultimate-opus (executor max→high, architect gemini→opus) · ultimate-f5/legend → dream-team ·
 #   solo-anthropic/solo-openai/claude-codex/claude-codex-max → 삭제(단일·2벤더 수요는 GJC 0.9.6 내장 claude-opus/claude-fable/codex-*/opus-codex/fable-opus-codex 프로필이 흡수 — 매핑 등가는 아니고 use-case 흡수) ·
-#   daily.planner gemini→sol · daily.critic grok→opus(3벤더화) · eco 전면 재편(위 주석) · llm-council/ultimate-sol 신설.
+#   daily.planner gemini→sol · daily.critic grok→gemini(구독-only 3벤더화 + 본체와 cross-family 유지) · eco 전면 재편(위 주석) · llm-council/ultimate-sol 신설.
 # Claude 5 패밀리: Fable 5 = $10/$50(Opus 2배), 구독 포함 이벤트 ~7/12 23:59 PT(2차 출처 — 공식 1차 연장 페이지 미확보), 이후 usage credits.
 #   Fable refusal 은 HTTP 200 + stop_reason=refusal — "빈 응답" 오인 금지. 30-day retention·ZDR 불가(민감 코드베이스 주의).
 #   GJC 실효 effort: fable-5 ≤xhigh · sonnet-5 ≤high (API 는 둘 다 max — 파서 갭, 상류 제보됨).
@@ -578,14 +578,14 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 回滚（恢复备
 
 ## 10. 💰 成本
 
-Gemini（`google-antigravity`）以**免费公开预览 + Google AI Pro/Ultra 订阅提高额度**方式运行（非按 token 计费）。**Fable 5 到 2026-07-12 23:59 PT 为止包含在 Claude 订阅（Pro/Max/Team）内**（7/7→7/12 延长 — 官方一手延长页未取得，按多个二手报道），但设有每周使用额度 50% 的上限，**之后按 usage credits 单独计费** — 不是「免费」。其余按 token 计费，主要模型单价如下（$/1M，输入/输出）：
+Gemini（`google-antigravity`）以**免费公开预览 + Google AI Pro/Ultra 订阅提高额度**方式运行（非按 token 计费 — [Antigravity plans 官方文档](https://antigravity.google/docs/plans)，2026-07-10 核实）。**Fable 5 到 2026-07-12 23:59 PT 为止包含在 Claude 订阅（Pro/Max/Team）内**（7/7→7/12 延长 — 官方一手延长页未取得，按多个二手报道），但设有每周使用额度 50% 的上限，**之后按 usage credits 单独计费** — 不是「免费」。其余按 token 计费，主要模型单价如下（$/1M，输入/输出）：
 
 | 模型 | $/1M (in/out) | 角色 |
 |---|---|---|
 | Claude Fable 5 | 10 / 50（批量 5/25 · 缓存命中 1）† | dream-team default·executor · escalation executor |
-| Claude Opus 4.8 | 5 / 25 | default·executor·critic 基础设施 |
+| Claude Opus 4.8 | 5 / 25 | default·executor 基础设施 |
 | Claude Sonnet 5 | 3 / 15（入门价 2/10 至 2026-08-31）‡ | eco executor 备选 |
-| GPT-5.6 Sol | 5 / 30（Fast 模式为 12.5/75） | planner（全捆绑）· ultimate-sol 3 席 · cyber-cop executor·critic |
+| GPT-5.6 Sol | 5 / 30（Fast 模式为 12.5/75） | planner（daily·sprint·ultimate-opus·dream-team·council·escalation）· ultimate-sol 3 席 · cyber-cop executor·critic |
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
 | GPT-5.6 Luna | 1 / 6 | eco planner（v2 新采用） |
 | Grok 4.5 | 2 / 6（实效输入约 $0.84 @88% cache） | critic（premium 3 种·llm-council·escalation）— xai API key |

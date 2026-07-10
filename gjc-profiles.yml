@@ -126,7 +126,7 @@ profiles:
 # v1.11.0 → v2.0.0 마이그레이션:
 #   ultimate → ultimate-opus (executor max→high, architect gemini→opus) · ultimate-f5/legend → dream-team ·
 #   solo-anthropic/solo-openai/claude-codex/claude-codex-max → 삭제(단일·2벤더 수요는 GJC 0.9.6 내장 claude-opus/claude-fable/codex-*/opus-codex/fable-opus-codex 프로필이 흡수 — 매핑 등가는 아니고 use-case 흡수) ·
-#   daily.planner gemini→sol · daily.critic grok→opus(3벤더화) · eco 전면 재편(위 주석) · llm-council/ultimate-sol 신설.
+#   daily.planner gemini→sol · daily.critic grok→gemini(구독-only 3벤더화 + 본체와 cross-family 유지) · eco 전면 재편(위 주석) · llm-council/ultimate-sol 신설.
 # Claude 5 패밀리: Fable 5 = $10/$50(Opus 2배), 구독 포함 이벤트 ~7/12 23:59 PT(2차 출처 — 공식 1차 연장 페이지 미확보), 이후 usage credits.
 #   Fable refusal 은 HTTP 200 + stop_reason=refusal — "빈 응답" 오인 금지. 30-day retention·ZDR 불가(민감 코드베이스 주의).
 #   GJC 실효 effort: fable-5 ≤xhigh · sonnet-5 ≤high (API 는 둘 다 max — 파서 갭, 상류 제보됨).

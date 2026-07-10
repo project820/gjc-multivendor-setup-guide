@@ -352,7 +352,7 @@ profiles:
 # v1.11.0 → v2.0.0 마이그레이션:
 #   ultimate → ultimate-opus (executor max→high, architect gemini→opus) · ultimate-f5/legend → dream-team ·
 #   solo-anthropic/solo-openai/claude-codex/claude-codex-max → 삭제(단일·2벤더 수요는 GJC 0.9.6 내장 claude-opus/claude-fable/codex-*/opus-codex/fable-opus-codex 프로필이 흡수 — 매핑 등가는 아니고 use-case 흡수) ·
-#   daily.planner gemini→sol · daily.critic grok→opus(3벤더화) · eco 전면 재편(위 주석) · llm-council/ultimate-sol 신설.
+#   daily.planner gemini→sol · daily.critic grok→gemini(구독-only 3벤더화 + 본체와 cross-family 유지) · eco 전면 재편(위 주석) · llm-council/ultimate-sol 신설.
 # Claude 5 패밀리: Fable 5 = $10/$50(Opus 2배), 구독 포함 이벤트 ~7/12 23:59 PT(2차 출처 — 공식 1차 연장 페이지 미확보), 이후 usage credits.
 #   Fable refusal 은 HTTP 200 + stop_reason=refusal — "빈 응답" 오인 금지. 30-day retention·ZDR 불가(민감 코드베이스 주의).
 #   GJC 실효 effort: fable-5 ≤xhigh · sonnet-5 ≤high (API 는 둘 다 max — 파서 갭, 상류 제보됨).
@@ -567,14 +567,14 @@ parallel independent, 5 (OR-success): 1-(0.01)^5 ≈ 100%  → diversity raises 
 
 ## 10. 💰 Cost
 
-Gemini (`google-antigravity`) runs on **free public preview + higher limits with Google AI Pro/Ultra subscriptions** (not per-token billed). **Fable 5 is included in Claude subscriptions (Pro/Max/Team) through 2026-07-12 23:59 PT** (7/7→7/12 extension; no official primary extension page, based on multiple secondary reports), capped at 50% of weekly usage limits, and **billed separately via usage credits afterwards** — it is **not "free."** The rest are per-token; key model prices ($/1M, in/out):
+Gemini (`google-antigravity`) runs on **free public preview + higher limits with Google AI Pro/Ultra subscriptions** (not per-token billed — [official Antigravity plans doc](https://antigravity.google/docs/plans), checked 2026-07-10). **Fable 5 is included in Claude subscriptions (Pro/Max/Team) through 2026-07-12 23:59 PT** (7/7→7/12 extension; no official primary extension page, based on multiple secondary reports), capped at 50% of weekly usage limits, and **billed separately via usage credits afterwards** — it is **not "free."** The rest are per-token; key model prices ($/1M, in/out):
 
 | Model | $/1M (in/out) | Role |
 |---|---|---|
 | Claude Fable 5 | 10 / 50 (batch 5/25 · cache hits 1)† | dream-team default·executor · escalation executor |
-| Claude Opus 4.8 | 5 / 25 | default·executor·critic backbone |
+| Claude Opus 4.8 | 5 / 25 | default·executor backbone |
 | Claude Sonnet 5 | 3 / 15 (intro 2/10 through 2026-08-31)‡ | eco executor alternative |
-| GPT-5.6 Sol | 5 / 30 (Fast mode is 12.5/75) | planner (all bundles) · ultimate-sol 3 seats · cyber-cop executor·critic |
+| GPT-5.6 Sol | 5 / 30 (Fast mode is 12.5/75) | planner (daily·sprint·ultimate-opus·dream-team·council·escalation) · ultimate-sol 3 seats · cyber-cop executor·critic |
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
 | GPT-5.6 Luna | 1 / 6 | eco planner (new in v2) |
 | Grok 4.5 | 2 / 6 (effective input ~$0.84 @88% cache) | critic (premium 3 bundles · llm-council · escalation) — xai API key |
