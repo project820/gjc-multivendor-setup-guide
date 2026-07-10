@@ -1,4 +1,3 @@
-
 <div align="center">
 
 # 🧩 GJC 멀티벤더 극한 셋업
@@ -73,7 +72,7 @@ gjc                        # 새 세션은 자동으로 daily 사용
 전체 카탈로그 ↓ [§5](#5-️-최종-카탈로그--10-번들--4계층) · reviewer 모드·티저는 아래 참조.
 
 > **🚨 cyber-cop** — GJC 최초 reviewer 모드: architect·critic이 주연이고 executor는 재현 조연이다. 고위험 PR은 3표 패널로 판정하며, PR #4~#7에서 머지 전 결함 10건을 차단했다.
-> `gjc-cop 123`
+> 설치: `curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
 > → [공지 문서](./docs/whats-new-cyber-cop.md)
 
 > **Extragoal — GPT-5.5 Pro 최종리뷰 레인 (opt-in)** — Pro 심층 추론을 개발·QA·보안점검의 회전수-1 판정석에 투입한다. 상류 기본 레인은 이것 없이도 동작하며, `GJC_SETUP_EXTRAGOAL=1`로 설치한다.

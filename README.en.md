@@ -72,7 +72,7 @@ gjc                        # new sessions use daily automatically
 Full catalog: [§5](#5-️-final-catalog--10-bundles--4-tiers) · reviewer mode and teasers below.
 
 > **🚨 cyber-cop** — GJC's first reviewer mode: architect and critic lead while executor supports reproduction. High-risk PRs use a 3-vote panel; it blocked 10 defects before merge across PRs #4–#7.
-> `gjc-cop 123`
+> Install the wrapper: `curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
 > → [Announcement](./docs/whats-new-cyber-cop.md)
 
 > **Extragoal — GPT-5.5 Pro final-review lane (opt-in)** — Put Pro deep reasoning in the final, round-one decision seat for development, QA, and security review. The upstream default lane works without it; install it with `GJC_SETUP_EXTRAGOAL=1`.
@@ -321,7 +321,7 @@ profiles:
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-4-8:high` · `claude-sonnet-4-6:high` — sel ✅(07-10) |
 | `openai-codex` | `gpt-5.6-sol:medium`/`:high`/`:xhigh` · `gpt-5.6-terra:high`/`:xhigh` · `gpt-5.6-luna:high` · `gpt-5.5:high` · `gpt-5.4:high` — sel ✅(07-10; 5.5=07-02) |
-| `xai` | `grok-4.5:medium`/`:high` · `grok-4-fast:high` · `grok-4-1-fast:high` · `grok-code-fast-1` · `xai/grok-composer-2.5-fast` — sel ✅(07-10; 4-1 retired) |
+| `xai` | `grok-4.5:medium`/`:high` · `grok-4-fast:high` · `grok-4-1-fast:high` · `grok-code-fast-1` · `grok-composer-2.5-fast` — sel ✅(07-10; 4-1 retired) |
 | `grok-build` | `grok-4.3` (bare) — sel ✅(07-02) |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅(07-10) |
 | `opencode-go` | `deepseek-v4-flash` · `deepseek-v4-pro` · `glm-5.2` · `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` — sel ✅(07-02) |

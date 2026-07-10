@@ -72,7 +72,7 @@ gjc                        # 新規セッションは自動で daily
 全カタログは [§5](#5-️-最終カタログ--10-バンドル--4階層) · reviewer モードとティーザーは以下を参照。
 
 > **🚨 cyber-cop** — GJC 初の reviewer モード: architect·critic が主役で、executor は再現の脇役。高リスク PR は3票パネルで判定し、PR #4〜#7 でマージ前の欠陥10件を遮断した。
-> `gjc-cop 123`
+> インストール: `curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
 > → [アナウンス文書](./docs/whats-new-cyber-cop.md)
 
 > **Extragoal — GPT-5.5 Pro 最終レビューレーン（opt-in）** — Pro の深い推論を開発・QA・セキュリティ点検の最終判定席に投入する。上流の基本レーンはこれ無しでも動作し、`GJC_SETUP_EXTRAGOAL=1` で導入する。
@@ -317,7 +317,7 @@ profiles:
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-4-8:high` · `claude-sonnet-4-6:high` — sel ✅(07-10) |
 | `openai-codex` | `gpt-5.6-sol:medium`/`:high`/`:xhigh` · `gpt-5.6-terra:high`/`:xhigh` · `gpt-5.6-luna:high` · `gpt-5.5:high` · `gpt-5.4:high` — sel ✅(07-10; 5.5=07-02) |
-| `xai` | `grok-4.5:medium`/`:high` · `grok-4-fast:high` · `grok-4-1-fast:high` · `grok-code-fast-1` · `grok-composer-2.5-fast` · `xai/grok-composer-2.5-fast` — sel ✅(07-10; 4-1 retired) |
+| `xai` | `grok-4.5:medium`/`:high` · `grok-4-fast:high` · `grok-4-1-fast:high` · `grok-code-fast-1` · `grok-composer-2.5-fast` — sel ✅(07-10; 4-1 retired) |
 | `grok-build` | `grok-4.3`（bare）— sel ✅(07-02) |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅(07-10) |
 | `opencode-go` | `deepseek-v4-flash` · `deepseek-v4-pro` · `glm-5.2` · `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` — sel ✅(07-02) |

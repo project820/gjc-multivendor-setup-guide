@@ -72,7 +72,7 @@ gjc                        # 新会话自动使用 daily
 完整目录 ↓ [§5](#5-️-最终目录--10-个捆绑--4-层级)；reviewer 模式与预告见下方。
 
 > **🚨 cyber-cop** — GJC 首个 reviewer 模式：architect·critic 是主角，executor 是复现配角。高风险 PR 使用三票评审团；PR #4~#7 曾在合并前拦截 10 个缺陷。
-> `gjc-cop 123`
+> 安装 wrapper：`curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
 > → [公告文档](./docs/whats-new-cyber-cop.md)
 
 > **Extragoal — GPT-5.5 Pro 最终审查通道（opt-in）** — 将 Pro 深度推理投入开发、QA 与安全检查的第 -1 轮判定席；上游默认通道不依赖它，以 `GJC_SETUP_EXTRAGOAL=1` 安装。
