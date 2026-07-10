@@ -7,8 +7,8 @@
 #    curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | bash
 #
 #  옵션(환경변수):
-#    GJC_SETUP_DEFAULT=ultimate  # 기본 프로필 지정(기본값: daily). none 이면 기본설정 건너뜀
-#      예) curl -fsSL <url>/install.sh | GJC_SETUP_DEFAULT=ultimate bash
+#    GJC_SETUP_DEFAULT=ultimate-opus  # 기본 프로필 지정(기본값: daily). none 이면 기본설정 건너뜀
+#      예) curl -fsSL <url>/install.sh | GJC_SETUP_DEFAULT=ultimate-opus bash
 #    GJC_CODING_AGENT_DIR=...    # GJC 에이전트 디렉터리 override (기본: ~/.gjc/agent)
 #    GJC_SETUP_COP=1             # cyber-cop reviewer 도구 설치: routing-rules.md + 오케스트레이터 +
 #                               #   trusted validator 를 ~/.gjc/agent/cyber-cop/ 에 배송하고

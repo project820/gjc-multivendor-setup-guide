@@ -11,6 +11,28 @@
 
 ---
 
+## v2.0.0 — 2026-07-10
+
+### Changed (MAJOR — 카탈로그 구조 재설계)
+- **13 프로필 → 10 번들 · 4계층(tier)**. "동등한 프로필 N개" 모델을 폐기하고 신뢰 등급이 다른 4계층으로 재편: **Core**(`daily`·`coding-sprint`·`cyber-cop` — 구독 OAuth 3벤더) / **Premium experimental**(`ultimate-opus`·`ultimate-sol`·`dream-team` — role-fit L3 전 "최강" 단정 금지) / **Workflow bundle**(`llm-council`·`escalation` — 좌석표 + routing-rules 의 Council/Escalation 계약 필수) / **Specialized experimental**(`eco`·`monorepo`). 근거: 2축 블라인드 독립 딥리서치(Claude Fable 5 Ultracode + Parallel.ai Ultra 2x, 2026-07-10) 공통 verdict REVISE + 인간 configuration freeze(동일자).
+- **이름 승계**: `ultimate`→`ultimate-opus`(executor `:max`→`:high`, architect gemini→**opus** — MRCR 1M 실효검색) · `ultimate-f5`/`legend`→`dream-team`(Fable default+executor). **신설**: `ultimate-sol`(Sol 3좌석 — 유일한 비-Anthropic default, validator 예외 등재) · `llm-council`(4계열 합의 좌석표).
+- **삭제**: `solo-anthropic`·`solo-openai`·`claude-codex`·`claude-codex-max` — v2 멀티벤더 원칙(전 번들 `required_providers ≥ 2`, 혼합 구독 콜라보레이션 — 인간 판정 2026-07-10). 단일·2벤더 수요는 GJC 0.9.6 내장 프로필(`claude-opus`/`claude-fable`/`codex-*`/`opus-codex`/`fable-opus-codex`)이 흡수(매핑 등가 아님 — 구판 좌석은 `git show v1.11.0:gjc-profiles.yml`).
+- **좌석 변경**: `daily.planner` gemini→`gpt-5.6-sol:high` · `daily.critic` grok→`opus-4-8:high`(xai 키 장벽 제거 — 구독-only 3벤더 daily) · `coding-sprint.planner` gemini→`gpt-5.6-sol:high`(critic terra 유지 — plan/crit 동계열은 SAME_FAMILY_OK 등재) · `coding-sprint`/`ultimate-opus` executor `:max`→`:high`(실패신호 시에만 격상) · `eco` 전면 재편: default `opus:low`→`terra:medium`, planner `grok-4-1-fast:high`(**xAI 2026-05-15 retire — grok-4.3 요율 redirect 과금, 공식 migration 문서**)→`gpt-5.6-luna:medium`(Luna 첫 채용), architect `-low:high` 리터럴 핀, critic `gemini-3.5-flash-low`(**07-10 오후 라이브 소멸**)→`gemini-3-flash:low`, anthropic·xai 제거(3벤더). `escalation`·`cyber-cop`·`monorepo` 매핑은 v1.11.0 그대로(KEEP).
+- **GJC 0.9.6 재기준화** — 당일(07-10 12:36 KST) 릴리스 확인 후 업그레이드(바이너리 sha256 = 공식 자산 digest). 카탈로그 유일 diff: gpt-5.6 3종 ctx **272K→373K** usable prompt budget. antigravity 퍼지 공간 **fail-closed** 전환(`gemini-3.1-pro-high`/`-bogus`는 이제 "not found" — 0.9.5 침묵 -low 해석 함정 재현 안 됨, `-low:high` 핀은 유지). 전 문서·주석·SVG 스탬프 0.9.6/373K 동기화.
+- **validator 확장**: `NON_ANTHROPIC_DEFAULT_OK`(ultimate-sol) · 멀티벤더 불변식(`required_providers ≥ 2` 하드에러) · `SAME_FAMILY_OK` 재작성(monorepo 유지 + ultimate-opus/dream-team exec_arch + coding-sprint plan_crit — 인간 판정 근거 명기, 전부 WARN 영구 표면화).
+- **routing-rules.md v2**: 번들 4계층 표 + **Council 계약**(병렬 독립호출·상호 비공개·raw verdict 보존·CRITICAL/HIGH dissent 비다수결) + **Escalation 계약**(수동 트리거·재시도 예산·Fable refusal 시 Opus 강등·human gate) 신설. Grok critic 좌석 의미 재정의: "결함회수 최강"이 아니라 **제3계열 독립 dissent**(2축 리서치 합의 — critic-specific 근거 0건).
+- README×4 전면 동기화(4열 tier 표·설계 근거·마이그레이션·비용표) · install.sh 예시 · gen_svgs(10번들 매트릭스·dream-team 배너).
+
+### Validation
+- 실호출(2026-07-10, **gjc 0.9.6**): `SELECTORS_ONLY=1 revalidate.sh` → `evidence/2026-07-10-selectors-rerun-3.md` — **v2 출하 셀렉터 전 좌석 그린**(+ 수동 4행: `gemini-3-flash:low`·`opus:medium`·`terra:medium`·`luna:medium` ok). 배터리가 antigravity 라이브 표면 당일 드리프트(`gemini-3.5-flash*`·`gemini-pro-agent` 소멸)를 적발 → eco.critic 교체로 즉시 반영(검증 안 된 셀렉터 출하 금지 원칙). `python3 scripts/validate-profiles.py` green(신규 불변식 + README×4 파리티, 의도된 WARN 5건).
+
+### Evidence
+- `evidence/2026-07-10-catalog-gjc096.txt`(0.9.5 대비 diff = gpt-5.6 373K뿐) · `evidence/2026-07-10-selectors-rerun-3.md`(0.9.6 첫 배터리 + findings) · `evidence/2026-07-10-errata.md`(E1: BrowseComp 열 오귀속 84.3=Opus/85.9=Gemini · E2: Luna T-B 84.3/84.7→84.7 채택 · R1: grok-build 재조회 — 4.5 여전히 xai 전용).
+- 리서치 freeze 정본(레포 외부): `~/multivendor/research/2026-07-10-gjc-v2-profile-review/outputs/two-axis-synthesis-and-proposed-config-v1.md`(Amendment A1 포함, SHA256 고정).
+
+### Not shipped
+- Premium 3종의 role-fit L3 실측(승격 조건) · gpt-5.6 `:max` reasoning-token 계측 · Fable refusal 정량화 · Council/Escalation E2E 검증 · 번들별 비용 실측 — freeze 문서 §8의 후속 실험 목록.
+
 ## v1.11.0 — 2026-07-10
 
 ### Changed

@@ -61,24 +61,32 @@ for s in \
   "openai-codex/gpt-5.6-terra:high" "openai-codex/gpt-5.6-luna:high" \
   "openai-codex/gpt-5.5:high" "openai-codex/gpt-5.4:high" \
   "google-antigravity/gemini-3.1-pro-low" "google-antigravity/gemini-3.1-pro-low:high" \
-  "google-antigravity/gemini-3.5-flash-low" \
-  "xai/grok-4.5:medium" "xai/grok-4.5:high" "xai/grok-4.3:high" "xai/grok-4-1-fast:high" "xai/grok-4-fast:high" \
+  "google-antigravity/gemini-3-flash:low" \
+  "anthropic/claude-opus-4-8:medium" \
+  "openai-codex/gpt-5.6-terra:medium" "openai-codex/gpt-5.6-luna:medium" \
+  "xai/grok-4.5:medium" "xai/grok-4.5:high" "xai/grok-4.3:high" "xai/grok-4-fast:high" \
   "opencode-go/deepseek-v4-flash" "opencode-go/deepseek-v4-pro" \
   "opencode-go/glm-5.2" ; do P "$s" ok; done
 # (glm-5.2 bundled since 0.7.10; grok-4.5 added to the catalog 2026-07-09 = xai/grok-4.5, xai API only, no grok-build variant.
 #  grok-4.5 native efforts low/med/high; :xhigh/:max exit 0 but clamp to high — shipped selectors are :medium/:high only.
-#  gpt-5.6-sol/terra/luna added 2026-07-10 (gjc 0.9.5): catalog lists low..max; :max is accepted live but its depth is
-#  un-benchmarked — shipped selectors cap at :xhigh. gpt-5.5 kept as a canary (retired from profiles in v1.11).)
+#  gpt-5.6-sol/terra/luna added 2026-07-10: catalog lists low..max; :max is accepted live but its depth is
+#  un-benchmarked — shipped selectors cap at :xhigh. gpt-5.5 kept as a canary (retired from profiles in v1.11).
+#  gemini-3-flash:low = v2 eco.critic (gemini-3.5-flash-low vanished from the live surface 07-10 PM — see below).)
 
-# --- fuzzy/dynamic selectors (informational; not counted as regression) ---
-# bare gemini-3.5-flash is NOT a literal catalog id — resolves via fuzzy match to -low today;
-# kept as a canary for fuzzy-resolution changes. Profiles pin gemini-3.5-flash-low (above).
-# gemini-3.1-pro-high: 400'd while catalog-listed (0.7.10~0.9.1); DELISTED in 0.9.5 and now
-# SILENTLY fuzzy-resolves to gemini-3.1-pro-low at default effort (live-confirmed 2026-07-10:
-# even gemini-3.1-pro-bogus succeeds) — a worse trap than the 400: it "works" but is NOT high
-# reasoning. Keep pinning gemini-3.1-pro-low:high. No rejection canary is possible in the
-# antigravity fuzzy space (everything resolves).
-for s in "google-antigravity/gemini-3.5-flash" "google-antigravity/gemini-3.1-pro-high"; do P "$s" ok-live; done
+# --- retired/informational selectors (not counted as regression) ---
+# grok-4-1-fast: xAI retired the slug 2026-05-15 — legacy calls redirect to grok-4.3 at grok-4.3
+# pricing (official migration doc). Still answers, so keep as an informational canary only;
+# shipped profiles dropped it in v2 (eco.planner -> gpt-5.6-luna:medium).
+for s in "xai/grok-4-1-fast:high"; do P "$s" ok-live; done
+
+# --- antigravity fuzzy/live-surface canaries (gjc 0.9.6: fail-closed; expected to FAIL) ---
+# 0.9.5 silently fuzzy-resolved unknown antigravity ids to gemini-3.1-pro-low (even -bogus).
+# 0.9.6 fails closed: gemini-3.1-pro-high / gemini-3.5-flash / -bogus all return "not found".
+# Also a live-surface retirement (07-10 PM): gemini-3.5-flash-low / -extra-low / gemini-pro-agent
+# vanished from live calls while --list-models still printed them — live calls are the truth.
+# If any of these start SUCCEEDING again, that's a resolver/surface change — re-audit the fuzzy rules.
+for s in "google-antigravity/gemini-3.5-flash" "google-antigravity/gemini-3.5-flash-low" \
+  "google-antigravity/gemini-3.1-pro-high" "google-antigravity/gemini-3.1-pro-bogus"; do P "$s" fail; done
 
 # --- known rejections (documented; expected to FAIL) ---
 for s in "openai-codex/gpt-5.3-codex:high" "xai/grok-4.5:bogus" "openai-codex/gpt-5.6-sol:bogus"; do P "$s" fail; done
