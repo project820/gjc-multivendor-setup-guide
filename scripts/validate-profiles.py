@@ -165,7 +165,9 @@ def main() -> int:
         if uncovered:
             errors.append(f"[{name}] uses providers not in required_providers: {sorted(uncovered)}")
 
-    # 6. README embed sync — every README*.md with an embedded yaml block must match gjc-profiles.yml
+    # 6. README embed sync — every README*.md with an embedded yaml block must match gjc-profiles.yml.
+    # Comparison is on PARSED model_mapping dicts (not text), so localized READMEs may embed a
+    # comment-stripped variant (scripts/sync-readme-yaml.py) and still stay parity-green.
     import yaml
     file_map = {n: p["model_mapping"] for n, p in profiles.items()}
     readmes = sorted(ROOT.glob("README*.md"))

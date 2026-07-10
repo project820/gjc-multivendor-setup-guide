@@ -137,7 +137,7 @@ gjc                        # 新会话自动使用 daily
 
 三条设计原则：
 
-- **主循环绝不让步。** 大多数中位任务由主循环独自处理，所以把 `default` 降成弱模型会让整体体感质量崩塌。默认使用 Anthropic 旗舰（Opus 4.8 — `dream-team` 用 Fable 5）。唯一例外 `ultimate-sol`（Sol 路由器）是 validator 登记 + WARN 外显的 opt-in 实验。
+- **主循环绝不让步。** 大多数中位任务由主循环独自处理，所以把 `default` 降成弱模型会让整体体感质量崩塌。默认使用 Anthropic 旗舰（Opus 4.8 — `dream-team` 用 Fable 5）。非 Anthropic 路由只有两个：opt-in 实验 `ultimate-sol`（Sol — validator 登记+WARN 外显）与不含 Anthropic 的低价实验 `eco`（Terra — 路由不变量本身不适用）。
 - **多样性只在「验证」环节获益。** 让 `critic` 用不同厂商以保持独立，但串行链要短（可靠性按 `0.99ⁿ` 衰减）。
 - **effort 是非对称经济学。** `medium→high` 只提升 1~2 分却要约 23 倍 token。无脑拉满是浪费 —— 只在「解不出来」时才升档。
 
@@ -356,7 +356,7 @@ profiles:
 
 #### 各配置的设计依据
 
-- **daily** — 主循环 Opus `:medium`（效率 knee），实现用编码特化 `gpt-5.6-terra`（$2.5/15 约等于 GPT-5.5 级），拆解用长程 workflow 第一的 `gpt-5.6-sol:high`（v2：gemini→sol — Agents' Last Exam 52.7），架构/评审**与 critic** 都用 Gemini `-low:high`（v2：critic grok→gemini — **移除 xai key 门槛，仅订阅 OAuth 3 厂商即可激活**，同时保持 critic 与 Anthropic 主循环 cross-family；Grok critic 没有 defect-recall 直接证据，diversity seat 移到 premium 系列）。日常质量/成本平衡点。
+- **daily** — 主循环 Opus `:medium`（效率 knee），实现用编码特化 `gpt-5.6-terra`（$2.5/15 约等于 GPT-5.5 级），拆解用长程 workflow 第一的 `gpt-5.6-sol:high`（v2：gemini→sol — Agents' Last Exam 52.7），架构/评审**与 critic** 都用 Gemini `-low:high`（v2：critic grok→gemini — **移除 xai key 门槛，仅订阅 OAuth 3 厂商即可激活**，同时保持 critic 与 Anthropic 主循环 cross-family；Grok critic 没有 defect-recall 直接证据，diversity seat 移到 premium 系列）。⚠ architect·critic 使用同一选择器 — 在 3 厂商仅订阅约束下，同时满足主循环交叉与 plan/crit 交叉契约的只有 Google 系列（刻意取舍；需要更强独立性时登录 xai 并把 critic 换回 `grok-4.5:medium` — 旧 v1.11 席位）。日常质量/成本平衡点。
 - **coding-sprint** — executor 主演（Opus `:high` — v2 不再常驻 `:max`，只在失败信号时升档，[§8-2](#8-2-自适应-effort-升档)），planner 用 `gpt-5.6-sol:high`（v2：gemini→sol — sprint 拆解走 Sol 轴），critic 用*懂代码的* `gpt-5.6-terra`抓实 bug。⚠ planner/critic 同属 gpt 系列 — 2026-07-10 人工判定登记为 `SAME_FAMILY_OK`（模型 Sol≠Terra 分离，捆绑整体仍是 3 厂商）。
 - **cyber-cop** — 🚨 **reviewer 模式**：author 模式（default+executor 加权）的反相。审查会话中角色权重反转：executor 降为复现 PoC·failing test 的配角，**architect（一级代码评审判定者）与 critic（合并门）成为主角**。architect=Opus `:high`（1M 实效检索 76% vs Gemini 26% 崩溃 — 通读 200k+ diff），critic=`gpt-5.6-sol:high`（与 Claude 写的代码 cross-family — 缓解自我偏好偏差，arXiv [2410.21819](https://arxiv.org/abs/2410.21819)）。高风险 PR·安全审计走 critic 3 票 panel（§9 规则 — 独立投票、禁止辩论，2/3 反对或任一 CRITICAL/BLOCK 即拦截；第 3 票 grok 仅在 xai 登录时启用，因此 xai 不在 `required_providers`，没有 xai 也可用 2 票 {gpt-5.6-sol, gemini} 满足 provenance 最小值）。运行规则（委派顺序·证据契约·汇总者限制·provenance fallback·禁止 LGTM）见 [`routing-rules.md`](./routing-rules.md) 的 reviewer 契约。与 `escalation` 的区别：escalation 是 author-side gate（修到通过），cyber-cop 是 reviewer-side（寻找反对依据）。v1.11.0 映射保持（KEEP）。
 - **ultimate-opus** — 🏆 Anthropic 质量基底 premium（旧 `ultimate` 后继）。default·executor·architect 统一用 Opus `:high`，换来稳定性、1M 和订阅边际成本；交叉验证由 **Sol planner `:xhigh` + Grok critic `:high`** 负责。⚠ executor/architect 同属 claude 系列 — 人工判定 `SAME_FAMILY_OK`（WARN 永久外显）。Opus 三席不是「三个独立意见」—— 不要暗示 council 品质。

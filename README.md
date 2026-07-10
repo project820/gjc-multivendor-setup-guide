@@ -266,7 +266,7 @@ profiles:
       executor:  openai-codex/gpt-5.6-terra:high                # 코딩특화 $2.5/15에 ≈GPT-5.5급(공식 5.6 평가표)·벤더분산
       planner:   openai-codex/gpt-5.6-sol:high                  # 장기 워크플로 완주 1위(Agents' Last Exam 52.7)·tool-heavy 분해
       architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx·멀티모달(MMMU-Pro)·GPQA 94.3 — Gemini 전문좌석
-      critic:    google-antigravity/gemini-3.1-pro-low:high     # v2: grok→Gemini — xai 키 장벽 제거(구독-only daily) + 본체(Opus)와 cross-family 유지. PR #21 패널 지적 반영(본체=critic 동일벤더 금지). Grok critic 은 defect-recall 직접근거 0건(2축 리서치 합의)
+      critic:    google-antigravity/gemini-3.1-pro-low:high     # v2: grok→Gemini — xai 키 장벽 제거(구독-only daily) + 본체(Opus)와 cross-family 유지(PR #21 패널 반영). ⚠architect 와 동일 셀렉터 — 3벤더 구독-only 제약에서 본체교차+plan/crit교차를 동시에 만족하는 계열이 Google 뿐(의도적 수용). 독립성 강화 원하면 xai 로그인 후 critic 을 xai/grok-4.5:medium 으로 스왑(구 v1.11 좌석)
 
   coding-sprint:                       # 🏎 순수 구현 처리량 — daily 대비 executor 를 Opus 로 승격
     required_providers: [anthropic, openai-codex, google-antigravity]
@@ -384,7 +384,7 @@ profiles:
 
 #### 프로필별 설계 근거
 
-- **daily** — 본체 Opus `:medium`(효율 knee), 구현은 코딩특화 `gpt-5.6-terra`($2.5/15에 ≈GPT-5.5급), 분해는 장기 워크플로 1위 `gpt-5.6-sol:high`(v2: gemini→sol — Agents' Last Exam 52.7), 설계·리뷰와 비평은 Gemini `-low:high`(v2: critic grok→gemini — **xai 키 장벽 제거로 구독 OAuth 3벤더만으로 activation** + 본체(Anthropic)와 cross-family 유지; Grok critic 은 defect-recall 직접근거 0건이라 diversity 좌석은 프리미엄 계열로 이동). 일상 작업의 품질/비용 균형점.
+- **daily** — 본체 Opus `:medium`(효율 knee), 구현은 코딩특화 `gpt-5.6-terra`($2.5/15에 ≈GPT-5.5급), 분해는 장기 워크플로 1위 `gpt-5.6-sol:high`(v2: gemini→sol — Agents' Last Exam 52.7), 설계·리뷰와 비평은 Gemini `-low:high`(v2: critic grok→gemini — **xai 키 장벽 제거로 구독 OAuth 3벤더만으로 activation** + 본체(Anthropic)와 cross-family 유지; Grok critic 은 defect-recall 직접근거 0건이라 diversity 좌석은 프리미엄 계열로 이동). ⚠architect·critic 이 동일 셀렉터 — 3벤더 구독-only 제약에서 본체교차+plan/crit교차를 동시에 만족하는 계열이 Google 뿐이라 의도적으로 수용(독립성 강화가 필요하면 xai 로그인 후 critic 을 `grok-4.5:medium`으로 스왑 — 구 v1.11 좌석). 일상 작업의 품질/비용 균형점.
 - **coding-sprint** — executor 주연(Opus `:high` — v2: `:max` 상시 대신 실패신호 시에만 격상, [§8-2](#8-2-적응형-effort-에스컬레이션)), planner 는 `gpt-5.6-sol:high`(v2: gemini→sol — 스프린트 분해는 Sol 축), critic은 *코딩을 아는* `gpt-5.6-terra`로 실버그를 잡는다. ⚠planner/critic 이 같은 gpt 계열 — 인간 판정(2026-07-10)으로 `SAME_FAMILY_OK` 등재(모델은 Sol≠Terra 분리, 번들 전체는 3벤더).
 - **cyber-cop** — 🚨 **reviewer 모드**: author 모드(default+executor 가중)의 역상. 리뷰 세션에선 역할 가중치가 반전된다 — executor는 재현 PoC·failing test용 조연으로 내려가고, **architect(1차 코드리뷰 판정자)와 critic(머지 게이트)이 주연**이 된다. architect=Opus `:high`(1M 실효검색 76% vs Gemini 26% 붕괴 — 200k+ diff 통독), critic=`gpt-5.6-sol:high`(Claude-작성 코드와 cross-family — 자기선호 편향 완화, arXiv [2410.21819](https://arxiv.org/abs/2410.21819)). 고위험 PR·보안 감사는 critic 3표 패널(§9 규칙 — 독립 투표, 토론 금지, 2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단; 3표째 grok은 xai 로그인 시 — 그래서 xai는 `required_providers`에 없고, 미보유자도 2표 {gpt-5.6-sol, gemini}로 provenance 최소치를 지키며 운영 가능). 운영 규칙(위임 순서·증거 계약·집계자 제한·provenance fallback·LGTM 금지)은 [`routing-rules.md`](./routing-rules.md)의 리뷰어 계약 참조. `escalation`과의 차이: escalation은 author-side 게이트(고쳐서 통과), cyber-cop은 reviewer-side(반대 근거 탐색). v1.11.0 매핑 그대로(KEEP).
 - **ultimate-opus** — 🏆 Anthropic 품질 기저 프리미엄(구 `ultimate` 후계). default·executor·architect 를 Opus `:high`로 통일해 안정성·1M·구독 한계비용을 취하고, 교차검증은 **Sol planner `:xhigh` + Grok critic `:high`** 가 담당한다. ⚠executor/architect 동일 claude 계열 — 인간 판정 `SAME_FAMILY_OK`(WARN 영구 표면화). Opus 3좌석은 "세 독립 의견"이 아니다 — council 품질을 암시하지 말 것.
