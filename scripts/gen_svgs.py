@@ -231,8 +231,9 @@ def gen_profiles_matrix():
                       f'opacity="0.8">{esc(effort)}</text>\n')
     # 푸터
     s += (f'<text x="24" y="{footer_y}" font-size="11.5" fill="#6B6B7B">불변식: '
-          f'멀티벤더 프로필 default = Anthropic 플래그십(Opus/Fable) 고정 · '
-          f'critic = 본체와 다른 벤더 · solo-* 는 단일 벤더 최강(독립성 트레이드오프)'
+          f'멀티벤더 프로필 default = Anthropic 플래그십(Opus/Fable) — 단 🌞 ultimate-sol 은 '
+          f'명시 예외(투트랙 B, 272K·툴콜 트레이드오프 WARN 표면화) · critic = 본체와 다른 벤더 · '
+          f'solo-* 는 단일 벤더 최강(독립성 트레이드오프)'
           f'</text>\n')
     s += (f'<text x="24" y="{footer_y+20}" font-size="11.5" fill="#6B6B7B">'
           f'엔진 effort 하드룰 합법 · ⚡ ultimate-f5 = Fable 5 구독 포함 이벤트'

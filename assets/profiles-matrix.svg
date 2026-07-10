@@ -261,6 +261,6 @@
 <rect x="892" y="1035" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="892" y="1035" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="906" y="1057" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="906" y="1074" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
-<text x="24" y="1124" font-size="11.5" fill="#6B6B7B">불변식: 멀티벤더 프로필 default = Anthropic 플래그십(Opus/Fable) 고정 · critic = 본체와 다른 벤더 · solo-* 는 단일 벤더 최강(독립성 트레이드오프)</text>
+<text x="24" y="1124" font-size="11.5" fill="#6B6B7B">불변식: 멀티벤더 프로필 default = Anthropic 플래그십(Opus/Fable) — 단 🌞 ultimate-sol 은 명시 예외(투트랙 B, 272K·툴콜 트레이드오프 WARN 표면화) · critic = 본체와 다른 벤더 · solo-* 는 단일 벤더 최강(독립성 트레이드오프)</text>
 <text x="24" y="1144" font-size="11.5" fill="#6B6B7B">엔진 effort 하드룰 합법 · ⚡ ultimate-f5 = Fable 5 구독 포함 이벤트(7/12 23:59 PT 종료 — 7/7→7/12 연장, 이후 usage credits $10/$50) · gjc 0.9.5</text>
 </svg>

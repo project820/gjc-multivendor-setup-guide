@@ -42,13 +42,17 @@ SAME_FAMILY_OK = {
 
 # Documented explicit exceptions to the "default = Anthropic flagship" router invariant.
 # The invariant is NOT retired — every exception needs a rationale here, is surfaced as a
-# permanent WARN, and anything unlisted still hard-errors. First exception shipped in v1.12.0.
+# permanent WARN, and anything unlisted still hard-errors. Entries bind the exception to an
+# exact allowed vendor FAMILY (PR #20 critic finding): a later default swap inside an excepted
+# profile to any other family (e.g. Gemini) hard-errors instead of sliding through as a WARN.
+# First exception shipped in v1.12.0.
 NON_ANTHROPIC_DEFAULT_OK = {
-    "ultimate-sol": "two-track B (opt-in, experimental): Sol leads long-horizon workflow completion "
-                    "(Agents' Last Exam 52.7 vs Fable 40.5, OpenAI launch table incl. competitor rows); "
-                    "explicit trade-offs stay surfaced — 272K codex-surface router ctx (vs 1M) and weaker "
-                    "tool-calling axis (Toolathlon 58 vs Fable 61.7). L3 rolefit pending "
-                    "(evidence/2026-07-10-two-track-sol-notes.md).",
+    "ultimate-sol": ("gpt",
+                     "two-track B (opt-in, experimental): Sol leads long-horizon workflow completion "
+                     "(Agents' Last Exam 52.7 vs Fable 40.5, OpenAI launch table incl. competitor rows); "
+                     "explicit trade-offs stay surfaced — 272K codex-surface router ctx (vs 1M) and weaker "
+                     "tool-calling axis (Toolathlon 58 vs Fable 61.7). L3 rolefit pending "
+                     "(evidence/2026-07-10-two-track-sol-notes.md)."),
 }
 
 # provider-id -> vendor family (for cross-family checks)
@@ -120,10 +124,14 @@ def main() -> int:
         fam = {r: family_of(v) for r, v in mm.items()}
         used_prov = {v.split('/',1)[0] for v in mm.values()}
         # 2. router invariant (default = Anthropic flagship), with an explicit documented
-        #    exception allowlist — exceptions WARN so the trade-off never goes silent.
+        #    exception allowlist — exceptions are FAMILY-BOUND and WARN so the trade-off
+        #    never goes silent; a family mismatch inside an excepted profile hard-errors.
         if "anthropic" in req and fam["default"] != "claude":
-            if name in NON_ANTHROPIC_DEFAULT_OK:
-                warns.append(f"[{name}] non-Anthropic default ({mm['default']}) — documented exception: {NON_ANTHROPIC_DEFAULT_OK[name]}")
+            exc = NON_ANTHROPIC_DEFAULT_OK.get(name)
+            if exc is not None and fam["default"] == exc[0]:
+                warns.append(f"[{name}] non-Anthropic default ({mm['default']}) — documented exception ({exc[0]}-family only): {exc[1]}")
+            elif exc is not None:
+                errors.append(f"[{name}] default {mm['default']} ({fam['default']}-family) violates its documented exception — only {exc[0]}-family is allowlisted")
             else:
                 errors.append(f"[{name}] default must be Anthropic when anthropic is available (got {mm['default']})")
         # 3. cross-family (skip single-vendor; allow documented exceptions)
