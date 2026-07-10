@@ -7,13 +7,13 @@
 #
 # Cross-family independence is guaranteed by CALL STRUCTURE, not prompt compliance:
 # each seat is a separate `gjc -p --model <selector>` invocation, so the critic really
-# runs on openai-codex/gpt-5.5 (cross-family vs the assumed-Claude author) — it is NOT
+# runs on openai-codex/gpt-5.6-sol (cross-family vs the assumed-Claude author) — it is NOT
 # role-played by the default model. Each section header names the model that produced it.
 # (Fixes #10: a single `--mpreset` session has the default model role-play every seat.)
 #
 # Seats (from the `cyber-cop` profile in gjc-profiles.yml):
 #   architect = anthropic/claude-opus-4-8:high   (first-pass code-review adjudicator)
-#   critic    = openai-codex/gpt-5.5:high        (merge gate, cross-family vs Claude author)
+#   critic    = openai-codex/gpt-5.6-sol:high    (merge gate, cross-family vs Claude author)
 #   --panel   → high-risk 3-vote panel adds xai/grok-4.5:high + google-antigravity/gemini-3.1-pro-low:high
 # INVARIANTS are run by THIS script against the PR HEAD (not the local checkout), never model-claimed.
 # It NEVER merges — the verdict is surfaced to a human for the merge decision.
@@ -31,6 +31,19 @@ done
 set -- $_args
 PR="${1:?usage: cyber-cop-review.sh [--panel] <PR_NUMBER>}"
 case "$PR" in ''|*[!0-9]*) echo "PR number must be a positive integer: '$PR'" >&2; exit 2 ;; esac
+
+# Critic seat (merge gate). Override: CYBER_COP_CRIT_MODEL pins a different cross-family critic
+# (e.g. the previous openai-codex/gpt-5.5:high) — escape hatch per PR #19 (Sol role-fit not yet
+# A/B-measured; availability + n=1 live defect-recall only).
+CRIT_MODEL="${CYBER_COP_CRIT_MODEL:-openai-codex/gpt-5.6-sol:high}"
+# Fail-closed override guard, validated BEFORE any seat call (PR #19 round-3): the critic seat
+# MUST stay cross-family vs the assumed-Claude author, and MUST NOT reuse a reserved panel
+# family (xai/google) — that would double-count one family in the 2-of-3 provenance quorum.
+case "$CRIT_MODEL" in
+  openai-codex/*|openai/*) : ;;
+  *) echo "FATAL: CYBER_COP_CRIT_MODEL='$CRIT_MODEL' rejected — critic override must be an openai-codex/* (or openai/*) selector (cross-family vs the assumed-Claude author; xai/google-antigravity are reserved panel families)." >&2
+     exit 2 ;;
+esac
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 WORK="$(mktemp -d "/tmp/cc-review-${PR}.XXXX")"
@@ -90,7 +103,7 @@ import os, glob, json, sys
 d = os.environ["SEAT_DIR"]; short = os.environ["MODEL_SHORT"]
 # Inspect ONLY structured `model` fields set by GJC — never free-text message/attachment
 # content (the PR diff is recorded as a message string, so a hostile PR embedding
-# "model":"gpt-5.5" in its diff must NOT be able to satisfy this check).
+# "model":"gpt-5.6-sol" in its diff must NOT be able to satisfy this check).
 def model_fields(obj):
     if isinstance(obj, dict):
         v = obj.get("model")
@@ -169,8 +182,7 @@ ARCH_V="$(arch_verdict "$arch_out")"
 echo "## 1. ARCHITECT VERDICT (${ARCH_MODEL}): ${ARCH_V}"
 echo "$arch_out"; echo
 
-# --- 2. CRITIC (openai-codex/gpt-5.5:high — cross-family merge gate) ---
-CRIT_MODEL="openai-codex/gpt-5.5:high"
+# --- 2. CRITIC (cross-family merge gate; CRIT_MODEL defined+guarded at the top) ---
 crit_out="$(run_seat "$CRIT_MODEL" "You are the cyber-cop CRITIC (merge gate), running cross-family vs the assumed-Claude author. ${CONTRACT}
 Each vote MUST cite at least one file-backed blocking issue OR an explicit no-finding rationale; unsupported verdicts are void. Output your verdict token on the FIRST line, exactly one of: APPROVE | REQUEST_CHANGES | BLOCK. Then terse file-backed findings.")"
 CRIT_V="$(crit_verdict "$crit_out")"
@@ -188,9 +200,9 @@ if [ "$PANEL" = "1" ]; then
     REQUEST_CHANGES) panel_dissent=$((panel_dissent+1)) ;;
   esac
   # ONLY the grok seat is optional per routing-rules.md (no-xai-login downgrades to the
-  # 2-vote {gpt-5.5, gemini} panel). A failed/unavailable GEMINI seat is NOT voidable —
+  # 2-vote {gpt-5.6-sol, gemini} panel). A failed/unavailable GEMINI seat is NOT voidable —
   # that would silently change the documented panel composition — it FAILS CLOSED (BLOCK).
-  panel_valid=1   # critic (gpt-5.5) is one valid non-default vote
+  panel_valid=1   # critic (gpt-5.6-sol) is one valid non-default vote
   for pm in "xai/grok-4.5:high" "google-antigravity/gemini-3.1-pro-low:high"; do
     if [ "$pm" = "xai/grok-4.5:high" ] && [ "${DIFF_BYTES:-0}" -gt "${GROK45_PANEL_MAX_BYTES:-1600000}" ]; then
       echo "### panel vote (${pm}): VOID (diff ${DIFF_BYTES}B exceeds Grok 4.5 exact-diff guard ${GROK45_PANEL_MAX_BYTES}B — use 1M lanes)"; echo

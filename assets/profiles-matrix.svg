@@ -2,7 +2,7 @@
 <title>GJC 멀티벤더 — 13 프로필 × 5 역할 매트릭스</title>
 <rect width="1088" height="1100" rx="18" fill="#ffffff"/><rect width="1088" height="1100" rx="18" fill="none" stroke="#ECECF1"/>
 <text x="24" y="46" font-size="22" font-weight="700" fill="#1A1A28">GJC 멀티벤더 — 13 프로필 × 5 역할</text>
-<text x="24" y="72" font-size="13" fill="#6B6B7B">행=프로필 · 열=역할 · 색=벤더 · 07-09 rerun: Grok/OpenAI/Gemini/opencode OK · Anthropic 07-02 last-good</text>
+<text x="24" y="72" font-size="13" fill="#6B6B7B">행=프로필 · 열=역할 · 색=벤더 · 07-10 rerun: 전 프로바이더 그린(gpt-5.6 3종 신규 검증 · Anthropic rate-limit 해제)</text>
 <rect x="24" y="90" width="14" height="14" rx="3" fill="#FBE9E4" stroke="#D9583E"/>
 <text x="44" y="102" font-size="12" fill="#444">Anthropic</text>
 <rect x="133" y="90" width="14" height="14" rx="3" fill="#E3F4EE" stroke="#10A37F"/>
@@ -26,7 +26,7 @@
 <text x="202" y="199" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
 <text x="202" y="216" font-size="10.5" fill="#8A2B1A" opacity="0.8">:medium</text>
 <rect x="364" y="177" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="364" y="177" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="378" y="199" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.4</text>
+<text x="378" y="199" font-size="11" font-weight="700" fill="#0A6B53">GPT-5.6 Terra</text>
 <text x="378" y="216" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="540" y="177" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="540" y="177" width="4.5" height="48" rx="2" fill="#4285F4"/>
 <text x="554" y="199" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
@@ -46,7 +46,7 @@
 <text x="378" y="265" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
 <text x="378" y="282" font-size="10.5" fill="#8A2B1A" opacity="0.8">:max</text>
 <rect x="540" y="243" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="243" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="554" y="265" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="554" y="265" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="554" y="282" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
 <rect x="716" y="243" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="243" width="4.5" height="48" rx="2" fill="#4285F4"/>
 <text x="730" y="265" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
@@ -56,7 +56,7 @@
 <text x="906" y="282" font-size="10.5" fill="#2D3A4D" opacity="0.8">:high</text>
 <rect x="24" y="304" width="1040" height="58" rx="10" fill="#FFFFFF"/>
 <text x="34" y="331" font-size="13.5" font-weight="700" fill="#1A1A28">🔥 ultimate-f5</text>
-<text x="34" y="349" font-size="10.5" fill="#D9583E" font-weight="600">⚡ ~7/7 이벤트</text>
+<text x="34" y="349" font-size="10.5" fill="#D9583E" font-weight="600">⚡ ~7/12 이벤트</text>
 <rect x="188" y="309" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="188" y="309" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="202" y="331" font-size="12.5" font-weight="700" fill="#8A2B1A">Fable 5</text>
 <text x="202" y="348" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
@@ -64,7 +64,7 @@
 <text x="378" y="331" font-size="12.5" font-weight="700" fill="#8A2B1A">Fable 5</text>
 <text x="378" y="348" font-size="10.5" fill="#8A2B1A" opacity="0.8">:xhigh</text>
 <rect x="540" y="309" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="309" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="554" y="331" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="554" y="331" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="554" y="348" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
 <rect x="716" y="309" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="309" width="4.5" height="48" rx="2" fill="#4285F4"/>
 <text x="730" y="331" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
@@ -82,7 +82,7 @@
 <text x="378" y="397" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
 <text x="378" y="414" font-size="10.5" fill="#8A2B1A" opacity="0.8">:max</text>
 <rect x="540" y="375" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="375" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="554" y="397" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="554" y="397" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="554" y="414" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
 <rect x="716" y="375" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="375" width="4.5" height="48" rx="2" fill="#4285F4"/>
 <text x="730" y="397" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
@@ -105,7 +105,7 @@
 <text x="730" y="463" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
 <text x="730" y="480" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
 <rect x="892" y="441" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="892" y="441" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="906" y="463" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.4</text>
+<text x="906" y="463" font-size="11" font-weight="700" fill="#0A6B53">GPT-5.6 Terra</text>
 <text x="906" y="480" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="24" y="502" width="1040" height="58" rx="10" fill="#FAFAFC"/>
 <text x="34" y="529" font-size="13.5" font-weight="700" fill="#1A1A28">🛡 escalation</text>
@@ -117,7 +117,7 @@
 <text x="378" y="529" font-size="12.5" font-weight="700" fill="#8A2B1A">Fable 5</text>
 <text x="378" y="546" font-size="10.5" fill="#8A2B1A" opacity="0.8">:xhigh</text>
 <rect x="540" y="507" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="507" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="554" y="529" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="554" y="529" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="554" y="546" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
 <rect x="716" y="507" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="507" width="4.5" height="48" rx="2" fill="#4285F4"/>
 <text x="730" y="529" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
@@ -132,7 +132,7 @@
 <text x="202" y="595" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
 <text x="202" y="612" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
 <rect x="364" y="573" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="364" y="573" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="378" y="595" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="378" y="595" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="378" y="612" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="540" y="573" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="540" y="573" width="4.5" height="48" rx="2" fill="#4285F4"/>
 <text x="554" y="595" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
@@ -141,7 +141,7 @@
 <text x="730" y="595" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
 <text x="730" y="612" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
 <rect x="892" y="573" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="892" y="573" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="906" y="595" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="906" y="595" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="906" y="612" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="24" y="634" width="1040" height="58" rx="10" fill="#FAFAFC"/>
 <text x="34" y="667" font-size="13.5" font-weight="700" fill="#1A1A28">💸 eco</text>
@@ -195,19 +195,19 @@
 <rect x="24" y="832" width="1040" height="58" rx="10" fill="#FFFFFF"/>
 <text x="34" y="865" font-size="13.5" font-weight="700" fill="#1A1A28">🤖 solo-openai</text>
 <rect x="188" y="837" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="188" y="837" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="202" y="859" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="202" y="859" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="202" y="876" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="364" y="837" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="364" y="837" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="378" y="859" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="378" y="859" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="378" y="876" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
 <rect x="540" y="837" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="837" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="554" y="859" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="554" y="859" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="554" y="876" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
 <rect x="716" y="837" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="716" y="837" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="730" y="859" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.4</text>
 <text x="730" y="876" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="892" y="837" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="892" y="837" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="906" y="859" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.4</text>
+<text x="906" y="859" font-size="11" font-weight="700" fill="#0A6B53">GPT-5.6 Terra</text>
 <text x="906" y="876" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="24" y="898" width="1040" height="58" rx="10" fill="#FAFAFC"/>
 <text x="34" y="931" font-size="13.5" font-weight="700" fill="#1A1A28">🤝 claude-codex</text>
@@ -218,13 +218,13 @@
 <text x="378" y="925" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
 <text x="378" y="942" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
 <rect x="540" y="903" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="903" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="554" y="925" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="554" y="925" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="554" y="942" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="716" y="903" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="903" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="730" y="925" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
 <text x="730" y="942" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
 <rect x="892" y="903" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="892" y="903" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="906" y="925" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.4</text>
+<text x="906" y="925" font-size="11" font-weight="700" fill="#0A6B53">GPT-5.6 Terra</text>
 <text x="906" y="942" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="24" y="964" width="1040" height="58" rx="10" fill="#FFFFFF"/>
 <text x="34" y="997" font-size="13.5" font-weight="700" fill="#1A1A28">🥇 claude-codex-max</text>
@@ -235,14 +235,14 @@
 <text x="378" y="991" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
 <text x="378" y="1008" font-size="10.5" fill="#8A2B1A" opacity="0.8">:max</text>
 <rect x="540" y="969" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="969" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="554" y="991" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="554" y="991" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="554" y="1008" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
 <rect x="716" y="969" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="969" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="730" y="991" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 4.8</text>
 <text x="730" y="1008" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
 <rect x="892" y="969" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="892" y="969" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="906" y="991" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.5</text>
+<text x="906" y="991" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="906" y="1008" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <text x="24" y="1058" font-size="11.5" fill="#6B6B7B">불변식: 멀티벤더 프로필 default = Anthropic 플래그십(Opus/Fable) 고정 · critic = 본체와 다른 벤더 · solo-* 는 단일 벤더 최강(독립성 트레이드오프)</text>
-<text x="24" y="1078" font-size="11.5" fill="#6B6B7B">엔진 effort 하드룰 합법 · ⚡ ultimate-f5 = Fable 5 구독 포함 이벤트(~2026-07-07, 이후 usage credits $10/$50) · gjc 0.9.1</text>
+<text x="24" y="1078" font-size="11.5" fill="#6B6B7B">엔진 effort 하드룰 합법 · ⚡ ultimate-f5 = Fable 5 구독 포함 이벤트(7/12 23:59 PT 종료 — 7/7→7/12 연장, 이후 usage credits $10/$50) · gjc 0.9.5</text>
 </svg>

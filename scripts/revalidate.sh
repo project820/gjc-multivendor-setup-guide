@@ -57,6 +57,8 @@ for s in \
   "anthropic/claude-opus-4-8:high" "anthropic/claude-sonnet-4-6:high" \
   "anthropic/claude-fable-5:high" "anthropic/claude-fable-5:xhigh" \
   "anthropic/claude-sonnet-5:high" \
+  "openai-codex/gpt-5.6-sol:high" "openai-codex/gpt-5.6-sol:xhigh" \
+  "openai-codex/gpt-5.6-terra:high" "openai-codex/gpt-5.6-luna:high" \
   "openai-codex/gpt-5.5:high" "openai-codex/gpt-5.4:high" \
   "google-antigravity/gemini-3.1-pro-low" "google-antigravity/gemini-3.1-pro-low:high" \
   "google-antigravity/gemini-3.5-flash-low" \
@@ -64,16 +66,22 @@ for s in \
   "opencode-go/deepseek-v4-flash" "opencode-go/deepseek-v4-pro" \
   "opencode-go/glm-5.2" ; do P "$s" ok; done
 # (glm-5.2 bundled since 0.7.10; grok-4.5 added to the catalog 2026-07-09 = xai/grok-4.5, xai API only, no grok-build variant.
-#  grok-4.5 native efforts low/med/high; :xhigh/:max exit 0 but clamp to high — shipped selectors are :medium/:high only.)
+#  grok-4.5 native efforts low/med/high; :xhigh/:max exit 0 but clamp to high — shipped selectors are :medium/:high only.
+#  gpt-5.6-sol/terra/luna added 2026-07-10 (gjc 0.9.5): catalog lists low..max; :max is accepted live but its depth is
+#  un-benchmarked — shipped selectors cap at :xhigh. gpt-5.5 kept as a canary (retired from profiles in v1.11).)
 
 # --- fuzzy/dynamic selectors (informational; not counted as regression) ---
 # bare gemini-3.5-flash is NOT a literal catalog id — resolves via fuzzy match to -low today;
 # kept as a canary for fuzzy-resolution changes. Profiles pin gemini-3.5-flash-low (above).
-for s in "google-antigravity/gemini-3.5-flash"; do P "$s" ok-live; done
+# gemini-3.1-pro-high: 400'd while catalog-listed (0.7.10~0.9.1); DELISTED in 0.9.5 and now
+# SILENTLY fuzzy-resolves to gemini-3.1-pro-low at default effort (live-confirmed 2026-07-10:
+# even gemini-3.1-pro-bogus succeeds) — a worse trap than the 400: it "works" but is NOT high
+# reasoning. Keep pinning gemini-3.1-pro-low:high. No rejection canary is possible in the
+# antigravity fuzzy space (everything resolves).
+for s in "google-antigravity/gemini-3.5-flash" "google-antigravity/gemini-3.1-pro-high"; do P "$s" ok-live; done
 
 # --- known rejections (documented; expected to FAIL) ---
-# gemini-3.1-pro-high: appears in the catalog LISTING since 0.7.10 but the live call still 400s (trap).
-for s in "google-antigravity/gemini-3.1-pro-high" "openai-codex/gpt-5.3-codex:high" "xai/grok-4.5:bogus"; do P "$s" fail; done
+for s in "openai-codex/gpt-5.3-codex:high" "xai/grok-4.5:bogus" "openai-codex/gpt-5.6-sol:bogus"; do P "$s" fail; done
 
 if [ "${SELECTORS_ONLY:-0}" != 1 ]; then
   { echo; echo "## Single-message @file input limit (separate from the 1M context window)"; echo

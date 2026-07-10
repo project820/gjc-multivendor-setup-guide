@@ -11,6 +11,25 @@
 
 ---
 
+## v1.11.0 — 2026-07-10
+
+### Changed
+- **GPT-5.6 세대교체 (Tier 1, like-for-like)** — GPT-5.6 Sol/Terra/Luna GA(2026-07-09) 반영. 전 gpt-5.5 좌석 → **`gpt-5.6-sol`**(동가 $5/$30, 동일 effort): ultimate/ultimate-f5/legend/escalation.planner`:xhigh` · cyber-cop.executor/critic`:high`(+고위험 패널 좌석) · solo-openai default/executor/planner · claude-codex.planner · claude-codex-max.planner/critic. 1M ctx 근거가 아닌 gpt-5.4 좌석 → **`gpt-5.6-terra`**(동가 $2.5/$15, ≈GPT-5.5급): daily.executor`:high` · coding-sprint.critic · claude-codex.critic · solo-openai.critic. **유지**: solo-openai.architect=gpt-5.4:high(유일 1M ctx 레인) · monorepo(5.6도 codex 272K라 배제 지속) · eco. **미채용**: Luna(포지션 없음) · `:max` 셀렉터(수용되나 심도 미검증 — 출하 상한 xhigh). 도구 좌석 동기화: cyber-cop-review.sh CRIT_MODEL · gjc-cop pre-push 훅 · revalidate.sh 배터리 · gen_svgs · README×4 · routing-rules · MAINTAINING · whats-new-cyber-cop.
+- **Fable 5 이벤트 연장 반영** — 구독 포함 종료 ~7/7 → **~2026-07-12 23:59 PT(연장 확정)** 전면 정정(profiles 주석 · README×4 표/불릿/비용 · SVG 스탬프). Anthropic "capacity 확보 시 구독 복귀 방침(비확정)" 병기.
+- **gemini-3.1-pro-high 함정 형태 변화 (0.9.5)** — 카탈로그 delisting + 실측: 이제 400이 아니라 **퍼지 매칭으로 `-low` 기본 effort에 침묵 해석되어 "성공"**(`-bogus`도 성공). 문서를 "호출 400" → "성공하지만 고추론 아님" 함정으로 재작성, revalidate 카나리를 expect-fail → informational ok-live 재분류.
+- README 배지 정정: v1.6 이후 누락됐던 version 배지 → 1.11.0.
+- **리뷰어 좌석 escape hatch** — PR #19 critic(gpt-5.6-sol) HIGH 지적("머지 게이트 좌석을 rolefit 실측 없이 교체") 절충: `CYBER_COP_CRIT_MODEL`(cyber-cop-review.sh) / `GJC_COP_HOOK_MODEL`(gjc-cop pre-push 훅) env로 critic 좌석을 즉시 다른 cross-family 모델(예: gpt-5.5:high)로 핀 가능. 판정 원문·반론·수용 내역은 `evidence/2026-07-10-gpt-5.6-notes.md` §8.
+
+### Validation
+- 실호출(2026-07-10, gjc 0.9.5): gpt-5.6-sol `:medium`/`:high`/`:xhigh` · terra `:high`/`:xhigh` · luna `:high` 전부 ok · 3종 `:max` 수용(심도 미검증 — 미출하) · `:bogus` 거부. `SELECTORS_ONLY=1 revalidate.sh` → `evidence/2026-07-10-selectors-rerun-2.md` **전 프로바이더 그린**(Anthropic rate-limit 해제 — fable-5/sonnet-5/opus/sonnet-4-6 재검증, 07-02 last-good 캐비앗 해소). 첫 `2026-07-10-selectors.md`는 gemini-3.1-pro-high 행동 변화를 fail-closed로 잡은 스냅샷으로 보존. `python3 scripts/validate-profiles.py` green(README×4 파리티).
+
+### Evidence
+- `evidence/2026-07-10-gpt-5.6-notes.md` — 방법론(당사자 Codex 조사본 → 독립 병렬 리서치 교차검증 → 실호출), 확정 팩트, **불일치 기록**(OpenAI의 Sol SWE-Bench Pro 미공표 vs 당사자 표 64.6% 충돌 · METR의 Sol SWE 평가 게이밍 적발 — SWE류 벤치 단독 근거 승격 금지), Fable 연장 근거, 카탈로그 드리프트, `:max` 심도 프로브 결론불가 기록.
+- `evidence/2026-07-10-catalog.txt`(diff: gpt-5.6 3종 추가 · gemini-3.1-pro-high 제거) · `evidence/2026-07-10-selectors.md` · `evidence/2026-07-10-selectors-rerun-2.md`(authoritative).
+
+### Not shipped
+- gpt-5.6 `:max` effort(reasoning-token 계측 후 별도 판단) · Luna 좌석 · Sol Fast($12.5/$75) · Sol/Terra L3 rolefit 실측(후속 PR — SWE류 벤치는 METR 게이밍 적발로 단독 근거 불인정).
+
 ## v1.10.0 — 2026-07-09
 
 ### Changed

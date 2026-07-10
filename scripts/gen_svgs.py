@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""gen_svgs.py — GJC 멀티벤더 가이드 SVG 자산 재생성기 (v1.10.0)
+"""gen_svgs.py — GJC 멀티벤더 가이드 SVG 자산 재생성기 (v1.11.0)
 
 assets/ 아래 4개 SVG 를 데이터 기반으로 재생성한다:
   - role-winners.svg     : 👑 legend (Ultimate Legend) 역할별 최강 배너
@@ -14,7 +14,7 @@ routing-tree.svg 는 모델명 하드코딩이 없어 재생성 대상이 아니
   python3 scripts/gen_svgs.py            # repo 루트 기준 assets/ 에 출력
   python3 scripts/gen_svgs.py --out DIR  # 다른 디렉터리에 출력
 
-데이터 원천: gjc-profiles.yml (v1.10.0, 13 프로필). 프로필이 바뀌면
+데이터 원천: gjc-profiles.yml (v1.11.0, 13 프로필). 프로필이 바뀌면
 아래 PROFILES 테이블을 yml 과 동기화한 뒤 재실행한다.
 검증 스탬프 날짜는 VERIFY_DATE 하나만 고치면 된다.
 """
@@ -23,8 +23,8 @@ import argparse
 import os
 import re
 
-VERIFY_DATE = "2026-07-09"
-GJC_VERSION = "0.9.1"
+VERIFY_DATE = "2026-07-10"
+GJC_VERSION = "0.9.5"
 
 FONT = "-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"
 
@@ -56,26 +56,26 @@ GEM_HI = (G, "Gemini 3.1 Pro-low", ":high")
 
 PROFILES = [
     ("⭐ daily", "평소 기본", [
-        (A, "Opus 4.8", ":medium"), (O, "GPT-5.4", ":high"),
+        (A, "Opus 4.8", ":medium"), (O, "GPT-5.6 Terra", ":high"),
         GEM_HI, GEM_HI, (X, "Grok 4.5", ":medium")]),
     ("🏆 ultimate", None, [
         (A, "Opus 4.8", ":high"), (A, "Opus 4.8", ":max"),
-        (O, "GPT-5.5", ":xhigh"), GEM_HI, (X, "Grok 4.5", ":high")]),
-    ("🔥 ultimate-f5", "⚡ ~7/7 이벤트", [
+        (O, "GPT-5.6 Sol", ":xhigh"), GEM_HI, (X, "Grok 4.5", ":high")]),
+    ("🔥 ultimate-f5", "⚡ ~7/12 이벤트", [
         (A, "Fable 5", ":high"), (A, "Fable 5", ":xhigh"),
-        (O, "GPT-5.5", ":xhigh"), GEM_HI, (X, "Grok 4.5", ":high")]),
+        (O, "GPT-5.6 Sol", ":xhigh"), GEM_HI, (X, "Grok 4.5", ":high")]),
     ("👑 legend", "Ultimate Legend", [
         (A, "Fable 5", ":high"), (A, "Opus 4.8", ":max"),
-        (O, "GPT-5.5", ":xhigh"), GEM_HI, (X, "Grok 4.5", ":high")]),
+        (O, "GPT-5.6 Sol", ":xhigh"), GEM_HI, (X, "Grok 4.5", ":high")]),
     ("🏎 coding-sprint", None, [
         (A, "Opus 4.8", ":medium"), (A, "Opus 4.8", ":max"),
-        GEM_HI, GEM_HI, (O, "GPT-5.4", ":high")]),
+        GEM_HI, GEM_HI, (O, "GPT-5.6 Terra", ":high")]),
     ("🛡 escalation", "구원투수=Fable", [
         (A, "Opus 4.8", ":high"), (A, "Fable 5", ":xhigh"),
-        (O, "GPT-5.5", ":xhigh"), GEM_HI, (X, "Grok 4.5", ":high")]),
+        (O, "GPT-5.6 Sol", ":xhigh"), GEM_HI, (X, "Grok 4.5", ":high")]),
     ("🚨 cyber-cop", "reviewer 모드", [
-        (A, "Opus 4.8", ":high"), (O, "GPT-5.5", ":high"),
-        GEM_HI, (A, "Opus 4.8", ":high"), (O, "GPT-5.5", ":high")]),
+        (A, "Opus 4.8", ":high"), (O, "GPT-5.6 Sol", ":high"),
+        GEM_HI, (A, "Opus 4.8", ":high"), (O, "GPT-5.6 Sol", ":high")]),
     ("💸 eco", None, [
         (A, "Opus 4.8", ":low"), (C, "DeepSeek V4 Flash", None),
         (X, "Grok 4.1 Fast", ":high"),
@@ -89,17 +89,17 @@ PROFILES = [
         (A, "Opus 4.8", ":max"), (A, "Opus 4.8", ":high"),
         (A, "Opus 4.8", ":high")]),
     ("🤖 solo-openai", None, [
-        (O, "GPT-5.5", ":high"), (O, "GPT-5.5", ":xhigh"),
-        (O, "GPT-5.5", ":xhigh"), (O, "GPT-5.4", ":high"),
-        (O, "GPT-5.4", ":high")]),
+        (O, "GPT-5.6 Sol", ":high"), (O, "GPT-5.6 Sol", ":xhigh"),
+        (O, "GPT-5.6 Sol", ":xhigh"), (O, "GPT-5.4", ":high"),
+        (O, "GPT-5.6 Terra", ":high")]),
     ("🤝 claude-codex", None, [
         (A, "Opus 4.8", ":medium"), (A, "Opus 4.8", ":high"),
-        (O, "GPT-5.5", ":high"), (A, "Opus 4.8", ":high"),
-        (O, "GPT-5.4", ":high")]),
+        (O, "GPT-5.6 Sol", ":high"), (A, "Opus 4.8", ":high"),
+        (O, "GPT-5.6 Terra", ":high")]),
     ("🥇 claude-codex-max", None, [
         (A, "Opus 4.8", ":high"), (A, "Opus 4.8", ":max"),
-        (O, "GPT-5.5", ":xhigh"), (A, "Opus 4.8", ":high"),
-        (O, "GPT-5.5", ":high")]),
+        (O, "GPT-5.6 Sol", ":xhigh"), (A, "Opus 4.8", ":high"),
+        (O, "GPT-5.6 Sol", ":high")]),
 ]
 
 
@@ -134,8 +134,8 @@ def gen_role_winners():
          "Anthropic · 라우터=품질 상한"),
         ("🔨 executor", "실코딩", A, "Claude Opus 4.8", ":max",
          "Anthropic · 구독 포함 코딩 최강"),
-        ("🧠 planner", "최상위 추론·설계", O, "GPT-5.5", ":xhigh",
-         "OpenAI · ARC-AGI-2 추론 강세"),
+        ("🧠 planner", "최상위 추론·설계", O, "GPT-5.6 Sol", ":xhigh",
+         "OpenAI · 5.6 플래그십 추론"),
         ("🔭 architect", "멀티모달·1M ctx 리뷰", G, "Gemini 3.1 Pro-low", ":high",
          "Google · MMMU 81% 검증 우위"),
         ("⚖ critic", "독립 적대 비평", X, "Grok 4.5", ":high",
@@ -184,7 +184,7 @@ def gen_profiles_matrix():
     s += (f'<text x="24" y="46" font-size="22" font-weight="700" fill="#1A1A28">'
           f'GJC 멀티벤더 — {n} 프로필 × 5 역할</text>\n')
     s += (f'<text x="24" y="72" font-size="13" fill="#6B6B7B">행=프로필 · 열=역할 · '
-          f'색=벤더 · 07-09 rerun: Grok/OpenAI/Gemini/opencode OK · Anthropic 07-02 last-good</text>\n')
+          f'색=벤더 · 07-10 rerun: 전 프로바이더 그린(gpt-5.6 3종 신규 검증 · Anthropic rate-limit 해제)</text>\n')
     # 벤더 범례 (헤더 행과 분리 — 자체 라인 + 구분선)
     lx = 24
     for key, label in VENDOR_LABELS:
@@ -232,7 +232,7 @@ def gen_profiles_matrix():
           f'</text>\n')
     s += (f'<text x="24" y="{footer_y+20}" font-size="11.5" fill="#6B6B7B">'
           f'엔진 effort 하드룰 합법 · ⚡ ultimate-f5 = Fable 5 구독 포함 이벤트'
-          f'(~2026-07-07, 이후 usage credits $10/$50) · gjc {GJC_VERSION}</text>\n')
+          f'(7/12 23:59 PT 종료 — 7/7→7/12 연장, 이후 usage credits $10/$50) · gjc {GJC_VERSION}</text>\n')
     s += "</svg>"
     return s
 
@@ -294,6 +294,7 @@ def gen_effort_ladder():
         "Opus 4.8 = minimal..max",
         "Fable 5 ≤ xhigh (GJC, :max 클램프)",
         "Sonnet 4.6/5 ≤ high",
+        "GPT-5.6 3종 = 출하 ≤ xhigh (:max 수용·심도 미검증)",
         "xai Grok 4.5 ≤ high",
         "Gemini Pro = {low, high}",
         "opencode-go = effort 생략",

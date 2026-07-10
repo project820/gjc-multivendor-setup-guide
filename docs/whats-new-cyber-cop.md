@@ -36,14 +36,14 @@ cyber-cop:                             # 🚨 reviewer 모드 — PR 리뷰·보
   required_providers: [anthropic, openai-codex, google-antigravity]
   model_mapping:
     default:   anthropic/claude-opus-4-8:high        # 집계자 제한 + 1M ctx
-    executor:  openai-codex/gpt-5.5:high             # 조연 — 재현 PoC·failing test·harness
+    executor:  openai-codex/gpt-5.6-sol:high         # 조연 — 재현 PoC·failing test·harness
     planner:   google-antigravity/gemini-3.1-pro-low:high
     architect: anthropic/claude-opus-4-8:high        # 주연1 — 1차 판정자, 1M 실효검색(MRCR 76% vs Gemini 26%)
-    critic:    openai-codex/gpt-5.5:high             # 주연2 — 머지 게이트, Claude-작성 코드와 cross-family
+    critic:    openai-codex/gpt-5.6-sol:high         # 주연2 — 머지 게이트, Claude-작성 코드와 cross-family
 ```
 
 - **architect = Opus 1M**: 200k+ 대형 diff 통독은 실효검색이 무너지지 않는 모델이 맡는다.
-- **critic = GPT-5.5**: 리뷰 대상(Claude 코드)과 **다른 벤더**가 판정한다 — cross-family 기준점을 "내 executor"가 아니라 "**PR 작성자의 모델**"에 둔 첫 프로필.
+- **critic = GPT-5.6 Sol** (v1.11.0에서 gpt-5.5 → 동가 세대교체): 리뷰 대상(Claude 코드)과 **다른 벤더**가 판정한다 — cross-family 기준점을 "내 executor"가 아니라 "**PR 작성자의 모델**"에 둔 첫 프로필.
 - **default = 집계자 제한**: 본체(Anthropic)는 critic 판정 원문을 요약·은폐 없이 보존·노출만 한다. 본체가 재해석하면 편향이 그 지점에서 재생되기 때문이다.
 
 ## 2. Use cases
@@ -69,7 +69,7 @@ gjc-cop --panel 123       # 고위험: 3표 cross-family 패널
 gjc-cop shell             # 대화형 리뷰어 세션(신뢰 계약 자동 주입)
 gjc-cop watch             # 신규 PR 폴링·자동 리뷰(머지 절대 안 함, 사람이 결정)
 gjc-cop --install-hook    # (v1.7, #9 Lv.2) pre-push 훅: push 직전 나가는 diff를 cross-family critic
-                          # 1좌석(gpt-5.5)이 판정. 기본 advisory(출력만) — `git config cop.strict true`면
+                          # 1좌석(gpt-5.6-sol)이 판정. 기본 advisory(출력만) — `git config cop.strict true`면
                           # APPROVE 아닐 때 push 차단. strict에선 좌석 도달 전 모든 실패
                           # (gjc 부재·diff 계산 실패·5MiB 초과·좌석 실패)가 fail-closed. 우회: git push --no-verify
 ```
@@ -92,7 +92,7 @@ gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
 
 프로필 설치가 안 됐다면 [원클릭 설치](../README.md#-30초-설치-한-줄-복붙) 후 `gjc --mpreset cyber-cop`.
 
-원커맨드 헬퍼(동봉)도 있다 — **좌석 오케스트레이터**로, 좌석마다 `gjc -p --model …`를 따로 호출해 4섹션 verdict(architect/critic/불변식/머지 권고)를 조립한다. critic은 **실제로 `openai-codex/gpt-5.5`(Claude 작성자 대비 cross-family)로 실행**되며 본체가 롤플레이하지 않는다 — cross-family가 프롬프트 순응이 아니라 **호출 구조로 보장**된다(#10). 각 섹션 헤더에 실행 모델이 명기되고, 불변식은 스크립트가 직접 실행하며, **절대 머지하지 않는다**:
+원커맨드 헬퍼(동봉)도 있다 — **좌석 오케스트레이터**로, 좌석마다 `gjc -p --model …`를 따로 호출해 4섹션 verdict(architect/critic/불변식/머지 권고)를 조립한다. critic은 **실제로 `openai-codex/gpt-5.6-sol`(Claude 작성자 대비 cross-family)로 실행**되며 본체가 롤플레이하지 않는다 — cross-family가 프롬프트 순응이 아니라 **호출 구조로 보장**된다(#10). 각 섹션 헤더에 실행 모델이 명기되고, 불변식은 스크립트가 직접 실행하며, **절대 머지하지 않는다**:
 
 ```bash
 # 헬퍼는 셋업가이드 레포에 있다(설치기는 gjc-profiles.yml만 받음) — $GUIDE 절대경로로 실행
@@ -151,13 +151,13 @@ gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
 
 고위험 PR·보안 감사의 머지 게이트는 critic **3표 병렬 패널**이 맡는다 (인용 — 규범: routing-rules.md 리뷰어 계약):
 
-- 패널: `{openai-codex/gpt-5.5:high, xai/grok-4.5:high, google-antigravity/gemini-3.1-pro-low:high}`
+- 패널: `{openai-codex/gpt-5.6-sol:high, xai/grok-4.5:high, google-antigravity/gemini-3.1-pro-low:high}`
   - v1.10.0에서 xai 패널 좌석은 `grok-4.5:high`로 갱신했다. high effort는 고위험/옵트인 패널 전용(2026-07-09 벤치: ~7.6k reasoning, TTFT ~48s).
 - **독립 투표 후 본체 집계 (토론 금지)** — 토론형 합의는 편향을 증폭한다
 - **2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단**
 - 각 표는 **file-backed blocking issue 최소 1건 또는 명시적 no-finding rationale** 필수 — 근거 없는 표는 무효표
 
-`xai`는 `required_providers`에 **없다** — grok 미보유자도 프로필을 쓸 수 있다. 3표째(grok)는 xai 로그인 시 가동되고, 미보유면 **2표 {gpt-5.5, gemini}로 강등 운영**해도 provenance 최소치(non-default family ≥2)는 유지된다. PR 작성 모델을 모를 때도 같은 규칙: "Claude 작성"으로 가정하지 말고 non-default family 2개 이상을 호출한다.
+`xai`는 `required_providers`에 **없다** — grok 미보유자도 프로필을 쓸 수 있다. 3표째(grok)는 xai 로그인 시 가동되고, 미보유면 **2표 {gpt-5.6-sol, gemini}로 강등 운영**해도 provenance 최소치(non-default family ≥2)는 유지된다. PR 작성 모델을 모를 때도 같은 규칙: "Claude 작성"으로 가정하지 말고 non-default family 2개 이상을 호출한다.
 
 ## 5. 보안 — 자동화하기 전에 반드시 읽어라
 
