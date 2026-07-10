@@ -197,6 +197,6 @@
 <text x="730" y="810" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
 <rect x="892" y="771" width="168" height="48" rx="8" fill="#DFF3F4"/><rect x="892" y="771" width="4.5" height="48" rx="2" fill="#0E7490"/>
 <text x="906" y="800" font-size="12.5" font-weight="700" fill="#155E63">GLM-5.2</text>
-<text x="24" y="860" font-size="11.5" fill="#6B6B7B">불변식: 전 번들 멀티벤더(providers ≥2) · default = Anthropic 플래그십(예외 ultimate-sol, WARN 표면화) · critic = cross-family 기본(예외는 SAME_FAMILY_OK + WARN)</text>
+<text x="24" y="860" font-size="11.5" fill="#6B6B7B">불변식: 전 번들 멀티벤더(providers ≥2) · default = Anthropic 플래그십(예외: opt-in ultimate-sol=Sol · anthropic 미포함 eco=Terra) · critic = cross-family 기본(예외는 SAME_FAMILY_OK + WARN)</text>
 <text x="24" y="880" font-size="11.5" fill="#6B6B7B">엔진 effort 하드룰 합법 · 🔥 dream-team = Fable 5 구독 포함 이벤트(~7/12 23:59 PT, 이후 usage credits $10/$50) · llm-council/escalation 은 좌석표+워크플로 계약 · gjc 0.9.6</text>
 </svg>

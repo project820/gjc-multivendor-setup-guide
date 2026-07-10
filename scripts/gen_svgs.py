@@ -126,7 +126,7 @@ def gen_role_winners():
         ("🧠 planner", "최상위 추론·설계", O, "GPT-5.6 Sol", ":xhigh",
          "OpenAI · 5.6 플래그십 추론"),
         ("🔭 architect", "1M 실효검색·설계 리뷰", A, "Claude Opus 4.8", ":high",
-         "Anthropic · MRCR 76%@1M"),
+         "Anthropic · MRCR 76%@1M(4.6 실측 — 4.8 미공개)"),
         ("⚖ critic", "독립 적대 비평", X, "Grok 4.5", ":high",
          "xAI · 제3계열 독립 dissent"),
     ]
@@ -216,7 +216,7 @@ def gen_profiles_matrix():
                       f'opacity="0.8">{esc(effort)}</text>\n')
     # 푸터
     s += (f'<text x="24" y="{footer_y}" font-size="11.5" fill="#6B6B7B">불변식: '
-          f'전 번들 멀티벤더(providers ≥2) · default = Anthropic 플래그십(예외 ultimate-sol, WARN 표면화) · '
+          f'전 번들 멀티벤더(providers ≥2) · default = Anthropic 플래그십(예외: opt-in ultimate-sol=Sol · anthropic 미포함 eco=Terra) · '
           f'critic = cross-family 기본(예외는 SAME_FAMILY_OK + WARN)'
           f'</text>\n')
     s += (f'<text x="24" y="{footer_y+20}" font-size="11.5" fill="#6B6B7B">'
