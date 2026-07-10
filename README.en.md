@@ -371,7 +371,7 @@ gjc -p --no-session --no-tools --model "openai-codex/gpt-5.6-terra:high" "Reply 
 
 ### 6-2·6-3. Role-fit deep dive (moved)
 
-Repeated deep research and measurement found the role-to-model placement near-optimal: the 07-10 Sol generation change updated planner, Gemini’s nominal 1M is not effective 1M (MRCR 26%@1M versus Opus 76%), and a ~400k single-message limit is not the context-window limit, so chunk accumulation is required. Full details: [docs/deep-dive-role-fit.md](./docs/deep-dive-role-fit.md) (Korean-only deep-dive).
+Cross-validating v1's three independent deep-research passes (GPT-5.5 · Claude Opus 4.8 · Gemini 3.1 Pro) with v2's two-axis blind independent research (Claude Fable 5 Ultracode · Parallel.ai Ultra 2x, 2026-07-10) confirmed the role-to-model placement as near-optimal: the 07-10 Sol generation change updated planner, Gemini's nominal 1M is not effective 1M (MRCR 26%@1M versus Opus 76%), and a ~400k single-message limit is not the context-window limit, so chunk accumulation is required. Full details: [docs/deep-dive-role-fit.md](./docs/deep-dive-role-fit.md) (Korean-only deep-dive).
 
 ---
 

@@ -427,7 +427,7 @@ gjc -p --no-session --no-tools --model "openai-codex/gpt-5.6-terra:high" "Reply 
 
 ### 6-2·6-3. 역할 배치 딥다이브 (이관됨)
 
-다회차 딥리서치+실측으로 역할→모델 배치가 near-optimal임을 확인했다. planner는 07-10 Sol 세대교체, Gemini 명목 1M≠실효 1M(MRCR 26%@1M vs Opus 76%), 단일 메시지 한도 ~400k는 윈도우 한도가 아니므로 청크 누적이 전제다. 전문: [docs/deep-dive-role-fit.md](./docs/deep-dive-role-fit.md)
+v1의 3종 독립 딥리서치(GPT-5.5 · Claude Opus 4.8 · Gemini 3.1 Pro)와 v2의 2축 블라인드 독립 리서치(Claude Fable 5 Ultracode · Parallel.ai Ultra 2x, 2026-07-10)를 교차검증한 결과, 역할→모델 배치는 near-optimal로 확인됐다. planner는 07-10 Sol 세대교체, Gemini 명목 1M≠실효 1M(MRCR 26%@1M vs Opus 76%), 단일 메시지 한도 ~400k는 윈도우 한도가 아니므로 청크 누적이 전제다. 전문: [docs/deep-dive-role-fit.md](./docs/deep-dive-role-fit.md)
 
 ---
 

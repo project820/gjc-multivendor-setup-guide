@@ -368,7 +368,7 @@ gjc -p --no-session --no-tools --model "google-antigravity/gemini-3.1-pro-low:hi
 gjc -p --no-session --no-tools --model "openai-codex/gpt-5.6-terra:high" "Reply exactly: OK"
 ```
 
-角色→模型的深度研究与实测分析已移至[docs/deep-dive-role-fit.md](./docs/deep-dive-role-fit.md)（仅韩文）；其中涵盖 Sol planner 世代替换、Gemini 名义 1M 与有效检索的差异，以及单条消息约 400k 限制不等于上下文窗口、需要分块累积的结论。
+v1 的三份独立深度调研（GPT-5.5 · Claude Opus 4.8 · Gemini 3.1 Pro）与 v2 的双轴盲测独立调研（Claude Fable 5 Ultracode · Parallel.ai Ultra 2x，2026-07-10）交叉验证确认：角色→模型配置接近最优。深度分析已移至[docs/deep-dive-role-fit.md](./docs/deep-dive-role-fit.md)（仅韩文），涵盖 Sol planner 世代替换、Gemini 名义 1M 与有效检索的差异，以及单条消息约 400k 限制不等于上下文窗口、需要分块累积的结论。
 
 ---
 

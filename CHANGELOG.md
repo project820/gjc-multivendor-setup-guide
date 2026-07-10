@@ -15,7 +15,7 @@
 
 ### Changed (PATCH — 문서 개편, 매핑/좌석 불변)
 - **README×4 정보구조 개편**: 퍼널 재정렬(hero → 30초 설치 → 번들 선택 티저 → 목차 → 카탈로그 → 운영 → 링크), cyber-cop/Extragoal 티저 카드 강등(+EN 미러에 누락돼 있던 Extragoal 티저 신설), 중복(설치 원라이너·`/login`·마이그레이션) 정본 1곳화, §5 설계근거 벽문단 → 번들당 1줄 요점, §6 셀 다이어트 + 표기 범례 + `<details>`(실패 셀렉터·지연·마이그레이션). KO 641→552줄, EN 603→499, ZH 614→492, JA 613→489.
-- **딥다이브 이관**: §6-2/§6-3 → 신설 [`docs/deep-dive-role-fit.md`](./docs/deep-dive-role-fit.md)(KO 정본, non-normative 헤더 + dated provenance). README×4는 요약+링크 잔류. EN/ZH/JA의 KO-only 블록(TOC·§5 근거·§5 TIP·§6-2/6-3 전문 번역 — 계약 위반 드리프트)을 MAINTAINING §4 계약대로 제거(TOC 삭제, 나머지 요약+링크). 라이브 §6-2/6-3 포인터 재지정: MAINTAINING:45/:66 · routing-rules:110 · CHANGELOG v1.5.1 항목; 과거 릴리스 노트의 §6-2/6-3 프로즈는 역사 기록으로 verbatim 보존.
+- **딥다이브 이관**: §6-2/§6-3 → 신설 [`docs/deep-dive-role-fit.md`](./docs/deep-dive-role-fit.md)(KO 정본, non-normative 헤더 + dated provenance). README×4는 요약+링크 잔류. EN/ZH/JA의 KO-only 블록(TOC·§5 근거·§5 TIP·§6-2/6-3 전문 번역 — 계약 위반 드리프트)을 MAINTAINING §4 계약대로 제거(TOC 삭제, 나머지 요약+링크). 라이브 §6-2/6-3 포인터 재지정: MAINTAINING:45/:66 · routing-rules:110 · CHANGELOG v1.5.2 항목; 과거 릴리스 노트의 §6-2/6-3 프로즈는 역사 기록으로 verbatim 보존.
 - 버전 표기 2.0.0→2.0.1(배지·footer ×4; `2026-07-10` 검증 배지 불변).
 
 ### Fixed (정합성·최신성 — research/2026-07-10-readme-frontend-review.md §G)

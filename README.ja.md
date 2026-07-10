@@ -365,7 +365,7 @@ gjc -p --no-session --no-tools --model "google-antigravity/gemini-3.1-pro-low:hi
 gjc -p --no-session --no-tools --model "openai-codex/gpt-5.6-terra:high" "Reply exactly: OK"
 ```
 
-役割配置と残余ギャップの深掘りは、韓国語のみの [docs/deep-dive-role-fit.md](./docs/deep-dive-role-fit.md) を参照。
+v1 の3本の独立ディープリサーチ（GPT-5.5 · Claude Opus 4.8 · Gemini 3.1 Pro）と v2 の2軸ブラインド独立リサーチ（Claude Fable 5 Ultracode · Parallel.ai Ultra 2x、2026-07-10）の相互検証により、役割→モデル配置は near-optimal と確認された。役割配置と残余ギャップの深掘りは、韓国語のみの [docs/deep-dive-role-fit.md](./docs/deep-dive-role-fit.md) を参照。
 
 ---
 
