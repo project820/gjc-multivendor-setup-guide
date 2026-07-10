@@ -33,7 +33,7 @@ ROLES = {"default", "executor", "architect", "planner", "critic"}
 # Documented intentional same-family pairs (design choices, not bugs).
 # (profile, pair) -> rationale ; pair in {"exec_arch","plan_crit"}.
 SAME_FAMILY_OK = {
-    ("monorepo", "exec_arch"): "all roles >=1M ctx; gpt-5.5 (272K) excluded — gpt-5.4 is 1M but Opus ranks at least equal",
+    ("monorepo", "exec_arch"): "all roles >=1M ctx; gpt-5.5/5.6 (272K) excluded — gpt-5.4 is 1M but Opus ranks at least equal",
     ("claude-codex", "exec_arch"): "2-vendor: Anthropic = execution/context lane",
     ("claude-codex", "plan_crit"): "2-vendor: Codex = reasoning/critique lane",
     ("claude-codex-max", "exec_arch"): "2-vendor: Anthropic = execution/context lane",
@@ -49,12 +49,14 @@ FAMILY = {
 }
 # Legal effort suffixes by model class. Matchers take (provider, model_id) so
 # per-provider ceilings can differ (same model id can clamp differently by provider).
-# Sets encode GJC-EFFECTIVE ceilings (0.9.1, live-verified 2026-07-09), NOT the API ones:
+# Sets encode GJC-EFFECTIVE ceilings (0.9.1~0.9.5, live-verified 2026-07-09/10), NOT the API ones:
 #   fable-5 <=xhigh (:max silently clamps) · sonnet-5 <=high (API allows max — upstream gap)
 #   xai grok-4.3 <=high (:xhigh silently clamps; xhigh exists only on the grok-build provider,
 #   whose effort suffixes don't resolve at all — bare grok-build selectors only)
 #   xai grok-4.5 <=high (native reasoning_efforts=low/med/high per models_cache.json;
 #   :xhigh/:max exit 0 but silently clamp to high — never shipped)
+#   gpt-5.6-sol/terra/luna: catalog lists low..max and :max is accepted live (2026-07-10),
+#   but its depth is un-benchmarked — deliberate fail-closed ceiling stays xhigh (gpt-5.[2-9] rule).
 def _eff_rules():
     return [
         (lambda p, m: m.startswith("claude-fable-5"), {"minimal","low","medium","high","xhigh"}),   # :max -> silent clamp to xhigh

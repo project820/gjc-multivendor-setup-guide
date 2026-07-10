@@ -268,7 +268,7 @@ echo
 b "⚠ 프로바이더 인증 (필수 — 안 하면 'No API key')"
 echo "  GJC를 켠 뒤 아래를 한 번씩(브라우저 OAuth):"
 echo "    /login anthropic           # claude"
-echo "    /login openai-codex        # gpt(base GPT: gpt-5.5/5.4)"
+echo "    /login openai-codex        # gpt(base GPT: gpt-5.6 sol/terra/luna · 5.5 · 5.4)"
 echo "    /login google-antigravity  # gemini (Google AI Pro/Ultra 구독)"
 echo "    /login xai                 # grok 전체(grok-4.5 등)"
 echo "  opencode-go 는 /provider add 또는 OPENCODE_API_KEY"

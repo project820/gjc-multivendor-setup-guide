@@ -25,7 +25,8 @@
 - 실패신호(테스트 깨짐·자기모순·재시도 루프·critic 반려)에서만 1단계 격상: high → xhigh → max.
 - 단, 사다리 상한은 모델별(GJC 실효): max는 Opus 전용 최상단 · Fable 5=**xhigh**(`:max`는 침묵 클램프) ·
   Sonnet(4.6/5)=**high** · xai grok-4.3=**high**(`:xhigh` 침묵 클램프) · xai grok-4.5=**high**(`:xhigh`/`:max` 침묵 클램프) · Gemini Pro는 low↔high 2단뿐 ·
-  opencode-go는 effort 자체를 생략. 상한 위 등급을 써도 에러 없이 조용히 깎이니 "올렸다"고 착각 금지.
+  gpt-5.6 3종=출하 상한 **xhigh**(`:max`는 수용되나 심도 미검증 — 광고 금지) · opencode-go는 effort 자체를 생략.
+  상한 위 등급을 써도 에러 없이 조용히 깎이니 "올렸다"고 착각 금지.
 - minimal 금지(-23점 급락). "안전하니 올리자"식 무조건 max 금지.
 
 ## 프로필 스왑 — 모드 경계에서만 (매 쿼리 스왑 ❌, 캐시 손실)
@@ -36,9 +37,9 @@
 ## 리뷰어 계약 — cyber-cop 프로필 전용 (PR 리뷰·보안 감사 세션)
 - **위임 순서**: 리뷰 진입 → **architect 선호출**(1차 코드리뷰 판정자: CLEAR/WATCH/BLOCK) →
   머지 게이트 → **critic**. 고위험 PR·보안 감사는 critic **3표 병렬 패널**
-  `{openai-codex/gpt-5.5:high, xai/grok-4.5:high, google-antigravity/gemini-3.1-pro-low:high}` —
+  `{openai-codex/gpt-5.6-sol:high, xai/grok-4.5:high, google-antigravity/gemini-3.1-pro-low:high}` —
   독립 투표 후 본체가 집계(토론 금지), **2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단**.
-  (3표째 grok은 xai 로그인 시 — 미보유면 2표 {gpt-5.5, gemini}로 강등 운영, provenance 최소치(non-default family ≥2)는 유지된다.)
+  (3표째 grok은 xai 로그인 시 — 미보유면 2표 {gpt-5.6-sol, gemini}로 강등 운영, provenance 최소치(non-default family ≥2)는 유지된다.)
 - **default=집계자 제한**: 본체는 critic/패널의 raw verdict를 **요약·은폐 없이 보존·노출**한다.
   본체(Anthropic)가 Claude-작성 PR을 재해석하면 자기선호 편향이 재생된다(arXiv 2410.21819) — 판정 원문이 진실원천.
 - **증거 계약**: critic 1표당 **file-backed blocking issue 최소 1건** 또는 **명시적 no-finding rationale** 필수.
@@ -53,9 +54,11 @@
   thinking 상시-온(끌 수 없음). 안전 분류기 거부가 **HTTP 200 + `stop_reason: refusal`**로 옴 — "빈 응답"으로 오인 금지.
 - `anthropic/claude-sonnet-5` — GJC 실효 상한 = **high** (`:xhigh`/`:max`는 high로 침묵 클램프).
   토크나이저 변경으로 동일 텍스트 ~30% 토큰 증가 — 실효 비용을 스티커 가격으로 계산 금지.
-- Gemini 고추론 = `google-antigravity/gemini-3.1-pro-low:high`  (★ `gemini-3.1-pro-high` 는 카탈로그 목록엔 떠도 호출은 여전히 400)
-- openai-codex 는 base GPT만 (`gpt-5.5` / `gpt-5.4`) — `-codex` 변종(gpt-5.3-codex 등) 미지원.
-  ctx는 모델별: **gpt-5.4=1M / gpt-5.5=272K**(400K→272K 축소 — "codex 272k" 일괄 룰 폐기). 대용량 입력은 gpt-5.4.
+- Gemini 고추론 = `google-antigravity/gemini-3.1-pro-low:high`  (★ `gemini-3.1-pro-high` 는 0.9.5에서 카탈로그에서 제거됐고, 이제 400이 아니라 **퍼지 매칭으로 gemini-3.1-pro-low 기본 effort로 침묵 해석**되어 "성공"한다 — 고추론이 아니다. 반드시 `-low:high` 리터럴 핀)
+- openai-codex 는 base GPT만 (`gpt-5.6-sol`/`gpt-5.6-terra`/`gpt-5.6-luna` · `gpt-5.5` · `gpt-5.4`) — `-codex` 변종(gpt-5.3-codex 등) 미지원.
+  ctx는 모델별: **gpt-5.4=1M / gpt-5.5·gpt-5.6 3종=272K**(5.6의 API 스펙은 1.05M — codex 표기 하한). 대용량 입력은 gpt-5.4.
+- openai-codex `gpt-5.6-sol/terra/luna` (2026-07-09 GA, 실호출 검증 2026-07-10) — Sol $5/$30(5.5 동가·상위호환) · Terra $2.5/$15(≈5.5급 반값) · Luna $1/$6(미채용).
+  `:medium`/`:high`/`:xhigh` 검증 OK · `:max`는 수용되나 **심도 미검증 — 출하·광고 금지**. ⚠ METR이 Sol의 SWE 평가 게이밍을 적발 — SWE류 벤치 단독 근거 승격 금지.
 - xai `grok-4.5` (canonical `grok-4-5`) — **xai API(XAI_API_KEY) 전용** · grok-build/OAuth 변종 **없음**(grok-4.3와 다름).
   GJC 실효 상한 = **high** (native low/med/high; `:xhigh`/`:max`는 high로 침묵 클램프 — 광고 금지).
   provider ctx **500K**(auto-compact 80% → exact-diff 안전 ~**400K**)이나 GJC `--list-models`는 **222K/8.9K**로 스테일 표기(보수적 하한). 가격 **$2/$6** per 1M(실효 ~$0.84/$6.2 @88% cache).
