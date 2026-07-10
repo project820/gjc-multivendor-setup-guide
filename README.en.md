@@ -33,9 +33,9 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 - High-risk / security PRs convene a **3-vote parallel panel** (`gpt-5.6-sol` · `grok-4.5` · `gemini-3.1-pro`), independent votes → 2/3 dissent or any CRITICAL/BLOCK blocks.
 
 **Proof it works — this repo dogfooded it**
-> Across PRs #4–#7 the review gate **blocked 10 defects before merge** (#4: 5 · #6: 5 · #7: passed on first vote). The review helper was BLOCKed by *its own* prompt-injection flaw (fixed, then passed), and two overclaims the Anthropic base model waved through (a relative-path injection surface and a permission overclaim) were **correctly BLOCKed by the cross-family critic (GPT-5.5)**. (One more was caught *after* #6 merged → fixed immediately in #7.) The self-preference-bias defense works in practice.
+> Across PRs #4–#7 the review gate **blocked 10 defects before merge** (#4: 5 · #6: 5 · #7: passed on first vote). The review helper was BLOCKed by *its own* prompt-injection flaw (fixed, then passed), and two overclaims the Anthropic base model waved through (a relative-path injection surface and a permission overclaim) were **correctly BLOCKed by the cross-family critic (the then-seat GPT-5.5 — the current critic seat is GPT-5.6 Sol)**. (One more was caught *after* #6 merged → fixed immediately in #7.) The self-preference-bias defense works in practice.
 
-**Start clone-free in 2 commands (v1.6+)**
+**Start clone-free in 2 commands**
 ```bash
 # prereqs: gh CLI installed & authed (gh auth login) + gjc provider /login done
 curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | GJC_SETUP_COP=1 bash
@@ -103,15 +103,15 @@ Subscribing to claude·gpt·grok·gemini·opencode go and then using only one mo
 
 | Role | What it does | Best model |
 |---|---|---|
-| 🧠 **reasoning/planning** (planner) | sequencing, acceptance criteria | **Gemini 3.1 Pro** (GPQA 94.3 / ARC-AGI-2 77.1)† |
+| 🧠 **reasoning/planning** (planner) | sequencing, acceptance criteria | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · GA 2026-07-09)† — bundle-specific seats: see [§5](#5-️-final-catalog--10-bundles--4-tiers) (exceptions: cyber-cop/monorepo=Gemini, eco=Luna) |
 | 🔨 **implementation** (executor) | writing/editing real code | **Claude Fable 5** (SWE-bench Verified **95.0**) — strongest *subscription-included* is **Opus 4.8** (88.6) |
 | 🔭 **code review** (architect) | large-repo navigation, architecture | **Gemini 3.1 Pro** (multimodal MMMU-Pro 81%)† · ultra-long-context (>200k) → **Opus** |
 | ⚖️ **independent critique** (critic) | adversarial verification | **cross-family** (different vendor than the main loop) |
 | 🎛️ **orchestration** (default) | tool-calling, routing, honesty | **Anthropic flagship** — Opus 4.8 (router quality caps the whole system; `dream-team` uses Fable 5. The only non-Anthropic routers are opt-in `ultimate-sol` (Sol) and Anthropic-free `eco` (Terra)) |
 
-> **Benchmark reference date: 2026-07-02** (re-verified right after the Claude 5 family launch). † Reasoning-axis update: **GPT-5.6 Sol went GA on 2026-07-09** — the v2 catalog already completed the planner-axis generation swap ([§6-2](#6-2-role-placement-optimality-review-deep-research--measurements)). On the architect axis, Gemini 3.5 Pro (2M ctx, Deep Think) slipped to July GA — will re-verify on release.
+> **Benchmark reference date: 2026-07-10** (planner row — GPT-5.6 Sol GA reflected). † 07-02 snapshot: the former planner-axis leader was Gemini 3.1 Pro (GPQA 94.3 / ARC-AGI-2 77.1), but the 07-09 Sol GA replaced that generation ([§6-2](#6-2-role-placement-optimality-review-deep-research--measurements)). The architect axis remains at its 2026-07-02 baseline — Gemini 3.5 Pro (2M ctx, Deep Think) slipped to July GA; re-verification is due on release.
 
-> Fill all 5 roles from one vendor and at least one role is not the best. This guide fills each of the 5 with its best-fit vendor — weighed against cost, accessibility, and reliability — into a combo that **actually works**. It cross-validates three independent deep-research passes (GPT-5.5 · Claude Opus 4.8 · Gemini 3.1 Pro) and **verifies every profile selector with live calls** ([§6](#6--verification-matrix)).
+> Fill all 5 roles from one vendor and at least one role is not the best. This guide fills each of the 5 with its best-fit vendor — weighed against cost, accessibility, and reliability — into a combo that **actually works**. It cross-validates v1's three independent deep-research passes (GPT-5.5 · Claude Opus 4.8 · Gemini 3.1 Pro) and v2's two-axis blind independent research (Claude Fable 5 Ultracode · Parallel.ai Ultra 2x, 2026-07-10) ([§6-2](#6-2-role-placement-optimality-review-deep-research--measurements)), and records selector verification status in [§6](#6--verification-matrix).
 
 ---
 
@@ -174,13 +174,13 @@ google-antigravity Gemini  gemini-3.1-pro-low:high (high reasoning) · gemini-3.
 | claude | `anthropic` | all efforts. Includes the Claude 5 family (Fable 5 · Sonnet 5) |
 | gpt | `openai-codex` | **ChatGPT account → serves base GPT (gpt-5.6 sol/terra/luna · 5.5 · 5.4)**. ctx: gpt-5.4=1M · 5.5=272K · the three 5.6 models=373K |
 | grok | `xai` | full lineup + Composer |
-| gemini | `google-antigravity` | **Google AI Pro/Ultra subscription token**. Gemini + bundled Claude (Opus 4.6 — bundle composition not re-checked since the Claude 5 launch) |
+| gemini | `google-antigravity` | **Google AI Pro/Ultra subscription token**. Gemini + bundled Claude (Opus 4.6 — as of 2026-07-02; bundle composition has not been re-checked afterward) |
 | opencode go | `opencode-go` | API key (`OPENCODE_API_KEY`) |
 
 > [!NOTE]
 > **openai-codex path caveat**: logging in with a ChatGPT (Codex) account serves the **base GPT models (`gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, `gpt-5.5`, `gpt-5.4`)**. Standalone `-codex` variants (`gpt-5.3-codex`, `gpt-5.2-codex`, `gpt-5.1-codex-max/mini`) are **not supported** on this path (`not supported when using Codex with a ChatGPT account`), so this guide uses verified **base GPT** for coding roles too.
 >
-> Alternative paths: `google-vertex` (API key, paid per-token, 1M ctx) — a fallback independent of subscription/quota. Another is **DeepInfra** (new GJC provider since 0.7.9, API key): DeepSeek V4 Pro **$1.30/$2.60** (1M ctx) · V4 Flash $0.09/$0.18 — its Standard/Priority (1.5×) tiers map directly onto GJC's `service-tier` setting.
+> Alternative paths: `google-vertex` (API key, paid per-token, 1M ctx) — a fallback independent of subscription/quota. Another is **DeepInfra** (API key): DeepSeek V4 Pro **$1.30/$2.60** (1M ctx) · V4 Flash $0.09/$0.18 — its Standard/Priority (1.5×) tiers map directly onto GJC's `service-tier` setting.
 
 ### 3-4. Selector syntax
 
@@ -199,12 +199,12 @@ opencode-go/<model>                           (omit effort = model default)
 | Role (axis) | Leader | Figure |
 |---|---|---|
 | executor (SWE-bench Verified) | **Fable 5** | **95.0%** (Opus 4.8 88.6 = **strongest subscription-included** · GPT-5.5 82.6 · Gemini 3.1 Pro 80.6) |
-| planner (reasoning GPQA/ARC-AGI) | **Gemini 3.1 Pro**† | GPQA 94.3 · ARC-AGI-2 77.1 (fluid reasoning: GPT-5.5 — [§6-2 (KO)](./README.md#6-2-역할-배치-최적성-검토-deep-research--실측) · standalone GPQA #1 is Sonnet 5 at 96.2) |
+| planner (long-horizon workflow · reasoning) | **GPT-5.6 Sol**† | Agents' Last Exam 52.7 (5.5: 46.9) · AA Intelligence 58.9 — standalone GPQA #1 is Sonnet 5 at 96.2 · Gemini 3.1 Pro is specialized for scientific knowledge at 94.3 ([§6-2](#6-2-role-placement-optimality-review-deep-research--measurements)) |
 | architect (ctx · multimodal) | **Gemini 3.1 Pro**† | 1M ctx · MMMU-Pro 81% |
 | default (tool-calling · honesty) | **Opus 4.8 / Fable 5** | router quality = whole-system ceiling (Fable carries refusal/billing caveats — [§5](#5-️-final-catalog--10-bundles--4-tiers)) |
 | critic (independence) | **cross-family** | meta-judge > debate aggregation |
 
-> † **Update note**: the planner axis completed its generation swap to **GPT-5.6 Sol (GA 2026-07-09)** — reflected in the v2 catalog; the planner/architect rows above are a 2026-07-02 snapshot. On the architect axis, Gemini 3.5 Pro (2M ctx, Deep Think) slipped to July GA; its release puts this table up for re-verification.
+> † The planner row is **as of 2026-07-10** (GPT-5.6 Sol GA 07-09 — no ARC-AGI-2 5.6 figure is published; evidence is the official evaluation table plus the AA index). The §5 seat table is authoritative for bundle-specific planner seats (exceptions: cyber-cop/monorepo=Gemini, eco=Luna). The architect axis is due for re-verification on Gemini 3.5 Pro's release (2026-07-02 baseline).
 
 **Consensus principles**
 
@@ -475,7 +475,7 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # revert (restore ba
 ```
 
 > [!WARNING]
-> **GJC 0.7.10 preset rename/delete caveat**: the engine's custom-preset rename/delete features **strip all comments** from `models.yml` — including the installer's managed-block sentinels — which degrades updates to name-based replacement, so **profiles you deleted can resurrect on reinstall** (reproduced). After using rename/delete, double-check the result when reinstalling; for guaranteed full removal, restoring a backup (`cp … .bak-*`) is the safest path.
+> **GJC 0.7.10~0.9.1 preset rename/delete caveat**: the engine's custom-preset rename/delete features **strip all comments** from `models.yml` — including the installer's managed-block sentinels — which degrades updates to name-based replacement, so **profiles you deleted can resurrect on reinstall** (reproduced). After using rename/delete, double-check the result when reinstalling; for guaranteed full removal, restoring a backup (`cp … .bak-*`) is the safest path. (Unverified on 0.9.6 — reproduction confirmed on 0.7.10~0.9.1.)
 
 ---
 

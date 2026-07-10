@@ -33,9 +33,9 @@
 - 高风险 PR·安全审计召集**3 票并行评审团**（`gpt-5.6-sol` · `grok-4.5` · `gemini-3.1-pro`），独立投票 → 2/3 反对或任一 CRITICAL/BLOCK 即拦截。
 
 **实证有效 —— 本仓库自我验证**
-> 在 PR #4~#7 中，审查门在合并前**拦截了 10 个缺陷**（#4：5 · #6：5 · #7：首轮通过）。审查辅助脚本因*自身的* prompt-injection 缺陷被 BLOCK（修复后通过）；本体（Anthropic）对自家族文档放行的 2 处（相对路径注入面·权限夸大）被 **cross-family critic（GPT-5.5）准确 BLOCK**。（另有 1 个在 #6 合并**后**发现 → 已在 #7 立即修复。）证明自我偏好偏差防御在实战中生效。
+> 在 PR #4~#7 中，审查门在合并前**拦截了 10 个缺陷**（#4：5 · #6：5 · #7：首轮通过）。审查辅助脚本因*自身的* prompt-injection 缺陷被 BLOCK（修复后通过）；本体（Anthropic）对自家族文档放行的 2 处（相对路径注入面·权限夸大）被 **cross-family critic（当时席位 GPT-5.5 — 现行 critic 席位为 GPT-5.6 Sol）准确 BLOCK**。（另有 1 个在 #6 合并**后**发现 → 已在 #7 立即修复。）证明自我偏好偏差防御在实战中生效。
 
-**免克隆，两条命令开始（v1.6+）**
+**免克隆，两条命令开始**
 ```bash
 # 前提：已安装并认证 gh CLI（gh auth login）+ gjc 各提供方 /login 完成
 curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | GJC_SETUP_COP=1 bash
@@ -50,7 +50,7 @@ gjc-cop 123               # PR #123 → 4 段判定（REPO 从 cwd 自动检测 
 
 📖 完整的缺口论证·三步用法·自动审查流水线·安全守则 → **[cyber-cop 公告文档](./docs/whats-new-cyber-cop.md)**
 
-### Extragoal — GPT-5.5 Pro 最终审查通道（opt-in，v1.9+）
+### Extragoal — GPT-5.5 Pro 最终审查通道（opt-in）
 
 GPT-5.5 **Pro** 订阅者可把 Pro 的深度推理投入开发·QA·安全检查的第 -1 轮判定席。这是把上游 gajae-code 的 extragoal 外部审查门包装成可安装体验；**没有它，上游默认通道也始终可用，Pro 通道也不是任何阶段的前置条件。**
 
@@ -113,15 +113,15 @@ gjc                        # 新会话自动使用 daily
 
 | 角色 | 做什么 | 最佳模型 |
 |---|---|---|
-| 🧠 **推理/规划**（planner） | 排序、验收标准 | **Gemini 3.1 Pro**（GPQA 94.3 / ARC-AGI-2 77.1）† |
+| 🧠 **推理/规划**（planner） | 排序、验收标准 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA）† — 各捆绑席位见[§5](#5-️-最终目录--10-个捆绑--4-层级)（例外：cyber-cop·monorepo=Gemini，eco=Luna） |
 | 🔨 **实现**（executor） | 真正写/改代码 | **Claude Fable 5**（SWE-bench Verified **95.0**）— 订阅内最强是 **Opus 4.8**（88.6） |
 | 🔭 **代码评审**（architect） | 大型仓库导航、架构 | **Gemini 3.1 Pro**（多模态 MMMU-Pro 81%）† · 超长上下文（>200k）→ **Opus** |
 | ⚖️ **独立批评**（critic） | 对抗式验证 | **cross-family**（与主循环不同厂商） |
 | 🎛️ **编排**（default） | 工具调用、路由、诚实性 | **Anthropic 旗舰** — Opus 4.8（路由质量 = 全系统上限；`dream-team` 用 Fable 5。非 Anthropic 路由只有两个：opt-in `ultimate-sol`（Sol）与不含 Anthropic 的 `eco`（Terra）） |
 
-> **基准日期：2026-07-02**（Claude 5 家族发布后即时复验）。† 推理维度更新：**GPT-5.6 Sol 已于 2026-07-09 GA** — v2 目录已完成 planner 轴换代（[§6-2](#6-2-角色配置最优性复查deep-research--实测)）。architect 维度 Gemini 3.5 Pro（2M 上下文，Deep Think）推迟至 7 月 GA — 发布后将重新验证。
+> **基准日期：2026-07-10**（planner 行 — 已反映 GPT-5.6 Sol GA）。† 07-02 快照：planner 轴原第一是 Gemini 3.1 Pro（GPQA 94.3 / ARC-AGI-2 77.1），但 07-09 Sol GA 已完成该代际替换（[§6-2](#6-2-角色配置最优性复查deep-research--实测)）。architect 轴仍保持 2026-07-02 基准 — Gemini 3.5 Pro（2M 上下文，Deep Think）推迟至 7 月 GA，发布时将重新验证。
 
-> 用一个厂商填满 5 个角色，必然至少有一个角色不是最强。本指南把这 5 个角色各自配上最合适的厂商，并在成本、可用性、可靠性之间权衡，整理成一个**真正能用**的组合。它交叉验证了三份独立深度调研（GPT-5.5 · Claude Opus 4.8 · Gemini 3.1 Pro），并在[§6](#6--验证矩阵)明确记录选择器验证状态。
+> 用一个厂商填满 5 个角色，必然至少有一个角色不是最强。本指南把这 5 个角色各自配上最合适的厂商，并在成本、可用性、可靠性之间权衡，整理成一个**真正能用**的组合。v1 交叉验证了 3 份独立深度调研（GPT-5.5 · Claude Opus 4.8 · Gemini 3.1 Pro），v2 交叉验证了双轴盲测独立调研（Claude Fable 5 Ultracode · Parallel.ai Ultra 2x，2026-07-10）（[§6-2](#6-2-角色配置最优性复查deep-research--实测)），并在[§6](#6--验证矩阵)明确记录选择器验证状态。
 
 ---
 
@@ -185,13 +185,13 @@ google-antigravity Gemini  gemini-3.1-pro-low:high（高推理）· gemini-3.1-p
 | claude | `anthropic` | 全 effort。含 Claude 5 家族（Fable 5·Sonnet 5） |
 | gpt | `openai-codex` | **ChatGPT 账号 → base GPT（5.6 sol/terra/luna · gpt-5.5 · gpt-5.4）**。上下文：gpt-5.4=1M · gpt-5.5=272K · 5.6 3 种=373K |
 | grok | `xai` | 全系列 + Composer |
-| gemini | `google-antigravity` | **Google AI Pro/Ultra 订阅 token**。Gemini + 捆绑的 Claude（Opus 4.6 — Claude 5 发布后捆绑构成待复核） |
+| gemini | `google-antigravity` | **Google AI Pro/Ultra 订阅 token**。Gemini + 捆绑的 Claude（Opus 4.6 — 截至 2026-07-02，之后捆绑构成未再确认） |
 | opencode go | `opencode-go` | API key（`OPENCODE_API_KEY`） |
 
 > [!NOTE]
 > **openai-codex 路径注意**：用 ChatGPT（Codex）账号登录会提供 **base GPT 模型（`gpt-5.6-sol`、`gpt-5.6-terra`、`gpt-5.6-luna`、`gpt-5.5`、`gpt-5.4`）**。独立的 `-codex` 变体（`gpt-5.3-codex`、`gpt-5.2-codex`、`gpt-5.1-codex-max/mini`）在此路径下**不受支持**（`not supported when using Codex with a ChatGPT account`），因此本指南的编码角色也统一使用已验证的 **base GPT**。
 >
-> 备选路径：`google-vertex`（API key，按 token 付费，1M 上下文）— 与订阅/配额无关的兜底。另一个是 **DeepInfra**（gjc 0.7.9 新增提供方，API key）：DeepSeek V4 Pro **$1.30/$2.60**（1M 上下文）· V4 Flash $0.09/$0.18 — Standard/Priority（1.5×）层级与 GJC `service-tier` 设置直接对应。
+> 备选路径：`google-vertex`（API key，按 token 付费，1M 上下文）— 与订阅/配额无关的兜底。另一个是 **DeepInfra**（API key）：DeepSeek V4 Pro **$1.30/$2.60**（1M 上下文）· V4 Flash $0.09/$0.18 — Standard/Priority（1.5×）层级与 GJC `service-tier` 设置直接对应。
 
 ### 3-4. 选择器语法
 
@@ -210,12 +210,12 @@ opencode-go/<model>                           （省略 effort = 模型默认）
 | 角色（维度） | 领先者 | 数据 |
 |---|---|---|
 | executor（SWE-bench Verified） | **Fable 5** | **95.0%**（Opus 4.8 88.6 = **订阅内最强** · GPT-5.5 82.6 · Gemini 3.1 Pro 80.6） |
-| planner（推理 GPQA/ARC-AGI） | **Gemini 3.1 Pro**† | GPQA 94.3 · ARC-AGI-2 77.1（流体推理是 GPT-5.5 — [§6-2](#6-2-角色配置最优性复查deep-research--实测) · GPQA 单项第一是 Sonnet 5 的 96.2） |
+| planner（长周期工作流·推理） | **GPT-5.6 Sol**† | Agents' Last Exam 52.7（5.5：46.9）· AA Intelligence 58.9 — GPQA 单项第一是 Sonnet 5 的 96.2 · 科学知识专长是 Gemini 3.1 Pro 的 94.3（[§6-2](#6-2-角色配置最优性复查deep-research--实测)） |
 | architect（上下文 · 多模态） | **Gemini 3.1 Pro**† | 1M 上下文 · MMMU-Pro 81% |
 | default（工具调用 · 诚实性） | **Opus 4.8 / Fable 5** | 路由质量 = 全系统上限（Fable 有 refusal·计费注意事项 — [§5](#5-️-最终目录--10-个捆绑--4-层级)） |
 | critic（独立性） | **cross-family** | 元裁判 > 辩论式聚合 |
 
-> † **更新脚注**：planner 维度已完成换代 — **GPT-5.6 Sol 2026-07-09 GA**（v2 目录已反映；上表 planner/architect 行是 2026-07-02 快照）。architect 维度 Gemini 3.5 Pro（2M 上下文，Deep Think）推迟至 7 月 GA — 发布后本表需重新验证。
+> † planner 行**基于 2026-07-10**（GPT-5.6 Sol 于 07-09 GA — 未公布 ARC-AGI-2 的 5.6 数值，依据为官方评估表+AA 指数）。各捆绑 planner 席位以 §5 席位表为准（例外：cyber-cop·monorepo=Gemini，eco=Luna）。architect 轴将在 Gemini 3.5 Pro 发布时重新验证（2026-07-02 基准）。
 
 **共识原则**
 
@@ -486,7 +486,7 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 回滚（恢复备
 ```
 
 > [!WARNING]
-> **GJC 0.7.10 预设 rename/delete 注意**：引擎的自定义预设 rename/delete 功能会**删掉 `models.yml` 里的全部注释** — 安装脚本的管理区块哨兵（注释）也会一并消失，管理区块随之降级为按名称替换，**用户删除过的配置可能在重装时复活**（已复现确认）。用过 rename/delete 之后再重装时务必检查结果；要彻底移除，最可靠的做法是恢复备份（`cp … .bak-*`）。
+> **GJC 0.7.10~0.9.1 预设 rename/delete 注意**：引擎的自定义预设 rename/delete 功能会**删掉 `models.yml` 里的全部注释** — 安装脚本的管理区块哨兵（注释）也会一并消失，管理区块随之降级为按名称替换，**用户删除过的配置可能在重装时复活**（已复现确认）。用过 rename/delete 之后再重装时务必检查结果；要彻底移除，最可靠的做法是恢复备份（`cp … .bak-*`）。（0.9.6 未复验 — 复现确认于 0.7.10~0.9.1。）
 
 ---
 
