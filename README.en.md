@@ -107,9 +107,9 @@ Subscribing to claude·gpt·grok·gemini·opencode go and then using only one mo
 | 🔨 **implementation** (executor) | writing/editing real code | **Claude Fable 5** (SWE-bench Verified **95.0**) — strongest *subscription-included* is **Opus 4.8** (88.6) |
 | 🔭 **code review** (architect) | large-repo navigation, architecture | **Gemini 3.1 Pro** (multimodal MMMU-Pro 81%)† · ultra-long-context (>200k) → **Opus** |
 | ⚖️ **independent critique** (critic) | adversarial verification | **cross-family** (different vendor than the main loop) |
-| 🎛️ **orchestration** (default) | tool-calling, routing, honesty | **Anthropic flagship** — Opus 4.8 (router quality caps the whole system; `dream-team` uses Fable 5, and `ultimate-sol` is the only Sol opt-in exception) |
+| 🎛️ **orchestration** (default) | tool-calling, routing, honesty | **Anthropic flagship** — Opus 4.8 (router quality caps the whole system; `dream-team` uses Fable 5. The only non-Anthropic routers are opt-in `ultimate-sol` (Sol) and Anthropic-free `eco` (Terra)) |
 
-> **Benchmark reference date: 2026-07-02** (re-verified right after the Claude 5 family launch). † The reasoning/architect axes have "successors imminent" — GPT-5.6 Sol is in partner preview (6/26, `max` effort + `ultra` sub-agent mode, GA weeks away), and Gemini 3.5 Pro (2M ctx, Deep Think) slipped to July GA. Will re-verify on release.
+> **Benchmark reference date: 2026-07-02** (re-verified right after the Claude 5 family launch). † Reasoning-axis update: **GPT-5.6 Sol went GA on 2026-07-09** — the v2 catalog already completed the planner-axis generation swap ([§6-2](#6-2-role-placement-optimality-review-deep-research--measurements)). On the architect axis, Gemini 3.5 Pro (2M ctx, Deep Think) slipped to July GA — will re-verify on release.
 
 > Fill all 5 roles from one vendor and at least one role is not the best. This guide fills each of the 5 with its best-fit vendor — weighed against cost, accessibility, and reliability — into a combo that **actually works**. It cross-validates three independent deep-research passes (GPT-5.5 · Claude Opus 4.8 · Gemini 3.1 Pro) and **verifies every profile selector with live calls** ([§6](#6--verification-matrix)).
 
@@ -204,11 +204,11 @@ opencode-go/<model>                           (omit effort = model default)
 | default (tool-calling · honesty) | **Opus 4.8 / Fable 5** | router quality = whole-system ceiling (Fable carries refusal/billing caveats — [§5](#5-️-final-catalog--10-bundles--4-tiers)) |
 | critic (independence) | **cross-family** | meta-judge > debate aggregation |
 
-> † **Successors imminent**: on the planner axis, GPT-5.6 Sol is in partner preview (2026-06-26, `max` effort + `ultra` sub-agent mode — GA weeks away); on the architect axis, Gemini 3.5 Pro (2M ctx, Deep Think) slipped to July GA. Either release puts this table up for re-verification.
+> † **Update note**: the planner axis completed its generation swap to **GPT-5.6 Sol (GA 2026-07-09)** — reflected in the v2 catalog; the planner/architect rows above are a 2026-07-02 snapshot. On the architect axis, Gemini 3.5 Pro (2M ctx, Deep Think) slipped to July GA; its release puts this table up for re-verification.
 
 **Consensus principles**
 
-1. **default = Anthropic flagship (Opus/Fable), fixed** — router quality is the whole-system ceiling. The only exception is `ultimate-sol`, an opt-in Sol-router experiment listed in the validator with WARN surfaced.
+1. **default = Anthropic flagship (Opus/Fable), fixed** — router quality is the whole-system ceiling. Two exceptions: `ultimate-sol` (Sol router — opt-in experiment listed in the validator, WARN surfaced) and `eco` (an Anthropic-free bundle — Terra router, the invariant does not apply).
 2. **architect = Gemini 3.1 Pro (multimodal) / Opus (ultra-long-context)** — Gemini is best for vision and mid ctx; for 200k+ text retrieval use Opus (MRCR 76%@1M, where Gemini collapses to 26%).
 3. **critic = cross-family** — a different vendor than the main loop/planner mitigates self-preference bias.
 4. **Structure = strong main loop + signal-driven delegation + failure-driven effort escalation.**
@@ -232,9 +232,9 @@ opencode-go/<model>                           (omit effort = model default)
 | Core | 🏎️ **coding-sprint** | implementation-throughput bundle with executor promoted to Opus | pure implementation sprint |
 | Core | 🚨 **cyber-cop** | reviewer mode — architect & critic lead, dedicated to PR review and security audits | reviewing others' PRs · merge gates · security audits |
 | Premium (exp) | 🏆 **ultimate-opus** | Anthropic-quality premium baseline (successor to the old cost-no-object profile) | accuracy matters more than cost |
-| Premium (exp) | 🧪 **ultimate-sol** | Sol-baseline premium — agentic/terminal/browser axis. **Only non-Anthropic default** | long autonomous workflow experiments |
+| Premium (exp) | 🧪 **ultimate-sol** | Sol-baseline premium — agentic/terminal/browser axis. **Only non-Anthropic default among Anthropic-carrying bundles** (validator exception; `eco` carries no Anthropic at all) | long autonomous workflow experiments |
 | Premium (exp) | 🔥 **dream-team** | strongest-per-role hypothesis — Fable default+executor | highest quality, credits accepted |
-| Workflow | 🏛️ **llm-council** | 4-family council seating chart — **routing-rules executes the Council vote/quorum contract** | decisions needing multi-family consensus |
+| Workflow | 🏛️ **llm-council** | 4-family seating chart (verdict seats are Google·xAI·OpenAI, 3 families — **the Anthropic main loop is aggregator-restricted**) — routing-rules executes the Council vote/quorum contract | decisions needing multi-family consensus |
 | Workflow | 🛡️ **escalation** | manual escalation — Fable rescue pitcher + 3-vote critic panel | merges · security · billing · irreversible changes |
 | Specialized (exp) | 💸 **eco** | low-cost multi-vendor experiment — *not absolute cheapest* (built-in `codex-eco` is the minimal-dependency cheap path) | cost pressure · bulk work |
 | Specialized (exp) | 🗺️ **monorepo** | ≥1M ctx everywhere (excludes gpt-5.5 272K / gpt-5.6 373K) | huge codebases |
@@ -242,135 +242,106 @@ opencode-go/<model>                           (omit effort = model default)
 **v1.11.0 → v2.0.0 migration**: `ultimate`→`ultimate-opus` · `ultimate-f5`/`legend`→`dream-team` · `solo-anthropic`/`solo-openai`/`claude-codex`/`claude-codex-max` → **removed** — single-/two-vendor needs are absorbed by built-in GJC 0.9.6 profiles (`claude-opus`/`claude-fable`/`codex-*`/`opus-codex`/`fable-opus-codex`), as use-case absorption rather than mapping equivalence. `llm-council` and `ultimate-sol` are new.
 
 <details>
-<summary><b>📋 Expand the full YAML (identical to gjc-profiles.yml — by model mapping; only §refs in comments adapted for the README)</b></summary>
+<summary><b>📋 Expand the full YAML (identical to gjc-profiles.yml by model mapping — comments stripped; the annotated Korean canonical lives in <a href="./gjc-profiles.yml">gjc-profiles.yml</a>)</b></summary>
 
 ```yaml
 profiles:
 
-  # ───────────────────────── Core tier ─────────────────────────
-
-  daily:                               # ★ 평소 기본 (--default daily) — 구독 OAuth 3벤더만으로 activation
+  daily:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:medium               # 본체 효율 knee · 1M ctx
-      executor:  openai-codex/gpt-5.6-terra:high                # 코딩특화 $2.5/15에 ≈GPT-5.5급(공식 5.6 평가표)·벤더분산
-      planner:   openai-codex/gpt-5.6-sol:high                  # 장기 워크플로 완주 1위(Agents' Last Exam 52.7)·tool-heavy 분해
-      architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx·멀티모달(MMMU-Pro)·GPQA 94.3 — Gemini 전문좌석
-      critic:    google-antigravity/gemini-3.1-pro-low:high     # v2: grok→Gemini — xai 키 장벽 제거(구독-only daily) + 본체(Opus)와 cross-family 유지. PR #21 패널 지적 반영(본체=critic 동일벤더 금지). Grok critic 은 defect-recall 직접근거 0건(2축 리서치 합의)
+      default:   anthropic/claude-opus-4-8:medium
+      executor:  openai-codex/gpt-5.6-terra:high
+      planner:   openai-codex/gpt-5.6-sol:high
+      architect: google-antigravity/gemini-3.1-pro-low:high
+      critic:    google-antigravity/gemini-3.1-pro-low:high
 
-  coding-sprint:                       # 🏎 순수 구현 처리량 — daily 대비 executor 를 Opus 로 승격
+  coding-sprint:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:medium               # 본체 오케스트레이션
-      executor:  anthropic/claude-opus-4-8:high                 # 구독 포함 코딩 최강 계열(v2: max→high — 실패신호 시에만 max 격상, routing-rules 사다리)
-      planner:   openai-codex/gpt-5.6-sol:high                  # v2: gemini→Sol — 스프린트 분해는 Sol 축(Terminal-Bench 88.8·DeepSWE 72.7)
-      architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx 리뷰
-      critic:    openai-codex/gpt-5.6-terra:high                # 코딩인지 critic. ⚠planner 와 같은 gpt 계열 — 인간 판정(2026-07-10)으로 SAME_FAMILY_OK 등재(번들 전체는 3벤더 유지)
+      default:   anthropic/claude-opus-4-8:medium
+      executor:  anthropic/claude-opus-4-8:high
+      planner:   openai-codex/gpt-5.6-sol:high
+      architect: google-antigravity/gemini-3.1-pro-low:high
+      critic:    openai-codex/gpt-5.6-terra:high
 
-  cyber-cop:                           # 🚨 reviewer 모드 — PR 리뷰·보안 감사 (author 모드의 역상). v1.11.0 매핑 그대로(KEEP)
+  cyber-cop:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:high                 # 집계자 제한 — critic raw verdict 보존·노출(routing-rules 계약)
-      executor:  openai-codex/gpt-5.6-sol:high                  # 조연 — 재현 PoC·failing test·harness (Terminal-Bench 2.1 88.8 SOTA)
-      planner:   google-antigravity/gemini-3.1-pro-low:high     # 리뷰 체크리스트·감사 범위 (critic 과 cross-family)
-      architect: anthropic/claude-opus-4-8:high                 # 주연1 — 1차 코드리뷰 판정자(CLEAR/WATCH/BLOCK)
-      critic:    openai-codex/gpt-5.6-sol:high                  # 주연2 — 머지 게이트, Claude-작성 코드와 cross-family
-      # 고위험 PR·보안 감사: critic 3표 병렬 패널 {openai-codex/gpt-5.6-sol:high, xai/grok-4.5:high,
-      # google-antigravity/gemini-3.1-pro-low:high} — 독립 투표 후 본체 집계(토론 금지), 2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단
-      # (3표째 grok 은 xai 로그인 시 — 미보유면 2표 {gpt-5.6-sol, gemini}로도 provenance 최소치(non-default family ≥2) 충족)
+      default:   anthropic/claude-opus-4-8:high
+      executor:  openai-codex/gpt-5.6-sol:high
+      planner:   google-antigravity/gemini-3.1-pro-low:high
+      architect: anthropic/claude-opus-4-8:high
+      critic:    openai-codex/gpt-5.6-sol:high
 
-  # ─────────────── Premium tier (experimental — role-fit L3 전) ───────────────
-
-  ultimate-opus:                       # 🏆 Anthropic 품질 기저 프리미엄 (구 ultimate 후계)
+  ultimate-opus:
     required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-4-8:high
-      executor:  anthropic/claude-opus-4-8:high                 # ⚠architect 와 같은 claude 계열 — 인간 판정(2026-07-10) SAME_FAMILY_OK. Sol planner+Grok critic 이 교차검증 담당
-      planner:   openai-codex/gpt-5.6-sol:xhigh                 # 최상위 추론 + OpenAI 다양성
-      architect: anthropic/claude-opus-4-8:high                 # 1M 실효검색(MRCR 76% vs Gemini 26%) — v2: gemini→Opus
-      critic:    xai/grok-4.5:high                              # 제3계열 독립 dissent seat(결함회수 최강 근거는 없음 — 명칭 주의)
+      executor:  anthropic/claude-opus-4-8:high
+      planner:   openai-codex/gpt-5.6-sol:xhigh
+      architect: anthropic/claude-opus-4-8:high
+      critic:    xai/grok-4.5:high
 
-  ultimate-sol:                        # 🧪 OpenAI(Sol) 기저 프리미엄 — agentic/terminal/브라우징 축. non-Anthropic default 유일 예외
+  ultimate-sol:
     required_providers: [openai-codex, anthropic, xai]
     model_mapping:
-      default:   openai-codex/gpt-5.6-sol:high                  # 라우터(장기 워크플로 완주 1위). ctx 373K(0.9.6) — 1M 아님 주의
-      executor:  openai-codex/gpt-5.6-sol:xhigh                 # Terminal-Bench 88.8·DeepSWE 72.7. ⚠METR 게이밍 캐비앗 — SWE류 단독근거 금지
-      planner:   openai-codex/gpt-5.6-sol:xhigh                 # Sol 3좌석 = 의도된 정체성(자기강화 리스크는 아래 2좌석이 완충)
-      architect: anthropic/claude-opus-4-8:high                 # cross-family 검증축 1 — 1M 장문
-      critic:    xai/grok-4.5:high                              # cross-family 검증축 2
+      default:   openai-codex/gpt-5.6-sol:high
+      executor:  openai-codex/gpt-5.6-sol:xhigh
+      planner:   openai-codex/gpt-5.6-sol:xhigh
+      architect: anthropic/claude-opus-4-8:high
+      critic:    xai/grok-4.5:high
 
-  dream-team:                          # 🔥 역할별 최강 가설 (구 ultimate-f5/legend 후계) — Fable 중심
+  dream-team:
     required_providers: [anthropic, openai-codex, xai]
     model_mapping:
-      default:   anthropic/claude-fable-5:high                  # 라우터=품질 상한. refusal(HTTP 200+stop_reason) 유의 · 7/12 이후 credits $10/$50 노출
-      executor:  anthropic/claude-fable-5:xhigh                 # SWE-Bench Pro 80.0(공식표 자기불리)·FrontierMath T4. ⚠:max 금지(xhigh 침묵 클램프)
-      planner:   openai-codex/gpt-5.6-sol:xhigh                 # 분해·tool-heavy 는 Sol 축
-      architect: anthropic/claude-opus-4-8:high                 # ⚠executor 와 같은 claude 계열 — 인간 판정 SAME_FAMILY_OK(Fable≠Opus 모델 분리·1M 장문)
-      critic:    xai/grok-4.5:high                              # 제3계열 dissent
+      default:   anthropic/claude-fable-5:high
+      executor:  anthropic/claude-fable-5:xhigh
+      planner:   openai-codex/gpt-5.6-sol:xhigh
+      architect: anthropic/claude-opus-4-8:high
+      critic:    xai/grok-4.5:high
 
-  # ─────────────── Workflow bundle tier (좌석표 + 동반 워크플로) ───────────────
-
-  llm-council:                         # 🏛 다계열 합의 리뷰 — ★프로필은 좌석표일 뿐이다. 병렬 독립호출·quorum·raw verdict 보존은
-    required_providers: [anthropic, openai-codex, google-antigravity, xai]   #   routing-rules.md "Council 계약"이 실행한다(YAML 이 자동 실행하지 않음)
-    model_mapping:
-      default:   anthropic/claude-opus-4-8:high                 # 집계자 제한 — 요약·은폐 없이 raw verdict 보존
-      executor:  openai-codex/gpt-5.6-terra:high                # 재현·검증 잡무
-      planner:   openai-codex/gpt-5.6-sol:xhigh                 # 의제 분해
-      architect: google-antigravity/gemini-3.1-pro-low:high     # 4계열 council 좌석 1 (Google)
-      critic:    xai/grok-4.5:high                              # 4계열 council 좌석 2 (xAI)
-
-  escalation:                          # 🚑 고실패비용 구원투수 — ★수동 에스컬레이션 번들. 실패신호 트리거·재시도 상한·human gate 는
-    required_providers: [anthropic, openai-codex, google-antigravity, xai]   #   routing-rules.md 가 정의한다(프로필이 자동 감지하지 않음). v1.11.0 매핑 그대로(KEEP)
+  llm-council:
+    required_providers: [anthropic, openai-codex, google-antigravity, xai]
     model_mapping:
       default:   anthropic/claude-opus-4-8:high
-      executor:  anthropic/claude-fable-5:xhigh                 # 실패한 작업의 구원투수. 간헐 사용 = credits 과금과도 궁합
+      executor:  openai-codex/gpt-5.6-terra:high
       planner:   openai-codex/gpt-5.6-sol:xhigh
       architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    xai/grok-4.5:high                              # + 3표 교차벤더 critic 패널(독립투표→본체집계)
+      critic:    xai/grok-4.5:high
 
-  # ─────────────── Specialized tier (experimental) ───────────────
-
-  eco:                                 # 💸 멀티벤더 저단가 실험 — "절대 최저비용" 아님(최소 의존 저가 경로는 GJC 내장 codex-eco).
-    required_providers: [openai-codex, opencode-go, google-antigravity]      #   v2: anthropic·xai 제거 — 3벤더
+  escalation:
+    required_providers: [anthropic, openai-codex, google-antigravity, xai]
     model_mapping:
-      default:   openai-codex/gpt-5.6-terra:medium              # v2: opus:low→terra — 비-Anthropic default 는 anthropic 미포함 번들이라 router 불변식 비적용
-      executor:  opencode-go/deepseek-v4-flash                  # $0.14/0.28, 최저가 코더(5번째 벤더)
-      planner:   openai-codex/gpt-5.6-luna:medium               # v2: grok-4-1-fast(2026-05-15 retire→4.3 redirect 과금)→Luna $1/$6
-      architect: google-antigravity/gemini-3.1-pro-low:high     # v2: 무핀→리터럴 -low:high 핀
-      critic:    google-antigravity/gemini-3-flash:low          # v2: gemini-3.5-flash-low 07-10 오후 라이브 소멸 → gemini-3-flash:low(검증✅)·cross-family vs executor
+      default:   anthropic/claude-opus-4-8:high
+      executor:  anthropic/claude-fable-5:xhigh
+      planner:   openai-codex/gpt-5.6-sol:xhigh
+      architect: google-antigravity/gemini-3.1-pro-low:high
+      critic:    xai/grok-4.5:high
 
-  monorepo:                            # 🗄 거대 코드베이스 — 전역 1M ctx (★gpt-5.5(272K)/5.6(373K) 배제 — 1M 미달). v1.11.0 매핑 그대로(KEEP)
+  eco:
+    required_providers: [openai-codex, opencode-go, google-antigravity]
+    model_mapping:
+      default:   openai-codex/gpt-5.6-terra:medium
+      executor:  opencode-go/deepseek-v4-flash
+      planner:   openai-codex/gpt-5.6-luna:medium
+      architect: google-antigravity/gemini-3.1-pro-low:high
+      critic:    google-antigravity/gemini-3-flash:low
+
+  monorepo:
     required_providers: [anthropic, google-antigravity, opencode-go]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:medium               # 1M
-      executor:  anthropic/claude-opus-4-8:high                 # 1M
-      planner:   google-antigravity/gemini-3.1-pro-low:high     # 추론(스코프 입력). 1M window ≠ 완전 recall — 청크 누적 워크플로 전제
-      architect: anthropic/claude-opus-4-8:high                 # 1M 멀티턴 누적·검색 최상. 단일 메시지 paste ~400k 한도(실측 350k ✅/476k 🔴) — 한 방 >400k 는 opencode-go/deepseek-v4-pro
-      critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51), cross-family vs anthropic. effort 무핀(opencode-go 규칙)
-
-# ─────────────────────────────────────────────────────────────────────────────
-# v1.11.0 → v2.0.0 마이그레이션:
-#   ultimate → ultimate-opus (executor max→high, architect gemini→opus) · ultimate-f5/legend → dream-team ·
-#   solo-anthropic/solo-openai/claude-codex/claude-codex-max → 삭제(단일·2벤더 수요는 GJC 0.9.6 내장 claude-opus/claude-fable/codex-*/opus-codex/fable-opus-codex 프로필이 흡수 — 매핑 등가는 아니고 use-case 흡수) ·
-#   daily.planner gemini→sol · daily.critic grok→gemini(구독-only 3벤더화 + 본체와 cross-family 유지) · eco 전면 재편(위 주석) · llm-council/ultimate-sol 신설.
-# Claude 5 패밀리: Fable 5 = $10/$50(Opus 2배), 구독 포함 이벤트 ~7/12 23:59 PT(2차 출처 — 공식 1차 연장 페이지 미확보), 이후 usage credits.
-#   Fable refusal 은 HTTP 200 + stop_reason=refusal — "빈 응답" 오인 금지. 30-day retention·ZDR 불가(민감 코드베이스 주의).
-#   GJC 실효 effort: fable-5 ≤xhigh · sonnet-5 ≤high (API 는 둘 다 max — 파서 갭, 상류 제보됨).
-# GPT-5.6(2026-07-09 GA): Sol $5/$30 · Terra $2.5/$15 · Luna $1/$6 — API 1.05M/128K, GJC 0.9.6 usable prompt budget 373K.
-#   :max 는 수용되나 심도 미검증 — 미출하(상한 xhigh). ⚠ METR: Sol 의 SWE 평가 게이밍 적발 — SWE류 벤치 단독근거 승격 금지.
-#   v2: Luna 를 eco.planner 로 채용($1/$6 — retire 된 grok-4-1-fast 대체).
-# opencode-go: OPENCODE_API_KEY 필요(eco.executor·monorepo.critic). 검증✅: deepseek-v4-flash/pro · glm-5.2.
-# xai: XAI_API_KEY 필요(premium 3종 + llm-council/escalation 의 critic). grok-4.5 는 grok-build/OAuth 변종 없음(07-10 재조회) —
-#   grok-build 에 4.5 등장 시 xai 좌석 인증·비용 논증 전면 재계산(재평가 트리거).
-# Grok 4.5 critic 좌석의 의미: "검증된 결함회수 최강"이 아니라 "제3계열 독립 dissent" — 2축 리서치 합의(critic-specific 근거 0건).
-# 재평가 트리거: GJC 릴리스 diff · catalog drift(catalog-snapshot.sh --diff) · Fable 프로모션 종료/재연장 · 신모델 입점 ·
-#   validator 검사범위 변경 · 가격 개정 · 독립 leaderboard 등재 — 하나라도 발화하면 profile matrix 재계산.
+      default:   anthropic/claude-opus-4-8:medium
+      executor:  anthropic/claude-opus-4-8:high
+      planner:   google-antigravity/gemini-3.1-pro-low:high
+      architect: anthropic/claude-opus-4-8:high
+      critic:    opencode-go/glm-5.2
 ```
 
 </details>
 
 > [!TIP]
-> **opencode-go** activates in `eco` (executor) and `monorepo` (critic) when `OPENCODE_API_KEY` is set (verified✅). SuperGrok's `xai/grok-composer-2.5-fast` (200k) is also verified as a throughput alternative. Other opencode-go models (qwen3.7-max · kimi-k2.6 · glm-5.1 · minimax-m2.7 · mimo-v2.5) were also confirmed working. Newly listed, still unverified candidates: **kimi-k2.7-code** (likely budget executor) · **minimax-m3** (1M multimodal).
+> **opencode-go** activates in `eco` (executor) and `monorepo` (critic) when `OPENCODE_API_KEY` is set (verified✅). SuperGrok's `xai/grok-composer-2.5-fast` (200k) is also verified as a throughput alternative. Other opencode-go models (qwen3.7-max · kimi-k2.6 · glm-5.1 · minimax-m2.7 · mimo-v2.5) were also confirmed working. Newly listed, still unverified candidates: **kimi-k2.7-code** (likely budget executor) · **minimax-m3** (512K multimodal — measured catalog value, `2026-07-10-catalog-gjc096.txt`).
 
 #### Per-bundle design rationale
 
@@ -378,9 +349,9 @@ profiles:
 - **coding-sprint** — executor leads (Opus `:high`; escalate to max only on failure signals, [§8-2](#8-2-adaptive-effort-escalation)), planner is `gpt-5.6-sol:high` for sprint decomposition, and critic is coding-aware `gpt-5.6-terra` for real bug finding. ⚠ planner/critic are both GPT-family — listed as `SAME_FAMILY_OK` by human judgment (2026-07-10): Sol≠Terra and the whole bundle still uses 3 vendors.
 - **cyber-cop** — 🚨 **reviewer mode**: the inverse of author mode. In review sessions role weight flips: executor drops to supporting repro PoC / failing-test work, while **architect (first-pass code-review verdict) and critic (merge gate) lead**. architect=Opus `:high` (1M effective retrieval, 76% vs Gemini collapsing to 26% for 200k+ diff reading), critic=`gpt-5.6-sol:high` (cross-family vs Claude-authored code — self-preference mitigation, arXiv [2410.21819](https://arxiv.org/abs/2410.21819)). High-risk PRs/security audits use the §9 critic panel: independent votes, no debate, 2/3 dissent or any CRITICAL/BLOCK blocks. The third Grok vote is optional when xai is logged in; without it, a 2-vote {gpt-5.6-sol, gemini} panel still preserves the minimum provenance rule (non-default family ≥2). Operational rules live in [`routing-rules.md`](./routing-rules.md). Difference from `escalation`: escalation is an author-side gate (fix until pass); cyber-cop is reviewer-side (hunt for blocking evidence).
 - **ultimate-opus** — 🏆 Anthropic-quality premium baseline. default·executor·architect are Opus `:high` for stability, 1M context, and subscription marginal cost; cross-checking is handled by **Sol planner `:xhigh` + Grok critic `:high`**. ⚠ executor/architect are same Claude-family — human-judged `SAME_FAMILY_OK` with WARN surfaced. Three Opus seats are not "three independent opinions"; do not imply council quality.
-- **ultimate-sol** — 🧪 Sol-baseline premium (experimental). Sol owns the axes where it is verified strong — long workflow completion (Agents' Last Exam 52.7), terminal (T-B 2.1 88.8 SOTA), browsing (BrowseComp 90.4), computer use (OSWorld 62.6) — so default/executor/planner all sit on Sol. **Only non-Anthropic default** (validator `NON_ANTHROPIC_DEFAULT_OK`; WARN surfaced). Tradeoffs are explicit: router ctx **373K** vs Opus 1M, weaker tool-use axis (Toolathlon 58 vs Fable 61.7), and ⚠METR's SWE-gaming finding, so SWE-style scores cannot be the sole promotion basis. Opus architect + Grok critic buffer the OpenAI self-reinforcement risk. Experimental until role-fit L3 is measured.
+- **ultimate-sol** — 🧪 Sol-baseline premium (experimental). Sol owns the axes where it is verified strong — long workflow completion (Agents' Last Exam 52.7), terminal (T-B 2.1 88.8 SOTA), browsing (BrowseComp 90.4), computer use (OSWorld 62.6) — so default/executor/planner all sit on Sol. **Only non-Anthropic default among Anthropic-carrying bundles** (validator `NON_ANTHROPIC_DEFAULT_OK`; WARN surfaced — `eco`'s Terra router is outside the invariant because that bundle carries no Anthropic). Tradeoffs are explicit: router ctx **373K** vs Opus 1M, weaker tool-use axis (Toolathlon 58 vs Fable 61.7), and ⚠METR's SWE-gaming finding, so SWE-style scores cannot be the sole promotion basis. Opus architect + Grok critic buffer the OpenAI self-reinforcement risk. Experimental until role-fit L3 is measured.
 - **dream-team** — 🔥 strongest-per-role *hypothesis*. **Fable 5 = default+executor** (SWE-Bench Pro 80.0 on OpenAI's own self-disadvantaging table · FrontierMath T4 87.8), decomposition on Sol `:xhigh`, design review on Opus `:high` (1M), critique on third-family Grok. Fable caveats: ① subscription-included event through ~7/12 23:59 PT, then **usage credits $10/$50** (default+executor exposes the maximum) ② refusal returns HTTP 200 + `stop_reason:refusal` ③ 30-day retention and no ZDR. ⚠ executor(Fable)/architect(Opus) are same Claude-family — human-judged `SAME_FAMILY_OK` because models are separated and Sol/Grok cross-check.
-- **llm-council** — 🏛 4-family (Anthropic·OpenAI·Google·xAI) council seating chart. **Activating the profile does not start a council** — parallel independent calls, mutual non-disclosure, raw verdict preservation, and quorum (CRITICAL/HIGH dissent is not majority-voted away) happen only when the main loop executes the **Council contract** in [`routing-rules.md`](./routing-rules.md). Seats: Opus main loop (aggregator limits), Terra (repro/verification chores), Sol `:xhigh` (agenda decomposition), Gemini (Google seat), Grok (xAI seat). Vendor count is not independent vote count; do not inflate confidence by arithmetic.
+- **llm-council** — 🏛 4-family seating chart (Anthropic·OpenAI·Google·xAI). **Verdict seats are Google (Gemini), xAI (Grok), and OpenAI (Sol/Terra) — 3 families; the Anthropic main loop (Opus) is aggregator-restricted**: to contain self-preference bias it casts no verdict and only preserves/exposes raw verdicts ("3-family verdicts + 4th-family aggregation", not a 4-family consensus). **Activating the profile does not start a council** — parallel independent calls, mutual non-disclosure, raw verdict preservation, and quorum (CRITICAL/HIGH dissent is not majority-voted away) happen only when the main loop executes the **Council contract** in [`routing-rules.md`](./routing-rules.md). Vendor count is not independent vote count; do not inflate confidence by arithmetic.
 - **escalation** — 🛡 **manual** escalation (not automatic failure detection — triggers, retry budget, and human gate are the routing-rules Escalation contract). On failure signals, bring in **Fable 5 `:xhigh` as the rescue executor**; intermittent use also fits credits billing. critic uses the multi-vendor 3-vote panel ([§9](#9--parallel-agents--reliability)). On Fable refusal, fall back executor to Opus `:max` and report to the human. Reserve for irreversible/high-cost changes.
 - **eco** — 💸 low-cost multi-vendor *experiment* — **not absolute cheapest** (built-in GJC 0.9.6 `codex-eco` is the minimal-dependency cheap path). v2 redesign: default `gpt-5.6-terra:medium` (non-Anthropic default invariant does not apply because no Anthropic is in the bundle), executor `deepseek-v4-flash` ($0.14/0.28), planner `gpt-5.6-luna:medium` (replaces the retired Grok fast slug: 2026-05-15 retire → legacy slug redirects to Grok 4.3 billing per xAI migration docs), architect literal Gemini `-low:high`, critic `gemini-3-flash:low` (the prior 3.5 flash live id disappeared on 07-10 afternoon — [§6](#6--verification-matrix)) and cross-family vs executor. No xai or anthropic key required.
 - **monorepo** — 🗺 every role has 1M ctx. `gpt-5.5` (272K) and the three `gpt-5.6` models (373K) are excluded; gpt-5.4 has 1M, but Opus is at least as strong here. architect=**Opus** (best 1M effective retrieval, **76%@1M**; Gemini collapses to 26%), critic=**`glm-5.2`** (cross-family, alternative `deepseek-v4-pro`). **1M nominal window ≠ perfect recall** — split huge inputs into chunks and accumulate across turns ([§6-3](#6-3-remaining-gaps-gap-13--gjc-effective-context-measurement)); only use `opencode-go/deepseek-v4-pro` for rare single-message >~400k paste.

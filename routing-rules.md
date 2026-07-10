@@ -1,4 +1,4 @@
-# GJC 멀티벤더 운영 규칙 v2 (본체 default 가 따른다 — 기본 Anthropic 플래그십, `ultimate-sol` 만 Sol)
+# GJC 멀티벤더 운영 규칙 v2 (본체 default 가 따른다 — 기본 Anthropic 플래그십; 예외는 opt-in `ultimate-sol`(Sol)과 Anthropic 미포함 `eco`(Terra)뿐)
 
 <!--
 사용법:
@@ -48,8 +48,9 @@ v2 카탈로그는 10개 user-facing 번들이며 신뢰 등급이 같지 않다
 
 ## Council 계약 — llm-council 번들 전용
 - **프로필은 좌석표다**: YAML 활성화만으로 council 은 시작되지 않는다. 본체가 아래 절차를 실행한다.
-- **독립 호출**: 의제를 각 좌석(architect=Gemini, critic=Grok, planner=Sol, executor=Terra)에
+- **독립 호출**: 의제를 각 판정석(architect=Gemini, critic=Grok, planner=Sol, executor=Terra — **판정석은 Google·xAI·OpenAI 3계열**)에
   **병렬·상호 비공개**로 보낸다. 좌석끼리 서로의 답을 보게 하지 않는다(no cross-talk).
+  본체 Anthropic(Opus)은 자기선호 편향 격리를 위해 **판정에 참여하지 않는다** — 4계열 "합의"가 아니라 "3계열 판정 + 제4계열 집계"다.
 - **raw verdict 보존**: 본체(Opus)는 집계자 제한 — 각 좌석의 판정 원문을 요약·은폐 없이 보존·노출한다.
 - **quorum**: 다수결이 검증을 대체하지 못한다. **CRITICAL/HIGH dissent 1건은 다수결로 기각 불가** —
   해소(반증) 또는 human gate 로만 닫는다. minority opinion 은 최종 보고에 반드시 남긴다.
