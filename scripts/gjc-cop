@@ -164,6 +164,15 @@ case "$sub" in
     fi
     # Seat override: GJC_COP_HOOK_MODEL pins a different cross-family critic (escape hatch, PR #19).
     HMODEL="${GJC_COP_HOOK_MODEL:-openai-codex/gpt-5.6-sol:high}"
+    # Fail-closed override guard (PR #19 round-3): the hook critic must stay cross-family vs the
+    # assumed-Claude author — only OpenAI-family selectors are accepted; anything else is refused
+    # (strict: block push; advisory: allow push, seat NOT run — never mislabel a same-family seat).
+    case "$HMODEL" in
+      openai-codex/*|openai/*) : ;;
+      *) echo "gjc-cop hook: invalid GJC_COP_HOOK_MODEL '$HMODEL' — must be an openai-codex/* (or openai/*) selector (cross-family vs assumed-Claude author)"
+         [ "$STRICT" = 1 ] && { echo "gjc-cop hook: STRICT → fail-closed BLOCK (fix the env or unset it; bypass once: git push --no-verify)"; exit 1; }
+         echo "gjc-cop hook: advisory — allowing push (override rejected, critic seat NOT run)"; exit 0 ;;
+    esac
     echo "gjc-cop hook: reviewing outgoing diff (${DB}B) with ${HMODEL} (cross-family critic)…"
     rc=0
     out="$(perl -e 'alarm shift; exec @ARGV' "$HTIMEOUT" \
