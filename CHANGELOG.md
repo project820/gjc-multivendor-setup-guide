@@ -11,6 +11,29 @@
 
 ---
 
+## v2.1.0 — 2026-08-16
+
+### Changed (MINOR — 후계 like-for-like, 10번들·4계층 불변)
+- **Opus 4.8 → Opus 5** (2026-07-24 GA, [Anthropic](https://www.anthropic.com/research/claude-opus-5) · [models overview](https://platform.claude.com/docs/en/about-claude/models/overview)). $5/$25 동가 · 1M/128K · effort `minimal..max`. 전 Anthropic default/executor/architect 좌석 교체. 4.8 은 legacy 카나리로 잔류·호출 가능.
+- **Grok 4.5 → Grok 4.6** (2026-08-12, [xAI](https://x.ai/news/grok-4-6) · [docs](https://docs.x.ai/developers/models/grok-4.6)). $2/$6 (<200k prompt) / $4/$12 (≥200k) · 500K. critic 좌석(premium 3종·llm-council·escalation) + cyber-cop 패널. 카탈로그는 `xhigh`까지 찍지만 **출하 상한은 `:high`**(L3 없음). `grok-build/grok-4.6:high` 는 not found(bare 만 OK — 미출하).
+- **GJC 0.13.3 재기준화** ([릴리스](https://github.com/Yeachan-Heo/gajae-code/releases/tag/v0.13.3), 2026-08-15). gpt-5.6 3종 usable prompt budget 표기 **373K→372K**. antigravity 퍼지 fail-closed 유지.
+- **Fable 플랜 스플릿 반영** ([공식 Help Center](https://support.claude.com/en/articles/15424964-claude-fable-5-on-your-plan)): 프로모션 2026-07-19 23:59:59 PT 종료. 07-20부터 Max/premium Team = 주간 한도 50% 포함, Pro/standard = usage credits. dream-team/escalation 문구 정정(~7/12 폐기).
+- validator: `claude-opus-5` 풀 래더 · `xai/grok-4.6` `low..xhigh` · sonnet-5 출하 합법성은 high 유지(카탈로그 xhigh/max 는 클램프 미측정).
+- 도구 좌석 동기화: `cyber-cop-review.sh` architect/패널 · `revalidate.sh` 배터리 · `gen_svgs.py` · README×4 · routing-rules · MAINTAINING · factsheet.
+
+### Unchanged (보호 목록)
+- 10번들·4계층·Council/Escalation 계약 · Gemini 3.1 Pro `-low:high` 핀 · eco.critic `gemini-3-flash:low` · eco.executor DeepSeek(카탈로그 잔류) · Sol/Terra/Luna 좌석 · Premium L3 미출하 · `evidence/` 과거 파일 불변.
+
+### Not shipped
+- Gemini 3.5 Pro 좌석(카탈로그 없음) · Flash 3.5/3.6 승격(클래스 상이·라이브 플랩) · grok-build critic · Grok/Sol/Fable 역할 재배치 · gpt-5.6 `:max` 심도 · DeepSeek 지역 정책 우회 스왑.
+
+### Validation
+- 실호출(2026-08-16, **gjc 0.13.3**): `evidence/2026-08-16-selectors.md` — Opus 5 `:medium`/`:high`/`:xhigh` · Grok 4.6 `:medium`/`:high`/`:xhigh` · Sol/Terra/Luna · Gemini 3.1 Pro pin · glm-5.2 · Fable `:high`/`:xhigh` 그린. `gemini-3.1-pro-high`·`grok-4.6:bogus`·`grok-build/grok-4.6:high` fail-closed. DeepSeek flash/pro 이 계정 403 China opt-in(카탈로그 id 생존).
+- `python3 scripts/validate-profiles.py` green · `scripts/sync-readme-yaml.py` 멱등.
+
+### Evidence
+- `evidence/2026-08-16-catalog.txt` · `evidence/2026-08-16-selectors.md` · `evidence/2026-08-16-notes.md`.
+
 ## v2.0.1 — 2026-07-10
 
 ### Changed (PATCH — 문서 개편, 매핑/좌석 불변)

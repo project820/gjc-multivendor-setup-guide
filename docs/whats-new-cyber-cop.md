@@ -14,7 +14,7 @@
 ---
 
 > [!NOTE]
-> **역사 문서 (v1.5 시점, 2026-07-03).** 본문 중 "12종/13번째" 카운트는 v1.5 당시 카탈로그 기준이다. **현행 v2.0.0 카탈로그는 10 번들·4계층**이고 `cyber-cop`은 Core tier 번들로 유지된다(매핑 v1.11.0 그대로 KEEP) — 현행 요약은 [whats-new-v2.md](./whats-new-v2.md)·[factsheet.md](./factsheet.md) 참조.
+> **역사 문서 (v1.5 시점, 2026-07-03).** 본문 중 "12종/13번째" 카운트는 v1.5 당시 카탈로그 기준이다. **현행 v2.1.0 카탈로그는 10 번들·4계층**이고 `cyber-cop`은 Core tier 번들(architect=Opus 5, critic=Sol, 패널 Grok 4.6) — 현행 요약은 [whats-new-v2.md](./whats-new-v2.md)·[factsheet.md](./factsheet.md) 참조.
 ## 1. 왜 필요한가 — 12종 전부가 author 모드였다
 
 기존 카탈로그의 모든 프로필은 **작성자 관점**으로 설계됐다: 본체(default)와 executor에 강한 모델을 배치하고, critic은 "내 작업의 자기검증 보조"로 뒀다(평소 권장 `daily`의 critic은 카탈로그 최저가 자리였다).
@@ -37,10 +37,10 @@
 cyber-cop:                             # 🚨 reviewer 모드 — PR 리뷰·보안 감사 (author 모드의 역상)
   required_providers: [anthropic, openai-codex, google-antigravity]
   model_mapping:
-    default:   anthropic/claude-opus-4-8:high        # 집계자 제한 + 1M ctx
+    default:   anthropic/claude-opus-5:high          # 집계자 제한 + 1M ctx
     executor:  openai-codex/gpt-5.6-sol:high         # 조연 — 재현 PoC·failing test·harness
     planner:   google-antigravity/gemini-3.1-pro-low:high
-    architect: anthropic/claude-opus-4-8:high        # 주연1 — 1차 판정자, 1M 실효검색(MRCR 76% vs Gemini 26%)
+    architect: anthropic/claude-opus-5:high          # 주연1 — 1차 판정자, 1M 장문
     critic:    openai-codex/gpt-5.6-sol:high         # 주연2 — 머지 게이트, Claude-작성 코드와 cross-family
 ```
 
@@ -153,8 +153,8 @@ gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
 
 고위험 PR·보안 감사의 머지 게이트는 critic **3표 병렬 패널**이 맡는다 (인용 — 규범: routing-rules.md 리뷰어 계약):
 
-- 패널: `{openai-codex/gpt-5.6-sol:high, xai/grok-4.5:high, google-antigravity/gemini-3.1-pro-low:high}`
-  - v1.10.0에서 xai 패널 좌석은 `grok-4.5:high`로 갱신했다. high effort는 고위험/옵트인 패널 전용(2026-07-09 벤치: ~7.6k reasoning, TTFT ~48s).
+- 패널: `{openai-codex/gpt-5.6-sol:high, xai/grok-4.6:high, google-antigravity/gemini-3.1-pro-low:high}`
+  - v2.1.0에서 xai 패널 좌석은 `grok-4.6:high`로 갱신(4.5는 레거시 카나리). 출하 상한 high (`:xhigh` 수용·심도 미검증).
 - **독립 투표 후 본체 집계 (토론 금지)** — 토론형 합의는 편향을 증폭한다
 - **2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단**
 - 각 표는 **file-backed blocking issue 최소 1건 또는 명시적 no-finding rationale** 필수 — 근거 없는 표는 무효표

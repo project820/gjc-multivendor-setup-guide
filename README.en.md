@@ -7,11 +7,11 @@
 Stop agonizing over model choice. **Install in one line** and let each role get its best-fit model automatically.
 
 [![GJC](https://img.shields.io/badge/for-Gajae%20Code%20(GJC)-e23?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code)
-[![Version](https://img.shields.io/badge/version-2.0.1-2496ED?style=flat-square)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.1.0-2496ED?style=flat-square)](./CHANGELOG.md)
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/bundles-10%20·%204%20tiers-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
-![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--07--10-brightgreen?style=flat-square)
+![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--16-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
 <img src="assets/role-winners.svg" alt="dream-team setup — strongest hypothesis per role" width="100%">
@@ -85,10 +85,10 @@ Full catalog: [§5](#5-️-final-catalog--10-bundles--4-tiers) · reviewer mode 
 | Role | What it does | Best model |
 |---|---|---|
 | 🧠 **reasoning/planning** (planner) | sequencing, acceptance criteria | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · GA 2026-07-09) — bundle-specific seats: see §5 (exceptions: cyber-cop/monorepo=Gemini, eco=Luna) |
-| 🔨 **implementation** (executor) | writing/editing real code | **Claude Fable 5** (SWE-bench Verified **95.0**) — strongest *subscription-included* is **Opus 4.8** (88.6) |
+| 🔨 **implementation** (executor) | writing/editing real code | **Claude Fable 5** (SWE-bench Verified **95.0**) — strongest *subscription-included* is **Opus 5** (Opus 4.8 successor · same $5/$25 · 2026-07-24) |
 | 🔭 **code review** (architect) | large-repo navigation, architecture | **Gemini 3.1 Pro** (multimodal MMMU-Pro 81%) · ultra-long-context (>200k) → **Opus** |
 | ⚖️ **independent critique** (critic) | adversarial verification | **cross-family** (different vendor than the main loop) |
-| 🎛️ **orchestration** (default) | tool-calling, routing, honesty | **Anthropic flagship** — Opus 4.8 (router quality caps the whole system; `dream-team` uses Fable 5. The only non-Anthropic routers are opt-in `ultimate-sol` (Sol) and Anthropic-free `eco` (Terra)) |
+| 🎛️ **orchestration** (default) | tool-calling, routing, honesty | **Anthropic flagship** — Opus 5 (router quality caps the whole system; `dream-team` uses Fable 5. The only non-Anthropic routers are opt-in `ultimate-sol` (Sol) and Anthropic-free `eco` (Terra)) |
 
 ---
 
@@ -104,7 +104,7 @@ Full catalog: [§5](#5-️-final-catalog--10-bundles--4-tiers) · reviewer mode 
 
 Three design principles:
 
-- **The main loop is non-negotiable.** Most median tasks are handled by the main loop alone, so dropping `default` to a weak model collapses perceived quality across the board. Default to the Anthropic flagship (Opus 4.8 — Fable 5 in `dream-team`). Only two non-Anthropic routers exist: the opt-in `ultimate-sol` experiment (Sol — validator-listed, WARN surfaced) and the Anthropic-free `eco` (Terra — the router invariant does not apply).
+- **The main loop is non-negotiable.** Most median tasks are handled by the main loop alone, so dropping `default` to a weak model collapses perceived quality across the board. Default to the Anthropic flagship (Opus 5 — Fable 5 in `dream-team`). Only two non-Anthropic routers exist: the opt-in `ultimate-sol` experiment (Sol — validator-listed, WARN surfaced) and the Anthropic-free `eco` (Terra — the router invariant does not apply).
 - **Diversity pays off only in *verification*.** Keep `critic` on a different vendor for independence, but keep serial chains short (reliability decays as `0.99ⁿ`).
 - **Effort is asymmetric economics.** `medium→high` is +1–2 points for ~23× the tokens. Blindly maxing is waste — escalate only because it could not solve the work.
 
@@ -124,15 +124,16 @@ Three design principles:
 
 ### 3-2. Effort cheatsheet
 
-These are the **GJC 0.9.6 effective** tiers (2026-07-10 live-call battery) — some differ from the official API specification:
+These are the **GJC 0.13.3 effective** tiers (2026-08-16 live-call battery) — some differ from the official API specification:
 
 ```text
-Opus 4.6/4.7/4.8        minimal low medium high xhigh max   ← all 6 tiers
+Opus 5 / 4.8            minimal low medium high xhigh max   ← all 6 tiers (shipped seats are Opus 5)
 Fable 5                 minimal low medium high xhigh       ← :max silently clamps to xhigh · thinking always-on
 Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max silently clamp to high
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 defaults to xhigh
 GPT 5.6 Sol/Terra/Luna  low medium high xhigh (max)          ← :max accepted, depth unverified — shipped cap is xhigh
-Grok 4.5 (xai)          low medium high                      ← :xhigh/:max silently clamps to high · minimal is not a native effort
+Grok 4.6 (xai)          low medium high xhigh                ← shipped cap high (:xhigh accepted, depth unverified)
+Grok 4.5 (xai)          low medium high                      ← legacy canary
 grok-build/grok-4.3     ── bare selector only (effort suffixes don't resolve) ──
 opencode-go deepseek-v4  minimal low medium high xhigh
 opencode-go others       ── omit the :effort suffix (default) ──
@@ -141,20 +142,20 @@ google-antigravity Gemini  gemini-3.1-pro-low:high (high reasoning) · gemini-3.
 
 ### Five hard rules
 
-1. Gemini Pro supports only `low`/`high`; high reasoning is the literal pin `gemini-3.1-pro-low:high` (since 0.9.6 the fuzzy space is fail-closed — bad ids return “not found”).
-2. openai-codex ctx is **per-model** — `gpt-5.4`=**1M** · `gpt-5.5`=**272K** · the three `gpt-5.6` models=**373K** (raised from 272K in 0.9.6; separate from the 1.05M API specification usable prompt budget).
+1. Gemini Pro supports only `low`/`high`; high reasoning is the literal pin `gemini-3.1-pro-low:high` (fuzzy space fail-closed — bad ids return “not found”). Gemini 3.5 Pro is not in the 08-16 catalog.
+2. openai-codex ctx is **per-model** — `gpt-5.4`=**1M** · `gpt-5.5`=**272K** · the three `gpt-5.6` models=**372K** (0.13.3 print; 0.9.6 listed 373K; separate from the 1.05M API specification).
 3. Sonnet (4.6/5) cannot do `xhigh`/`max` in GJC; **Fable 5 cannot do `max`** (clamped to high / xhigh respectively).
 4. opencode-go omits `:effort` (only the deepseek-v4 family supports it).
-5. xai `grok-4.5` caps at `high` (`:xhigh` silently clamps; xhigh exists only on grok-build, where effort suffixes do not resolve). Out-of-range tiers clamp rather than error; the gpt-5.6 trio accepts `:max`, but its depth is unverified, so the shipped cap is `xhigh`.
+5. xai `grok-4.6` ships at `high` (`:xhigh` accepted, depth unverified). `grok-build/grok-4.6:high` is not found (bare OK — not shipped). The gpt-5.6 trio accepts `:max`, but its depth is unverified, so the shipped cap is `xhigh`.
 
-> **Footnote (upstream gap):** Both Claude 5 models support up to `max` in the official API. The GJC parser (0.9.1–0.9.6) fable fallback and sonnet-5 inherited clamp are **engine-side gaps** reported upstream with reproductions.
+> **Footnote (upstream gap):** Both Claude 5 models support up to `max` in the official API. On GJC 0.13.3, Fable `:max` still returns OK — treat as a possible clamp and **do not ship**. Sonnet 5’s catalog now lists xhigh/max; clamp-vs-real is unmeasured, so the shipped legality stays high.
 
 ### 3-3. Subscription → provider
 
 | Subscription | provider-id | Notes |
 |---|---|---|
 | claude | `anthropic` | all efforts. Includes the Claude 5 family (Fable 5 · Sonnet 5) |
-| gpt | `openai-codex` | **ChatGPT account → base GPT (gpt-5.6 sol/terra/luna · 5.5 · 5.4)**. ctx: gpt-5.4=1M · 5.5=272K · 5.6 trio=373K |
+| gpt | `openai-codex` | **ChatGPT account → base GPT (gpt-5.6 sol/terra/luna · 5.5 · 5.4)**. ctx: gpt-5.4=1M · 5.5=272K · 5.6 trio=372K |
 | grok | `xai` | full lineup + Composer |
 | gemini | `google-antigravity` | **Google AI Pro/Ultra subscription token**. Gemini + bundled Claude (Opus 4.6 — as of 2026-07-02; bundle composition has not been re-checked afterward) |
 | opencode go | `opencode-go` | API key (`OPENCODE_API_KEY`) |
@@ -165,7 +166,7 @@ google-antigravity Gemini  gemini-3.1-pro-low:high (high reasoning) · gemini-3.
 ### 3-4. Selector syntax
 
 ```text
-<provider-id>/<model-id>:<effort>            e.g. anthropic/claude-opus-4-8:high
+<provider-id>/<model-id>:<effort>            e.g. anthropic/claude-opus-5:high
 google-antigravity/gemini-3.1-pro-low:high   (Gemini high reasoning — the engine's canonical path)
 opencode-go/<model>                           (omit effort = model default)
 ```
@@ -176,10 +177,10 @@ opencode-go/<model>                           (omit effort = model default)
 
 | Role (axis) | Leader | Figure |
 |---|---|---|
-| executor (SWE-bench Verified) | **Fable 5** | **95.0%** (Opus 4.8 88.6 = **strongest subscription-included** · GPT-5.5 82.6 · Gemini 3.1 Pro 80.6) |
+| executor (SWE-bench Verified) | **Fable 5** | **95.0%** (Opus 5 = **subscription-included successor** · Opus 4.8 88.6 is the prior-gen figure · GPT-5.5 82.6 · Gemini 3.1 Pro 80.6) |
 | planner (long-horizon workflow · reasoning) | **GPT-5.6 Sol**† | Agents' Last Exam 52.7 (5.5: 46.9) · AA Intelligence 58.9 — standalone GPQA #1 is Sonnet 5 at 96.2 · Gemini 3.1 Pro is specialized for scientific knowledge at 94.3 ([deep dive](./docs/deep-dive-role-fit.md#6-2-역할-배치-최적성-검토-deep-research--실측)) |
 | architect (ctx · multimodal) | **Gemini 3.1 Pro**† | 1M ctx · MMMU-Pro 81% |
-| default (tool-calling · honesty) | **Opus 4.8 / Fable 5** | router quality = whole-system ceiling (Fable carries refusal/billing caveats — see §5) |
+| default (tool-calling · honesty) | **Opus 5 / Fable 5** | router quality = whole-system ceiling (Fable carries refusal/billing caveats — see §5) |
 | critic (independence) | **cross-family** | meta-judge > debate aggregation |
 
 **Consensus principles** — † The planner row reflects the 2026-07-10 Sol GA replacing the 2026-07-02 Gemini 3.1 Pro snapshot; re-verify the architect axis when Gemini 3.5 Pro ships.
@@ -200,7 +201,7 @@ opencode-go/<model>                           (omit effort = model default)
 
 </div>
 
-> ★ = everyday recommendation. v2.0.0 is not a set of equal profiles but 10 bundles across 4 tiers. Every bundle has `required_providers ≥ 2`; `critic=cross-family` by default (exceptions are `SAME_FAMILY_OK` with WARN); it follows engine effort hard-rules and selector verification ([§6](#6--verification-matrix)). Every shipped seat was green in the 2026-07-10 gjc **0.9.6** battery.
+> ★ = everyday recommendation. v2.0.0 is not a set of equal profiles but 10 bundles across 4 tiers. Every bundle has `required_providers ≥ 2`; `critic=cross-family` by default (exceptions are `SAME_FAMILY_OK` with WARN); it follows engine effort hard-rules and selector verification ([§6](#6--verification-matrix)). Every shipped seat (including Opus 5 · Grok 4.6) was green in the 2026-08-16 gjc **0.13.3** battery.
 
 <details>
 <summary><b>📋 Expand the full YAML (identical to gjc-profiles.yml by model mapping — comments stripped; the annotated Korean canonical lives in <a href="./gjc-profiles.yml">gjc-profiles.yml</a>)</b></summary>
@@ -211,7 +212,7 @@ profiles:
   daily:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:medium
+      default:   anthropic/claude-opus-5:medium
       executor:  openai-codex/gpt-5.6-terra:high
       planner:   openai-codex/gpt-5.6-sol:high
       architect: google-antigravity/gemini-3.1-pro-low:high
@@ -220,8 +221,8 @@ profiles:
   coding-sprint:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:medium
-      executor:  anthropic/claude-opus-4-8:high
+      default:   anthropic/claude-opus-5:medium
+      executor:  anthropic/claude-opus-5:high
       planner:   openai-codex/gpt-5.6-sol:high
       architect: google-antigravity/gemini-3.1-pro-low:high
       critic:    openai-codex/gpt-5.6-terra:high
@@ -229,20 +230,20 @@ profiles:
   cyber-cop:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:high
+      default:   anthropic/claude-opus-5:high
       executor:  openai-codex/gpt-5.6-sol:high
       planner:   google-antigravity/gemini-3.1-pro-low:high
-      architect: anthropic/claude-opus-4-8:high
+      architect: anthropic/claude-opus-5:high
       critic:    openai-codex/gpt-5.6-sol:high
 
   ultimate-opus:
     required_providers: [anthropic, openai-codex, xai]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:high
-      executor:  anthropic/claude-opus-4-8:high
+      default:   anthropic/claude-opus-5:high
+      executor:  anthropic/claude-opus-5:high
       planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: anthropic/claude-opus-4-8:high
-      critic:    xai/grok-4.5:high
+      architect: anthropic/claude-opus-5:high
+      critic:    xai/grok-4.6:high
 
   ultimate-sol:
     required_providers: [openai-codex, anthropic, xai]
@@ -250,8 +251,8 @@ profiles:
       default:   openai-codex/gpt-5.6-sol:high
       executor:  openai-codex/gpt-5.6-sol:xhigh
       planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: anthropic/claude-opus-4-8:high
-      critic:    xai/grok-4.5:high
+      architect: anthropic/claude-opus-5:high
+      critic:    xai/grok-4.6:high
 
   dream-team:
     required_providers: [anthropic, openai-codex, xai]
@@ -259,26 +260,26 @@ profiles:
       default:   anthropic/claude-fable-5:high
       executor:  anthropic/claude-fable-5:xhigh
       planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: anthropic/claude-opus-4-8:high
-      critic:    xai/grok-4.5:high
+      architect: anthropic/claude-opus-5:high
+      critic:    xai/grok-4.6:high
 
   llm-council:
     required_providers: [anthropic, openai-codex, google-antigravity, xai]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:high
+      default:   anthropic/claude-opus-5:high
       executor:  openai-codex/gpt-5.6-terra:high
       planner:   openai-codex/gpt-5.6-sol:xhigh
       architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    xai/grok-4.5:high
+      critic:    xai/grok-4.6:high
 
   escalation:
     required_providers: [anthropic, openai-codex, google-antigravity, xai]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:high
+      default:   anthropic/claude-opus-5:high
       executor:  anthropic/claude-fable-5:xhigh
       planner:   openai-codex/gpt-5.6-sol:xhigh
       architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    xai/grok-4.5:high
+      critic:    xai/grok-4.6:high
 
   eco:
     required_providers: [openai-codex, opencode-go, google-antigravity]
@@ -292,10 +293,10 @@ profiles:
   monorepo:
     required_providers: [anthropic, google-antigravity, opencode-go]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:medium
-      executor:  anthropic/claude-opus-4-8:high
+      default:   anthropic/claude-opus-5:medium
+      executor:  anthropic/claude-opus-5:high
       planner:   google-antigravity/gemini-3.1-pro-low:high
-      architect: anthropic/claude-opus-4-8:high
+      architect: anthropic/claude-opus-5:high
       critic:    opencode-go/glm-5.2
 ```
 
@@ -315,18 +316,18 @@ profiles:
 ## 6. ✅ Verification matrix
 
 > Legend: ✅ live-call green (date in parentheses) · 🔴 failure · ⚠ caveat/clamp · †‡ footnotes · ●○ relative cost.
-> On 2026-07-10, gjc **0.9.6** called every provider’s core selector with `gjc -p --no-session --no-tools --model <sel> "..."` ([rerun-3](./evidence/2026-07-10-selectors-rerun-3.md); rerun-2 is the 0.9.5 green record). Every v2 shipped selector was green; same-day antigravity drift replaced `eco.critic`.
+> On 2026-08-16, gjc **0.13.3** called the core selectors with `gjc -p --no-session --no-tools --model <sel> "..."` ([08-16](./evidence/2026-08-16-selectors.md); 0.9.6 green is 07-10 rerun-3). Every v2.1 shipped seat was green; DeepSeek 403s China opt-in on this account.
 
 | Provider | Verified selectors |
 |---|---|
-| `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-4-8:high` · `claude-sonnet-4-6:high` — sel ✅(07-10) |
+| `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high` (legacy) · `claude-sonnet-4-6:high` — sel ✅(08-16) |
 | `openai-codex` | `gpt-5.6-sol:medium`/`:high`/`:xhigh` · `gpt-5.6-terra:high`/`:xhigh` · `gpt-5.6-luna:high` · `gpt-5.5:high` · `gpt-5.4:high` — sel ✅(07-10; 5.5=07-02) |
-| `xai` | `grok-4.5:medium`/`:high` · `grok-4-fast:high` · `grok-4-1-fast:high` · `grok-code-fast-1` · `grok-composer-2.5-fast` — sel ✅(07-10; 4-1 retired) |
+| `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high` (legacy) · `grok-4-fast:high` — sel ✅(08-16) |
 | `grok-build` | `grok-4.3` (bare) — sel ✅(07-02) |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅(07-10) |
 | `opencode-go` | `deepseek-v4-flash` · `deepseek-v4-pro` · `glm-5.2` · `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` — sel ✅(07-02) |
 
-- `fable-5:max`→xhigh, `sonnet-5:xhigh/max`→high, and `grok-4.5:xhigh/max`→high are silent clamps, not failures.
+- `fable-5:max` is accepted but may clamp (not shipped). `grok-4.6:xhigh` is accepted with unverified depth (ship `:high`). `grok-build/grok-4.6:high` is not found.
 - The gpt-5.6 trio accepts `:max`, but its depth is unverified and it is not shipped; `gpt-5.5:high` is a 07-02 green canary.
 - `grok-4-1-fast` still calls but redirects to Grok 4.3 billing after its 2026-05-15 retirement, so v2 excludes it.
 - Since 0.9.6 Gemini’s fuzzy space is fail-closed; the 0.9.5 silent `gemini-3.1-pro-high` → `-low` interpretation no longer reproduces.
@@ -337,7 +338,7 @@ profiles:
 
 - `openai-codex/gpt-5.3-codex` · `gpt-5.2-codex` · `gpt-5.1-codex-max/mini` — unsupported on ChatGPT accounts.
 - `google-antigravity/gemini-3.1-pro-high` — not found in 0.9.6; high reasoning is `gemini-3.1-pro-low:high`.
-- `gemini-3.5-flash-low` · `gemini-3.5-flash` · `gemini-pro-agent` — not found on 2026-07-10 afternoon.
+- `gemini-3.5-flash` (bare) · `gemini-3.1-pro-high` — not found 08-16. `gemini-3.5-flash-low` resurrected 08-16 (flap — not reseated).
 - `gemini-3-pro` — retired.
 - `claude-sonnet-4-6-thinking` — 404.
 - `gpt-oss-120b` — 500.
@@ -349,14 +350,14 @@ profiles:
 > The antigravity live surface can change within a day and `--list-models` can be cached. Live-call before adopting a seat; re-login/retry when discovery is stale, or use the bundle id (eco critic alternative: `opencode-go/deepseek-v4-pro`; add the `zai` provider for GLM).
 
 <details>
-<summary><b>Latency reference (micro-bench 2026-07-02; Grok 4.5 streaming on 2026-07-09)</b></summary>
+<summary><b>Latency reference (micro-bench 2026-07-02; 08-16 pings for Opus 5 · Grok 4.6)</b></summary>
 
 | Selector | Coding | Reasoning | Notes |
 |---|---|---|---|
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **fastest overall** |
-| `opus-4-8:high` | 4.0s | 3.9s | |
+| `opus-5:high` | 2.4s ping (08-16) | — | micro-bench not re-run |
 | `fable-5:medium`~`:max(→xhigh)` | 6.7~7.7s | 3.5~6.3s | +3~4s vs sonnet-5 on coding |
-| `grok-4.5:medium` / `:high` | ~14s / ~50s | TTFT ~13s / ~48s | high only for high-risk critic |
+| `grok-4.6:medium` / `:high` | 1.8s ping (08-16) | — | shipped critic cap is high · `:xhigh` not shipped |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | coding-latency outlier |
 | `glm-5.2` | **21.9s** | 4.0s | slowest at coding — fine for critic |
@@ -441,7 +442,7 @@ serial chain, 5 steps (0.99 each):  0.99^5 ≈ 95.1%    /    parallel independen
 ```
 
 - critic = **different vendor from the main loop, parallel independent vote, then the main loop tallies** (no debate — meta-judge wins).
-- critic panel example: `{openai-codex/gpt-5.6-sol:high, xai/grok-4.5:high, google-antigravity/gemini-3.1-pro-low:high}` in parallel → 2/3 dissent or any CRITICAL/BLOCK blocks. **CRITICAL/HIGH dissent cannot be majority-voted away** — resolve it or use a human gate.
+- critic panel example: `{openai-codex/gpt-5.6-sol:high, xai/grok-4.6:high, google-antigravity/gemini-3.1-pro-low:high}` in parallel → 2/3 dissent or any CRITICAL/BLOCK blocks. **CRITICAL/HIGH dissent cannot be majority-voted away** — resolve it or use a human gate.
 - executor fan-out only when **the work is truly independent** (no shared state).
 - keep chains short, with the main loop as the single source of truth (no direct sub-agent consensus).
 
@@ -454,17 +455,17 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 | Model | $/1M (in/out) | Role |
 |---|---|---|
 | Claude Fable 5 | 10 / 50 (batch 5/25 · cache hits 1)† | dream-team default·executor · escalation executor |
-| Claude Opus 4.8 | 5 / 25 | default·executor backbone |
+| Claude Opus 5 | 5 / 25 | default·executor backbone (4.8 successor) |
 | Claude Sonnet 5 | 3 / 15 (intro 2/10 through 2026-08-31)‡ | eco executor alternative |
 | GPT-5.6 Sol | 5 / 30 (Fast mode is 12.5/75) | planner (daily·sprint·ultimate-opus·dream-team·council·escalation) · ultimate-sol 3 seats · cyber-cop executor·critic |
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
 | GPT-5.6 Luna | 1 / 6 | eco planner (new in v2) |
-| Grok 4.5 | 2 / 6 (effective input ~$0.84 @88% cache) | critic (premium 3 bundles · llm-council · escalation) — xai API key |
+| Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic (premium 3 bundles · llm-council · escalation) — xai API key |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | eco executor · >400k single-paste fallback |
 | Gemini 3.1 Pro / 3-flash | preview/subscription token | planner·architect·critic |
 
-> † Fable 5 is exactly 2× Opus pricing. The subscription-included window (~7/12) still consumes weekly limits.
+> † Fable 5 is exactly 2× Opus pricing. From 2026-07-20 Max/premium Team include up to 50% of weekly limits; Pro/standard use credits.
 > ‡ Sonnet 5’s tokenizer change makes the same text ~30% more tokens — budget its effective cost above the sticker price.
 > (Note: via the DeepInfra provider (API key), DeepSeek V4 Pro is $1.30/$2.60.)
 
@@ -472,7 +473,7 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 
 | Bundle | Cost | Main driver |
 |---|---|---|
-| dream-team | ●●●●● | default·executor Fable 5 — ~7/12 subscription-included (50% weekly-limit cap), then credits $10/50 |
+| dream-team | ●●●●● | default·executor Fable 5 — Max/premium Team 50% of weekly limits; Pro uses credits $10/50 |
 | escalation | ●●●●● | executor Fable `:xhigh` (rescue pitcher — intermittent use) + planner Sol `:xhigh` + 4-vendor auth |
 | ultimate-opus / ultimate-sol | ●●●●○ | Opus or Sol 3 seats at `:high~xhigh` + Grok critic (xai API) |
 | llm-council | ●●●●○ | 4-vendor auth + Sol `:xhigh` planner — council workflow bills by vote count when executed |
@@ -486,7 +487,7 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 ## 11. 📖 Sources
 
 **Coding (executor)** · [Vals SWE-bench Verified](https://www.vals.ai/benchmarks/swebench) · [swebench.com](https://www.swebench.com/verified.html) · [Terminal-Bench 2.1](https://www.tbench.ai/leaderboard/terminal-bench/2.1)
-**Claude 5 family** · [Fable 5 redeployment announcement](https://www.anthropic.com/news/redeploying-fable-5) · [platform.claude.com model docs](https://platform.claude.com/docs) — pricing, subscription inclusion (~7/12 extension, [Android Authority report](https://www.androidauthority.com/claude-fable-5-free-extension-3685103/)), and effort specs cross-checked 2026-07-02/07-10
+**Claude 5 family** · [Fable 5 redeployment announcement](https://www.anthropic.com/news/redeploying-fable-5) · [platform.claude.com model docs](https://platform.claude.com/docs) — pricing, plan split ([official Help Center](https://support.claude.com/en/articles/15424964-claude-fable-5-on-your-plan)), Opus 5 ([announcement](https://www.anthropic.com/research/claude-opus-5)) cross-checked 2026-08-16
 **GPT-5.6 (2026-07-09 GA)** · [launch announcement](https://openai.com/index/gpt-5-6/) · [Sol preview (Cerebras 750TPS)](https://openai.com/index/previewing-gpt-5-6-sol/) · [AA: GPT-5.6 has landed](https://artificialanalysis.ai/articles/gpt-5-6-has-landed) · [TechTimes (METR eval gaming)](https://www.techtimes.com/articles/319808/20260707/gpt-56-sol-review-faster-coding-half-fable-5-cost-benchmark-problem.htm) — pricing/evals cross-checked 2026-07-10
 **Role and routing** · [Gemini 3.1 Pro card](https://deepmind.google/models/model-cards/gemini-3-1-pro/) · [AA Index](https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index) · [BFCL](https://gorilla.cs.berkeley.edu/leaderboard.html) · [self-preference bias](https://arxiv.org/abs/2410.21819) · [RouteLLM](https://www.lmsys.org/blog/2024-07-01-routellm/)
 **Official models/pricing** · [Anthropic](https://docs.anthropic.com/en/docs/about-claude/models) · [OpenAI](https://openai.com/api/pricing/) · [xAI](https://docs.x.ai/developers/models)
@@ -494,6 +495,6 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 <div align="center">
 
 **Install in one line, best model per role.**
-**v2.0.1** · [CHANGELOG](./CHANGELOG.md) · [Maintenance playbook](./MAINTAINING.md) · License [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
+**v2.1.0** · [CHANGELOG](./CHANGELOG.md) · [Maintenance playbook](./MAINTAINING.md) · License [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
 
 </div>

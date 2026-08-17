@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""gen_svgs.py — GJC 멀티벤더 가이드 SVG 자산 재생성기 (v2.0.0)
+"""gen_svgs.py — GJC 멀티벤더 가이드 SVG 자산 재생성기 (v2.1.0)
 
 assets/ 아래 4개 SVG 를 데이터 기반으로 재생성한다:
   - role-winners.svg     : 🔥 dream-team 역할별 최강 가설 배너
@@ -14,7 +14,7 @@ routing-tree.svg 는 모델명 하드코딩이 없어 재생성 대상이 아니
   python3 scripts/gen_svgs.py            # repo 루트 기준 assets/ 에 출력
   python3 scripts/gen_svgs.py --out DIR  # 다른 디렉터리에 출력
 
-데이터 원천: gjc-profiles.yml (v2.0.0, 10 번들). 프로필이 바뀌면
+데이터 원천: gjc-profiles.yml (v2.1.0, 10 번들). 프로필이 바뀌면
 아래 PROFILES 테이블을 yml 과 동기화한 뒤 재실행한다.
 검증 스탬프 날짜는 VERIFY_DATE 하나만 고치면 된다.
 """
@@ -23,8 +23,8 @@ import argparse
 import os
 import re
 
-VERIFY_DATE = "2026-07-10"
-GJC_VERSION = "0.9.6"
+VERIFY_DATE = "2026-08-16"
+GJC_VERSION = "0.13.3"
 
 FONT = "-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"
 
@@ -47,7 +47,7 @@ VENDOR_LABELS = [
 
 ROLES = ["🎛 default", "🔨 executor", "🧠 planner", "🔭 architect", "⚖ critic"]
 
-# ── 프로필 데이터 (gjc-profiles.yml v2.0.0 와 1:1 동기화) ─────────────────────
+# ── 프로필 데이터 (gjc-profiles.yml v2.1.0 와 1:1 동기화) ─────────────────────
 # 셀 = (vendor, model_display, effort_display)  — effort_display None 이면 생략.
 # Gemini 셀렉터 gemini-3.1-pro-low:high 는 모델 'Gemini 3.1 Pro-low' + effort ':high'
 # 로 분리 표기한다 (과거 'low:high' 병합 오표기 금지).
@@ -56,39 +56,39 @@ GEM_HI = (G, "Gemini 3.1 Pro-low", ":high")
 
 PROFILES = [
     ("⭐ daily", "Core · 구독 3벤더", [
-        (A, "Opus 4.8", ":medium"), (O, "GPT-5.6 Terra", ":high"),
+        (A, "Opus 5", ":medium"), (O, "GPT-5.6 Terra", ":high"),
         (O, "GPT-5.6 Sol", ":high"), GEM_HI, GEM_HI]),
     ("🏎 coding-sprint", "Core", [
-        (A, "Opus 4.8", ":medium"), (A, "Opus 4.8", ":high"),
+        (A, "Opus 5", ":medium"), (A, "Opus 5", ":high"),
         (O, "GPT-5.6 Sol", ":high"), GEM_HI, (O, "GPT-5.6 Terra", ":high")]),
     ("🚨 cyber-cop", "Core · reviewer 모드", [
-        (A, "Opus 4.8", ":high"), (O, "GPT-5.6 Sol", ":high"),
-        GEM_HI, (A, "Opus 4.8", ":high"), (O, "GPT-5.6 Sol", ":high")]),
+        (A, "Opus 5", ":high"), (O, "GPT-5.6 Sol", ":high"),
+        GEM_HI, (A, "Opus 5", ":high"), (O, "GPT-5.6 Sol", ":high")]),
     ("🏆 ultimate-opus", "Premium (exp)", [
-        (A, "Opus 4.8", ":high"), (A, "Opus 4.8", ":high"),
-        (O, "GPT-5.6 Sol", ":xhigh"), (A, "Opus 4.8", ":high"),
-        (X, "Grok 4.5", ":high")]),
+        (A, "Opus 5", ":high"), (A, "Opus 5", ":high"),
+        (O, "GPT-5.6 Sol", ":xhigh"), (A, "Opus 5", ":high"),
+        (X, "Grok 4.6", ":high")]),
     ("🧪 ultimate-sol", "Premium (exp) · Sol 라우터", [
         (O, "GPT-5.6 Sol", ":high"), (O, "GPT-5.6 Sol", ":xhigh"),
-        (O, "GPT-5.6 Sol", ":xhigh"), (A, "Opus 4.8", ":high"),
-        (X, "Grok 4.5", ":high")]),
+        (O, "GPT-5.6 Sol", ":xhigh"), (A, "Opus 5", ":high"),
+        (X, "Grok 4.6", ":high")]),
     ("🔥 dream-team", "Premium (exp) · Fable 중심", [
         (A, "Fable 5", ":high"), (A, "Fable 5", ":xhigh"),
-        (O, "GPT-5.6 Sol", ":xhigh"), (A, "Opus 4.8", ":high"),
-        (X, "Grok 4.5", ":high")]),
+        (O, "GPT-5.6 Sol", ":xhigh"), (A, "Opus 5", ":high"),
+        (X, "Grok 4.6", ":high")]),
     ("🏛 llm-council", "Workflow · 좌석표+계약", [
-        (A, "Opus 4.8", ":high"), (O, "GPT-5.6 Terra", ":high"),
-        (O, "GPT-5.6 Sol", ":xhigh"), GEM_HI, (X, "Grok 4.5", ":high")]),
+        (A, "Opus 5", ":high"), (O, "GPT-5.6 Terra", ":high"),
+        (O, "GPT-5.6 Sol", ":xhigh"), GEM_HI, (X, "Grok 4.6", ":high")]),
     ("🛡 escalation", "Workflow · 구원투수=Fable", [
-        (A, "Opus 4.8", ":high"), (A, "Fable 5", ":xhigh"),
-        (O, "GPT-5.6 Sol", ":xhigh"), GEM_HI, (X, "Grok 4.5", ":high")]),
+        (A, "Opus 5", ":high"), (A, "Fable 5", ":xhigh"),
+        (O, "GPT-5.6 Sol", ":xhigh"), GEM_HI, (X, "Grok 4.6", ":high")]),
     ("💸 eco", "Specialized (exp)", [
         (O, "GPT-5.6 Terra", ":medium"), (C, "DeepSeek V4 Flash", None),
         (O, "GPT-5.6 Luna", ":medium"), GEM_HI,
         (G, "Gemini 3-flash", ":low")]),
     ("🗺 monorepo", "Specialized (exp)", [
-        (A, "Opus 4.8", ":medium"), (A, "Opus 4.8", ":high"),
-        GEM_HI, (A, "Opus 4.8", ":high"), (C, "GLM-5.2", None)]),
+        (A, "Opus 5", ":medium"), (A, "Opus 5", ":high"),
+        GEM_HI, (A, "Opus 5", ":high"), (C, "GLM-5.2", None)]),
 ]
 
 
@@ -125,9 +125,9 @@ def gen_role_winners():
          "Anthropic · SWE-Bench Pro 80.0"),
         ("🧠 planner", "최상위 추론·설계", O, "GPT-5.6 Sol", ":xhigh",
          "OpenAI · 5.6 플래그십 추론"),
-        ("🔭 architect", "1M 실효검색·설계 리뷰", A, "Claude Opus 4.8", ":high",
-         "Anthropic · MRCR 76%@1M(4.6 실측 — 4.8 미공개)"),
-        ("⚖ critic", "독립 적대 비평", X, "Grok 4.5", ":high",
+        ("🔭 architect", "1M 실효검색·설계 리뷰", A, "Claude Opus 5", ":high",
+         "Anthropic · MRCR 76%@1M(4.6 실측 — 5 미독립측정)"),
+        ("⚖ critic", "독립 적대 비평", X, "Grok 4.6", ":high",
          "xAI · 제3계열 독립 dissent"),
     ]
     s = svg_open(W, H, "🔥 dream-team 셋업 — 역할별 최강 가설 (Premium · experimental)")
@@ -173,7 +173,7 @@ def gen_profiles_matrix():
     s += (f'<text x="24" y="46" font-size="22" font-weight="700" fill="#1A1A28">'
           f'GJC 멀티벤더 — {n} 번들 × 5 역할 (4계층)</text>\n')
     s += (f'<text x="24" y="72" font-size="13" fill="#6B6B7B">행=번들 · 열=역할 · '
-          f'색=벤더 · 07-10 rerun-3(gjc 0.9.6): v2 출하 셀렉터 전 좌석 그린</text>\n')
+          f'색=벤더 · 08-16 (gjc 0.13.3): Opus 5·Grok 4.6 실호출 그린</text>\n')
     # 벤더 범례 (헤더 행과 분리 — 자체 라인 + 구분선)
     lx = 24
     for key, label in VENDOR_LABELS:
@@ -220,8 +220,8 @@ def gen_profiles_matrix():
           f'critic = cross-family 기본(예외는 SAME_FAMILY_OK + WARN)'
           f'</text>\n')
     s += (f'<text x="24" y="{footer_y+20}" font-size="11.5" fill="#6B6B7B">'
-          f'엔진 effort 하드룰 합법 · 🔥 dream-team = Fable 5 구독 포함 이벤트'
-          f'(~7/12 23:59 PT, 이후 usage credits $10/$50) · llm-council/escalation 은 좌석표+워크플로 계약 · gjc {GJC_VERSION}</text>\n')
+          f'엔진 effort 하드룰 합법 · 🔥 dream-team = Fable 5 '
+          f'(Max/premium Team 주간한도 50% 포함 · Pro 는 credits) · llm-council/escalation 은 좌석표+워크플로 계약 · gjc {GJC_VERSION}</text>\n')
     s += "</svg>"
     return s
 
@@ -280,11 +280,11 @@ def gen_effort_ladder():
           f'fill="#33334a">모델별 effort 상한 — GJC {GJC_VERSION} 실효 '
           f'(검증 {VERIFY_DATE})</text>\n')
     chips = [
-        "Opus 4.8 = minimal..max",
+        "Opus 5 = minimal..max",
         "Fable 5 ≤ xhigh (GJC, :max 클램프)",
         "Sonnet 4.6/5 ≤ high",
         "GPT-5.6 3종 = 출하 ≤ xhigh (:max 수용·심도 미검증)",
-        "xai Grok 4.5 ≤ high",
+        "xai Grok 4.6 ≤ xhigh (출하 :high)",
         "Gemini Pro = {low, high}",
         "opencode-go = effort 생략",
     ]
@@ -332,7 +332,7 @@ def gen_architecture():
     s += ('<text x="500" y="172" font-size="13" font-weight="700" fill="#fff" '
           'text-anchor="middle">default 프로필의 Anthropic 플래그십</text>\n')
     s += ('<text x="500" y="189" font-size="11.5" font-weight="700" fill="#FFD9CE" '
-          'text-anchor="middle">(Opus 4.8 / Fable 5)</text>\n')
+          'text-anchor="middle">(Opus 5 / Fable 5)</text>\n')
     s += ('<text x="500" y="206" font-size="10.5" fill="#FFE7E0" '
           'text-anchor="middle">읽기 · 편집 · 도구호출 · 라우팅</text>\n')
     s += ('<path d="M680 169 C 760 169, 760 110, 690 124" fill="none" '

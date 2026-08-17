@@ -7,11 +7,11 @@
 モデル選びで悩むのをやめよう。**ワンライナーでインストール**し、各役割に最適なモデルを自動で割り当てる。
 
 [![GJC](https://img.shields.io/badge/for-Gajae%20Code%20(GJC)-e23?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code)
-[![Version](https://img.shields.io/badge/version-2.0.1-2496ED?style=flat-square)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.1.0-2496ED?style=flat-square)](./CHANGELOG.md)
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/bundles-10%20·%204%20tiers-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
-![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--07--10-brightgreen?style=flat-square)
+![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--16-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
 <img src="assets/role-winners.svg" alt="dream-team 構成 — 役割ごとの最強仮説" width="100%">
@@ -85,10 +85,10 @@ gjc                        # 新規セッションは自動で daily
 | 役割 | 何をするか | 最適モデル |
 |---|---|---|
 | 🧠 **推論・設計**（planner） | 手順・受け入れ基準 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 席は [§5](#5-️-最終カタログ--10-バンドル--4階層) を参照（例外：cyber-cop・monorepo=Gemini、eco=Luna） |
-| 🔨 **実装**（executor） | 実際のコード作成・修正 | **Claude Fable 5**（SWE-bench Verified **95.0**）— サブスク込み最強は **Opus 4.8**（88.6） |
+| 🔨 **実装**（executor） | 実際のコード作成・修正 | **Claude Fable 5**（SWE-bench Verified **95.0**）— サブスク込み最強は **Opus 5**（4.8 後継 · 同額 $5/$25 · 2026-07-24） |
 | 🔭 **コードレビュー**（architect） | 大規模リポ探索・アーキ | **Gemini 3.1 Pro**（マルチモーダル MMMU-Pro 81%） · 超長文脈（>200k）→ **Opus** |
 | ⚖️ **独立批評**（critic） | 敵対的検証 | **クロスファミリー**（メインループと別ベンダー） |
-| 🎛️ **オーケストレーション**（default） | ツール呼び出し・ルーティング・誠実性 | **Anthropic フラッグシップ** — Opus 4.8（`dream-team` は Fable 5。非 Anthropic は `ultimate-sol`（Sol）と `eco`（Terra）のみ） |
+| 🎛️ **オーケストレーション**（default） | ツール呼び出し・ルーティング・誠実性 | **Anthropic フラッグシップ** — Opus 5（`dream-team` は Fable 5。非 Anthropic は `ultimate-sol`（Sol）と `eco`（Terra）のみ） |
 
 ---
 
@@ -102,7 +102,7 @@ gjc                        # 新規セッションは自動で daily
 
 3つの設計原則：
 
-- **メインループは絶対に譲らない。** 中央値のタスクはほぼメインループが単独処理するため、`default` を弱モデルに落とすと体感品質が全面崩壊する。基本は Anthropic フラッグシップ（Opus 4.8 — `dream-team` は Fable 5）。非 Anthropic ルータは `ultimate-sol`（Sol）と `eco`（Terra）のみ。
+- **メインループは絶対に譲らない。** 中央値のタスクはほぼメインループが単独処理するため、`default` を弱モデルに落とすと体感品質が全面崩壊する。基本は Anthropic フラッグシップ（Opus 5 — `dream-team` は Fable 5）。非 Anthropic ルータは `ultimate-sol`（Sol）と `eco`（Terra）のみ。
 - **多様性は「検証」でのみ効く。** `critic` はメインループと別ベンダーにして独立性を確保する。ただし直列チェーンは短く保つ（信頼性は `0.99ⁿ` で減衰）。
 - **effort は非対称な経済学。** `medium→high` は +1〜2点のためにトークン約23倍。無条件 `max` は無駄 — 解けなかったときだけ上げる。
 
@@ -122,15 +122,16 @@ gjc                        # 新規セッションは自動で daily
 
 ### 3-2. Effort チートシート
 
-**GJC 0.9.6 の実効値**（2026-07-10 実呼び出しバッテリー）であり、API 公式仕様と異なる箇所がある：
+**GJC 0.13.3 の実効値**（2026-08-16 実呼び出しバッテリー）であり、API 公式仕様と異なる箇所がある：
 
 ```text
-Opus 4.6/4.7/4.8        minimal low medium high xhigh max   ← 全6段
+Opus 5 / 4.8            minimal low medium high xhigh max   ← 全6段（出荷席は Opus 5）
 Fable 5                 minimal low medium high xhigh       ← :max は xhigh へサイレントクランプ
 Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max は high へサイレントクランプ
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 既定 xhigh
 GPT 5.6 Sol/Terra/Luna  low medium high xhigh (max)          ← :max は受理されるが深度未検証 — 出荷上限 xhigh
-Grok 4.5（xai）          low medium high                      ← :xhigh/:max は high へサイレントクランプ
+Grok 4.6（xai）          low medium high xhigh                ← 出荷上限 high（:xhigh 受理・深度未検証）
+Grok 4.5（xai）          low medium high                      ← レガシーカナリア
 grok-build/grok-4.3     ── bare セレクタのみ（effort サフィックス非解釈）──
 opencode-go deepseek-v4  minimal low medium high xhigh
 opencode-go その他       ── effort サフィックス省略（既定）──
@@ -139,20 +140,20 @@ google-antigravity Gemini  gemini-3.1-pro-low:high（高推論）· gemini-3.1-p
 
 ### 5つのハードルール
 
-1. Gemini Pro は `low`/`high` のみ — 高推論は `gemini-3.1-pro-low:high` をリテラルにピン（0.9.6 からファジー空間は fail-closed）。
-2. openai-codex の文脈はモデル別 — `gpt-5.4`=1M · `gpt-5.5`=272K · `gpt-5.6 3種`=373K。
+1. Gemini Pro は `low`/`high` のみ — 高推論は `gemini-3.1-pro-low:high` をリテラルにピン（ファジー空間 fail-closed）。Gemini 3.5 Pro は 08-16 カタログに無い。
+2. openai-codex の文脈はモデル別 — `gpt-5.4`=1M · `gpt-5.5`=272K · `gpt-5.6 3種`=372K（0.13.3 表記）。
 3. Sonnet（4.6/5）は `xhigh`/`max` 不可 · **Fable 5 は `max` 不可**（それぞれ high/xhigh にクランプ）。
 4. opencode-go は `:effort` を省略（deepseek-v4 系のみ例外）。
-5. xai `grok-4.5` の上限は `high`。gpt-5.6 3種の `:max` は受理されるが深度未検証のため出荷上限は `xhigh`。
+5. xai `grok-4.6` の出荷上限は `high`（`:xhigh` 受理・深度未検証）。`grok-build/grok-4.6:high` は not found。
 
-> **脚注（上流ギャップ）**：Claude 5 ファミリーは API 公式には両方とも `max` まで対応する。GJC パーサ（0.9.1~0.9.6）の fable フォールバック・sonnet-5 の 4.6 クランプ継承はエンジン側のギャップで、再現資料と共に上流へ報告済み。
+> **脚注（上流ギャップ）**：Claude 5 ファミリーは API 公式には両方とも `max` まで対応する。GJC 0.13.3 でも Fable `:max` は受理される — クランプの可能性あり **未出荷**。Sonnet 5 カタログは xhigh/max を出すが未測定のため出荷合法性は high。
 
 ### 3-3. 契約 → プロバイダ
 
 | 契約 | provider-id | 備考 |
 |---|---|---|
 | claude | `anthropic` | 全 effort。Claude 5 ファミリー（Fable 5·Sonnet 5）を含む |
-| gpt | `openai-codex` | **ChatGPT アカウント → base GPT（gpt-5.6 sol/terra/luna · 5.5 · 5.4）を提供**。ctx: 5.4=1M · 5.5=272K · 5.6=373K |
+| gpt | `openai-codex` | **ChatGPT アカウント → base GPT（gpt-5.6 sol/terra/luna · 5.5 · 5.4）を提供**。ctx: 5.4=1M · 5.5=272K · 5.6=372K |
 | grok | `xai` | 全ラインナップ + Composer |
 | gemini | `google-antigravity` | **Google AI Pro/Ultra サブスクトークン**。Gemini + 同梱 Claude（Opus 4.6 — 2026-07-02 時点） |
 | opencode go | `opencode-go` | API キー（`OPENCODE_API_KEY`） |
@@ -163,7 +164,7 @@ google-antigravity Gemini  gemini-3.1-pro-low:high（高推論）· gemini-3.1-p
 ### 3-4. セレクタ構文
 
 ```text
-<provider-id>/<model-id>:<effort>            例）anthropic/claude-opus-4-8:high
+<provider-id>/<model-id>:<effort>            例）anthropic/claude-opus-5:high
 google-antigravity/gemini-3.1-pro-low:high   （Gemini 高推論 — エンジン公式経路）
 opencode-go/<model>                           （effort 省略 = モデル既定）
 ```
@@ -174,10 +175,10 @@ opencode-go/<model>                           （effort 省略 = モデル既定
 
 | 役割（軸） | 首位 | 数値 |
 |---|---|---|
-| executor（SWE-bench Verified） | **Fable 5** | **95.0%**（Opus 4.8 88.6 = **サブスク込み最強** · GPT-5.5 82.6 · Gemini 3.1 Pro 80.6） |
+| executor（SWE-bench Verified） | **Fable 5** | **95.0%**（Opus 5 = **サブスク込み後継** · Opus 4.8 88.6 は前世代値 · GPT-5.5 82.6 · Gemini 3.1 Pro 80.6） |
 | planner（長期ワークフロー・推論） | **GPT-5.6 Sol**† | Agents' Last Exam 52.7（5.5：46.9）· AA Intelligence 58.9 — 科学知識特化は Gemini 3.1 Pro の 94.3（[役割配置の検討](./docs/deep-dive-role-fit.md#6-2-역할-배치-최적성-검토-deep-research--실측)） |
 | architect（文脈・マルチモーダル） | **Gemini 3.1 Pro**† | 1M 文脈 · MMMU-Pro 81% |
-| default（ツール呼び出し・誠実性） | **Opus 4.8 / Fable 5** | ルータ品質 = 全体の上限（Fable は [§5](#5-️-最終カタログ--10-バンドル--4階層) のキャベアットに注意） |
+| default（ツール呼び出し・誠実性） | **Opus 5 / Fable 5** | ルータ品質 = 全体の上限（Fable は [§5](#5-️-最終カタログ--10-バンドル--4階層) のキャベアットに注意） |
 | critic（独立性） | **クロスファミリー** | メタ審判 > 討論型集計 |
 
 **合意原則** — † planner は 2026-07-10 の Sol GA を反映して Gemini 3.1 Pro スナップショットを置換し、architect 軸は Gemini 3.5 Pro リリース時に再検証する。
@@ -196,7 +197,7 @@ opencode-go/<model>                           （effort 省略 = モデル既定
 <img src="assets/profiles-matrix.svg" alt="プロファイル × 役割 マトリクス" width="100%">
 </div>
 
-> ★ = 日常推奨。v2.0.0 は同等なプロファイル群ではなく 4階層の10バンドルである。全バンドルは `required_providers ≥ 2`、基本 `critic=cross-family`（例外は `SAME_FAMILY_OK`+WARN）、エンジン effort ハードルールとセレクタ検証（[§6](#6--検証マトリクス)）に従う。2026-07-10 の gjc **0.9.6** バッテリーで出荷席はグリーンだった。
+> ★ = 日常推奨。v2.0.0 は同等なプロファイル群ではなく 4階層の10バンドルである。全バンドルは `required_providers ≥ 2`、基本 `critic=cross-family`（例外は `SAME_FAMILY_OK`+WARN）、エンジン effort ハードルールとセレクタ検証（[§6](#6--検証マトリクス)）に従う。2026-08-16 の gjc **0.13.3** バッテリーで出荷席（Opus 5·Grok 4.6 含む）はグリーンだった。
 
 <details>
 <summary><b>📋 完全な YAML を展開（モデルマッピングは gjc-profiles.yml と同一 — コメントは除去済み。注釈付きの韓国語正本は <a href="./gjc-profiles.yml">gjc-profiles.yml</a>）</b></summary>
@@ -207,7 +208,7 @@ profiles:
   daily:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:medium
+      default:   anthropic/claude-opus-5:medium
       executor:  openai-codex/gpt-5.6-terra:high
       planner:   openai-codex/gpt-5.6-sol:high
       architect: google-antigravity/gemini-3.1-pro-low:high
@@ -216,8 +217,8 @@ profiles:
   coding-sprint:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:medium
-      executor:  anthropic/claude-opus-4-8:high
+      default:   anthropic/claude-opus-5:medium
+      executor:  anthropic/claude-opus-5:high
       planner:   openai-codex/gpt-5.6-sol:high
       architect: google-antigravity/gemini-3.1-pro-low:high
       critic:    openai-codex/gpt-5.6-terra:high
@@ -225,20 +226,20 @@ profiles:
   cyber-cop:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:high
+      default:   anthropic/claude-opus-5:high
       executor:  openai-codex/gpt-5.6-sol:high
       planner:   google-antigravity/gemini-3.1-pro-low:high
-      architect: anthropic/claude-opus-4-8:high
+      architect: anthropic/claude-opus-5:high
       critic:    openai-codex/gpt-5.6-sol:high
 
   ultimate-opus:
     required_providers: [anthropic, openai-codex, xai]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:high
-      executor:  anthropic/claude-opus-4-8:high
+      default:   anthropic/claude-opus-5:high
+      executor:  anthropic/claude-opus-5:high
       planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: anthropic/claude-opus-4-8:high
-      critic:    xai/grok-4.5:high
+      architect: anthropic/claude-opus-5:high
+      critic:    xai/grok-4.6:high
 
   ultimate-sol:
     required_providers: [openai-codex, anthropic, xai]
@@ -246,8 +247,8 @@ profiles:
       default:   openai-codex/gpt-5.6-sol:high
       executor:  openai-codex/gpt-5.6-sol:xhigh
       planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: anthropic/claude-opus-4-8:high
-      critic:    xai/grok-4.5:high
+      architect: anthropic/claude-opus-5:high
+      critic:    xai/grok-4.6:high
 
   dream-team:
     required_providers: [anthropic, openai-codex, xai]
@@ -255,26 +256,26 @@ profiles:
       default:   anthropic/claude-fable-5:high
       executor:  anthropic/claude-fable-5:xhigh
       planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: anthropic/claude-opus-4-8:high
-      critic:    xai/grok-4.5:high
+      architect: anthropic/claude-opus-5:high
+      critic:    xai/grok-4.6:high
 
   llm-council:
     required_providers: [anthropic, openai-codex, google-antigravity, xai]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:high
+      default:   anthropic/claude-opus-5:high
       executor:  openai-codex/gpt-5.6-terra:high
       planner:   openai-codex/gpt-5.6-sol:xhigh
       architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    xai/grok-4.5:high
+      critic:    xai/grok-4.6:high
 
   escalation:
     required_providers: [anthropic, openai-codex, google-antigravity, xai]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:high
+      default:   anthropic/claude-opus-5:high
       executor:  anthropic/claude-fable-5:xhigh
       planner:   openai-codex/gpt-5.6-sol:xhigh
       architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    xai/grok-4.5:high
+      critic:    xai/grok-4.6:high
 
   eco:
     required_providers: [openai-codex, opencode-go, google-antigravity]
@@ -288,10 +289,10 @@ profiles:
   monorepo:
     required_providers: [anthropic, google-antigravity, opencode-go]
     model_mapping:
-      default:   anthropic/claude-opus-4-8:medium
-      executor:  anthropic/claude-opus-4-8:high
+      default:   anthropic/claude-opus-5:medium
+      executor:  anthropic/claude-opus-5:high
       planner:   google-antigravity/gemini-3.1-pro-low:high
-      architect: anthropic/claude-opus-4-8:high
+      architect: anthropic/claude-opus-5:high
       critic:    opencode-go/glm-5.2
 ```
 
@@ -311,18 +312,18 @@ profiles:
 ## 6. ✅ 検証マトリクス
 
 > 凡例: ✅ 実呼び出しグリーン（括弧内は検証日）· 🔴 失敗 · ⚠ 注意/クランプ · †‡ 脚注 · ●○ 相対コスト。
-> 2026-07-10 の gjc **0.9.6** で全プロバイダの核心セレクタを `gjc -p --no-session --no-tools --model <sel> "..."` で実呼び出しした（[rerun-3](./evidence/2026-07-10-selectors-rerun-3.md)、0.9.5 の記録は rerun-2）。v2 出荷席はすべてグリーンで、当日の antigravity ドリフトで eco.critic を差し替えた。
+> 2026-08-16 の gjc **0.13.3** で核心セレクタを実呼び出しした（[08-16](./evidence/2026-08-16-selectors.md)、0.9.6 グリーンは 07-10 rerun-3）。v2.1 出荷席はグリーン。このアカウントの DeepSeek は 403 China opt-in。
 
 | プロバイダ | 検証済みセレクタ |
 |---|---|
-| `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-4-8:high` · `claude-sonnet-4-6:high` — sel ✅(07-10) |
+| `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`（レガシー）· `claude-sonnet-4-6:high` — sel ✅(08-16) |
 | `openai-codex` | `gpt-5.6-sol:medium`/`:high`/`:xhigh` · `gpt-5.6-terra:high`/`:xhigh` · `gpt-5.6-luna:high` · `gpt-5.5:high` · `gpt-5.4:high` — sel ✅(07-10; 5.5=07-02) |
-| `xai` | `grok-4.5:medium`/`:high` · `grok-4-fast:high` · `grok-4-1-fast:high` · `grok-code-fast-1` · `grok-composer-2.5-fast` — sel ✅(07-10; 4-1 retired) |
+| `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（レガシー）· `grok-4-fast:high` — sel ✅(08-16) |
 | `grok-build` | `grok-4.3`（bare）— sel ✅(07-02) |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅(07-10) |
 | `opencode-go` | `deepseek-v4-flash` · `deepseek-v4-pro` · `glm-5.2` · `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` — sel ✅(07-02) |
 
-- `fable-5:max`→xhigh、`sonnet-5:xhigh/max`→high、`grok-4.5:xhigh/max`→high は失敗でなくサイレントクランプ。
+- `fable-5:max` は受理されるがクランプの可能性（未出荷）。`grok-4.6:xhigh` は受理・深度未検証（出荷 `:high`）。`grok-build/grok-4.6:high` は not found。
 - GPT-5.6 3種の `:max` は受理されるが深度未検証で未出荷、`gpt-5.5:high` は 07-02 グリーンのカナリア。
 - `grok-4-1-fast` は 2026-05-15 retire 後に grok-4.3 料金へ redirect されるため v2 から除外した。
 - 0.9.6 以降の Gemini ファジー空間は fail-closed。`gemini-3.1-pro-high` の 0.9.5 サイレント `-low` 解釈は再現されない。
@@ -333,7 +334,7 @@ profiles:
 
 - `openai-codex/gpt-5.3-codex` · `gpt-5.2-codex` · `gpt-5.1-codex-max/mini` — ChatGPT アカウント非対応。
 - `google-antigravity/gemini-3.1-pro-high` — 0.9.6 では not found。高推論は `gemini-3.1-pro-low:high`。
-- `gemini-3.5-flash-low` · `gemini-3.5-flash` · `gemini-pro-agent` — 2026-07-10 午後に not found。
+- `gemini-3.5-flash`（bare）· `gemini-3.1-pro-high` — 08-16 not found。`gemini-3.5-flash-low` は 08-16 復活（フラップ — 未再席）。
 - `gemini-3-pro` — 廃止。
 - `claude-sonnet-4-6-thinking` — 404。
 - `gpt-oss-120b` — 500。
@@ -345,14 +346,14 @@ profiles:
 > antigravity のライブ面は当日中にも変わり、`--list-models` 表記はキャッシュの場合がある。席に採用する前に実呼び出しで確認し、ディスカバリ未更新なら再ログイン/再試行またはバンドル id を使う（eco critic の代替は `opencode-go/deepseek-v4-pro`、GLM は `zai/glm-5.2` と `zai` プロバイダ追加）。
 
 <details>
-<summary><b>レイテンシ参考（マイクロベンチ 2026-07-02; Grok 4.5 は 2026-07-09 streaming）</b></summary>
+<summary><b>レイテンシ参考（マイクロベンチ 2026-07-02; 08-16 ping は Opus 5·Grok 4.6）</b></summary>
 
 | セレクタ | コーディング | 推論 | 備考 |
 |---|---|---|---|
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **全体最速** |
-| `opus-4-8:high` | 4.0s | 3.9s | |
+| `opus-5:high` | 2.4s ping (08-16) | — | マイクロベンチ未再測定 |
 | `fable-5:medium`~`:max(→xhigh)` | 6.7~7.7s | 3.5~6.3s | コーディングで sonnet-5 比 +3~4s |
-| `grok-4.5:medium` / `:high` | ~14s / ~50s | TTFT ~13s / ~48s | high は高リスク critic 専用 |
+| `grok-4.6:medium` / `:high` | 1.8s ping (08-16) | — | critic 出荷上限 high · `:xhigh` 未出荷 |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | コーディング遅延の外れ値 |
 | `glm-5.2` | **21.9s** | 4.0s | コーディング最遅 — critic には支障なし |
@@ -431,7 +432,7 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 巻き戻し（バ
 ```
 
 - critic は**メインループと別ベンダーで、並列独立投票後にメインループが集計**（討論禁止 — メタ審判が優位）。
-- critic パネル例：`{openai-codex/gpt-5.6-sol:high, xai/grok-4.5:high, google-antigravity/gemini-3.1-pro-low:high}` を同時実行 → 2/3 反対または CRITICAL/BLOCK 1件なら遮断。**CRITICAL/HIGH dissent は多数決で棄却不可** — 解消または human gate。
+- critic パネル例：`{openai-codex/gpt-5.6-sol:high, xai/grok-4.6:high, google-antigravity/gemini-3.1-pro-low:high}` を同時実行 → 2/3 反対または CRITICAL/BLOCK 1件なら遮断。**CRITICAL/HIGH dissent は多数決で棄却不可** — 解消または human gate。
 - executor の fan-out は**作業が真に独立**（共有状態なし）なときだけ。
 - チェーンは短く、メインループを単一の真実源にする（サブ同士で直接合意させない）。
 
@@ -444,17 +445,17 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 | モデル | $/1M (in/out) | 役割 |
 |---|---|---|
 | Claude Fable 5 | 10 / 50（バッチ 5/25 · キャッシュヒット 1）† | dream-team default·executor · escalation executor |
-| Claude Opus 4.8 | 5 / 25 | default·executor の基幹 |
+| Claude Opus 5 | 5 / 25 | default·executor の基幹（4.8 後継） |
 | Claude Sonnet 5 | 3 / 15（イントロ 2/10 ~2026-08-31）‡ | eco executor 代替 |
 | GPT-5.6 Sol | 5 / 30（Fast モードは 12.5/75） | planner（daily·sprint·ultimate-opus·dream-team·council·escalation）· ultimate-sol 3席 · cyber-cop executor·critic |
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
 | GPT-5.6 Luna | 1 / 6 | eco planner（v2 新規採用） |
-| Grok 4.5 | 2 / 6（実効入力約 $0.84 @88% cache） | critic（premium 3種・llm-council・escalation）— xai API キー |
+| Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3種・llm-council・escalation）— xai API キー |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | eco executor · >400k 単一 paste フォールバック |
 | Gemini 3.1 Pro / 3-flash | プレビュー/サブスクトークン | planner·architect·critic |
 
-> † Fable 5 は Opus のちょうど2倍の単価。サブスク込み分（~7/12）も週次上限を消費する。
+> † Fable 5 は Opus のちょうど2倍の単価。07-20 以降 Max/premium Team は週次上限の 50% 込み、Pro/standard は credits。
 > ‡ Sonnet 5 は**トークナイザ変更で同一テキストが約30%多くトークン化**される — 実効コストは表示単価より高く見積もること。
 > （参考：DeepSeek 系は DeepInfra プロバイダ（API キー）経由なら V4 Pro $1.30/$2.60。）
 
@@ -462,7 +463,7 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 
 | プロファイル | コスト | 主因 |
 |---|---|---|
-| dream-team | ●●●●● | default·executor Fable 5 — ~7/12 サブスク込み（週次上限 50%）、以後 credits $10/50 |
+| dream-team | ●●●●● | default·executor Fable 5 — Max/premium Team 週次上限 50%、Pro は credits $10/50 |
 | escalation | ●●●●● | executor Fable `:xhigh`（救援投手 — 間欠使用）+ planner Sol `:xhigh` + 4 ベンダー認証 |
 | ultimate-opus / ultimate-sol | ●●●●○ | Opus または Sol 3席 `:high~xhigh` + Grok critic（xai API） |
 | llm-council | ●●●●○ | 4 ベンダー認証 + Sol `:xhigh` planner — council 実行時は票数分課金 |
@@ -476,7 +477,7 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 ## 11. 📖 出典
 
 **コーディング（executor）** · [Vals SWE-bench Verified](https://www.vals.ai/benchmarks/swebench) · [swebench.com](https://www.swebench.com/verified.html) · [Terminal-Bench 2.1](https://www.tbench.ai/leaderboard/terminal-bench/2.1)
-**Claude 5 ファミリー** · [Fable 5 再デプロイ告知](https://www.anthropic.com/news/redeploying-fable-5) · [platform.claude.com モデルドキュメント](https://platform.claude.com/docs) — 価格・サブスク込み（~7/12 延長、[Android Authority 報道](https://www.androidauthority.com/claude-fable-5-free-extension-3685103/)）・effort 仕様を 2026-07-02/07-10 に相互確認
+**Claude 5 ファミリー** · [Fable 5 再デプロイ告知](https://www.anthropic.com/news/redeploying-fable-5) · [platform.claude.com モデルドキュメント](https://platform.claude.com/docs) — 価格・プラン分割（[公式 Help Center](https://support.claude.com/en/articles/15424964-claude-fable-5-on-your-plan)）・Opus 5（[発表](https://www.anthropic.com/research/claude-opus-5)）を 2026-08-16 に相互確認
 **GPT-5.6（2026-07-09 GA）** · [リリース発表](https://openai.com/index/gpt-5-6/) · [Sol プレビュー(Cerebras 750TPS)](https://openai.com/index/previewing-gpt-5-6-sol/) · [AA: GPT-5.6 has landed](https://artificialanalysis.ai/articles/gpt-5-6-has-landed) · [TechTimes(METR 評価ゲーミング)](https://www.techtimes.com/articles/319808/20260707/gpt-56-sol-review-faster-coding-half-fable-5-cost-benchmark-problem.htm) — 価格・評価を 2026-07-10 に相互確認
 **役割・ルーティング** · [Gemini 3.1 Pro card](https://deepmind.google/models/model-cards/gemini-3-1-pro/) · [AA Index](https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index) · [BFCL](https://gorilla.cs.berkeley.edu/leaderboard.html) · [self-preference bias](https://arxiv.org/abs/2410.21819) · [RouteLLM](https://www.lmsys.org/blog/2024-07-01-routellm/)
 **公式モデル/価格** · [Anthropic](https://docs.anthropic.com/en/docs/about-claude/models) · [OpenAI](https://openai.com/api/pricing/) · [xAI](https://docs.x.ai/developers/models)
@@ -484,6 +485,6 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 <div align="center">
 
 **ワンライナーで導入、役割ごとに最適モデル。**
-**v2.0.1** · [CHANGELOG](./CHANGELOG.md) · [保守プレイブック](./MAINTAINING.md) · ライセンス [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
+**v2.1.0** · [CHANGELOG](./CHANGELOG.md) · [保守プレイブック](./MAINTAINING.md) · ライセンス [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
 
 </div>

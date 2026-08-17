@@ -36,7 +36,7 @@ ROLES = {"default", "executor", "architect", "planner", "critic"}
 # Documented intentional same-family pairs (design choices, not bugs).
 # (profile, pair) -> rationale ; pair in {"exec_arch","plan_crit"}.
 SAME_FAMILY_OK = {
-    ("monorepo", "exec_arch"): "all roles >=1M ctx; gpt-5.5 (272K)/5.6 (373K) excluded — gpt-5.4 is 1M but Opus ranks at least equal",
+    ("monorepo", "exec_arch"): "all roles >=1M ctx; gpt-5.5 (272K)/5.6 (372K) excluded — gpt-5.4 is 1M but Opus ranks at least equal",
     ("ultimate-opus", "exec_arch"): "human ruling 2026-07-10: Opus quality base; Sol planner + Grok critic carry cross-family verification (bundle stays 3-vendor)",
     ("dream-team", "exec_arch"): "human ruling 2026-07-10: Fable executor vs Opus architect are distinct models; Sol planner + Grok critic carry cross-family verification",
     ("coding-sprint", "plan_crit"): "human ruling 2026-07-10: Sol planner + Terra critic are distinct models; bundle stays 3-vendor mixed collaboration",
@@ -46,8 +46,8 @@ SAME_FAMILY_OK = {
 NON_ANTHROPIC_DEFAULT_OK = {
     "ultimate-sol": "opt-in experimental Sol-base premium: Sol leads long-horizon workflow completion "
     "(Agents' Last Exam 52.7 vs Fable 40.5, OpenAI launch table incl. competitor rows); trade-offs stay "
-    "surfaced — 373K codex-surface router ctx (vs 1M) and weaker tool-calling axis (Toolathlon 58 vs "
-    "Fable 61.7). Role-fit L3 pending (evidence/2026-07-10-selectors-rerun-3.md, two-axis synthesis A1).",
+    "surfaced — 372K codex-surface router ctx (vs 1M) and weaker tool-calling axis (Toolathlon 58 vs "
+    "Fable 61.7). Role-fit L3 pending (evidence/2026-08-16-selectors.md, two-axis synthesis A1).",
 }
 
 # provider-id -> vendor family (for cross-family checks)
@@ -59,18 +59,20 @@ FAMILY = {
 }
 # Legal effort suffixes by model class. Matchers take (provider, model_id) so
 # per-provider ceilings can differ (same model id can clamp differently by provider).
-# Sets encode GJC-EFFECTIVE ceilings (0.9.1~0.9.5, live-verified 2026-07-09/10), NOT the API ones:
-#   fable-5 <=xhigh (:max silently clamps) · sonnet-5 <=high (API allows max — upstream gap)
-#   xai grok-4.3 <=high (:xhigh silently clamps; xhigh exists only on the grok-build provider,
-#   whose effort suffixes don't resolve at all — bare grok-build selectors only)
-#   xai grok-4.5 <=high (native reasoning_efforts=low/med/high per models_cache.json;
-#   :xhigh/:max exit 0 but silently clamp to high — never shipped)
-#   gpt-5.6-sol/terra/luna: catalog lists low..max and :max is accepted live (2026-07-10),
+# Sets encode GJC-EFFECTIVE shipped ceilings (live-verified 2026-08-16 on gjc 0.13.3), NOT the API ones:
+#   fable-5 <=xhigh (:max still returns OK — possible silent clamp; never shipped)
+#   sonnet-5 shipped legality stays <=high (catalog now lists xhigh/max; clamp-vs-real unmeasured)
+#   opus-5 / opus-4.x = full ladder including max
+#   xai grok-4.6 catalog low..xhigh (:xhigh accepted 2026-08-16; shipped seats stay :high — no L3)
+#   xai grok-4.5 <=high
+#   grok-build effort suffixes still don't resolve (grok-4.6:high = not found; bare grok-4.6 OK)
+#   gpt-5.6-sol/terra/luna: catalog lists low..max and :max is accepted live,
 #   but its depth is un-benchmarked — deliberate fail-closed ceiling stays xhigh (gpt-5.[2-9] rule).
 def _eff_rules():
     return [
-        (lambda p, m: m.startswith("claude-fable-5"), {"minimal","low","medium","high","xhigh"}),   # :max -> silent clamp to xhigh
-        (lambda p, m: m.startswith("claude-sonnet-5"), {"minimal","low","medium","high"}),          # :xhigh/:max -> silent clamp to high
+        (lambda p, m: m.startswith("claude-fable-5"), {"minimal","low","medium","high","xhigh"}),   # :max accepted; do not ship
+        (lambda p, m: m.startswith("claude-sonnet-5"), {"minimal","low","medium","high"}),          # catalog lists xhigh/max; shipped legality stays high
+        (lambda p, m: m.startswith("claude-opus-5"), {"minimal","low","medium","high","xhigh","max"}),
         (lambda p, m: m.startswith("claude-opus-4"), {"minimal","low","medium","high","xhigh","max"}),
         (lambda p, m: m.startswith("claude-sonnet-4"), {"minimal","low","medium","high"}),
         (lambda p, m: m.startswith("claude-haiku-4"), {"minimal","low","medium","high","xhigh"}),
@@ -79,9 +81,10 @@ def _eff_rules():
         (lambda p, m: m.startswith("gpt-5"), {"minimal","low","medium","high"}),  # base gpt-5/gpt-5.1 (catalog: minimal..high)
         (lambda p, m: "gemini" in m and "pro" in m, {"low","high"}),
         (lambda p, m: "gemini" in m and "flash" in m, {"minimal","low","medium","high"}),
-        (lambda p, m: p == "xai" and m.startswith("grok-4.5"), {"low","medium","high"}),  # native low/med/high (models_cache.json); :xhigh/:max clamp to high — not shipped
-        (lambda p, m: p == "xai" and m.startswith("grok"), {"minimal","low","medium","high"}),      # :xhigh -> silent clamp to high
-        (lambda p, m: p == "grok-build" and m.startswith("grok"), set()),  # catalog lists xhigh but effort suffixes don't resolve — bare selectors only
+        (lambda p, m: p == "xai" and m.startswith("grok-4.6"), {"low","medium","high","xhigh"}),  # 0.13.3 catalog; shipped seats :high
+        (lambda p, m: p == "xai" and m.startswith("grok-4.5"), {"low","medium","high"}),
+        (lambda p, m: p == "xai" and m.startswith("grok"), {"minimal","low","medium","high"}),
+        (lambda p, m: p == "grok-build" and m.startswith("grok"), set()),  # effort suffixes don't resolve — bare selectors only
     ]
 
 def family_of(selector: str) -> str:

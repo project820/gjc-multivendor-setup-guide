@@ -54,6 +54,7 @@ P(){ local sel="$1" expect="$2" r a
 
 # --- catalog selectors used by the current profiles, plus documented compatibility canaries (must stay ok) ---
 for s in \
+  "anthropic/claude-opus-5:high" "anthropic/claude-opus-5:medium" \
   "anthropic/claude-opus-4-8:high" "anthropic/claude-sonnet-4-6:high" \
   "anthropic/claude-fable-5:high" "anthropic/claude-fable-5:xhigh" \
   "anthropic/claude-sonnet-5:high" \
@@ -62,34 +63,33 @@ for s in \
   "openai-codex/gpt-5.5:high" "openai-codex/gpt-5.4:high" \
   "google-antigravity/gemini-3.1-pro-low" "google-antigravity/gemini-3.1-pro-low:high" \
   "google-antigravity/gemini-3-flash:low" \
-  "anthropic/claude-opus-4-8:medium" \
   "openai-codex/gpt-5.6-terra:medium" "openai-codex/gpt-5.6-luna:medium" \
+  "xai/grok-4.6:medium" "xai/grok-4.6:high" \
   "xai/grok-4.5:medium" "xai/grok-4.5:high" "xai/grok-4.3:high" "xai/grok-4-fast:high" \
-  "opencode-go/deepseek-v4-flash" "opencode-go/deepseek-v4-pro" \
   "opencode-go/glm-5.2" ; do P "$s" ok; done
-# (glm-5.2 bundled since 0.7.10; grok-4.5 added to the catalog 2026-07-09 = xai/grok-4.5, xai API only, no grok-build variant.
-#  grok-4.5 native efforts low/med/high; :xhigh/:max exit 0 but clamp to high — shipped selectors are :medium/:high only.
-#  gpt-5.6-sol/terra/luna added 2026-07-10: catalog lists low..max; :max is accepted live but its depth is
-#  un-benchmarked — shipped selectors cap at :xhigh. gpt-5.5 kept as a canary (retired from profiles in v1.11).
-#  gemini-3-flash:low = v2 eco.critic (gemini-3.5-flash-low vanished from the live surface 07-10 PM — see below).)
+# (v2.1.0 / gjc 0.13.3 / 2026-08-16: opus-5 + grok-4.6 added as shipped successors.
+#  grok-4.5 kept as a legacy canary. gpt-5.6 :max still un-benchmarked — shipped cap xhigh.
+#  gemini-3-flash:low stays eco.critic (3.5-flash-low resurrected 08-16 but live-surface flaps).
+#  deepseek-v4-flash/pro are catalog-live but this account 403s China-opt-in — informational below.)
 
 # --- retired/informational selectors (not counted as regression) ---
 # grok-4-1-fast: xAI retired the slug 2026-05-15 — legacy calls redirect to grok-4.3 at grok-4.3
-# pricing (official migration doc). Still answers, so keep as an informational canary only;
-# shipped profiles dropped it in v2 (eco.planner -> gpt-5.6-luna:medium).
-for s in "xai/grok-4-1-fast:high"; do P "$s" ok-live; done
+# pricing (official migration doc). Still answers, so keep as an informational canary only.
+# deepseek-v4-*: catalog id lives; 2026-08-16 this account 403s "China hosted / explicit opt-in".
+# grok-build/grok-4.6 (bare) resolves; :high does not — bare is informational only.
+# gemini-3.5-flash-low resurrected 08-16 after the 07-10 PM vanishing — flap, not a seat.
+for s in "xai/grok-4-1-fast:high" "opencode-go/deepseek-v4-flash" "opencode-go/deepseek-v4-pro" \
+  "grok-build/grok-4.6" "google-antigravity/gemini-3.5-flash-low"; do P "$s" ok-live; done
 
-# --- antigravity fuzzy/live-surface canaries (gjc 0.9.6: fail-closed; expected to FAIL) ---
-# 0.9.5 silently fuzzy-resolved unknown antigravity ids to gemini-3.1-pro-low (even -bogus).
-# 0.9.6 fails closed: gemini-3.1-pro-high / gemini-3.5-flash / -bogus all return "not found".
-# Also a live-surface retirement (07-10 PM): gemini-3.5-flash-low / -extra-low / gemini-pro-agent
-# vanished from live calls while --list-models still printed them — live calls are the truth.
+# --- antigravity fuzzy/live-surface canaries (fail-closed; expected to FAIL) ---
+# 0.9.6+ fails closed: gemini-3.1-pro-high / bare gemini-3.5-flash / -bogus all return "not found".
 # If any of these start SUCCEEDING again, that's a resolver/surface change — re-audit the fuzzy rules.
-for s in "google-antigravity/gemini-3.5-flash" "google-antigravity/gemini-3.5-flash-low" \
+for s in "google-antigravity/gemini-3.5-flash" \
   "google-antigravity/gemini-3.1-pro-high" "google-antigravity/gemini-3.1-pro-bogus"; do P "$s" fail; done
 
 # --- known rejections (documented; expected to FAIL) ---
-for s in "openai-codex/gpt-5.3-codex:high" "xai/grok-4.5:bogus" "openai-codex/gpt-5.6-sol:bogus"; do P "$s" fail; done
+for s in "openai-codex/gpt-5.3-codex:high" "xai/grok-4.6:bogus" "openai-codex/gpt-5.6-sol:bogus" \
+  "grok-build/grok-4.6:high"; do P "$s" fail; done
 
 if [ "${SELECTORS_ONLY:-0}" != 1 ]; then
   { echo; echo "## Single-message @file input limit (separate from the 1M context window)"; echo
@@ -101,8 +101,8 @@ if [ "${SELECTORS_ONLY:-0}" != 1 ]; then
     r="$(perl -e 'alarm 300; exec @ARGV' gjc -p --no-session --no-tools --model "$sel" @"$f" "Output only the PART_X value." 2>&1)"
     if printf '%s' "$r" | grep -q ZULU555; then a="found"; elif [ -z "$r" ]; then a="400/empty"; else a="resp(no-needle)"; fi
     printf '| `%s` | %s | %s |\n' "$sel" "$lbl" "$a" >> "$OUT"; }
-  B "anthropic/claude-opus-4-8:high"             "$T/350k.txt" 350k
-  B "anthropic/claude-opus-4-8:high"             "$T/476k.txt" 476k
+  B "anthropic/claude-opus-5:high"             "$T/350k.txt" 350k
+  B "anthropic/claude-opus-5:high"             "$T/476k.txt" 476k
   B "xai/grok-4-fast:high"                       "$T/476k.txt" 476k
   B "xai/grok-4-fast:high"                       "$T/857k.txt" 857k
   rm -rf "$T"

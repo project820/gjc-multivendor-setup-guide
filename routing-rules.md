@@ -23,8 +23,8 @@
 ## 적응형 effort 에스컬레이션 — 실패신호 기반
 - 최저 합리 등급으로 시작 (단순=low, executor/planner=high).
 - 실패신호(테스트 깨짐·자기모순·재시도 루프·critic 반려)에서만 1단계 격상: high → xhigh → max.
-- 단, 사다리 상한은 모델별(GJC 0.9.6 실효): max는 Opus 전용 최상단 · Fable 5=**xhigh**(`:max`는 침묵 클램프) ·
-  Sonnet(4.6/5)=**high** · xai grok-4.5=**high**(`:xhigh`/`:max` 침묵 클램프) · Gemini Pro는 low↔high 2단뿐 ·
+- 단, 사다리 상한은 모델별(GJC 0.13.3 실효): max는 Opus 전용 최상단 · Fable 5=**xhigh**(`:max`는 수용·클램프 가능 — 미출하) ·
+  Sonnet(4.6/5)=**high**(카탈로그는 sonnet-5 에 xhigh/max 를 찍지만 클램프 미측정) · xai grok-4.6 출하 **high**(`:xhigh` 수용·심도 미검증) · Gemini Pro는 low↔high 2단뿐 ·
   gpt-5.6 3종=출하 상한 **xhigh**(`:max`는 수용되나 심도 미검증 — 광고 금지) · opencode-go는 effort 자체를 생략.
   상한 위 등급을 써도 에러 없이 조용히 깎이니 "올렸다"고 착각 금지.
 - minimal 금지(-23점 급락). "안전하니 올리자"식 무조건 max 금지.
@@ -67,7 +67,7 @@ v2 카탈로그는 10개 user-facing 번들이며 신뢰 등급이 같지 않다
 ## 리뷰어 계약 — cyber-cop 프로필 전용 (PR 리뷰·보안 감사 세션)
 - **위임 순서**: 리뷰 진입 → **architect 선호출**(1차 코드리뷰 판정자: CLEAR/WATCH/BLOCK) →
   머지 게이트 → **critic**. 고위험 PR·보안 감사는 critic **3표 병렬 패널**
-  `{openai-codex/gpt-5.6-sol:high, xai/grok-4.5:high, google-antigravity/gemini-3.1-pro-low:high}` —
+  `{openai-codex/gpt-5.6-sol:high, xai/grok-4.6:high, google-antigravity/gemini-3.1-pro-low:high}` —
   독립 투표 후 본체가 집계(토론 금지), **2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단**.
   (3표째 grok은 xai 로그인 시 — 미보유면 2표 {gpt-5.6-sol, gemini}로 강등 운영, provenance 최소치(non-default family ≥2)는 유지된다.)
 - **default=집계자 제한**: 본체는 critic/패널의 raw verdict를 **요약·은폐 없이 보존·노출**한다.
@@ -79,26 +79,24 @@ v2 카탈로그는 10개 user-facing 번들이며 신뢰 등급이 같지 않다
 - **근거 없는 LGTM 금지**: 승인 편향 억제 — 반대 근거를 먼저 탐색하고, 근거 없이 통과시키지 않는다.
   cyber-cop은 reviewer-side(반대 근거 탐색)다 — author-side 최종 게이트는 `escalation`.
 
-## 검증된 셀렉터 하드룰 (위반 금지 — 기준 gjc 0.9.6, 2026-07-10 실호출)
+## 검증된 셀렉터 하드룰 (위반 금지 — 기준 gjc 0.13.3, 2026-08-16 실호출)
 - `anthropic/claude-fable-5` — GJC 실효 상한 = **xhigh** (`:max`는 수용되나 xhigh로 **침묵 클램프** — 광고 금지).
   thinking 상시-온(끌 수 없음). 안전 분류기 거부가 **HTTP 200 + `stop_reason: refusal`**로 옴 — "빈 응답"으로 오인 금지.
   30-day retention 필수·ZDR 불가 — 민감 코드베이스에서 dream-team/escalation executor 사용 전 정책 확인.
 - `anthropic/claude-sonnet-5` — GJC 실효 상한 = **high** (`:xhigh`/`:max`는 high로 침묵 클램프).
 - Gemini 고추론 = `google-antigravity/gemini-3.1-pro-low:high` 리터럴 핀.
-  ★0.9.6 변화: antigravity 퍼지 공간이 **fail-closed** 로 전환 — `gemini-3.1-pro-high`/`-bogus`는 이제
-  "Model not found"(0.9.5의 침묵 -low 해석 함정은 재현 안 됨). 핀은 그대로 유지한다.
-  ★라이브 표면 드리프트(07-10): `gemini-3.5-flash-low`/`-extra-low`/`gemini-pro-agent` 소멸 —
-  경량 Gemini 좌석은 `gemini-3-flash:low`(검증✅). `--list-models` 표기와 실호출이 어긋날 수 있다 — 실호출이 진실.
+  ★퍼지 공간 fail-closed 유지 — `gemini-3.1-pro-high`/`-bogus`는 "Model not found". 핀은 그대로 유지한다.
+  ★Gemini 3.5 Pro 는 08-16 카탈로그에 없다. `gemini-3.5-flash-low` 는 07-10 소멸 후 08-16 부활(플랩) — 경량 좌석은 `gemini-3-flash:low`.
+  `--list-models` 표기와 실호출이 어긋날 수 있다 — 실호출이 진실.
 - openai-codex 는 base GPT만 (`gpt-5.6-sol`/`gpt-5.6-terra`/`gpt-5.6-luna` · `gpt-5.5` · `gpt-5.4`) — `-codex` 변종 미지원.
-  ctx는 모델별(0.9.6): **gpt-5.4=1M / gpt-5.5=272K / gpt-5.6 3종=373K** usable prompt budget(API 스펙 1.05M/128K와 별개).
+  ctx는 모델별(0.13.3): **gpt-5.4=1M / gpt-5.5=272K / gpt-5.6 3종=372K** usable prompt budget(API 스펙 1.05M/128K와 별개).
   1M 급 입력은 gpt-5.4 또는 Opus/Gemini 레인.
 - openai-codex `gpt-5.6-sol/terra/luna` — Sol $5/$30 · Terra $2.5/$15 · Luna $1/$6(eco.planner 채용).
   `:medium`/`:high`/`:xhigh` 검증 OK · `:max`는 수용되나 **심도 미검증 — 출하·광고 금지**.
   ⚠ METR이 Sol의 SWE 평가 게이밍을 적발 — SWE류 벤치 단독 근거 승격 금지.
-- xai `grok-4.5` (canonical `grok-4-5`) — **xai API(XAI_API_KEY) 전용** · grok-build/OAuth 변종 **없음**(07-10 재조회 재확인).
-  GJC 실효 상한 = **high** (`:xhigh`/`:max`는 high로 침묵 클램프 — 광고 금지).
-  provider ctx **500K**(auto-compact 80% → exact-diff 안전 ~**400K**), GJC `--list-models`는 222K/8.9K 스테일 표기. 가격 **$2/$6**.
-  운영 노트: critic 이 ~400K 넘는 diff 를 심판해야 하면 grok-4.5 에 붓지 말고 **1M 레인(Opus/Gemini/GPT-5.4/GLM)** 으로 라우팅.
+- xai `grok-4.6` — **xai API(XAI_API_KEY)** · $2/$6 (<200k prompt) / $4/$12 (≥200k) · ctx **500K**.
+  출하 상한 = **high** (`:xhigh` 수용·심도 미검증 — 미출하). `grok-build/grok-4.6:high` 는 not found(bare 만 OK — 미출하).
+  운영 노트: critic 이 ~400K 넘는 diff 를 심판해야 하면 grok-4.6 에 붓지 말고 **1M 레인(Opus/Gemini/GPT-5.4/GLM)** 으로 라우팅.
   critic 좌석의 Grok 은 "검증된 결함회수 최강"이 아니라 **제3계열 독립 dissent** 다(2축 리서치 합의) — 그렇게만 설명한다.
 - `xai/grok-4-1-fast` — **v2에서 퇴출**: xAI 가 2026-05-15 retire, legacy slug 는 grok-4.3 요율로 redirect 과금(공식 migration 문서).
 - opencode-go 는 effort 접미사 생략, `OPENCODE_API_KEY` 필요.
@@ -106,7 +104,7 @@ v2 카탈로그는 10개 user-facing 번들이며 신뢰 등급이 같지 않다
   멀티 critic 은 병렬 독립 투표 후 본체가 집계(토론 금지).
 
 ## GJC 단일 메시지 입력 한도 (≠ 컨텍스트 윈도우, 실측)
-- Opus 4.8 의 GJC 컨텍스트 윈도우는 **1M** 이다(멀티턴 agentic 파일읽기로 1M까지 정상 누적).
+- Opus 5 의 GJC 컨텍스트 윈도우는 **1M** 이다(멀티턴 agentic 파일읽기로 1M까지 정상 누적).
 - 단, **단일 메시지(`@file`)로 한 방에 ~400k+ 토큰을 주입하면 Opus·Gemini 가 400**(메시지 크기 한도, 윈도우 아님. 레포 실측: 350k ✅ / 476k 🔴 — [딥다이브 §6-3](./docs/deep-dive-role-fit.md#6-3-잔여-공백-검토-gap-13--gjc-실효-컨텍스트-실측)).
 - **거대 입력은 한 메시지에 통째로 붓지 말고 청크로 나눠 누적**시키면 1M 윈도우 안에서 정상 처리된다.
   1M nominal window ≠ 완전 recall — monorepo 번들도 청크 누적 워크플로를 전제한다.
@@ -116,4 +114,4 @@ v2 카탈로그는 10개 user-facing 번들이며 신뢰 등급이 같지 않다
 - 직렬 체인은 짧게(0.99^N 붕괴). 병렬 결과는 dedup 후 검증. 본체가 단일 진실원천 —
   서브에이전트끼리 직접 합의시키지 말 것.
 - GJC 릴리스가 바뀌면(모델 metadata·effort clamp·provider 표면·selector resolver) 이 문서와
-  profile matrix 를 재계산한다 — 0.9.5→0.9.6 에서 ctx(272K→373K)와 퍼지 동작이 실제로 바뀌었다.
+  profile matrix 를 재계산한다 — 0.9.6→0.13.3 에서 Opus 5·Grok 4.6 입점과 gpt-5.6 ctx 표기(373K→372K)가 실제로 바뀌었다.
