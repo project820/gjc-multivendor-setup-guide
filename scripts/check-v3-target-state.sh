@@ -290,11 +290,18 @@ if [ "$SHIP" = 1 ]; then
   esac
 
   # #8 whats-new-v3 존재 + 구 공지 배너 + CHANGELOG 에는 배너 없음
+  #
+  # 계획이 금지한 것은 CHANGELOG 최상단의 **공지 배너**(`> … whats-new-v3.md` 인용줄)다.
+  # 파일명 언급 자체가 아니다 — CHANGELOG 항목이 "whats-new-v3.md 의 이 문장을 고쳤다"
+  # 라고 쓰는 것은 정상이고 오히려 권장된다. 예전 검사는 파일 전체를 `grep -q
+  # "whats-new-v3.md"` 로 훑어서 그런 정상 항목에 FAIL 을 냈다(#27 머지 직후 실측).
+  # 크루드한 검사가 오탐을 내면 사람은 문서를 약하게 고치거나 게이트를 무시한다 —
+  # 둘 다 나쁘다. 배너 모양(`^>` + 링크)으로 좁힌다.
   if [ -f docs/whats-new-v3.md ]; then ok whats-new "docs/whats-new-v3.md 존재"; else bad whats-new "docs/whats-new-v3.md 없음"; fi
   for f in docs/whats-new-v2.md docs/whats-new-cyber-cop.md; do
     if [ -f "$f" ] && grep -q "whats-new-v3.md" "$f"; then ok banner "$f 배너 존재"; else bad banner "$f 배너 없음"; fi
   done
-  if grep -q "whats-new-v3.md" CHANGELOG.md 2>/dev/null; then bad banner "CHANGELOG.md 에 배너가 들어갔다(계획상 제외 대상)"; else ok banner "CHANGELOG.md 배너 없음(의도대로)"; fi
+  if grep -qE '^>.*whats-new-v3\.md' CHANGELOG.md 2>/dev/null; then bad banner "CHANGELOG.md 에 공지 배너가 들어갔다(계획상 제외 대상)"; else ok banner "CHANGELOG.md 공지 배너 없음(의도대로 — 항목 내 파일명 언급은 정상)"; fi
 
   # #11 CHANGELOG v3.0.0 + MAINTAINING MAJOR 사례
   if grep -qE '^#+ .*v?3\.0\.0' CHANGELOG.md 2>/dev/null; then ok changelog "v3.0.0 항목 존재"; else bad changelog "CHANGELOG 에 v3.0.0 항목 없음"; fi
