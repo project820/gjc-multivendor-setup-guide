@@ -197,7 +197,7 @@ opencode-go/<model>                           （省略 effort = 模型默认）
 <img src="assets/profiles-matrix.svg" alt="配置 × 角色矩阵" width="100%">
 </div>
 
-> ★ = 日常推荐。v2.0.0 是 4 层级的 10 个捆绑：全部 `required_providers ≥ 2`，默认 `critic=cross-family`（例外为 `SAME_FAMILY_OK`+WARN），并遵循引擎 effort 硬规则及[§6](#6--验证矩阵)选择器验证；2026-08-16 gjc **0.13.3** 电池中的出货席位（含 Opus 5·Grok 4.6）均为绿色。
+> ★ = 日常推荐。v2.0.0 是 4 层级的 10 个捆绑：全部 `required_providers ≥ 2`，默认 `critic=cross-family`（例外为 `SAME_FAMILY_OK`+WARN），并遵循引擎 effort 硬规则及[§6](#6--验证矩阵)选择器验证；2026-08-17 最终席位批次中的出货席位（含 Opus 5·Grok 4.6）均为绿色；08-16 的运行早于 eco.executor 变更。
 
 <details>
 <summary><b>📋 展开完整 YAML（模型映射与 gjc-profiles.yml 一致 — 已去除注释）</b></summary>
@@ -315,7 +315,7 @@ profiles:
 ## 6. ✅ 验证矩阵
 
 > 图例：✅ 真实调用绿色（括号为验证日）· 🔴 失败 · ⚠ 注意/夹取 · †‡ 脚注 · ●○ 相对成本。
-> 2026-08-16 gjc **0.13.3** 对核心选择器真实调用（[08-16](./evidence/2026-08-16-selectors.md)；0.9.6 绿为 07-10 rerun-3）。v2.1 出货席位为绿；本账号 DeepSeek 为 403 China opt-in。
+> 共运行两次真实调用批次：**08-16**（gjc 0.13.3，各提供方核心选择器 — [记录](./evidence/2026-08-16-selectors.md)；0.9.6 绿为 07-10 rerun-3）与 **08-17**（v2.1.0 最终席位 + 单条消息上限 — [记录](./evidence/2026-08-17-selectors.md)）。08-16 早于 eco.executor 变更，因此最终席位的全量覆盖以 **08-17 为准**。截至 08-17，v2.1 出货席位全绿；DeepSeek 在本账号 403 China opt-in，已从出货席位移除。
 
 | 提供方 | 已验证选择器 |
 |---|---|

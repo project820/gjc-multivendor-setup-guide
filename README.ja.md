@@ -197,7 +197,7 @@ opencode-go/<model>                           （effort 省略 = モデル既定
 <img src="assets/profiles-matrix.svg" alt="プロファイル × 役割 マトリクス" width="100%">
 </div>
 
-> ★ = 日常推奨。v2.0.0 は同等なプロファイル群ではなく 4階層の10バンドルである。全バンドルは `required_providers ≥ 2`、基本 `critic=cross-family`（例外は `SAME_FAMILY_OK`+WARN）、エンジン effort ハードルールとセレクタ検証（[§6](#6--検証マトリクス)）に従う。2026-08-16 の gjc **0.13.3** バッテリーで出荷席（Opus 5·Grok 4.6 含む）はグリーンだった。
+> ★ = 日常推奨。v2.0.0 は同等なプロファイル群ではなく 4階層の10バンドルである。全バンドルは `required_providers ≥ 2`、基本 `critic=cross-family`（例外は `SAME_FAMILY_OK`+WARN）、エンジン effort ハードルールとセレクタ検証（[§6](#6--検証マトリクス)）に従う。2026-08-17 の最終ロスター・バッテリーで出荷席（Opus 5·Grok 4.6 含む）はグリーンだった。08-16 の実行は eco.executor 変更より前である。
 
 <details>
 <summary><b>📋 完全な YAML を展開（モデルマッピングは gjc-profiles.yml と同一 — コメントは除去済み。注釈付きの韓国語正本は <a href="./gjc-profiles.yml">gjc-profiles.yml</a>）</b></summary>
@@ -312,7 +312,7 @@ profiles:
 ## 6. ✅ 検証マトリクス
 
 > 凡例: ✅ 実呼び出しグリーン（括弧内は検証日）· 🔴 失敗 · ⚠ 注意/クランプ · †‡ 脚注 · ●○ 相対コスト。
-> 2026-08-16 の gjc **0.13.3** で核心セレクタを実呼び出しした（[08-16](./evidence/2026-08-16-selectors.md)、0.9.6 グリーンは 07-10 rerun-3）。v2.1 出荷席はグリーン。このアカウントの DeepSeek は 403 China opt-in。
+> ライブ・バッテリーは2回実行した。**08-16**（gjc 0.13.3、全プロバイダの中核セレクタ — [記録](./evidence/2026-08-16-selectors.md)、0.9.6 グリーンは 07-10 rerun-3）と **08-17**（v2.1.0 最終席 + 単一メッセージ上限 — [記録](./evidence/2026-08-17-selectors.md)）。08-16 は eco.executor 変更より前なので、最終席の全数カバーは **08-17 が正**である。v2.1 出荷席は 08-17 時点で全てグリーン。DeepSeek はこのアカウントで 403 China opt-in のため出荷席から外した。
 
 | プロバイダ | 検証済みセレクタ |
 |---|---|

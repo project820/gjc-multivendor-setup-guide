@@ -34,9 +34,9 @@
 
 | 모델 | $/1M in/out | GJC ctx 표면 | GJC 실효 effort 상한 | 검증 |
 |---|---|---|---|---|
-| Claude Opus 5 | 5 / 25 | **1M**/128K | **max** (6단 전부) | 08-16✅ |
-| Claude Opus 4.8 | 5 / 25 | **1M**/128K (단일 `@file` ~400k: 350k✅/476k🔴) | **max** (6단 전부) | 07-10✅ 레거시 카나리 |
-| Claude Fable 5 | 10 / 50 (배치 5/25) | 1M/128K | **xhigh** (`:max` 수용·클램프 가능) · thinking 상시-온 · refusal=HTTP 200+`stop_reason` · 30d retention/ZDR 불가 · 07-20부터 Max/premium Team 주간한도 50% 포함, Pro=credits | 08-16✅ |
+| Claude Opus 5 | 5 / 25 | **1M**/128K (단일 `@file` **476k 통과** — 08-17) | **max** (6단 전부) | 08-16·17✅ |
+| Claude Opus 4.8 | 5 / 25 | **1M**/128K (단일 `@file` ~400k: 350k✅/476k🔴 — 구세대 수치) | **max** (6단 전부) | 07-10✅ 레거시 카나리 |
+| Claude Fable 5 | 10 / 50 (배치 5/25) | 1M/128K | **xhigh** 출하상한 (`:max` 수용·심도 미검증) · thinking 상시-온 · refusal=HTTP 200+`stop_reason` · 30d retention/ZDR 불가 · 07-20부터 Max/premium Team 주간한도 50% 포함, Pro=credits | 08-16✅ |
 | GPT-5.6 Sol | 5 / 30 | **372K**/128K (0.13.3 표기, API 1.05M과 별개) | **xhigh** 출하상한 (`:max` 수용·심도 미검증) | 08-16✅ |
 | GPT-5.6 Terra | 2.5 / 15 | 372K/128K | xhigh 출하상한 | 08-16✅ |
 | GPT-5.6 Luna | 1 / 6 | 372K/128K | xhigh 출하상한 | 08-16✅ |

@@ -201,7 +201,7 @@ opencode-go/<model>                           (omit effort = model default)
 
 </div>
 
-> ★ = everyday recommendation. v2.0.0 is not a set of equal profiles but 10 bundles across 4 tiers. Every bundle has `required_providers ≥ 2`; `critic=cross-family` by default (exceptions are `SAME_FAMILY_OK` with WARN); it follows engine effort hard-rules and selector verification ([§6](#6--verification-matrix)). Every shipped seat (including Opus 5 · Grok 4.6) was green in the 2026-08-16 gjc **0.13.3** battery.
+> ★ = everyday recommendation. v2.0.0 is not a set of equal profiles but 10 bundles across 4 tiers. Every bundle has `required_providers ≥ 2`; `critic=cross-family` by default (exceptions are `SAME_FAMILY_OK` with WARN); it follows engine effort hard-rules and selector verification ([§6](#6--verification-matrix)). Every shipped seat (including Opus 5 · Grok 4.6) was green in the 2026-08-17 final-roster battery; the 2026-08-16 run predates the eco.executor change.
 
 <details>
 <summary><b>📋 Expand the full YAML (identical to gjc-profiles.yml by model mapping — comments stripped; the annotated Korean canonical lives in <a href="./gjc-profiles.yml">gjc-profiles.yml</a>)</b></summary>
@@ -316,7 +316,7 @@ profiles:
 ## 6. ✅ Verification matrix
 
 > Legend: ✅ live-call green (date in parentheses) · 🔴 failure · ⚠ caveat/clamp · †‡ footnotes · ●○ relative cost.
-> On 2026-08-16, gjc **0.13.3** called the core selectors with `gjc -p --no-session --no-tools --model <sel> "..."` ([08-16](./evidence/2026-08-16-selectors.md); 0.9.6 green is 07-10 rerun-3). Every v2.1 shipped seat was green; DeepSeek 403s China opt-in on this account.
+> Two live batteries were run: **08-16** (gjc 0.13.3, core selectors across providers — [record](./evidence/2026-08-16-selectors.md); 0.9.6 green is 07-10 rerun-3) and **08-17** (final v2.1.0 roster plus the single-message limit — [record](./evidence/2026-08-17-selectors.md)). The 08-16 run predates the eco.executor change, so **08-17 is authoritative** for full final-roster coverage. Every v2.1 shipped seat is green as of 08-17; DeepSeek 403s China opt-in on this account and was dropped from shipped seats.
 
 | Provider | Verified selectors |
 |---|---|
