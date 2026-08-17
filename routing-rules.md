@@ -80,10 +80,10 @@ v2 카탈로그는 10개 user-facing 번들이며 신뢰 등급이 같지 않다
   cyber-cop은 reviewer-side(반대 근거 탐색)다 — author-side 최종 게이트는 `escalation`.
 
 ## 검증된 셀렉터 하드룰 (위반 금지 — 기준 gjc 0.13.3, 2026-08-16 실호출)
-- `anthropic/claude-fable-5` — GJC 실효 상한 = **xhigh** (`:max`는 수용되나 xhigh로 **침묵 클램프** — 광고 금지).
+- `anthropic/claude-fable-5` — GJC 출하 상한 = **xhigh** (`:max`는 카탈로그에 없는데 호출은 OK로 돌아온다 — 실제로 xhigh로 클램프되는지 별도 심도인지 **미측정**. 측정 전까지 출하·광고 금지).
   thinking 상시-온(끌 수 없음). 안전 분류기 거부가 **HTTP 200 + `stop_reason: refusal`**로 옴 — "빈 응답"으로 오인 금지.
   30-day retention 필수·ZDR 불가 — 민감 코드베이스에서 dream-team/escalation executor 사용 전 정책 확인.
-- `anthropic/claude-sonnet-5` — GJC 실효 상한 = **high** (`:xhigh`/`:max`는 high로 침묵 클램프).
+- `anthropic/claude-sonnet-5` — GJC 출하 상한 = **high** (카탈로그는 `xhigh,max`를 표기하고 `:xhigh` 호출도 OK지만 클램프 여부 **미측정** — validator는 fail-closed로 high 유지).
 - Gemini 고추론 = `google-antigravity/gemini-3.1-pro-low:high` 리터럴 핀.
   ★퍼지 공간 fail-closed 유지 — `gemini-3.1-pro-high`/`-bogus`는 "Model not found". 핀은 그대로 유지한다.
   ★Gemini 3.5 Pro 는 08-16 카탈로그에 없다. `gemini-3.5-flash-low` 는 07-10 소멸 후 08-16 부활(플랩) — 경량 좌석은 `gemini-3-flash:low`.

@@ -281,8 +281,8 @@ def gen_effort_ladder():
           f'(검증 {VERIFY_DATE})</text>\n')
     chips = [
         "Opus 5 = minimal..max",
-        "Fable 5 ≤ xhigh (GJC, :max 클램프)",
-        "Sonnet 4.6/5 ≤ high",
+        "Fable 5 = 출하 ≤ xhigh (:max 수용·심도 미검증)",
+        "Sonnet 4.6/5 = 출하 ≤ high (:xhigh/:max 수용·심도 미검증)",
         "GPT-5.6 3종 = 출하 ≤ xhigh (:max 수용·심도 미검증)",
         "xai Grok 4.6 ≤ xhigh (출하 :high)",
         "Gemini Pro = {low, high}",
@@ -305,8 +305,8 @@ def gen_effort_ladder():
           f'올리는 건 정당 (테스트깨짐·자기모순·critic반려)   ❌ "올리면 안전하겠지"는 '
           f'낭비 — medium→high: +1~2점에 토큰 ~23배</text>\n')
     s += (f'<text x="24" y="{cy+78}" font-size="12" fill="#6B6B7B">🚫 minimal 은 '
-          f'품질 급락(-23점) — 실전 저점은 low · 클램프는 침묵 적용(에러 없이 상한으로 '
-          f'하향)이라 셀렉터에 상한 초과 effort 를 쓰지 말 것</text>\n')
+          f'품질 급락(-23점) — 실전 저점은 low · 상한 초과 effort 는 에러 없이 수용될 수 '
+          f'있고 실제 적용 여부가 미검증이라 셀렉터에 쓰지 말 것</text>\n')
     s += "</svg>"
     return s
 

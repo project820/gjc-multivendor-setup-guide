@@ -126,8 +126,8 @@ gjc                        # 新会话自动使用 daily
 
 ```text
 Opus 5 / 4.8            minimal low medium high xhigh max   ← 全 6 档（出货席位为 Opus 5）
-Fable 5                 minimal low medium high xhigh       ← :max 被静默夹取到 xhigh · thinking 常开
-Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max 被静默夹取到 high
+Fable 5                 minimal low medium high xhigh       ← :max 接受但深度未验证 — 出货上限 xhigh · thinking 常开
+Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max 接受但深度未验证 — 出货上限 high
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 默认 xhigh
 GPT 5.6 Sol/Terra/Luna  low medium high xhigh (max)          ← :max 接受但深度未验证 — 出货上限 xhigh
 Grok 4.6（xai）          low medium high xhigh                ← 出货上限 high（:xhigh 接受、深度未验证）

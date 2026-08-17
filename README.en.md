@@ -128,8 +128,8 @@ These are the **GJC 0.13.3 effective** tiers (2026-08-16 live-call battery) — 
 
 ```text
 Opus 5 / 4.8            minimal low medium high xhigh max   ← all 6 tiers (shipped seats are Opus 5)
-Fable 5                 minimal low medium high xhigh       ← :max silently clamps to xhigh · thinking always-on
-Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max silently clamp to high
+Fable 5                 minimal low medium high xhigh       ← :max accepted, depth unverified — shipped cap xhigh · thinking always-on
+Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max accepted, depth unverified — shipped cap high
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 defaults to xhigh
 GPT 5.6 Sol/Terra/Luna  low medium high xhigh (max)          ← :max accepted, depth unverified — shipped cap is xhigh
 Grok 4.6 (xai)          low medium high xhigh                ← shipped cap high (:xhigh accepted, depth unverified)

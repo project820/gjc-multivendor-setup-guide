@@ -144,8 +144,8 @@ gjc                        # 새 세션은 자동으로 daily 사용
 
 ```text
 Opus 5 / 4.8            minimal low medium high xhigh max   ← 6단계 전부 (출하 좌석은 Opus 5)
-Fable 5                 minimal low medium high xhigh       ← :max는 xhigh로 침묵 클램프 · thinking 상시-온
-Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max는 high로 침묵 클램프
+Fable 5                 minimal low medium high xhigh       ← :max 수용되나 심도 미검증 — 출하 상한 xhigh · thinking 상시-온
+Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max 수용되나 심도 미검증 — 출하 상한 high
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 기본 xhigh
 GPT 5.6 Sol/Terra/Luna  low medium high xhigh (max)          ← :max 수용되나 심도 미검증 — 출하 상한 xhigh
 Grok 4.6 (xai)          low medium high xhigh                ← 출하 상한 high (:xhigh 수용·심도 미검증)
@@ -356,7 +356,7 @@ profiles:
 </details>
 
 > [!TIP]
-> **opencode-go** 는 `OPENCODE_API_KEY` 설정 시 `eco` executor·`monorepo` critic에서 활성화된다(검증✅). 출하 좌석 `glm-5.2` 는 2026-08-16·08-17 실호출 ok. `deepseek-v4-flash/pro` 는 카탈로그 id 는 살아 있으나 **이 계정에서 403 China opt-in** 이라 v2.1.0 에서 출하 좌석에서 내렸다(정보성 카나리로만 유지 — 지역 정책 해제 시 재평가). 신규 입점 후보 `kimi-k2.7-code`·`minimax-m3` 는 미검증이다.
+> **opencode-go** 는 `OPENCODE_API_KEY` 설정 시 `eco` executor·`monorepo` critic에서 활성화된다(검증✅). 출하 좌석 `glm-5.2` 는 2026-08-16·08-17 실호출 ok. `deepseek-v4-flash/pro` 는 카탈로그 id 는 살아 있으나 **이 계정에서 403 China opt-in** 이라 v2.1.0 에서 출하 좌석에서 내렸다(정보성 카나리로만 유지 — 지역 정책 해제 시 재평가). `kimi-k3`(1M/131K)·`kimi-k2.7-code`(262K)·`minimax-m3` 는 **실호출은 되지만 role-fit 미검증이라 미출하**다 — 08-17 프로브 기록은 [`evidence/2026-08-17-eco-executor.md`](./evidence/2026-08-17-eco-executor.md).
 
 #### 프로필별 설계 근거
 

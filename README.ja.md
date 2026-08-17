@@ -126,8 +126,8 @@ gjc                        # 新規セッションは自動で daily
 
 ```text
 Opus 5 / 4.8            minimal low medium high xhigh max   ← 全6段（出荷席は Opus 5）
-Fable 5                 minimal low medium high xhigh       ← :max は xhigh へサイレントクランプ
-Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max は high へサイレントクランプ
+Fable 5                 minimal low medium high xhigh       ← :max は受理されるが深度未検証 — 出荷上限 xhigh
+Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max は受理されるが深度未検証 — 出荷上限 high
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 既定 xhigh
 GPT 5.6 Sol/Terra/Luna  low medium high xhigh (max)          ← :max は受理されるが深度未検証 — 出荷上限 xhigh
 Grok 4.6（xai）          low medium high xhigh                ← 出荷上限 high（:xhigh 受理・深度未検証）
