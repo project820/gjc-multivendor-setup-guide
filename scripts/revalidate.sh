@@ -5,6 +5,7 @@
 #
 #   bash scripts/revalidate.sh            # full battery → evidence/<date>-selectors.md
 #   SELECTORS_ONLY=1 bash scripts/revalidate.sh   # skip the long-context probes
+#   DRY_RUN=1 bash scripts/revalidate.sh          # verify the script itself; writes NO evidence file
 #
 # Exit code: non-zero if any selector EXPECTED to work failed (regression).
 # Credential failures (expired/unauthorized/re-login needed) are recorded as
@@ -13,11 +14,19 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 DATE="$(date +%Y-%m-%d)"
 mkdir -p evidence
-OUT="evidence/${DATE}-selectors.md"
-if [ -e "$OUT" ]; then
-  n=2
-  while [ -e "evidence/${DATE}-selectors-rerun-${n}.md" ]; do n=$((n+1)); done
-  OUT="evidence/${DATE}-selectors-rerun-${n}.md"
+# DRY_RUN=1 은 evidence 파일을 만들지 않는다. 스크립트 자체를 검증할 때 쓴다 —
+# 중간에 끊긴 실행이 반쯤 찬 evidence 파일로 남아 append-only 기록을 오염시키는 걸 막는다.
+# (v2.1.0 리뷰에서 실제로 잘린 rerun-3/-4 가 커밋될 뻔했다.)
+if [ "${DRY_RUN:-0}" = 1 ]; then
+  OUT="$(mktemp -t revalidate-dryrun)"
+  echo "## DRY_RUN=1 — evidence 파일을 쓰지 않는다 (임시: $OUT)"
+else
+  OUT="evidence/${DATE}-selectors.md"
+  if [ -e "$OUT" ]; then
+    n=2
+    while [ -e "evidence/${DATE}-selectors-rerun-${n}.md" ]; do n=$((n+1)); done
+    OUT="evidence/${DATE}-selectors-rerun-${n}.md"
+  fi
 fi
 command -v gjc >/dev/null 2>&1 || { echo "gjc not found"; exit 2; }
 command -v perl >/dev/null 2>&1 || { echo "perl not found (used for per-call timeout)"; exit 2; }
