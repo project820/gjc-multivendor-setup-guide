@@ -324,7 +324,7 @@ profiles:
 | `openai-codex` | shipped seats: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 final-roster battery**). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` are canaries, not shipped seats; all green in the 08-17 battery |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high` (legacy) · `grok-4.3:high` · `grok-4-fast:high` — sel ✅(08-16·**08-17 final-roster battery**) |
 | `grok-build` | `grok-4.6` (bare) — sel ✅(**08-17**). `grok-4.3` (bare) is the 07-02 record. Effort suffixes do not resolve (`grok-4.6:high` = not found) — not shipped |
-| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(07-10·**08-17 final-roster battery**) |
+| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(08-16·**08-17 final-roster battery**). Fuzzy `gemini-3.1-pro-high`/`-bogus` and bare `gemini-3.5-flash` confirmed fail-closed |
 | `opencode-go` | shipped seat `glm-5.2` — sel ✅(08-16, 08-17). `deepseek-v4-flash`/`-pro` keep a live catalog id but **403 China opt-in on this account**, so they are not shipped. `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` are from the 07-02 snapshot and were not re-verified in v2.1.0 |
 
 - `fable-5:max` is accepted but may clamp (not shipped). `grok-4.6:xhigh` is accepted with unverified depth (ship `:high`). `grok-build/grok-4.6:high` is not found.

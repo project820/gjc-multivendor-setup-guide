@@ -139,7 +139,12 @@ def _load_profiles(root):
     out = []
     for name, spec in profiles.items():
         label, tier = _PROFILE_CHROME[name]
-        mapping = spec["model_mapping"]
+        mapping = (spec or {}).get("model_mapping")
+        if not isinstance(mapping, dict) or not mapping:
+            raise SystemExit(f"gen_svgs: profile {name!r} in {path} has no model_mapping")
+        missing_roles = [r for r in _ROLE_ORDER if r not in mapping]
+        if missing_roles:
+            raise SystemExit(f"gen_svgs: profile {name!r} is missing roles {missing_roles}")
         out.append((label, tier, [_cell(mapping[r]) for r in _ROLE_ORDER]))
     return out
 

@@ -320,7 +320,7 @@ profiles:
 | `openai-codex` | 出荷席: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 最終ロスター・バッテリー**). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` は出荷席ではなくカナリアで、08-17 バッテリーでもグリーン |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（レガシー）· `grok-4.3:high` · `grok-4-fast:high` — sel ✅(08-16·**08-17 最終ロスター・バッテリー**) |
 | `grok-build` | `grok-4.6`（bare）— sel ✅(**08-17**)。`grok-4.3`（bare）は 07-02 記録。effort サフィックスは解決しない（`grok-4.6:high` = not found）— 未出荷 |
-| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(07-10·**08-17 最終ロスター・バッテリー**) |
+| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(08-16・**08-17 最終ロスター・バッテリー**)。ファジー `gemini-3.1-pro-high`/`-bogus` と bare `gemini-3.5-flash` は fail-closed を確認 |
 | `opencode-go` | 出荷席 `glm-5.2` — sel ✅(08-16・08-17)。`deepseek-v4-flash`/`-pro` はカタログ id は生存だが**このアカウントで 403 China opt-in** のため未出荷。`glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` は 07-02 スナップショットで v2.1.0 では再検証していない |
 
 - `fable-5:max` は受理されるがクランプの可能性（未出荷）。`grok-4.6:xhigh` は受理・深度未検証（出荷 `:high`）。`grok-build/grok-4.6:high` は not found。
