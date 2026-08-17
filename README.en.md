@@ -461,8 +461,8 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
 | GPT-5.6 Luna | 1 / 6 | eco planner (new in v2) |
 | Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic (premium 3 bundles · llm-council · escalation) — xai API key |
-| GLM-5.2 (opencode-go) | 1.40 / 4.40 | monorepo critic |
-| DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | eco executor · >400k single-paste fallback |
+| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic · >400k single-paste fallback |
+| DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **not shipped** — 403 China opt-in on this account (catalog id still live) |
 | Gemini 3.1 Pro / 3-flash | preview/subscription token | planner·architect·critic |
 
 > † Fable 5 is exactly 2× Opus pricing. From 2026-07-20 Max/premium Team include up to 50% of weekly limits; Pro/standard use credits.
@@ -480,7 +480,7 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 | coding-sprint | ●●●○○ | executor Opus `:high` (raise to max only on failure signals) |
 | daily | ●●●○○ | main loop Opus `:medium`, delegation spread across mid/cheap models — subscription OAuth across 3 vendors |
 | monorepo | ●●●○○ | executor/architect Opus + Gemini (preview/subscription) + GLM-5.2 |
-| eco | ●○○○○ | executor DeepSeek V4 Flash ($0.14) + Luna ($1) + Gemini preview — not absolute cheapest; built-in `codex-eco` is |
+| eco | ●○○○○ | executor GLM-5.2 ($1.40) + Luna ($1) + Gemini preview — not absolute cheapest; built-in `codex-eco` is |
 
 ---
 

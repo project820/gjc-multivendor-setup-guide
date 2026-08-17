@@ -170,7 +170,7 @@
 <text x="202" y="727" font-size="11" font-weight="700" fill="#0A6B53">GPT-5.6 Terra</text>
 <text x="202" y="744" font-size="10.5" fill="#0A6B53" opacity="0.8">:medium</text>
 <rect x="364" y="705" width="168" height="48" rx="8" fill="#DFF3F4"/><rect x="364" y="705" width="4.5" height="48" rx="2" fill="#0E7490"/>
-<text x="378" y="734" font-size="11" font-weight="700" fill="#155E63">DeepSeek V4 Flash</text>
+<text x="378" y="734" font-size="12.5" font-weight="700" fill="#155E63">GLM-5.2</text>
 <rect x="540" y="705" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="705" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="554" y="727" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Luna</text>
 <text x="554" y="744" font-size="10.5" fill="#0A6B53" opacity="0.8">:medium</text>

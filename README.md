@@ -368,8 +368,8 @@ profiles:
 - **dream-team** — Fable default+executor, Sol·Opus·Grok의 최고품질 가설; ⚠ 07-20부터 Max/premium Team은 주간 한도 50% 포함·Pro/standard는 credits, HTTP 200 refusal·30-day retention·ZDR 불가, Claude 계열은 `SAME_FAMILY_OK`.
 - **llm-council** — Google·xAI·OpenAI가 판정하고 Anthropic은 raw verdict를 보존하는 집계자; [`routing-rules.md`](./routing-rules.md)의 Council 계약(독립호출·quorum)이 필요하다.
 - **escalation** — 실패 뒤 Fable `:xhigh`와 3표 critic을 쓰는 수동 게이트; Escalation 계약이 트리거·human gate를 정하고 refusal 시 Opus `:max`로 강등한다.
-- **eco** — Terra·DeepSeek·Luna·Gemini 저단가 실험(절대 최저가는 내장 `codex-eco`); `grok-4-1-fast` retire/redirect 뒤 critic은 07-10 `gemini-3-flash:low`로 교체됐다.
-- **monorepo** — Opus architect·GLM-5.2 critic의 1M ctx 번들; 완전 recall이 아니므로 청크 누적하고 >~400k paste만 DeepSeek V4 Pro를 쓴다.
+- **eco** — Terra·GLM-5.2·Luna·Gemini 저단가 실험(절대 최저가는 내장 `codex-eco`); `grok-4-1-fast` retire/redirect 뒤 critic은 07-10 `gemini-3-flash:low`로 교체됐고, executor는 DeepSeek가 이 계정에서 403 China opt-in 이라 v2.1.0에서 `glm-5.2`로 교체됐다.
+- **monorepo** — Opus architect·GLM-5.2 critic의 1M ctx 번들; 완전 recall이 아니므로 청크 누적하고 >~400k paste만 `opencode-go/glm-5.2`(1M/131K)를 쓴다.
 
 ---
 
@@ -517,8 +517,8 @@ Gemini는 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 구독 �
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
 | GPT-5.6 Luna | 1 / 6 | eco planner (v2 신규 채용) |
 | Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic(premium 3종·llm-council·escalation) — xai API 키 |
-| GLM-5.2 (opencode-go) | 1.40 / 4.40 | monorepo critic |
-| DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | eco executor · >400k 단일 paste 폴백 |
+| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic · >400k 단일 paste 폴백 |
+| DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **미출하** — 이 계정 403 China opt-in(카탈로그 잔류) |
 | Gemini 3.1 Pro / 3-flash | 프리뷰/구독 토큰 | planner·architect·critic |
 
 > † Fable 5는 Opus의 정확히 2배 단가. 07-20부터 Max/premium Team은 주간 한도의 50%까지 포함, Pro/standard는 credits.
@@ -536,7 +536,7 @@ Gemini는 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 구독 �
 | coding-sprint | ●●●○○ | executor Opus `:high`(실패신호 시에만 max 격상) |
 | daily | ●●●○○ | 본체 Opus `:medium`, 위임은 중·저가로 분산 — 구독 OAuth 3벤더 |
 | monorepo | ●●●○○ | executor/architect Opus + Gemini(프리뷰/구독) + GLM-5.2 |
-| eco | ●○○○○ | executor DeepSeek V4 Flash($0.14) + Luna($1) + Gemini 프리뷰 — 단, *절대 최저가는 내장 `codex-eco`* |
+| eco | ●○○○○ | executor GLM-5.2($1.40) + Luna($1) + Gemini 프리뷰 — 단, *절대 최저가는 내장 `codex-eco`* |
 
 ---
 

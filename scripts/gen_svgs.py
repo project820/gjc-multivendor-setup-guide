@@ -83,7 +83,7 @@ PROFILES = [
         (A, "Opus 5", ":high"), (A, "Fable 5", ":xhigh"),
         (O, "GPT-5.6 Sol", ":xhigh"), GEM_HI, (X, "Grok 4.6", ":high")]),
     ("💸 eco", "Specialized (exp)", [
-        (O, "GPT-5.6 Terra", ":medium"), (C, "DeepSeek V4 Flash", None),
+        (O, "GPT-5.6 Terra", ":medium"), (C, "GLM-5.2", None),
         (O, "GPT-5.6 Luna", ":medium"), GEM_HI,
         (G, "Gemini 3-flash", ":low")]),
     ("🗺 monorepo", "Specialized (exp)", [

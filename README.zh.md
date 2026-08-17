@@ -454,8 +454,8 @@ Gemini 使用 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 订�
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
 | GPT-5.6 Luna | 1 / 6 | eco planner（v2 新采用） |
 | Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3 种·llm-council·escalation）— xai API key |
-| GLM-5.2 (opencode-go) | 1.40 / 4.40 | monorepo critic |
-| DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | eco executor · >400k 单条 paste 兜底 |
+| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic · >400k 单条 paste 兜底 |
+| DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **未出货** — 本账号 403 China opt-in（目录 id 仍在） |
 | Gemini 3.1 Pro / 3-flash | 预览/订阅 token | planner·architect·critic |
 
 > † Fable 5 单价恰为 Opus 的 2 倍。07-20 起 Max/premium Team 含每周额度的 50%，Pro/standard 用 credits。
@@ -473,7 +473,7 @@ Gemini 使用 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 订�
 | coding-sprint | ●●●○○ | executor Opus `:high`（仅失败信号时升 max） |
 | daily | ●●●○○ | 主循环 Opus `:medium`，委派中低价分散 — 订阅 OAuth 3 厂商 |
 | monorepo | ●●●○○ | executor/architect Opus + Gemini（预览/订阅）+ GLM-5.2 |
-| eco | ●○○○○ | executor DeepSeek V4 Flash（$0.14）+ Luna（$1）+ Gemini 预览；*绝对最低价*是内置 `codex-eco` |
+| eco | ●○○○○ | executor GLM-5.2（$1.40）+ Luna（$1）+ Gemini 预览；*绝对最低价*是内置 `codex-eco` |
 
 ---
 

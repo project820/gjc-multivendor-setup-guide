@@ -25,7 +25,7 @@
 | 🔥 dream-team | Fable:high | Fable:xhigh³ | Sol:xhigh | Opus5:high³ | Grok4.6:high | +xai |
 | 🏛 llm-council | Opus5:high⁵ | Terra:high | Sol:xhigh | Gemini`-low:high` | Grok4.6:high | 구독 3+xai |
 | 🛡 escalation | Opus5:high | Fable:xhigh | Sol:xhigh | Gemini`-low:high` | Grok4.6:high | 구독 3+xai |
-| 💸 eco | Terra:med | DeepSeek V4 Flash | Luna:med | Gemini`-low:high` | Gemini 3-flash:low | codex+go+google |
+| 💸 eco | Terra:med | GLM-5.2 | Luna:med | Gemini`-low:high` | Gemini 3-flash:low | codex+go+google |
 | 🗺 monorepo | Opus5:med | Opus5:high³ | Gemini`-low:high` | Opus5:high³ | GLM-5.2 | anthropic+google+go |
 
 ¹ architect와 동일 셀렉터 — 3벤더 구독-only 제약의 의도적 트레이드오프(xai 로그인 시 `grok-4.6:medium` 스왑 권장). ² plan/crit 동계열 — `SAME_FAMILY_OK` 인간판정. ³ exec/arch 동계열 — `SAME_FAMILY_OK`. ⁴ 유일한 Anthropic-보유 비-Anthropic 라우터(`NON_ANTHROPIC_DEFAULT_OK`, WARN). ⁵ 집계자 제한 — 판정석은 Google·xAI·OpenAI 3계열.
@@ -44,8 +44,8 @@
 | Gemini 3-flash | 프리뷰/구독¹ | 1M/66K | minimal..high | 08-16✅ |
 | Grok 4.6 | 2 / 6 (<200k) · 4 / 12 (≥200k) | provider 500K | 카탈로그 **xhigh** · 출하 **high** · xai API | 08-16✅ |
 | Grok 4.5 | 2 / 6 | 500K | **high** (레거시 카나리) | 08-16✅ |
-| DeepSeek V4 Flash | 0.14 / 0.28 | 1M | effort 생략 | 카탈로그 잔류 · 이 계정 08-16 **403 China opt-in** |
-| GLM-5.2 | 1.40 / 4.40 | 1M/131K | effort 생략(opencode-go 규칙) | 08-16✅ |
+| DeepSeek V4 Flash | 0.14 / 0.28 | 1M | effort 생략 | **미출하** — 카탈로그 잔류 · 이 계정 08-16·17 **403 China opt-in** |
+| GLM-5.2 | 1.40 / 4.40 | 1M/131K | effort 생략(opencode-go 규칙) | 08-16·17✅ — eco executor · monorepo critic |
 
 ¹ Antigravity = 무료 공개 프리뷰 + AI Pro/Ultra 구독 시 한도 상향([공식 plans](https://antigravity.google/docs/plans)). Gemini 3.5 Pro 미입점.
 

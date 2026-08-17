@@ -451,8 +451,8 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
 | GPT-5.6 Luna | 1 / 6 | eco planner（v2 新規採用） |
 | Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3種・llm-council・escalation）— xai API キー |
-| GLM-5.2 (opencode-go) | 1.40 / 4.40 | monorepo critic |
-| DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | eco executor · >400k 単一 paste フォールバック |
+| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic · >400k 単一 paste フォールバック |
+| DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **未出荷** — このアカウントで 403 China opt-in（カタログ id は生存） |
 | Gemini 3.1 Pro / 3-flash | プレビュー/サブスクトークン | planner·architect·critic |
 
 > † Fable 5 は Opus のちょうど2倍の単価。07-20 以降 Max/premium Team は週次上限の 50% 込み、Pro/standard は credits。
@@ -470,7 +470,7 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 | coding-sprint | ●●●○○ | executor Opus `:high`（失敗シグナル時のみ max 昇格） |
 | daily | ●●●○○ | 本体 Opus `:medium`、委譲は中・低価格へ分散 — サブスク OAuth 3ベンダー |
 | monorepo | ●●●○○ | executor/architect Opus + Gemini（プレビュー/サブスク）+ GLM-5.2 |
-| eco | ●○○○○ | executor DeepSeek V4 Flash（$0.14）+ Luna（$1）+ Gemini プレビュー — *絶対最安は内蔵 `codex-eco`* |
+| eco | ●○○○○ | executor GLM-5.2（$1.40）+ Luna（$1）+ Gemini プレビュー — *絶対最安は内蔵 `codex-eco`* |
 
 ---
 
