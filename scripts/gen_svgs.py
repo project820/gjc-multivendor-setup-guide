@@ -123,7 +123,11 @@ def _load_profiles(root):
     path = os.path.join(root, "gjc-profiles.yml")
     with open(path, encoding="utf-8") as fh:
         data = yaml.safe_load(fh)
-    profiles = data.get("model_profiles") or data.get("profiles") or {}
+    # 정본 gjc-profiles.yml 의 최상위 키는 `profiles` 다. validator·sync 도 같은 순서를
+    # 쓴다. 여기만 순서가 반대면 두 도구가 같은 입력에서 다른 트리를 고를 수 있다.
+    profiles = data.get("profiles") or data.get("model_profiles")
+    if not isinstance(profiles, dict) or not profiles:
+        raise SystemExit(f"gen_svgs: {path} has no usable 'profiles' mapping")
     unknown = sorted(set(profiles) - set(_PROFILE_CHROME))
     if unknown:
         raise SystemExit(f"gen_svgs: {path} has bundles with no SVG chrome: {unknown} — "
@@ -140,7 +144,6 @@ def _load_profiles(root):
     return out
 
 
-GEM_HI = (G, "Gemini 3.1 Pro-low", ":high")
 PROFILES = []  # main() 에서 yml 파싱 결과로 채운다
 
 

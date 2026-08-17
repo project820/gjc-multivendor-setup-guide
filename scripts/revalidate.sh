@@ -56,15 +56,21 @@ P(){ local sel="$1" expect="$2" r a
 # 손으로 적은 로스터는 정본과 조용히 어긋난다. gen_svgs.py 가 같은 결함으로 공개 SVG 를
 # 정본과 반대로 렌더한 사고가 있었다(v2.1.0 리뷰). 여기서는 yml 에서 출하 셀렉터를 뽑고,
 # 아래 카나리는 "출하 아님"을 명시한 채 별도로 더한다.
-_REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SHIPPED_SELECTORS="$(python3 - "$_REPO_ROOT/gjc-profiles.yml" <<'PYEOF'
+# 12행에서 이미 저장소 루트로 cd 했다. 여기서 $0 로 루트를 다시 계산하면
+# scripts/ 안에서 ./revalidate.sh 로 실행할 때 부모를 루트로 잘못 잡는다.
+SHIPPED_SELECTORS="$(python3 - "gjc-profiles.yml" <<'PYEOF'
 import sys, yaml
 with open(sys.argv[1], encoding="utf-8") as fh:
     data = yaml.safe_load(fh)
-profiles = data.get("profiles") or data.get("model_profiles") or {}
+profiles = data.get("profiles") or data.get("model_profiles")
+if not isinstance(profiles, dict) or not profiles:
+    sys.exit("FATAL: gjc-profiles.yml has no usable 'profiles' mapping")
 seen = []
-for spec in profiles.values():
-    for sel in spec["model_mapping"].values():
+for name, spec in profiles.items():
+    mapping = (spec or {}).get("model_mapping")
+    if not isinstance(mapping, dict) or not mapping:
+        sys.exit(f"FATAL: profile {name!r} has no model_mapping")
+    for sel in mapping.values():
         if sel not in seen:
             seen.append(sel)
 print("\n".join(seen))
