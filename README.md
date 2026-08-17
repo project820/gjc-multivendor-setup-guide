@@ -69,7 +69,7 @@ gjc                        # 새 세션은 자동으로 daily 사용
 | `anthropic` + `openai-codex` + `xai` | 🏆 **ultimate-opus** |
 | `anthropic` + `openai-codex` + `google-antigravity` + `xai` | 🛡 **escalation** · 🏛 **llm-council** |
 | `anthropic` + `google-antigravity` + `opencode-go` | 🗺 **monorepo** |
-| `openai-codex` + `google-antigravity` + `opencode-go` | 💸 **budget** (게이트 통과 시에만 노출) |
+| `openai-codex` + `google-antigravity` + `opencode-go` | 💸 **budget** (v3 신설) |
 
 ### 인증 방식은 별개 축이다
 
@@ -92,12 +92,14 @@ gjc                        # 새 세션은 자동으로 daily 사용
 Core / Premium / Workflow bundle / Specialized 는 각 번들 카드의 **배지**로만 남는다.
 "어떤 걸 쓸까" 의 1차 기준이 아니다 — 위 표가 1차 기준이다.
 
-| Core | 🚨 **cyber-cop** | reviewer 모드 — architect·critic 주연, PR 리뷰·보안 감사 전용 | 남의 PR 검토·머지 게이트·보안 감사 |
 > **🚨 cyber-cop** — GJC 최초 reviewer 모드: architect·critic이 주연이고 executor는 재현 조연이다. 고위험 PR은 3표 패널로 판정하며, PR #4~#7에서 머지 전 결함 10건을 차단했다.
 > 설치: `curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
 > → [공지 문서](./docs/whats-new-cyber-cop.md)
+
 > **Extragoal — GPT-5.5 Pro 최종리뷰 레인 (opt-in)** — Pro 심층 추론을 개발·QA·보안점검의 회전수-1 판정석에 투입한다. 상류 기본 레인은 이것 없이도 동작하며, `GJC_SETUP_EXTRAGOAL=1`로 설치한다.
 > → [Extragoal Maximalist 문서](./docs/extragoal-maximalist.md)
+
+---
 
 ## 📑 목차
 
@@ -286,6 +288,8 @@ profiles:
       architect: anthropic/claude-opus-5:high                   # 1M 장문. MRCR 76%@1M 은 Opus 4.6 실측 — 5 수치는 미독립측정
       critic:    xai/grok-4.6:high                              # v2.1: 4.5→4.6 like-for-like. 제3계열 독립 dissent(결함회수 최강 근거는 없음)
 
+  # ─────────────── Workflow bundle tier (좌석표 + 동반 워크플로) ───────────────
+
   llm-council:                         # 🏛 4계열 좌석표(판정석은 Google·xAI·OpenAI 3계열, 본체 Anthropic 은 집계자 제한 — 자기선호 격리). ★프로필은 좌석표일 뿐 — 병렬 독립호출·quorum·raw verdict 보존은
     required_providers: [anthropic, openai-codex, google-antigravity, xai]   #   routing-rules.md "Council 계약"이 실행한다(YAML 이 자동 실행하지 않음)
     model_mapping:
@@ -372,7 +376,7 @@ profiles:
 - **ultimate-opus** — Opus 3좌석의 안정성·1M을 Sol planner·Grok critic이 보완한다; ⚠ 같은 Claude 계열은 `SAME_FAMILY_OK`이며 세 독립 의견이 아니다.
 - **llm-council** — Google·xAI·OpenAI가 판정하고 Anthropic은 raw verdict를 보존하는 집계자; [`routing-rules.md`](./routing-rules.md)의 Council 계약(독립호출·quorum)이 필요하다.
 - **escalation** — 실패 뒤 Fable `:xhigh`와 3표 critic을 쓰는 수동 게이트; Escalation 계약이 트리거·human gate를 정하고 refusal 시 Opus `:max`로 강등한다.
-- **budget** — 저단가 API 경로 — *절대 최저가 아님*, `OPENCODE_API_KEY` 필요(게이트 통과 시 노출).
+- **budget** — 저단가 API 경로 — *절대 최저가 아님*, `OPENCODE_API_KEY` 필요.
 - **monorepo** — Opus architect·GLM-5.2 critic의 1M ctx 번들; 완전 recall이 아니므로 청크 누적을 권한다. 다만 >~400k 단일 paste 가 꼭 필요하면 **architect 좌석의 `claude-opus-5:high` 가 그대로 처리한다**(08-17 배터리에서 476k 통과 — Opus 4.8 의 476k 🔴 는 구세대 수치).
 
 ---
@@ -489,7 +493,7 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 되돌리기(백�
 | PR 리뷰·보안 감사 세션 | `cyber-cop` |
 | 다계열 합의가 필요한 결정 | `llm-council` (+ routing-rules 의 Council 계약) |
 | 정확성 최우선 (opt-in premium) | `ultimate-opus` |
-| 대량 리팩터·마이그레이션 | `budget`(게이트 통과 시) |
+| 대량 리팩터·마이그레이션 | `budget` |
 | 거대 코드베이스 진입 | `monorepo` |
 | 단일 벤더로만 운영 | GJC 내장 프로필(`claude-opus`·`codex-*` 등 — 이 카탈로그 밖) |
 

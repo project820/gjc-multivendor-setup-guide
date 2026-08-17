@@ -111,6 +111,8 @@ openai-codex/gpt-5.6-luna:high
 openai-codex/gpt-5.5:high
 openai-codex/gpt-5.4:high
 google-antigravity/gemini-3.1-pro-low
+google-antigravity/gemini-3-flash:low
+anthropic/claude-fable-5:high
 xai/grok-4.6:medium
 xai/grok-4.5:medium
 xai/grok-4.5:high
@@ -130,7 +132,7 @@ done <<< "$CANARIES"
 #  grok-4.5 kept as a legacy canary. gpt-5.6 :max still un-benchmarked — shipped cap xhigh.
 #  gemini-3-flash:low stays eco.critic (3.5-flash-low resurrected 08-16 but live-surface flaps).
 #  deepseek-v4-flash/pro are catalog-live but this account 403s China-opt-in — informational below.)
-# (v3.0.0 / 2026-08-18: daily.executor = gpt-5.6-luna:max — Luna's ONLY legal effort is :max now
+# (v3.0.0 / 2026-08-17: daily.executor = gpt-5.6-luna:max — Luna's ONLY legal effort is :max now
 #  (validator D-1); Sol/Terra shipped cap stays xhigh. After the eco/dream-team/ultimate-sol removal,
 #  gemini-3-flash:low and claude-fable-5:high hold ZERO shipped seats — informational only, no longer
 #  "stays eco.critic". The GLM-5.2 executor seat moved from eco.executor to budget.executor.)

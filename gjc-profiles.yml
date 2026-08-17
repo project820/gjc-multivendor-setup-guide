@@ -66,6 +66,8 @@ profiles:
       architect: anthropic/claude-opus-5:high                   # 1M 장문. MRCR 76%@1M 은 Opus 4.6 실측 — 5 수치는 미독립측정
       critic:    xai/grok-4.6:high                              # v2.1: 4.5→4.6 like-for-like. 제3계열 독립 dissent(결함회수 최강 근거는 없음)
 
+  # ─────────────── Workflow bundle tier (좌석표 + 동반 워크플로) ───────────────
+
   llm-council:                         # 🏛 4계열 좌석표(판정석은 Google·xAI·OpenAI 3계열, 본체 Anthropic 은 집계자 제한 — 자기선호 격리). ★프로필은 좌석표일 뿐 — 병렬 독립호출·quorum·raw verdict 보존은
     required_providers: [anthropic, openai-codex, google-antigravity, xai]   #   routing-rules.md "Council 계약"이 실행한다(YAML 이 자동 실행하지 않음)
     model_mapping:

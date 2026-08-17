@@ -142,3 +142,11 @@ validator 는 멀쩡하다 — `[canonical]` 이 돌리는 `validate-profiles.py
 
 **"fail-closed behaviour regressed" 를 문자 그대로 믿고 D-1/D-2 를 뜯으면 시간을 태운다.**
 상세는 `.gjc/v3-pending-scripts/README.md` 의 "순서 의존이 하나 더 있다" 절.
+
+---
+
+## Errata — 2026-08-17
+
+본문의 `2026-08-18` 날짜 표기는 오기다. 시스템 시계 확인 결과 이 작업은 전부
+**2026-08-17**(KST) 에 이뤄졌다. 본문은 append-only 원칙대로 손대지 않았으니
+`2026-08-18` 로 적힌 실측일은 `2026-08-17` 로 읽어라.

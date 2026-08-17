@@ -1,4 +1,4 @@
-# 팩트시트 — v2.1.0 (기준일 2026-08-17 · gjc 0.13.3)
+# 팩트시트 — v3.0.0 (기준일 2026-08-17 · gjc 0.13.3)
 
 > [!NOTE]
 > **이 문서는 non-normative 요약이다.** 규범 출처: 매핑 = [`gjc-profiles.yml`](../gjc-profiles.yml) · 운영 계약 = [`routing-rules.md`](../routing-rules.md) · 검증 원본 = [`evidence/`](../evidence/). 모든 수치는 **기재된 검증일 시점**이며 시점 민감하다 — 카탈로그·라이브 표면은 당일에도 변한다(07-10 오후 `gemini-3.5-flash*` 소멸 실측).
@@ -9,7 +9,7 @@
 |---|---|
 | 가이드 버전 | **v3.0.0** (카탈로그 재설계 — 8번들·4계층, daily.executor Luna:max) |
 | 기준 GJC | **0.13.3** (로컬 바이너리 확인 2026-08-16 · [upstream v0.13.3](https://github.com/Yeachan-Heo/gajae-code/releases/tag/v0.13.3) 2026-08-15) |
-| 번들 | **10종 · 4계층** (Core 3 · Premium exp 3 · Workflow 2 · Specialized exp 2) |
+| 번들 | **8종 · 4계층** (Core 3 · Premium exp 1 · Workflow 2 · Specialized exp 2) |
 | 실호출 검증 | 출하 좌석 게이트 정본 = **`evidence/2026-08-17-selectors-rerun-2.md`**(개정된 revalidate.sh 실행, 회귀 0). 단일 메시지 476k 근거 = `evidence/2026-08-17-selectors.md`(하네스 수정 전 산출물). `evidence/2026-08-16-selectors.md` 는 eco.executor 가 DeepSeek 이던 시점이라 그 좌석이 403 으로 실패해 있다 |
 | 리서치 근거 | 2축 블라인드 딥리서치(Claude Fable 5 Ultracode + Parallel.ai Ultra 2x) → 인간 freeze 2026-07-10 |
 
@@ -26,7 +26,7 @@
 | 💸 budget | Terra:med | GLM-5.2 | Qwen3.8Max | Gemini`-low:high` | Gemini`-low:high` | codex+go+google |
 | 🗺 monorepo | Opus5:med | Opus5:high³ | Gemini`-low:high` | Opus5:high³ | GLM-5.2 | anthropic+google+go |
 
-¹ architect와 동일 셀렉터 — 3벤더 구독-only 제약의 의도적 트레이드오프(xai 로그인 시 `grok-4.6:medium` 스왑 권장). ² plan/crit 동계열 — `SAME_FAMILY_OK` 인간판정. ³ exec/arch 동계열 — `SAME_FAMILY_OK`. ⁴ 유일한 Anthropic-보유 비-Anthropic 라우터(`NON_ANTHROPIC_DEFAULT_OK`, WARN). ⁵ 집계자 제한 — 판정석은 Google·xAI·OpenAI 3계열.
+¹ architect와 동일 셀렉터 — 3벤더 구독-only 제약의 의도적 트레이드오프(xai 로그인 시 `grok-4.6:medium` 스왑 권장). ² plan/crit 동계열 — `SAME_FAMILY_OK` 인간판정. ³ exec/arch 동계열 — `SAME_FAMILY_OK`. ⁵ 집계자 제한 — 판정석은 Google·xAI·OpenAI 3계열.
 
 ## 3. 모델 팩트 (검증일 명기)
 
@@ -61,7 +61,7 @@
 
 1. 전 번들 멀티벤더 — **실사용 벤더 ≥2** (required_providers 패딩으로 우회 불가, 패딩은 WARN)
 2. default = Anthropic 플래그십 (anthropic 미요구 번들은 적용 대상 아님 — 예외 목록 없음)
-3. exec/arch · plan/crit cross-family (예외는 `SAME_FAMILY_OK` 등재 + WARN 영구 표면화 — 현재 4건)
+3. exec/arch · plan/crit cross-family (예외는 `SAME_FAMILY_OK` 등재 + WARN 영구 표면화 — 현재 3건)
 4. effort 하드룰 (§3 상한 위반은 하드에러)
 5. required_providers ⊇ 실사용 provider
 6. README×4 임베드 YAML == `gjc-profiles.yml` (parsed-mapping 비교 — `scripts/sync-readme-yaml.py`로 동기화)

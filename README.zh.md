@@ -56,6 +56,41 @@ gjc                        # 新会话自动使用 daily
 
 ## 🧭 该用哪个捆绑？
 
+**从你已有的订阅开始。** 不要先看 tier——先确定你**现在能用什么**。
+
+下表左列是**某个捆绑实际运行所必需的最小提供方组合**。它直接转录自
+规范 `gjc-profiles.yml` 的 `required_providers`，没有任意删减或补充。你的组合只要
+**包含**某一行，即可使用该行的捆绑；若包含多行，即可使用这些行捆绑的**并集**。
+
+| 最小所需组合 | 可用捆绑 |
+|---|---|
+| `anthropic` + `openai-codex` + `google-antigravity` | ⭐ **daily** · 🏎 **coding-sprint** · 🚨 **cyber-cop** |
+| `anthropic` + `openai-codex` + `xai` | 🏆 **ultimate-opus** |
+| `anthropic` + `openai-codex` + `google-antigravity` + `xai` | 🛡 **escalation** · 🏛 **llm-council** |
+| `anthropic` + `google-antigravity` + `opencode-go` | 🗺 **monorepo** |
+| `openai-codex` + `google-antigravity` + `opencode-go` | 💸 **budget**（v3 新增） |
+
+### 认证方式是另一条轴
+
+即使同样是“拥有”，取得方式也可能不同。补齐组合前先确认这一点。
+
+| 提供方 | 取得方式 |
+|---|---|
+| `anthropic` · `openai-codex` · `google-antigravity` | `/login <provider>`——订阅登录 |
+| `xai` | `/login xai` 或设置 `XAI_API_KEY` |
+| `opencode-go` | `OPENCODE_API_KEY` |
+
+> [!TIP]
+> **仅有三个厂商的订阅登录**就能开启第一行——daily · coding-sprint · cyber-cop。大多数人从这里开始即可；其余是按需补充的扩展。
+
+完整目录 ↓ [§5](#5-️-最终目录--8-个捆绑--4-层级)；reviewer 模式与预告见下方。
+
+### tier 只是结果标签
+
+Core / Premium / Workflow bundle / Specialized 只保留为各捆绑卡片的**徽章**；不再是“该用哪个捆绑”的首要依据——上面的表才是首要依据。
+
+下表作为各捆绑具体内容的次要参考（tier 只是徽章，而非选择的首要方式）：
+
 | Tier | 捆绑 | 一句话定义 | 何时用 |
 |---|---|---|---|
 | Core | ⭐ **daily** | Opus 主循环 + 各角色分散委派 — **仅订阅 OAuth 3 厂商即可激活** | **日常默认** |
@@ -64,10 +99,8 @@ gjc                        # 新会话自动使用 daily
 | Premium (exp) | 🏆 **ultimate-opus** | Anthropic 质量基底 premium | 精度比成本更重要 |
 | Workflow | 🏛️ **llm-council** | 4 系列座位表与 Council 契约 | 需要多系列共识的决策 |
 | Workflow | 🛡️ **escalation** | 手动升级 — Fable 救援投手 + critic 3 票评审团 | 合并·安全·支付·不可逆变更 |
-| Specialized (exp) | 💸 **budget** | 受门禁控制的低成本多厂商实验 — *不是绝对最低价* | 成本压力·大批量 |
+| Specialized (exp) | 💸 **budget** | 低成本多厂商实验 — *不是绝对最低价* | 成本压力·大批量 |
 | Specialized (exp) | 🗺️ **monorepo** | 全局 ≥1M ctx | 巨型代码库 |
-
-完整目录 ↓ [§5](#5-️-最终目录--8-个捆绑--4-层级)；reviewer 模式与预告见下方。
 
 > **🚨 cyber-cop** — GJC 首个 reviewer 模式：architect·critic 是主角，executor 是复现配角。高风险 PR 使用三票评审团；PR #4~#7 曾在合并前拦截 10 个缺陷。
 > 安装 wrapper：`curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
@@ -402,7 +435,7 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 回滚（恢复备
 | PR 审查·安全审计会话 | `cyber-cop` |
 | 需要多系列共识的决策 | `llm-council`（+ routing-rules 的 Council 契约） |
 | 精度至上（opt-in premium） | `ultimate-opus` |
-| 大批量重构·迁移 | `budget`（通过门禁时） |
+| 大批量重构·迁移 | `budget` |
 | 进入巨型代码库 | `monorepo` |
 | 仅单厂商运营 | GJC 内置配置（`claude-opus`·`codex-*` 等 — 不在本目录内） |
 

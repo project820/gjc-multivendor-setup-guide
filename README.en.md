@@ -56,6 +56,39 @@ gjc                        # new sessions use daily automatically
 
 ## 🧭 Which bundle?
 
+**Start from the subscriptions you already have.** Do not read tier first — decide **what you can use now**.
+
+The left column below is the **minimum provider set a bundle actually needs to run**. It is transcribed verbatim from `required_providers` in the canonical `gjc-profiles.yml`, neither trimmed nor padded. When your own provider set is a **superset** of a row, you can use that row's bundles. Match several rows and you can use their **union**.
+
+| Minimum providers needed | Bundles you can run |
+|---|---|
+| `anthropic` + `openai-codex` + `google-antigravity` | ⭐ **daily** · 🏎 **coding-sprint** · 🚨 **cyber-cop** |
+| `anthropic` + `openai-codex` + `xai` | 🏆 **ultimate-opus** |
+| `anthropic` + `openai-codex` + `google-antigravity` + `xai` | 🛡 **escalation** · 🏛 **llm-council** |
+| `anthropic` + `google-antigravity` + `opencode-go` | 🗺 **monorepo** |
+| `openai-codex` + `google-antigravity` + `opencode-go` | 💸 **budget** |
+
+### Authentication is a separate axis
+
+Having a provider and how you obtain it are separate. Check this first while completing a set.
+
+| Provider | How to get it |
+|---|---|
+| `anthropic` · `openai-codex` · `google-antigravity` | `/login <provider>` — subscription login |
+| `xai` | `/login xai` or set `XAI_API_KEY` |
+| `opencode-go` | `OPENCODE_API_KEY` |
+
+> [!TIP]
+> **Three subscription logins alone** open the first row — daily · coding-sprint · cyber-cop. Most people start there and add the rest when needed.
+
+Full catalog: [§5](#5-️-final-catalog--8-bundles--4-tiers) — the full seating chart (bundle × 5 roles).
+
+### Tier is only a result label
+
+Core / Premium / Workflow bundle / Specialized remain only as badges on each bundle. They are not the primary way to choose — the matrix above is.
+
+Use this table as a secondary reference for what each bundle is; tier is only a badge, not the primary selection axis.
+
 | Tier | Bundle | One-liner | Use when |
 |---|---|---|---|
 | Core | ⭐ **daily** | Opus main loop + role-split delegation — **activates with subscription OAuth across 3 vendors only** | **everyday default** |
@@ -64,10 +97,8 @@ gjc                        # new sessions use daily automatically
 | Premium (exp) | 🏆 **ultimate-opus** | Anthropic-quality premium baseline | accuracy matters more than cost |
 | Workflow | 🏛️ **llm-council** | 4-family seating chart and Council contract | decisions needing multi-family consensus |
 | Workflow | 🛡️ **escalation** | manual escalation — Fable rescue pitcher + 3-vote critic panel | merges · security · billing · irreversible changes |
-| Specialized (exp) | 💸 **budget** | low-cost gated multi-vendor experiment — *not absolute cheapest* | cost pressure · bulk work |
+| Specialized (exp) | 💸 **budget** | low-cost multi-vendor experiment — *not absolute cheapest* | cost pressure · bulk work |
 | Specialized (exp) | 🗺️ **monorepo** | ≥1M ctx everywhere | huge codebases |
-
-Full catalog: [§5](#5-️-final-catalog--8-bundles--4-tiers) · reviewer mode and teasers below.
 
 > **🚨 cyber-cop** — GJC's first reviewer mode: architect and critic lead while executor supports reproduction. High-risk PRs use a 3-vote panel; it blocked 10 defects before merge across PRs #4–#7.
 > Install the wrapper: `curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
@@ -409,7 +440,7 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # revert (restore ba
 | PR review / security-audit session | `cyber-cop` |
 | decision needing multi-family consensus | `llm-council` (+ routing-rules Council contract) |
 | accuracy above all (opt-in premium) | `ultimate-opus` |
-| bulk refactor · migration | `budget` (gated) |
+| bulk refactor · migration | `budget` |
 | entering a huge codebase | `monorepo` |
 | single-vendor operation | built-in GJC profiles (`claude-opus` · `codex-*` etc. — outside this catalog) |
 

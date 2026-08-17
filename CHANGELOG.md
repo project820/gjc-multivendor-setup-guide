@@ -11,12 +11,13 @@
 
 ---
 
-## v3.0.0 — 2026-08-18
+## v3.0.0 — 2026-08-17
 
 ### Changed (MAJOR — 카탈로그 재설계 · 선택 축 변경 · validator 개정)
 
 - **10번들 → 8번들** (`gjc-profiles.yml`). 삭제: `dream-team` · `eco` · `ultimate-sol`.
-  신규: `budget`(게이트 통과 시). 유지 7종은 좌석 변경 없음 — 아래 좌석 항목 하나만 예외.
+  신규: `budget` — 게이트 3조건 **전부 판정 통과**(아래 Validation). 유지 7종은 좌석 변경
+  없음 — 아래 좌석 항목 하나만 예외.
 - **`daily.executor` `gpt-5.6-terra:high` → `gpt-5.6-luna:max`**. 사용자 정책 결정이며
   **품질 비교는 FAIL 이었다**(사전등록 60콜: 효과크기 0/10, Wilcoxon p=0.1587,
   토큰 47.1 vs 32.2). 측정된 승리가 아니라 **정책**으로 채택했다 —
@@ -51,13 +52,14 @@
 
 ### Not shipped
 
-- ⏸ `budget` — 게이트 3조건 중 **조건 3 공식 판정**이 브랜치의 실제 YAML 실행이다.
-  조건 1·2 충족 + 시뮬레이션 통과.
 - `trio` · `luna-scale` · `research-long` — **출하된 적 없다**(원안 후보 집합).
 - Gemini 3.5 Pro 좌석(카탈로그 없음) · Flash 3.5/3.6 승격 · `grok-build/grok-4.6:high`(not found).
-- ⏸ 좌석을 잃은 셀렉터 4종(`gemini-3-flash:low` · `claude-fable-5:high` ·
-  `gpt-5.6-luna:medium` · budget 탈락 시 `gpt-5.6-terra:medium`) 의 informational 강하 여부.
-  `luna:medium` 은 D-1 이 불법화해 canary 로도 남길 수 없다.
+- **좌석을 잃은 셀렉터 2종을 canary 로 강하** — `gemini-3-flash:low`(v2.1.0 `eco.critic`) ·
+  `claude-fable-5:high`. `scripts/revalidate.sh` 의 `CANARIES` 로 옮겨 라이브 표면 회귀
+  신호는 유지하되 출하 좌석이 아님을 라벨로 못박았다(`grok-4.5`·`deepseek-v4-*` 와 동일 처리).
+  D-1 은 `gjc-profiles.yml` 이 담을 수 있는 effort 를 제한하는 규칙이고 canary 배터리를
+  금지하지 않는다 — `gpt-5.6-luna:high` 는 이미 canary 로 남아 Luna 라이브 표면을 커버한다.
+  `gpt-5.6-terra:medium` 은 `budget.default` 로 좌석을 유지한다.
 
 ### Validation
 
@@ -68,6 +70,11 @@
   (`scripts/check-v3-target-state.sh --ship`, v3 전환 1회용).
 - 게이트 음성 경로 **16종** 실증 — 각 축이 결함 주입 시 실제로 FAIL 함을 확인.
 - 링크 무결성 — 파일 링크 133건 · 내부/파일간 앵커 전수, 죽은 링크 0.
+- **`budget` 게이트 3조건 공식 판정 — 통과.** 조건 1(3종 dated 프로브 그린: `qwen3.8-max` ·
+  `glm-5.2` · `minimax-m3`) · 조건 2(비-ocgo 좌석으로 가족 분리 — default `gpt` / architect·critic
+  `google`) · **조건 3(이 브랜치의 실제 YAML 에서 validator green)**. 조건 3 은 시뮬레이션이 아니라
+  브랜치 트리 실행이다: `profiles checked: 8` · `OK — all invariants hold` · exit 0 · 의도된 WARN 3건.
+  기록: `evidence/2026-08-17-v3-budget-gate-ruling.md`.
 
 
 ## v2.1.0 — 2026-08-17

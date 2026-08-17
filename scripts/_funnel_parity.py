@@ -37,13 +37,13 @@ def main():
     profiles = data.get("profiles") or data.get("model_profiles")
     if not isinstance(profiles, dict) or not profiles:
         print("BAD gjc-profiles.yml 에서 profiles 를 읽지 못함")
-        return 0
+        return 1
 
     txt = (root / "README.md").read_text(encoding="utf-8")
     m = re.search(r"^## .*어떤 번들을 쓸까.*$", txt, re.M)
     if not m:
         print("BAD README 에서 퍼널 절 헤딩을 찾지 못함")
-        return 0
+        return 1
     seg = txt[m.end():]
     nxt = re.search(r"^## ", seg, re.M)
     if nxt:
@@ -62,12 +62,16 @@ def main():
             cells = [c.strip() for c in line.strip().strip("|").split("|")]
             provs = set(re.findall(r"`([a-z0-9-]+)`", cells[0]))
             if provs:
-                rows.append(provs)
+                # 오른쪽 열도 읽는다. 예전엔 provider 집합만 봤고 "쓸 수 있는 번들" 열은
+                # 아예 파싱하지 않았다 — 번들이 빠지거나 엉뚱한 행에 실려도 통과했다
+                # (cyber-cop 패널 지적). 계약의 절반을 검사하지 않은 것이다.
+                names = set(re.findall(r"\*\*([a-z0-9-]+)\*\*", cells[1] if len(cells) > 1 else ""))
+                rows.append((provs, names))
         elif started and line.strip() == "":
             break          # 첫 표 블록이 끝났다
     if not rows:
         print("BAD 퍼널 표에서 최소 credential 행을 찾지 못함")
-        return 0
+        return 1
 
     problems = []
     for name, spec in profiles.items():
@@ -75,14 +79,31 @@ def main():
         if not req:
             problems.append(f"{name}: required_providers 없음")
             continue
-        hits = sum(1 for provs in rows if provs == req)
-        if hits != 1:
-            problems.append(f"{name}: {sorted(req)} 와 집합 동일한 행이 {hits}개")
+        set_hits = [provs for provs, _ in rows if provs == req]
+        if len(set_hits) != 1:
+            problems.append(f"{name}: {sorted(req)} 와 집합 동일한 행이 {len(set_hits)}개")
+        # 번들이 실제로 그 행에 실려 있는가
+        listed = [provs for provs, names in rows if name in names]
+        if len(listed) != 1:
+            problems.append(f"{name}: 퍼널 표에 실린 행이 {len(listed)}개 (정확히 1개여야 한다)")
+        elif listed[0] != req:
+            problems.append(
+                f"{name}: 실린 행의 조합 {sorted(listed[0])} != required_providers {sorted(req)}"
+            )
+
+    # 반대 방향 — 표에만 있고 로스터에 없는 이름(삭제된 번들 잔존)
+    for provs, names in rows:
+        for ghost in sorted(names - set(profiles)):
+            problems.append(f"{ghost}: 퍼널 표에 있으나 로스터에 없음 ({sorted(provs)})")
 
     if problems:
         print("BAD " + " | ".join(problems))
-    else:
-        print(f"OK 퍼널 {len(rows)}행 · {len(profiles)}번들 — 각 번들이 정확히 한 최소행과 일치")
+        return 1
+    total = sum(len(names) for _, names in rows)
+    print(
+        f"OK 퍼널 {len(rows)}행 · {len(profiles)}번들 — 각 번들이 정확히 한 최소행과 일치, "
+        f"표에 실린 번들 {total}개 전부 로스터와 양방향 일치"
+    )
     return 0
 
 

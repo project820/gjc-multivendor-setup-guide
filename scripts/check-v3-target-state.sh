@@ -83,22 +83,27 @@ if [ -f "$V" ]; then
   fi
 fi
 
+# 임시 파일은 mktemp 로 잡는다 — 예측 가능한 /tmp 이름은 공용 호스트에서
+# 심링크·TOCTOU 로 덮어쓰기 당한다(ci-fixture-check.sh 가 이미 mktemp 를 쓴다).
+TMPD="$(mktemp -d "${TMPDIR:-/tmp}/v3gate.XXXXXX")"
+trap 'rm -rf "$TMPD"' EXIT
+
 # ── 3) validator green ───────────────────────────────────────────────────────
-if python3 "$V" >/tmp/_v3gate_v.txt 2>&1; then ok invariants "$(tail -1 /tmp/_v3gate_v.txt)"
-else bad invariants "$(grep -E '^  ERROR' /tmp/_v3gate_v.txt | head -3 | tr '\n' ' ')"; fi
+if python3 "$V" >"$TMPD/v.txt" 2>&1; then ok invariants "$(tail -1 "$TMPD/v.txt")"
+else bad invariants "$(grep -E '^  ERROR' "$TMPD/v.txt" | head -3 | tr '\n' ' ')"; fi
 
 # ── 4) fixtures (SKIP 이면 실패로 본다 — 개정이 안 들어간 것) ──────────────────
 if [ -f scripts/ci-fixture-check.sh ]; then
-  if bash scripts/ci-fixture-check.sh >/tmp/_v3gate_f.txt 2>&1; then
-    if grep -q 'SKIP' /tmp/_v3gate_f.txt; then bad fixtures "v3 fixture 가 SKIP 상태 — validator 개정 미적용"
+  if bash scripts/ci-fixture-check.sh >"$TMPD/f.txt" 2>&1; then
+    if grep -q 'SKIP' "$TMPD/f.txt"; then bad fixtures "v3 fixture 가 SKIP 상태 — validator 개정 미적용"
     else ok fixtures "v3 fixture 활성 + 전부 통과"; fi
-  else bad fixtures "$(tail -1 /tmp/_v3gate_f.txt)"; fi
+  else bad fixtures "$(tail -1 "$TMPD/f.txt")"; fi
 else bad fixtures "scripts/ci-fixture-check.sh not found"; fi
 
 # ── 5) provider parity ───────────────────────────────────────────────────────
 if [ -f scripts/check-provider-parity.py ]; then
-  if python3 scripts/check-provider-parity.py >/tmp/_v3gate_p.txt 2>&1; then ok parity "$(tail -1 /tmp/_v3gate_p.txt)"
-  else bad parity "$(tail -1 /tmp/_v3gate_p.txt)"; fi
+  if python3 scripts/check-provider-parity.py >"$TMPD/p.txt" 2>&1; then ok parity "$(tail -1 "$TMPD/p.txt")"
+  else bad parity "$(tail -1 "$TMPD/p.txt")"; fi
 else bad parity "scripts/check-provider-parity.py not found"; fi
 
 # ── 6) 생성 표면 멱등 ────────────────────────────────────────────────────────
@@ -108,12 +113,17 @@ if command -v git >/dev/null 2>&1 && git rev-parse --git-dir >/dev/null 2>&1; th
   # 같다" 를 보고 `ok generators 멱등` 을 찍어버려서, 같은 축에 FAIL 과 ok 가 동시에
   # 나온다(2026-08-17 시뮬레이션 릴리스 트리에서 실측). 생성기가 돌지도 않았는데
   # 멱등을 통과했다고 적는 것은 공허한 ok 다.
+  #
+  # 해시 대상은 **생성물 내용**이다. 예전엔 `git status --porcelain` 을 해시했는데
+  # 그건 파일 이름과 상태 플래그만 담는다 — 이미 ` M` 인 파일이 2차 실행에서 내용만
+  # 또 바뀌면 porcelain 출력은 똑같아서 "멱등" 으로 오판한다(cyber-cop 패널 지적).
   if python3 scripts/gen_svgs.py >/dev/null 2>&1; then
-    H1="$(git status --porcelain | shasum -a 256 | cut -d' ' -f1)"
+    _gen_hash() { shasum -a 256 assets/*.svg README.md README.en.md README.ja.md README.zh.md | shasum -a 256 | cut -d' ' -f1; }
+    H1="$(_gen_hash)"
     python3 scripts/sync-readme-yaml.py >/dev/null 2>&1
     python3 scripts/gen_svgs.py >/dev/null 2>&1
-    H2="$(git status --porcelain | shasum -a 256 | cut -d' ' -f1)"
-    [ "$H1" = "$H2" ] && ok generators "sync+gen_svgs 멱등" || bad generators "재실행 시 트리가 또 바뀐다"
+    H2="$(_gen_hash)"
+    [ "$H1" = "$H2" ] && ok generators "sync+gen_svgs 멱등 (생성물 내용 해시)" || bad generators "재실행 시 생성물 내용이 또 바뀐다"
   else
     bad generators "gen_svgs.py 실패 — _PROFILE_CHROME/_MODEL_DISPLAY 편집 필요 (멱등 검사 건너뜀)"
   fi
@@ -121,8 +131,8 @@ else
   echo "skip [generators] git 트리가 아니라 멱등 검사 생략" >&2
 fi
 
-# ── 7) 정본 YAML 헤더 주석 (2026-08-18 추가 — MAINTAINING-v3-updates.md §10) ──
-# apply-roster-v3.py 는 프로필 **블록**만 지운다. 헤더 주석은 현행 상태 서술이라
+# ── 7) 정본 YAML 헤더 주석 (2026-08-17 추가 — MAINTAINING-v3-updates.md §10) ──
+# v3 로스터 축소는 프로필 **블록**만 지웠다. 헤더 주석은 현행 상태 서술이라
 # 번들이 사라지면 그 자리에서 거짓이 되는데, 여기 오기 전까지 **어떤 가드도 안 봤다.**
 #
 # 오탐 방지 — 검사 구간을 `profiles:` 앞(헤더)으로 한정한다. 본문 아래쪽의
@@ -153,12 +163,12 @@ else
   ok yaml-provider-note "opencode-go 좌석 안내 갱신됨"
 fi
 
-# ── 8) README §5 번들 카드 ↔ 로스터 1:1 (2026-08-18 추가) ────────────────────
+# ── 8) README §5 번들 카드 ↔ 로스터 1:1 (2026-08-17 추가) ────────────────────
 # `README.md` §5 는 번들마다 `- **name** — 설명` 카드를 하나씩 갖는다(v2.1.0 에서 10/10
 # 일치 실측). 이 카드가 **번들 설명의 유일한 출처**다 — 퍼널 tier 표를 v3 매트릭스로
 # 교체하면 `한 줄 정의`·`이럴 때` 열이 사라지므로(7×2=14셀), §5 카드만 남는다.
 #
-# 2026-08-18 실측: 시뮬레이션 릴리스 트리에서 `budget` 카드가 **없고**
+# 2026-08-17 실측: 시뮬레이션 릴리스 트리에서 `budget` 카드가 **없고**
 # `dream-team`·`eco`·`ultimate-sol` 죽은 카드가 **남아 있는데** 모든 게이트가 통과했다.
 # 즉 "설명 없는 번들이 출하되고, 없는 번들이 설명을 갖는" 상태를 아무도 안 봤다.
 CARD_BAD="$(python3 - <<'PY'
@@ -183,8 +193,8 @@ else
   bad readme-cards "§5 카드가 로스터와 어긋난다 — $CARD_BAD · 문구 원문은 .gjc/v3-pending-docs/bundle-blurbs-v3.md (결정 #2)"
 fi
 
-# ── 9) routing-rules.md 에 삭제 번들 잔존 (2026-08-18 추가) ──────────────────
-# 이 파일은 **전부 현행 서술**이다 — 역사 절이 없다(2026-08-18 구조 확인).
+# ── 9) routing-rules.md 에 삭제 번들 잔존 (2026-08-17 추가) ──────────────────
+# 이 파일은 **전부 현행 서술**이다 — 역사 절이 없다(2026-08-17 구조 확인).
 # 그래서 삭제 번들 이름이 남아 있으면 예외 없이 결함이다. 실측 잔존 7행/10건:
 #   1행 문서 제목(§8 불변식의 9번째 인스턴스) · 35·39·46행 tier·용도 목록
 #   43행 "대량·비용압박: eco" · 85행 정책 경고 · 94행 Luna 단가 각주(eco.planner)
@@ -214,7 +224,7 @@ else
   bad routing-rules "routing-rules.md 에 삭제 번들 잔존 — $RR_BAD (§12·§26 · codex-eco 는 건드리지 마라)"
 fi
 
-# ── 10) docs/factsheet.md — §2 밖 4건 (2026-08-18 추가) ──────────────────────
+# ── 10) docs/factsheet.md — §2 밖 4건 (2026-08-17 추가) ──────────────────────
 # `check-factsheet-parity.py`(결정 #4 제안)는 **§2 표만** 파싱한다. §16 이 확정한
 # 편집 10건 중 6~10번(§1 버전 · §3 Luna 상한 · §3 Qwen 행 · §5 불변식)은
 # 채택하든 안 하든 **무가드**였다. 여기서 그 4건만 좁게 본다 — §3 전체를 파싱하는
@@ -296,10 +306,10 @@ if [ "$SHIP" = 1 ]; then
     else bad tag "v2.1.0 이 HEAD 의 조상이 아니다 — 분기점 확인 필요"; fi
   else bad tag "v2.1.0 태그 없음"; fi
 
-  # 출하 SVG 에 **삭제된 번들 이름**이 남아 있는가 (2026-08-18 추가)
+  # 출하 SVG 에 **삭제된 번들 이름**이 남아 있는가 (2026-08-17 추가)
   #
   # gen_svgs 의 fail-closed 는 `_PROFILE_CHROME` **키**만 로스터와 대조한다. 제목·푸터의
-  # **하드코딩 산문**은 안 본다. 2026-08-18 시뮬레이션 릴리스 트리 실측 — 런북을 전부
+  # **하드코딩 산문**은 안 본다. 2026-08-17 시뮬레이션 릴리스 트리 실측 — 런북을 전부
   # 올바르게 수행하고 SVG 를 재생성했는데도 이렇게 남았다:
   #   profiles-matrix.svg 푸터  "예외: opt-in ultimate-sol=Sol · anthropic 미포함 eco=Terra"
   #                             "🔥 dream-team = Fable 5 (…)"
@@ -327,9 +337,9 @@ PY
     bad svg-prose "SVG 가 없는 번들을 광고한다 —$SVG_BAD · profiles-matrix 푸터는 MAINTAINING-v3-updates §6/§8, role-winners 는 결정 #7"
   fi
 
-  # README ×4 의 `## 5.` 제목에 박힌 **번들 개수**가 실제 로스터와 맞나 (2026-08-18 추가)
+  # README ×4 의 `## 5.` 제목에 박힌 **번들 개수**가 실제 로스터와 맞나 (2026-08-17 추가)
   #
-  # 2026-08-18 실측 — 시뮬레이션 릴리스 트리에서 로스터는 8인데 네 README 의 §5 제목이
+  # 2026-08-17 실측 — 시뮬레이션 릴리스 트리에서 로스터는 8인데 네 README 의 §5 제목이
   # 전부 "10 번들/10 bundles/10 バンドル/10 个捆绑" 이었고 `--ship` 이 **통과했다.**
   # 개수가 제목에 박혀 있어 사람 눈에만 보이고 어떤 가드도 안 봤다.
   #

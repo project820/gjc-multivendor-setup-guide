@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""gen_svgs.py — GJC 멀티벤더 가이드 SVG 자산 재생성기 (v2.1.0)
+"""gen_svgs.py — GJC 멀티벤더 가이드 SVG 자산 재생성기 (v3.0.0)
 
 assets/ 아래 4개 SVG 를 데이터 기반으로 재생성한다:
   - role-winners.svg     : 🏆 ultimate-opus 역할별 최강 가설 배너
-  - profiles-matrix.svg  : 10 번들 × 5 역할 매트릭스 (4계층)
+  - profiles-matrix.svg  : 8 번들 × 5 역할 매트릭스 (4계층)
   - effort-ladder.svg    : effort 6단계 사다리 + 모델별 클램프 스트립
   - architecture.svg     : 본체 1 + 서브에이전트 4 (본체 라벨 프로필-중립)
 
@@ -14,8 +14,8 @@ routing-tree.svg 는 모델명 하드코딩이 없어 재생성 대상이 아니
   python3 scripts/gen_svgs.py            # repo 루트 기준 assets/ 에 출력
   python3 scripts/gen_svgs.py --out DIR  # 다른 디렉터리에 출력
 
-데이터 원천: gjc-profiles.yml (v2.1.0, 10 번들). 프로필이 바뀌면
-아래 PROFILES 테이블을 yml 과 동기화한 뒤 재실행한다.
+데이터 원천: gjc-profiles.yml (v3.0.0, 8 번들). 프로필이 바뀌면
+아래 _PROFILE_CHROME 테이블을 yml 과 동기화한 뒤 재실행한다.
 검증 스탬프 날짜는 VERIFY_DATE 하나만 고치면 된다.
 """
 
@@ -52,9 +52,9 @@ ROLES = ["🎛 default", "🔨 executor", "🧠 planner", "🔭 architect", "⚖
 # 셀을 만든다. 손으로 두는 것은 표시 이름과 tier 캡션뿐이고, 매핑에 없는 셀렉터가
 # 나오면 조용히 넘어가지 않고 하드 에러로 죽는다.
 #
-# 왜 이렇게 하나: 예전엔 PROFILES 가 하드코딩 테이블이라 yml 을 바꿔도 SVG 가
-# 그대로였다. 실제로 v2.1.0 리뷰에서 eco.executor 교체가 SVG 에 반영되지 않아
-# 공개 문서가 정본과 반대로 말하는 사고가 났다. 파생 + fail-closed 로 막는다.
+# 왜 이렇게 하나: 예전엔 좌석표가 하드코딩 테이블이라 yml 을 바꿔도 SVG 가
+# 그대로였다. 공개 문서가 정본과 반대로 말하는 사고를 막기 위해 좌석은 파생하고
+# 매핑에 없는 셀렉터는 fail-closed 로 막는다.
 A, O, G, X, C = "anthropic", "openai", "google", "xai", "opencode"
 
 # provider 접두사 → 팔레트 키
@@ -178,10 +178,10 @@ def gen_role_winners():
     W, H = 1256, 268
     cards = [
         # (role, role_desc, vendor, model, effort, rationale)
-        ("🎛 default", "오케스트레이션·툴 신뢰성", A, "Claude Fable 5", ":high",
-         "Anthropic · 라우터=품질 상한"),
-        ("🔨 executor", "실코딩", A, "Claude Fable 5", ":xhigh",
-         "Anthropic · SWE-Bench Pro 80.0"),
+        ("🎛 default", "오케스트레이션·툴 신뢰성", A, "Claude Opus 5", ":high",
+         "Anthropic · $5/$25 · Max 기본"),
+        ("🔨 executor", "실코딩", A, "Claude Opus 5", ":high",
+         "Anthropic · 1M ctx · 구독 포함 코딩 최강"),
         ("🧠 planner", "최상위 추론·설계", O, "GPT-5.6 Sol", ":xhigh",
          "OpenAI · 5.6 플래그십 추론"),
         ("🔭 architect", "1M 실효검색·설계 리뷰", A, "Claude Opus 5", ":high",
@@ -218,7 +218,7 @@ def gen_role_winners():
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# 2. profiles-matrix.svg — 10 번들 × 5 역할
+# 2. profiles-matrix.svg — 8 번들 × 5 역할
 # ═════════════════════════════════════════════════════════════════════════════
 def gen_profiles_matrix():
     n = len(PROFILES)
@@ -280,7 +280,7 @@ def gen_profiles_matrix():
           f'</text>\n')
     s += (f'<text x="24" y="{footer_y+20}" font-size="11.5" fill="#6B6B7B">'
           f'엔진 effort 하드룰 합법 · 🏆 ultimate-opus = Opus 5 '
-          f'(Max/premium Team 주간한도 50% 포함 · Pro 는 credits) · llm-council/escalation 은 좌석표+워크플로 계약 · gjc {GJC_VERSION}</text>\n')
+          f'($5/$25 · Max 기본·Pro 최강) · llm-council/escalation 은 좌석표+워크플로 계약 · gjc {GJC_VERSION}</text>\n')
     s += "</svg>"
     return s
 
@@ -342,7 +342,7 @@ def gen_effort_ladder():
         "Opus 5 = minimal..max",
         "Fable 5 = 출하 ≤ xhigh (:max 수용·심도 미검증)",
         "Sonnet 4.6/5 = 출하 ≤ high (:xhigh/:max 수용·심도 미검증)",
-        "GPT-5.6 3종 = 출하 ≤ xhigh (:max 수용·심도 미검증)",
+        "GPT-5.6 Sol·Terra ≤xhigh · Luna=:max 단독(D-1)",
         "xai Grok 4.6 ≤ xhigh (출하 :high)",
         "Gemini Pro = {low, high}",
         "opencode-go = effort 생략",

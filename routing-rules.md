@@ -23,14 +23,14 @@
 ## 적응형 effort 에스컬레이션 — 실패신호 기반
 - 최저 합리 등급으로 시작 (단순=low, executor/planner=high).
 - 실패신호(테스트 깨짐·자기모순·재시도 루프·critic 반려)에서만 1단계 격상: high → xhigh → max.
-- 단, 사다리 상한은 모델별(GJC 0.13.3 실효): max는 Opus 전용 최상단 · Fable 5=**xhigh**(`:max`는 수용·클램프 가능 — 미출하) ·
+- 단, 사다리 상한은 모델별(GJC 0.13.3 실효): max는 Opus·Luna 전용 최상단 · Fable 5=**xhigh**(`:max`는 수용·클램프 가능 — 미출하) ·
   Sonnet(4.6/5)=**high**(카탈로그는 sonnet-5 에 xhigh/max 를 찍지만 클램프 미측정) · xai grok-4.6 출하 **high**(`:xhigh` 수용·심도 미검증) · Gemini Pro는 low↔high 2단뿐 ·
-  gpt-5.6 3종=출하 상한 **xhigh**(`:max`는 수용되나 심도 미검증 — 광고 금지) · opencode-go는 effort 자체를 생략.
+  gpt-5.6 Sol·Terra=출하 상한 **xhigh**(`:max`는 수용되나 심도 미검증 — 출하·광고 금지) · Luna=`:max` 단독(D-1 강제) 정책 좌석이며 실측 승리가 아님(아래·[v3 변경](./docs/whats-new-v3.md#좌석-변경--dailyexecutor-가-luna-max-로) 참조) · opencode-go는 effort 자체를 생략.
   상한 위 등급은 에러 없이 수용되지만 실제로 적용되는지가 미검증이다 — "올렸다"고 착각 금지.
 - minimal 금지(-23점 급락). "안전하니 올리자"식 무조건 max 금지.
 
 ## 번들 카탈로그 — 4계층 (프로필 ≠ 워크플로)
-v2 카탈로그는 10개 user-facing 번들이며 신뢰 등급이 같지 않다:
+v3 카탈로그는 8개 user-facing 번들이며 신뢰 등급이 같지 않다:
 - **Core**: `daily`(평소 기본) · `coding-sprint`(구현 처리량) · `cyber-cop`(PR 리뷰·보안 감사) — 구독 OAuth 3벤더.
 - **Premium (experimental)**: `ultimate-opus` — 최고품질 *가설*.
   role-fit L3 실측 전이므로 "역할별 최강 검증됨"으로 광고 금지. xai 인증 필요(`/login xai` 또는 XAI_API_KEY).
@@ -92,7 +92,7 @@ v2 카탈로그는 10개 user-facing 번들이며 신뢰 등급이 같지 않다
   ctx는 모델별(0.13.3): **gpt-5.4=1M / gpt-5.5=272K / gpt-5.6 3종=372K** usable prompt budget(API 스펙 1.05M/128K와 별개).
   1M 급 입력은 gpt-5.4 또는 Opus/Gemini 레인.
 - openai-codex `gpt-5.6-sol/terra/luna` — Sol $5/$30 · Terra $2.5/$15 · Luna $1/$6(daily.executor 채용).
-  `:medium`/`:high`/`:xhigh` 검증 OK · `:max`는 수용되나 **심도 미검증 — 출하·광고 금지**.
+  Sol·Terra는 `:medium`/`:high`/`:xhigh` 검증 OK이고 `:max`는 수용되나 **심도 미검증 — 출하·광고 금지**. Luna는 validator D-1이 `:max`만 허용하는 정책 좌석이지 측정 승리가 아니다: 사전등록 `:max` 대 `:xhigh` 배터리는 효과크기 0/10, Wilcoxon 단측 p=0.1587, 29/30 동률, 토큰 평균 47.1 vs 32.2로 실패했다([v3 변경](./docs/whats-new-v3.md#좌석-변경--dailyexecutor-가-luna-max-로)).
   ⚠ METR이 Sol의 SWE 평가 게이밍을 적발 — SWE류 벤치 단독 근거 승격 금지.
 - xai `grok-4.6` — **`/login xai` 또는 XAI_API_KEY 설정**(08-17: XAI_API_KEY 환경변수 없이 호출 성공한 단일 계정 관찰 — 메커니즘 단정 금지) · $2/$6 (<200k prompt) / $4/$12 (≥200k) · ctx **500K**.
   출하 상한 = **high** (`:xhigh` 수용·심도 미검증 — 미출하). `grok-build/grok-4.6:high` 는 not found(bare 만 OK — 미출하).

@@ -42,7 +42,7 @@ _MODEL_TOKEN = {
     "gpt-5.6-luna": "luna",
     "grok-4.6": "grok4.6",
     "glm-5.2": "glm-5.2",
-    # v3 신규 — budget.planner 좌석. 2026-08-18: 이 엔트리가 없으면 가드가
+    # v3 신규 — budget.planner 좌석. 2026-08-17: 이 엔트리가 없으면 가드가
     # `unknown model 'qwen3.8-max' — add it to _MODEL_TOKEN` 로 **fail-closed** 한다
     # (시뮬레이션 릴리스 트리에서 실측). gen_svgs.py 의 `_MODEL_DISPLAY` 와 같은 계열의
     # 하드코딩 테이블이고, v3 로스터에 모델이 추가되면 **두 곳을 같이** 고쳐야 한다.

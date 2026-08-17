@@ -56,6 +56,44 @@ gjc                        # 新規セッションは自動で daily
 
 ## 🧭 どのバンドルを使うか？
 
+**すでに持っているサブスクから始める。** tier を先に読むのではなく、**今何を利用できるか**から決める。
+
+以下の表の左側は、**そのバンドルが実際に動くために必ず必要な最小組み合わせ**である。
+正本 `gjc-profiles.yml` の `required_providers` をそのまま転記しており、任意に減らしたり
+増やしたりしていない。自分の組み合わせがある行を**包含**していれば、その行のバンドルを使える。
+複数の行を包含していれば、それらの**和集合**をすべて使える。
+
+| 最小必要組み合わせ | 使えるバンドル |
+|---|---|
+| `anthropic` + `openai-codex` + `google-antigravity` | ⭐ **daily** · 🏎 **coding-sprint** · 🚨 **cyber-cop** |
+| `anthropic` + `openai-codex` + `xai` | 🏆 **ultimate-opus** |
+| `anthropic` + `openai-codex` + `google-antigravity` + `xai` | 🛡 **escalation** · 🏛 **llm-council** |
+| `anthropic` + `google-antigravity` + `opencode-go` | 🗺 **monorepo** |
+| `openai-codex` + `google-antigravity` + `opencode-go` | 💸 **budget**（v3 新設） |
+
+### 認証方式は別の軸
+
+同じ「保有」でも、得る方法は異なる。組み合わせを満たす前にこれを確認する。
+
+| プロバイダ | 得る方法 |
+|---|---|
+| `anthropic` · `openai-codex` · `google-antigravity` | `/login <provider>` — サブスクログイン |
+| `xai` | `/login xai` または `XAI_API_KEY` を設定 |
+| `opencode-go` | `OPENCODE_API_KEY` |
+
+> [!TIP]
+> **3ベンダーへのサブスクログインだけで**最初の行が開く — daily · coding-sprint · cyber-cop。
+> ほとんどの人はここから始めればよい。残りは必要になったときに加える拡張である。
+
+全カタログは [§5](#5-️-最終カタログ--8-バンドル--4階層) · reviewer モードとティーザーは以下を参照。
+
+### tier は結果ラベルにすぎない
+
+Core / Premium / Workflow bundle / Specialized は各バンドルの**バッジ**としてだけ残る。
+「どれを使うか」の第一基準ではない — 上の表が第一基準である。
+
+以下は各バンドルの説明を確認するための二次的な参照表であり、tier は選択の主軸ではなくバッジにすぎない。
+
 | Tier | バンドル | 一言定義 | こんな時 |
 |---|---|---|---|
 | Core | ⭐ **daily** | 本体 Opus + 委譲役割別に分散 — **サブスク OAuth 3 ベンダーだけで activation** | **日常の既定** |
@@ -64,10 +102,8 @@ gjc                        # 新規セッションは自動で daily
 | Premium (exp) | 🏆 **ultimate-opus** | Anthropic 品質基盤のプレミアム | 正確性がコストより重要 |
 | Workflow | 🏛️ **llm-council** | 4 系列の座席表と Council 契約 | 多系列合意が必要な決定 |
 | Workflow | 🛡️ **escalation** | 手動エスカレーション — Fable 救援投手 + critic 3票パネル | 不可逆変更 |
-| Specialized (exp) | 💸 **budget** | ゲート通過時のみの低コストマルチベンダー実験 — *絶対最安ではない* | コスト圧・大量作業 |
+| Specialized (exp) | 💸 **budget** | 低コストマルチベンダー実験 — *絶対最安ではない* | コスト圧・大量作業 |
 | Specialized (exp) | 🗺️ **monorepo** | 全域 ≥1M ctx | 巨大コードベース |
-
-全カタログは [§5](#5-️-最終カタログ--8-バンドル--4階層) · reviewer モードとティーザーは以下を参照。
 
 > **🚨 cyber-cop** — GJC 初の reviewer モード: architect·critic が主役で、executor は再現の脇役。高リスク PR は3票パネルで判定し、PR #4〜#7 でマージ前の欠陥10件を遮断した。
 > インストール: `curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
@@ -399,7 +435,7 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 巻き戻し（バ
 | PR レビュー・セキュリティ監査セッション | `cyber-cop` |
 | 多系列合意が必要な決定 | `llm-council`（+ routing-rules の Council 契約） |
 | 精度最優先（opt-in premium） | `ultimate-opus` |
-| 大量リファクタ・マイグレーション | `budget`（ゲート通過時） |
+| 大量リファクタ・マイグレーション | `budget` |
 | 巨大コードベースへ突入 | `monorepo` |
 | 単一ベンダーのみで運用 | GJC 内蔵プロファイル（`claude-opus`・`codex-*` など — このカタログ外） |
 
