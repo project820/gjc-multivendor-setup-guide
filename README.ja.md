@@ -317,9 +317,9 @@ profiles:
 | プロバイダ | 検証済みセレクタ |
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`（レガシー）· `claude-sonnet-4-6:high` — sel ✅(08-16·**08-17 最終ロスター・バッテリー**) |
-| `openai-codex` | 出荷席: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 最終ロスター・バッテリー**). `gpt-5.5:high` · `gpt-5.4:high` = 07-10 カナリア (5.5=07-02) |
-| `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（レガシー）· `grok-4-fast:high` — sel ✅(08-16·**08-17 最終ロスター・バッテリー**) |
-| `grok-build` | `grok-4.3`（bare）— sel ✅(07-02) |
+| `openai-codex` | 出荷席: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 最終ロスター・バッテリー**). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` は出荷席ではなくカナリアで、08-17 バッテリーでもグリーン |
+| `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（レガシー）· `grok-4.3:high` · `grok-4-fast:high` — sel ✅(08-16·**08-17 最終ロスター・バッテリー**) |
+| `grok-build` | `grok-4.6`（bare）— sel ✅(**08-17**)。`grok-4.3`（bare）は 07-02 記録。effort サフィックスは解決しない（`grok-4.6:high` = not found）— 未出荷 |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(07-10·**08-17 最終ロスター・バッテリー**) |
 | `opencode-go` | 出荷席 `glm-5.2` — sel ✅(08-16・08-17)。`deepseek-v4-flash`/`-pro` はカタログ id は生存だが**このアカウントで 403 China opt-in** のため未出荷。`glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` は 07-02 スナップショットで v2.1.0 では再検証していない |
 
@@ -354,7 +354,7 @@ profiles:
 | `opus-5:high` | — | — | マイクロベンチ未実施。08-16 の解決 ping 2.4s はレイテンシ基準ではない |
 | `fable-5:medium`~`:xhigh` | 6.7~7.7s | 3.5~6.3s | コーディングで sonnet-5 比 +3~4s |
 | `grok-4.6:medium` / `:high` | — | — | マイクロベンチ未実施。08-16 の解決 ping 1.8s はレイテンシ基準ではない。critic 出荷上限 high · `:xhigh` 未出荷 |
-| `deepseek-v4-flash` | 4.6s | 5.5s | |
+| `deepseek-v4-flash` | 4.6s | 5.5s | 07-02 測定。**現在は未出荷** — このアカウントで 403 China opt-in |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | コーディング遅延の外れ値 |
 | `glm-5.2` | 07-02: **21.9s** · 08-17: **5.1s** | 4.0s | 07-02 の数値は再現せず — 08-17 コーディングプローブは 8/8 正解・5.1s（[証拠](./evidence/2026-08-17-eco-executor.md)） |
 

@@ -20,6 +20,7 @@
 - **Fable 플랜 스플릿 반영** ([공식 Help Center](https://support.claude.com/en/articles/15424964-claude-fable-5-on-your-plan)): 프로모션 2026-07-19 23:59:59 PT 종료. 07-20부터 Max/premium Team = 주간 한도 50% 포함, Pro/standard = usage credits. dream-team/escalation 문구 정정(~7/12 폐기).
 - validator: `claude-opus-5` 풀 래더 · **`xai/grok-4.6` `low..high`**(카탈로그는 xhigh 를 찍고 라이브도 수용하지만 심도 미검증 — gpt-5.6 `:max` 와 동일하게 fail-closed. 거부 테스트 기록은 `evidence/2026-08-17-eco-executor.md`) · sonnet-5 출하 합법성은 high 유지(카탈로그 xhigh/max 는 클램프 미측정).
 - 도구 좌석 동기화: `cyber-cop-review.sh` architect/패널 · `revalidate.sh` 배터리 · `gen_svgs.py` · README×4 · routing-rules · MAINTAINING · factsheet.
+- **환경변수 개명: `GROK45_PANEL_MAX_BYTES` → `GROK_PANEL_MAX_BYTES`** (`scripts/cyber-cop-review.sh`). 좌석이 Grok 4.6 인데 이름이 4.5 시절 그대로였다. **기존 호출자가 옛 이름으로 값을 넘기면 조용히 무시된다** — CI/스크립트에서 이 변수를 설정하고 있었다면 새 이름으로 바꿔야 한다. 기본값 1600000 은 불변.
 - **eco.executor DeepSeek → `opencode-go/glm-5.2`** (리뷰 발견 수정, role-fit 프로브 동반). `deepseek-v4-flash` 는 카탈로그 id 가 살아 있으나 이 계정에서 **403 China opt-in** 이라 출하 좌석이 실제로는 안 돌았다. `gjc-cop` critic 이 "깨진 출하 좌석이 게이트를 통과한다"고 REQUEST_CHANGES. 좌석을 이미 실호출 검증된 `glm-5.2`(08-16 8.9s · 08-17 재확인)로 교체하고, `revalidate.sh` 에서 deepseek 를 **정보성 카나리로 명시 분류**(조용한 강등이 아님), README 의 "deepseek 검증됨" 문구를 정정했다. family 배치 불변(ocgo executor ↔ google architect). 좌석 배치는 핑이 아니라 **실제 코딩 프로브**로 뒷받침했다 — `merge_intervals` 8케이스에서 terra:medium 3.5s·luna:high 4.9s·glm-5.2 5.1s·kimi-k3 6.0s 전부 8/8 정확. `glm-5.2` 의 07-02 마이크로벤치 21.9s 는 재현되지 않아 README §6 지연표를 08-17 측정과 함께 갱신했다. 증거 `evidence/2026-08-17-eco-executor.md`.
 
 ### Unchanged (보호 목록)

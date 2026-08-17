@@ -383,9 +383,9 @@ profiles:
 | 프로바이더 | 검증된 셀렉터 |
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`(레거시) · `claude-sonnet-4-6:high` — sel ✅(08-16·**08-17 최종 좌석 배터리**) |
-| `openai-codex` | 출하 좌석 `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 최종 좌석 배터리**). `gpt-5.5:high` · `gpt-5.4:high` 는 07-10 카나리(5.5=07-02) |
+| `openai-codex` | 출하 좌석 `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 최종 좌석 배터리**). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` 는 출하 좌석이 아닌 카나리이며 08-17 배터리에서도 그린이다 |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`(레거시) · `grok-4.3:high` · `grok-4-fast:high` — sel ✅(08-16·**08-17 최종 좌석 배터리**) |
-| `grok-build` | `grok-4.3` (bare) — sel ✅(07-02) |
+| `grok-build` | `grok-4.6` (bare) — sel ✅(**08-17**). `grok-4.3` (bare) 는 07-02 기록. effort 서픽스는 해석되지 않는다(`grok-4.6:high` = not found) — 미출하 |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(08-16·**08-17 최종 좌석 배터리**). 퍼지 `gemini-3.1-pro-high`/`-bogus`·bare `gemini-3.5-flash` 는 fail-closed 확인 |
 | `opencode-go` | 출하 좌석 `glm-5.2` — sel ✅(08-16·08-17). `deepseek-v4-flash`/`-pro` 는 카탈로그 id 는 살아 있으나 **이 계정 403 China opt-in** 이라 미출하. `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` 는 07-02 스냅샷 기준이며 v2.1.0 에서 재검증하지 않았다 |
 
@@ -420,7 +420,7 @@ profiles:
 | `opus-5:high` | — | — | 마이크로벤치 미측정. 08-16 해석 ping 2.4s 는 지연 벤치가 아니다 |
 | `fable-5:medium`~`:xhigh` | 6.7~7.7s | 3.5~6.3s | 코딩에서 sonnet-5 대비 +3~4s |
 | `grok-4.6:medium` / `:high` | — | — | 마이크로벤치 미측정. 08-16 해석 ping 1.8s 는 지연 벤치가 아니다. high 는 critic 출하 상한 · `:xhigh` 미출하 |
-| `deepseek-v4-flash` | 4.6s | 5.5s | |
+| `deepseek-v4-flash` | 4.6s | 5.5s | 07-02 측정. **현재 미출하** — 이 계정 403 China opt-in |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | 코딩 지연 아웃라이어 |
 | `glm-5.2` | 07-02: **21.9s** · 08-17: **5.1s** | 4.0s | 07-02 수치는 재현 안 됨 — 08-17 코딩 프로브 8/8 정확·5.1s([증거](./evidence/2026-08-17-eco-executor.md)) |
 

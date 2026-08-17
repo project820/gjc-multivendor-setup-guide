@@ -321,9 +321,9 @@ profiles:
 | Provider | Verified selectors |
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high` (legacy) · `claude-sonnet-4-6:high` — sel ✅(08-16·**08-17 final-roster battery**) |
-| `openai-codex` | shipped seats: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 final-roster battery**). `gpt-5.5:high` · `gpt-5.4:high` = 07-10 canaries (5.5=07-02) |
-| `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high` (legacy) · `grok-4-fast:high` — sel ✅(08-16·**08-17 final-roster battery**) |
-| `grok-build` | `grok-4.3` (bare) — sel ✅(07-02) |
+| `openai-codex` | shipped seats: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 final-roster battery**). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` are canaries, not shipped seats; all green in the 08-17 battery |
+| `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high` (legacy) · `grok-4.3:high` · `grok-4-fast:high` — sel ✅(08-16·**08-17 final-roster battery**) |
+| `grok-build` | `grok-4.6` (bare) — sel ✅(**08-17**). `grok-4.3` (bare) is the 07-02 record. Effort suffixes do not resolve (`grok-4.6:high` = not found) — not shipped |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(07-10·**08-17 final-roster battery**) |
 | `opencode-go` | shipped seat `glm-5.2` — sel ✅(08-16, 08-17). `deepseek-v4-flash`/`-pro` keep a live catalog id but **403 China opt-in on this account**, so they are not shipped. `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` are from the 07-02 snapshot and were not re-verified in v2.1.0 |
 
@@ -358,7 +358,7 @@ profiles:
 | `opus-5:high` | — | — | not micro-benched. The 08-16 resolution ping of 2.4s is not a latency benchmark |
 | `fable-5:medium`~`:xhigh` | 6.7~7.7s | 3.5~6.3s | +3~4s vs sonnet-5 on coding |
 | `grok-4.6:medium` / `:high` | — | — | not micro-benched. The 08-16 resolution ping of 1.8s is not a latency benchmark. Shipped critic cap is high · `:xhigh` not shipped |
-| `deepseek-v4-flash` | 4.6s | 5.5s | |
+| `deepseek-v4-flash` | 4.6s | 5.5s | measured 07-02. **Not shipped now** — 403 China opt-in on this account |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | coding-latency outlier |
 | `glm-5.2` | 07-02: **21.9s** · 08-17: **5.1s** | 4.0s | the 07-02 figure did not reproduce — 08-17 coding probe scored 8/8 at 5.1s ([evidence](./evidence/2026-08-17-eco-executor.md)) |
 

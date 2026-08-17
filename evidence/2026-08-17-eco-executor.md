@@ -175,17 +175,28 @@ v3 `budget` 좌석 후보로 재평가한다.
 $ python3 scripts/validate-profiles.py --root <fixture>
 FAIL (5 error(s)):
   ERROR [ultimate-opus.critic] illegal effort 'xhigh' for grok-4.6 (legal: ['high', 'low', 'medium'])
-  ERROR [ultimate-sol.critic]  illegal effort 'xhigh' for grok-4.6 (legal: ['high', 'low', 'medium'])
-  ERROR [dream-team.critic]    illegal effort 'xhigh' for grok-4.6 (legal: ['high', 'low', 'medium'])
-  ERROR [llm-council.critic]   illegal effort 'xhigh' for grok-4.6 (legal: ['high', 'low', 'medium'])
-  ERROR [escalation.critic]    illegal effort 'xhigh' for grok-4.6 (legal: ['high', 'low', 'medium'])
+  ERROR [ultimate-sol.critic] illegal effort 'xhigh' for grok-4.6 (legal: ['high', 'low', 'medium'])
+  ERROR [dream-team.critic] illegal effort 'xhigh' for grok-4.6 (legal: ['high', 'low', 'medium'])
+  ERROR [llm-council.critic] illegal effort 'xhigh' for grok-4.6 (legal: ['high', 'low', 'medium'])
+  ERROR [escalation.critic] illegal effort 'xhigh' for grok-4.6 (legal: ['high', 'low', 'medium'])
 exit=1
 ```
+
+> 위 블록은 실제 실행 stdout 을 그대로 붙인 것이다. 초판에서는 가독성을 위해
+> `ERROR` 줄의 열을 손으로 맞췄는데, 리뷰가 "validator 가 낼 수 없는 정렬"이라고
+> 지적했다. 정당한 지적이라 정렬을 제거하고 원문으로 되돌렸다.
+
 
 정상 트리는 `OK — all invariants hold`, exit 0 유지.
 
 영구 fixture 스크립트(`scripts/ci-fixture-check.sh`)는 v3 범위로 계획돼 있다 — 이 PR 은
 규칙만 조이고 거부 동작을 위 기록으로 증명한다.
+
+**알려진 갭(정직하게 남긴다):** 출하 상한(fable-5 xhigh · sonnet-5 high · grok-4.6 high ·
+gpt-5.6 xhigh)은 validator 규칙으로만 강제되고, 파생 로스터와 카나리 어디에서도 상한 위
+effort 를 실제로 호출하지 않는다. 즉 엔진이 바뀌어 `:xhigh` 가 실제로 동작하거나 반대로
+하드 실패하게 되어도 라이브 게이트는 그걸 못 본다. 위 거부 테스트는 수동 1회 실행이고
+CI 에 걸려 있지 않다. 자동화는 v3 의 `ci-fixture-check.sh` 로 넘긴다.
 
 ---
 

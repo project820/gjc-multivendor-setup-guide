@@ -320,9 +320,9 @@ profiles:
 | 提供方 | 已验证选择器 |
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`（遗留）· `claude-sonnet-4-6:high` — sel ✅（08-16·**08-17 最终席位批次**） |
-| `openai-codex` | 出货席位：`gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅（**08-17 最终席位批次**）。`gpt-5.5:high` · `gpt-5.4:high` 为 07-10 金丝雀（5.5=07-02） |
-| `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（遗留）· `grok-4-fast:high` — sel ✅（08-16·**08-17 最终席位批次**） |
-| `grok-build` | `grok-4.3`（裸选择器）— sel ✅（07-02） |
+| `openai-codex` | 出货席位：`gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅（**08-17 最终席位批次**）。`gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` 为金丝雀而非出货席位；08-17 批次中均为绿 |
+| `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（遗留）· `grok-4.3:high` · `grok-4-fast:high` — sel ✅（08-16·**08-17 最终席位批次**） |
+| `grok-build` | `grok-4.6`（裸选择器）— sel ✅（**08-17**）。`grok-4.3`（裸）为 07-02 记录。effort 后缀无法解析（`grok-4.6:high` = not found）— 不出货 |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅（07-10·**08-17 最终席位批次**） |
 | `opencode-go` | 出货席位 `glm-5.2` — sel ✅（08-16·08-17）。`deepseek-v4-flash`/`-pro` 目录 id 仍在，但**本账号 403 China opt-in**，故不出货。`glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` 为 07-02 快照，v2.1.0 未重新验证 |
 
@@ -357,7 +357,7 @@ profiles:
 | `opus-5:high` | — | — | 未做微基准。08-16 的解析 ping 2.4s 不是延迟基准 |
 | `fable-5:medium`~`:xhigh` | 6.7~7.7s | 3.5~6.3s | 编码比 sonnet-5 慢 +3~4s |
 | `grok-4.6:medium` / `:high` | — | — | 未做微基准。08-16 的解析 ping 1.8s 不是延迟基准。critic 出货上限 high · `:xhigh` 未出货 |
-| `deepseek-v4-flash` | 4.6s | 5.5s | |
+| `deepseek-v4-flash` | 4.6s | 5.5s | 07-02 测量。**当前未出货** — 本账号 403 China opt-in |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | 编码延迟离群值 |
 | `glm-5.2` | 07-02：**21.9s** · 08-17：**5.1s** | 4.0s | 07-02 数值未复现 — 08-17 编码探针 8/8 正确、5.1s（[证据](./evidence/2026-08-17-eco-executor.md)） |
 
