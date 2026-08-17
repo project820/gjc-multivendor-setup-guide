@@ -76,6 +76,18 @@
   브랜치 트리 실행이다: `profiles checked: 8` · `OK — all invariants hold` · exit 0 · 의도된 WARN 3건.
   기록: `evidence/2026-08-17-v3-budget-gate-ruling.md`.
 
+### Fixed (operator chrome — #26 squash 직후)
+
+- README×4 hero badges / KO·JA 설치 문구 / EN NOTE / 푸터: v2.1.0 · 10 bundles → **v3.0.0 · 8 bundles**.
+  (#26 원자 커밋이 손대지 않은 배지·푸터 문자열. 카탈로그 설계는 불변.)
+- README §3-2 / 하드룰 5 / §6: 출하 Luna 좌석은 `:max`(D-1 정책)이지 `:medium` 이 아님.
+  Sol·Terra `:max` 는 미출하 유지.
+- `docs/whats-new-v3.md` eco 삭제 사유: DeepSeek 지역 정책은 v2.1.0 좌석 교체 사유이지
+  v3 삭제 사유가 아님(저가 레인은 `budget` 이 흡수).
+- `MAINTAINING.md` §5: 10-bundle → 8-bundle catalog.
+- `budget` YAML 주석 "구독 없이" 정정 — 실제로는 openai-codex + antigravity 로그인 +
+  `OPENCODE_API_KEY` 가 필요하다.
+
 
 ## v2.1.0 — 2026-08-17
 

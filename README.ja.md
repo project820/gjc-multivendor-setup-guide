@@ -7,9 +7,9 @@
 モデル選びで悩むのをやめよう。**ワンライナーでインストール**し、各役割に最適なモデルを自動で割り当てる。
 
 [![GJC](https://img.shields.io/badge/for-Gajae%20Code%20(GJC)-e23?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code)
-[![Version](https://img.shields.io/badge/version-2.1.0-2496ED?style=flat-square)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-3.0.0-2496ED?style=flat-square)](./CHANGELOG.md)
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
-![Profiles](https://img.shields.io/badge/bundles-10%20·%204%20tiers-blue?style=flat-square)
+![Profiles](https://img.shields.io/badge/bundles-8%20·%204%20tiers-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
@@ -31,7 +31,7 @@
 curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | bash
 ```
 
-この1行で **10 個のバンドルを `~/.gjc/agent/models.yml` に安全にマージ**し、既定プロファイルを `daily` に設定する。既存設定は自動バックアップされ、再実行してもクリーンに更新される。
+この1行で **8 個のバンドルを `~/.gjc/agent/models.yml` に安全にマージ**し、既定プロファイルを `daily` に設定する。既存設定は自動バックアップされ、再実行してもクリーンに更新される。
 
 ```bash
 gjc --mpreset daily        # このセッションのみ
@@ -163,7 +163,8 @@ Opus 5 / 4.8            minimal low medium high xhigh max   ← 全6段（出荷
 Fable 5                 minimal low medium high xhigh       ← :max は受理されるが深度未検証 — 出荷上限 xhigh
 Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max は受理されるが深度未検証 — 出荷上限 high
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 既定 xhigh
-GPT 5.6 Sol/Terra/Luna  low medium high xhigh (max)          ← :max は受理されるが深度未検証 — 出荷上限 xhigh
+GPT 5.6 Sol/Terra       low medium high xhigh (max)          ← :max は受理されるが深度未検証 — 出荷上限 xhigh
+GPT 5.6 Luna            max                                  ← v3 政策席: D-1 が :max 単独強制（測定勝利ではない）
 Grok 4.6（xai）          low medium high xhigh                ← 出荷上限 high（:xhigh 受理・深度未検証）
 Grok 4.5（xai）          low medium high                      ← レガシーカナリア
 grok-build/grok-4.3     ── bare セレクタのみ（effort サフィックス非解釈）──
@@ -178,7 +179,7 @@ google-antigravity Gemini  gemini-3.1-pro-low:high（高推論）· gemini-3.1-p
 2. openai-codex の文脈はモデル別 — `gpt-5.4`=1M · `gpt-5.5`=272K · `gpt-5.6 3種`=372K（0.13.3 表記）。
 3. Sonnet（4.6/5）と Fable 5 の**出荷上限はそれぞれ `high` / `xhigh`** — 上位段は受理されるが深度未検証のため出荷しない。
 4. opencode-go は `:effort` を省略（deepseek-v4 系のみ例外）。
-5. xai `grok-4.6` の出荷上限は `high`（`:xhigh` 受理・深度未検証）。`grok-build/grok-4.6:high` は not found。
+5. xai `grok-4.6` の出荷上限は `high`（`:xhigh` 受理・深度未検証）。`grok-build/grok-4.6:high` は not found。gpt-5.6 Sol·Terra の `:max` は受理されるが深度未検証のため出荷上限は `xhigh`。Luna は v3 から `:max` 単独（D-1 — 政策席、測定勝利ではない）。
 
 > **脚注（上流ギャップ）**：Claude 5 ファミリーは API 公式には両方とも `max` まで対応する。GJC 0.13.3 でも Fable `:max` は受理される — クランプの可能性あり **未出荷**。Sonnet 5 カタログは xhigh/max を出すが未測定のため出荷合法性は high。
 
@@ -333,14 +334,14 @@ profiles:
 | プロバイダ | 検証済みセレクタ |
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`（レガシー）· `claude-sonnet-4-6:high` — sel ✅(08-16·**08-17 最終ロスター・バッテリー**) |
-| `openai-codex` | 出荷席: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 最終ロスター・バッテリー**). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` は出荷席ではなくカナリアで、08-17 バッテリーでもグリーン |
+| `openai-codex` | 出荷席: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:max` — sel ✅(**08-17 最終ロスター・バッテリー**). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` は出荷席ではなくカナリアで、08-17 バッテリーでもグリーン |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（レガシー）· `grok-4.3:high` · `grok-4-fast:high` — sel ✅(08-16·**08-17 最終ロスター・バッテリー**) |
 | `grok-build` | `grok-4.6`（bare）— sel ✅(**08-17**)。`grok-4.3`（bare）は 07-02 記録。effort サフィックスは解決しない（`grok-4.6:high` = not found）— 未出荷 |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(08-16・**08-17 最終ロスター・バッテリー**)。ファジー `gemini-3.1-pro-high`/`-bogus` と bare `gemini-3.5-flash` は fail-closed を確認 |
 | `opencode-go` | 出荷席 `glm-5.2` — sel ✅(08-16・08-17)。`deepseek-v4-flash`/`-pro` はカタログ id は生存だが**このアカウントで 403 China opt-in** のため未出荷。`glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` は 07-02 スナップショットで v2.1.0 では再検証していない |
 
 - `fable-5:max` は受理されるがクランプの可能性（未出荷）。`grok-4.6:xhigh` は受理・深度未検証（出荷 `:high`）。`grok-build/grok-4.6:high` は not found。
-- GPT-5.6 3種の `:max` は受理されるが深度未検証で未出荷、`gpt-5.5:high` は 07-02 グリーンのカナリア。
+- GPT-5.6 Sol·Terra の `:max` は受理されるが深度未検証で未出荷。Luna `:max` は v3 政策席（D-1）。`gpt-5.5:high` は 07-02 グリーンのカナリア。
 - `grok-4-1-fast` は 2026-05-15 retire 後に grok-4.3 料金へ redirect されるため v2 から除外した。
 - 0.9.6 以降の Gemini ファジー空間は fail-closed。`gemini-3.1-pro-high` の 0.9.5 サイレント `-low` 解釈は再現されない。
 - `glm-5.2` は 0.7.10 からバンドル入りし、`OPENCODE_API_KEY` が必要。
@@ -500,6 +501,6 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 <div align="center">
 
 **ワンライナーで導入、役割ごとに最適モデル。**
-**v2.1.0** · [CHANGELOG](./CHANGELOG.md) · [保守プレイブック](./MAINTAINING.md) · ライセンス [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
+**v3.0.0** · [CHANGELOG](./CHANGELOG.md) · [保守プレイブック](./MAINTAINING.md) · ライセンス [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
 
 </div>

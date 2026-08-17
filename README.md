@@ -7,9 +7,9 @@
 복잡한 모델 선택을 고민하지 말고, **한 줄로 설치**해 역할마다 최적 모델이 자동으로 배치되게 하라.
 
 [![GJC](https://img.shields.io/badge/for-Gajae%20Code%20(GJC)-e23?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code)
-[![Version](https://img.shields.io/badge/version-2.1.0-2496ED?style=flat-square)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-3.0.0-2496ED?style=flat-square)](./CHANGELOG.md)
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
-![Profiles](https://img.shields.io/badge/bundles-10%20·%204%20tiers-blue?style=flat-square)
+![Profiles](https://img.shields.io/badge/bundles-8%20·%204%20tiers-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
@@ -31,7 +31,7 @@
 curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | bash
 ```
 
-이 한 줄이 **10개 번들을 `~/.gjc/agent/models.yml` 에 안전 병합**하고 기본 프로필을 `daily` 로 설정한다. 기존 설정은 자동 백업되며, 재실행해도 깔끔히 갱신된다.
+이 한 줄이 **8개 번들을 `~/.gjc/agent/models.yml` 에 안전 병합**하고 기본 프로필을 `daily` 로 설정한다. 기존 설정은 자동 백업되며, 재실행해도 깔끔히 갱신된다.
 
 ```bash
 gjc --mpreset daily        # 이번 세션만 적용
@@ -168,7 +168,8 @@ Opus 5 / 4.8            minimal low medium high xhigh max   ← 6단계 전부 (
 Fable 5                 minimal low medium high xhigh       ← :max 수용되나 심도 미검증 — 출하 상한 xhigh · thinking 상시-온
 Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max 수용되나 심도 미검증 — 출하 상한 high
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 기본 xhigh
-GPT 5.6 Sol/Terra/Luna  low medium high xhigh (max)          ← :max 수용되나 심도 미검증 — 출하 상한 xhigh
+GPT 5.6 Sol/Terra       low medium high xhigh (max)          ← :max 수용되나 심도 미검증 — 출하 상한 xhigh
+GPT 5.6 Luna            max                                  ← v3 정책 좌석: D-1 이 :max 단독 강제 (측정 승리 아님)
 Grok 4.6 (xai)          low medium high xhigh                ← 출하 상한 high (:xhigh 수용·심도 미검증)
 Grok 4.5 (xai)          low medium high                      ← 레거시 카나리
 grok-build/grok-4.3     ── bare 셀렉터만 (effort 서픽스 미해석) ──
@@ -183,7 +184,7 @@ google-antigravity Gemini  gemini-3.1-pro-low:high (고추론) · gemini-3.1-pro
 2. openai-codex ctx는 **모델별** — `gpt-5.4`=**1M** · `gpt-5.5`=**272K** · `gpt-5.6 3종`=**372K**(0.13.3 표기; 0.9.6은 373K; API 스펙 1.05M과 별개의 usable prompt budget).
 3. Sonnet(4.6/5)·Fable 5 는 **출하 상한이 각각 `high`/`xhigh`** — 상위 티어는 호출이 수용되지만 심도 미검증이라 출하하지 않는다.
 4. opencode-go는 `:effort` 생략(deepseek-v4 계열만 예외적으로 지원).
-5. xai `grok-4.6` 출하 상한은 `high`(`:xhigh`는 수용·심도 미검증). `grok-build/grok-4.6:high`는 not found(bare만 OK — 미출하). gpt-5.6 3종 `:max`는 수용되나 심도 미검증이므로 출하 상한은 `xhigh`다.
+5. xai `grok-4.6` 출하 상한은 `high`(`:xhigh`는 수용·심도 미검증). `grok-build/grok-4.6:high`는 not found(bare만 OK — 미출하). gpt-5.6 Sol·Terra `:max`는 수용되나 심도 미검증이므로 출하 상한은 `xhigh`. Luna는 v3부터 `:max` 단독(D-1 — 정책 좌석, 측정 승리 아님).
 
 > **각주(상류 갭)**: Claude 5 패밀리는 API 공식으로는 둘 다 `max`까지 지원한다. GJC 0.13.3에서도 Fable `:max`는 수용된다 — 클램프 가능하므로 **미출하**. Sonnet 5 카탈로그는 이제 xhigh/max를 찍지만 클램프 미측정이라 출하 상한은 high.
 
@@ -319,7 +320,7 @@ profiles:
       architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste 는 Opus 5 가 476k 통과(08-17 배터리) — Opus 4.8 의 476k 🔴 는 구세대 수치
       critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51), cross-family vs anthropic. effort 무핀(opencode-go 규칙)
 
-  budget:                              # v3 게이트 — 구독 없이 저가 API 만으로 5역할
+  budget:                              # v3 게이트 — anthropic 없이 저단가 레인 (codex+antigravity 로그인 + OPENCODE_API_KEY)
     required_providers: [openai-codex, google-antigravity, opencode-go]
     model_mapping:
       default:   openai-codex/gpt-5.6-terra:medium
@@ -389,14 +390,14 @@ profiles:
 | 프로바이더 | 검증된 셀렉터 |
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`(레거시) · `claude-sonnet-4-6:high` — sel ✅(08-16·**08-17 최종 좌석 배터리**) |
-| `openai-codex` | 출하 좌석 `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 최종 좌석 배터리**). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` 는 출하 좌석이 아닌 카나리이며 08-17 배터리에서도 그린이다 |
+| `openai-codex` | 출하 좌석 `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:max` — sel ✅(**08-17 최종 좌석 배터리**). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` 는 출하 좌석이 아닌 카나리이며 08-17 배터리에서도 그린이다 |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`(레거시) · `grok-4.3:high` · `grok-4-fast:high` — sel ✅(08-16·**08-17 최종 좌석 배터리**) |
 | `grok-build` | `grok-4.6` (bare) — sel ✅(**08-17**). `grok-4.3` (bare) 는 07-02 기록. effort 서픽스는 해석되지 않는다(`grok-4.6:high` = not found) — 미출하 |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(08-16·**08-17 최종 좌석 배터리**). 퍼지 `gemini-3.1-pro-high`/`-bogus`·bare `gemini-3.5-flash` 는 fail-closed 확인 |
 | `opencode-go` | 출하 좌석 `glm-5.2` — sel ✅(08-16·08-17). `deepseek-v4-flash`/`-pro` 는 카탈로그 id 는 살아 있으나 **이 계정 403 China opt-in** 이라 미출하. `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` 는 07-02 스냅샷 기준이며 v2.1.0 에서 재검증하지 않았다 |
 
 - `fable-5:max`는 수용되나 클램프 가능(미출하). `grok-4.6:xhigh`는 수용·심도 미검증(출하 `:high`). `grok-build/grok-4.6:high`는 not found.
-- GPT-5.6 3종 `:max`는 수용되지만 심도 미검증이라 미출하이며, `gpt-5.5:high`는 07-02 그린 카나리다.
+- GPT-5.6 Sol·Terra `:max`는 수용되지만 심도 미검증이라 미출하. Luna `:max`는 v3 정책 좌석(D-1). `gpt-5.5:high`는 07-02 그린 카나리다.
 - `grok-4-1-fast`는 호출돼도 2026-05-15 retire 뒤 grok-4.3 요율로 redirect 과금돼 v2에서 제외했다.
 - 0.9.6부터 Gemini 퍼지 공간은 fail-closed다. `gemini-3.1-pro-high`의 0.9.5 침묵 `-low` 해석은 재현되지 않는다.
 - `glm-5.2`는 0.7.10부터 번들에 편입됐고 `OPENCODE_API_KEY`가 필요하다.
@@ -558,6 +559,6 @@ Gemini는 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 구독 �
 <div align="center">
 
 **한 줄로 설치하고, 역할마다 최적 모델로.**
-**v2.1.0** · [CHANGELOG](./CHANGELOG.md) · [유지보수·검증 플레이북](./MAINTAINING.md) · 라이선스 [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
+**v3.0.0** · [CHANGELOG](./CHANGELOG.md) · [유지보수·검증 플레이북](./MAINTAINING.md) · 라이선스 [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
 
 </div>
