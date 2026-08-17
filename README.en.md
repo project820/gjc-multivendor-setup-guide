@@ -325,7 +325,7 @@ profiles:
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high` (legacy) · `grok-4-fast:high` — sel ✅(08-16) |
 | `grok-build` | `grok-4.3` (bare) — sel ✅(07-02) |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅(07-10) |
-| `opencode-go` | `deepseek-v4-flash` · `deepseek-v4-pro` · `glm-5.2` · `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` — sel ✅(07-02) |
+| `opencode-go` | shipped seat `glm-5.2` — sel ✅(08-16, 08-17). `deepseek-v4-flash`/`-pro` keep a live catalog id but **403 China opt-in on this account**, so they are not shipped. `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` are from the 07-02 snapshot and were not re-verified in v2.1.0 |
 
 - `fable-5:max` is accepted but may clamp (not shipped). `grok-4.6:xhigh` is accepted with unverified depth (ship `:high`). `grok-build/grok-4.6:high` is not found.
 - The gpt-5.6 trio accepts `:max`, but its depth is unverified and it is not shipped; `gpt-5.5:high` is a 07-02 green canary.
@@ -356,7 +356,7 @@ profiles:
 |---|---|---|---|
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **fastest overall** |
 | `opus-5:high` | 2.4s ping (08-16) | — | micro-bench not re-run |
-| `fable-5:medium`~`:max(→xhigh)` | 6.7~7.7s | 3.5~6.3s | +3~4s vs sonnet-5 on coding |
+| `fable-5:medium`~`:xhigh` | 6.7~7.7s | 3.5~6.3s | +3~4s vs sonnet-5 on coding |
 | `grok-4.6:medium` / `:high` | 1.8s ping (08-16) | — | shipped critic cap is high · `:xhigh` not shipped |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | coding-latency outlier |

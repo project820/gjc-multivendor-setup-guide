@@ -387,7 +387,7 @@ profiles:
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`(레거시) · `grok-4-fast:high` — sel ✅(08-16) |
 | `grok-build` | `grok-4.3` (bare) — sel ✅(07-02) |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅(08-16) |
-| `opencode-go` | `deepseek-v4-flash` · `deepseek-v4-pro` · `glm-5.2` · `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` — sel ✅(07-02) |
+| `opencode-go` | 출하 좌석 `glm-5.2` — sel ✅(08-16·08-17). `deepseek-v4-flash`/`-pro` 는 카탈로그 id 는 살아 있으나 **이 계정 403 China opt-in** 이라 미출하. `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` 는 07-02 스냅샷 기준이며 v2.1.0 에서 재검증하지 않았다 |
 
 - `fable-5:max`는 수용되나 클램프 가능(미출하). `grok-4.6:xhigh`는 수용·심도 미검증(출하 `:high`). `grok-build/grok-4.6:high`는 not found.
 - GPT-5.6 3종 `:max`는 수용되지만 심도 미검증이라 미출하이며, `gpt-5.5:high`는 07-02 그린 카나리다.
@@ -418,7 +418,7 @@ profiles:
 |---|---|---|---|
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **전체 최속** |
 | `opus-5:high` | 2.4s (08-16 ping) | — | 마이크로벤치 미재측정 |
-| `fable-5:medium`~`:max(→xhigh)` | 6.7~7.7s | 3.5~6.3s | 코딩에서 sonnet-5 대비 +3~4s |
+| `fable-5:medium`~`:xhigh` | 6.7~7.7s | 3.5~6.3s | 코딩에서 sonnet-5 대비 +3~4s |
 | `grok-4.6:medium` / `:high` | 1.8s ping (08-16) | — | high는 critic 출하 상한 · `:xhigh` 미출하 |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | 코딩 지연 아웃라이어 |

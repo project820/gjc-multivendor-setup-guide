@@ -324,7 +324,7 @@ profiles:
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（遗留）· `grok-4-fast:high` — sel ✅（08-16） |
 | `grok-build` | `grok-4.3`（裸选择器）— sel ✅（07-02） |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅（07-10） |
-| `opencode-go` | `deepseek-v4-flash` · `deepseek-v4-pro` · `glm-5.2` · `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` — sel ✅（07-02） |
+| `opencode-go` | 出货席位 `glm-5.2` — sel ✅（08-16·08-17）。`deepseek-v4-flash`/`-pro` 目录 id 仍在，但**本账号 403 China opt-in**，故不出货。`glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` 为 07-02 快照，v2.1.0 未重新验证 |
 
 - `fable-5:max` 仍接受但可能夹取（不出货）。`grok-4.6:xhigh` 接受、深度未验证（出货 `:high`）。`grok-build/grok-4.6:high` 为 not found。
 - GPT-5.6 三款 `:max` 被接受但深度未验证，故未出货；`gpt-5.5:high` 是 07-02 绿色金丝雀。
@@ -355,7 +355,7 @@ profiles:
 |---|---|---|---|
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **全场最快** |
 | `opus-5:high` | 2.4s ping（08-16） | — | 微基准未重跑 |
-| `fable-5:medium`~`:max(→xhigh)` | 6.7~7.7s | 3.5~6.3s | 编码比 sonnet-5 慢 +3~4s |
+| `fable-5:medium`~`:xhigh` | 6.7~7.7s | 3.5~6.3s | 编码比 sonnet-5 慢 +3~4s |
 | `grok-4.6:medium` / `:high` | 1.8s ping（08-16） | — | critic 出货上限 high · `:xhigh` 未出货 |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | 编码延迟离群值 |

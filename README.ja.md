@@ -321,7 +321,7 @@ profiles:
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（レガシー）· `grok-4-fast:high` — sel ✅(08-16) |
 | `grok-build` | `grok-4.3`（bare）— sel ✅(07-02) |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅(07-10) |
-| `opencode-go` | `deepseek-v4-flash` · `deepseek-v4-pro` · `glm-5.2` · `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` — sel ✅(07-02) |
+| `opencode-go` | 出荷席 `glm-5.2` — sel ✅(08-16・08-17)。`deepseek-v4-flash`/`-pro` はカタログ id は生存だが**このアカウントで 403 China opt-in** のため未出荷。`glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` は 07-02 スナップショットで v2.1.0 では再検証していない |
 
 - `fable-5:max` は受理されるがクランプの可能性（未出荷）。`grok-4.6:xhigh` は受理・深度未検証（出荷 `:high`）。`grok-build/grok-4.6:high` は not found。
 - GPT-5.6 3種の `:max` は受理されるが深度未検証で未出荷、`gpt-5.5:high` は 07-02 グリーンのカナリア。
@@ -352,7 +352,7 @@ profiles:
 |---|---|---|---|
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **全体最速** |
 | `opus-5:high` | 2.4s ping (08-16) | — | マイクロベンチ未再測定 |
-| `fable-5:medium`~`:max(→xhigh)` | 6.7~7.7s | 3.5~6.3s | コーディングで sonnet-5 比 +3~4s |
+| `fable-5:medium`~`:xhigh` | 6.7~7.7s | 3.5~6.3s | コーディングで sonnet-5 比 +3~4s |
 | `grok-4.6:medium` / `:high` | 1.8s ping (08-16) | — | critic 出荷上限 high · `:xhigh` 未出荷 |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | コーディング遅延の外れ値 |
