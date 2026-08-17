@@ -69,7 +69,7 @@ gjc                        # 新会话自动使用 daily
 | Specialized (exp) | 💸 **eco** | 多厂商低价实验 — *不是绝对最低价* | 成本压力·大批量 |
 | Specialized (exp) | 🗺️ **monorepo** | 全局 ≥1M ctx | 巨型代码库 |
 
-完整目录 ↓ [§5](#5-️-最终目录--10-个捆绑--4-层级)；reviewer 模式与预告见下方。
+完整目录 ↓ [§5](#5-️-最终目录--8-个捆绑--4-层级)；reviewer 模式与预告见下方。
 
 > **🚨 cyber-cop** — GJC 首个 reviewer 模式：architect·critic 是主角，executor 是复现配角。高风险 PR 使用三票评审团；PR #4~#7 曾在合并前拦截 10 个缺陷。
 > 安装 wrapper：`curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
@@ -84,7 +84,7 @@ gjc                        # 新会话自动使用 daily
 
 | 角色 | 做什么 | 最佳模型 |
 |---|---|---|
-| 🧠 **推理/规划**（planner） | 排序、验收标准 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 各捆绑席位见[§5](#5-️-最终目录--10-个捆绑--4-层级)（例外：cyber-cop·monorepo=Gemini，eco=Luna） |
+| 🧠 **推理/规划**（planner） | 排序、验收标准 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 各捆绑席位见[§5](#5-️-最终目录--8-个捆绑--4-层级)（例外：cyber-cop·monorepo=Gemini，eco=Luna） |
 | 🔨 **实现**（executor） | 真正写/改代码 | **Claude Fable 5**（SWE-bench Verified **95.0**）— 订阅内最强是 **Opus 5**（4.8 后继 · 同价 $5/$25 · 2026-07-24） |
 | 🔭 **代码评审**（architect） | 大型仓库导航、架构 | **Gemini 3.1 Pro**（多模态 MMMU-Pro 81%） · 超长上下文（>200k）→ **Opus** |
 | ⚖️ **独立批评**（critic） | 对抗式验证 | **cross-family**（与主循环不同厂商） |
@@ -178,7 +178,7 @@ opencode-go/<model>                           （省略 effort = 模型默认）
 | executor（SWE-bench Verified） | **Fable 5** | **95.0%**（Opus 5 = **订阅内后继** · Opus 4.8 88.6 为上一代数字 · GPT-5.5 82.6 · Gemini 3.1 Pro 80.6） |
 | planner（长周期工作流·推理） | **GPT-5.6 Sol**† | Agents' Last Exam 52.7（5.5：46.9）· AA Intelligence 58.9 — GPQA 单项第一 Sonnet 5 96.2 · 科学知识 Gemini 3.1 Pro 94.3（[深度解读](./docs/deep-dive-role-fit.md#6-2-역할-배치-최적성-검토-deep-research--실측)） |
 | architect（上下文·多模态） | **Gemini 3.1 Pro**† | 1M 上下文 · MMMU-Pro 81% |
-| default（工具调用·诚实性） | **Opus 5 / Fable 5** | 路由质量 = 全系统上限（Fable 有 refusal·计费注意事项 — [§5](#5-️-最终目录--10-个捆绑--4-层级)） |
+| default（工具调用·诚实性） | **Opus 5 / Fable 5** | 路由质量 = 全系统上限（Fable 有 refusal·计费注意事项 — [§5](#5-️-最终目录--8-个捆绑--4-层级)） |
 | critic（独立性） | **cross-family** | 元裁判 > 辩论式聚合 |
 
 **核心共识原则** — † planner 已以 2026-07-10 Sol GA 取代 2026-07-02 Gemini 3.1 Pro 快照；architect 轴在 Gemini 3.5 Pro 发布时重新验证。
@@ -191,7 +191,7 @@ opencode-go/<model>                           （省略 effort = 模型默认）
 
 ---
 
-## 5. 🗂️ 最终目录 — 10 个捆绑 · 4 层级
+## 5. 🗂️ 最终目录 — 8 个捆绑 · 4 层级
 
 <div align="center">
 <img src="assets/profiles-matrix.svg" alt="配置 × 角色矩阵" width="100%">
@@ -209,7 +209,7 @@ profiles:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
       default:   anthropic/claude-opus-5:medium
-      executor:  openai-codex/gpt-5.6-terra:high
+      executor:  openai-codex/gpt-5.6-luna:max
       planner:   openai-codex/gpt-5.6-sol:high
       architect: google-antigravity/gemini-3.1-pro-low:high
       critic:    google-antigravity/gemini-3.1-pro-low:high
@@ -241,24 +241,6 @@ profiles:
       architect: anthropic/claude-opus-5:high
       critic:    xai/grok-4.6:high
 
-  ultimate-sol:
-    required_providers: [openai-codex, anthropic, xai]
-    model_mapping:
-      default:   openai-codex/gpt-5.6-sol:high
-      executor:  openai-codex/gpt-5.6-sol:xhigh
-      planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: anthropic/claude-opus-5:high
-      critic:    xai/grok-4.6:high
-
-  dream-team:
-    required_providers: [anthropic, openai-codex, xai]
-    model_mapping:
-      default:   anthropic/claude-fable-5:high
-      executor:  anthropic/claude-fable-5:xhigh
-      planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: anthropic/claude-opus-5:high
-      critic:    xai/grok-4.6:high
-
   llm-council:
     required_providers: [anthropic, openai-codex, google-antigravity, xai]
     model_mapping:
@@ -277,15 +259,6 @@ profiles:
       architect: google-antigravity/gemini-3.1-pro-low:high
       critic:    xai/grok-4.6:high
 
-  eco:
-    required_providers: [openai-codex, opencode-go, google-antigravity]
-    model_mapping:
-      default:   openai-codex/gpt-5.6-terra:medium
-      executor:  opencode-go/glm-5.2
-      planner:   openai-codex/gpt-5.6-luna:medium
-      architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    google-antigravity/gemini-3-flash:low
-
   monorepo:
     required_providers: [anthropic, google-antigravity, opencode-go]
     model_mapping:
@@ -294,6 +267,15 @@ profiles:
       planner:   google-antigravity/gemini-3.1-pro-low:high
       architect: anthropic/claude-opus-5:high
       critic:    opencode-go/glm-5.2
+
+  budget:
+    required_providers: [openai-codex, google-antigravity, opencode-go]
+    model_mapping:
+      default:   openai-codex/gpt-5.6-terra:medium
+      executor:  opencode-go/glm-5.2
+      planner:   opencode-go/qwen3.8-max
+      architect: google-antigravity/gemini-3.1-pro-low:high
+      critic:    google-antigravity/gemini-3.1-pro-low:high
 ```
 
 </details>
@@ -308,7 +290,7 @@ profiles:
 > [!TIP]
 > `opencode-go` 以 `OPENCODE_API_KEY` 激活 `eco` executor 与 `monorepo` critic；验证与候选详情见[韩文正本 §5](./README.md#프로필별-설계-근거)。
 
-各捆绑的设计理由与 caveat 已浓缩；完整目录见[韩文正本 §5](./README.md#5-️-최종-카탈로그--10-번들--4계층)，逐捆绑说明见[设计依据](./README.md#프로필별-설계-근거)。
+各捆绑的设计理由与 caveat 已浓缩；完整目录见[韩文正本 §5](./README.md#5-️-최종-카탈로그--8-번들--4계층)，逐捆绑说明见[设计依据](./README.md#프로필별-설계-근거)。
 
 ---
 

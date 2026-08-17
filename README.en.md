@@ -69,7 +69,7 @@ gjc                        # new sessions use daily automatically
 | Specialized (exp) | 💸 **eco** | low-cost multi-vendor experiment — *not absolute cheapest* | cost pressure · bulk work |
 | Specialized (exp) | 🗺️ **monorepo** | ≥1M ctx everywhere | huge codebases |
 
-Full catalog: [§5](#5-️-final-catalog--10-bundles--4-tiers) · reviewer mode and teasers below.
+Full catalog: [§5](#5-️-final-catalog--8-bundles--4-tiers) · reviewer mode and teasers below.
 
 > **🚨 cyber-cop** — GJC's first reviewer mode: architect and critic lead while executor supports reproduction. High-risk PRs use a 3-vote panel; it blocked 10 defects before merge across PRs #4–#7.
 > Install the wrapper: `curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
@@ -193,7 +193,7 @@ opencode-go/<model>                           (omit effort = model default)
 
 ---
 
-## 5. 🗂️ Final catalog — 10 bundles · 4 tiers
+## 5. 🗂️ Final catalog — 8 bundles · 4 tiers
 
 <div align="center">
 
@@ -213,7 +213,7 @@ profiles:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
       default:   anthropic/claude-opus-5:medium
-      executor:  openai-codex/gpt-5.6-terra:high
+      executor:  openai-codex/gpt-5.6-luna:max
       planner:   openai-codex/gpt-5.6-sol:high
       architect: google-antigravity/gemini-3.1-pro-low:high
       critic:    google-antigravity/gemini-3.1-pro-low:high
@@ -245,24 +245,6 @@ profiles:
       architect: anthropic/claude-opus-5:high
       critic:    xai/grok-4.6:high
 
-  ultimate-sol:
-    required_providers: [openai-codex, anthropic, xai]
-    model_mapping:
-      default:   openai-codex/gpt-5.6-sol:high
-      executor:  openai-codex/gpt-5.6-sol:xhigh
-      planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: anthropic/claude-opus-5:high
-      critic:    xai/grok-4.6:high
-
-  dream-team:
-    required_providers: [anthropic, openai-codex, xai]
-    model_mapping:
-      default:   anthropic/claude-fable-5:high
-      executor:  anthropic/claude-fable-5:xhigh
-      planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: anthropic/claude-opus-5:high
-      critic:    xai/grok-4.6:high
-
   llm-council:
     required_providers: [anthropic, openai-codex, google-antigravity, xai]
     model_mapping:
@@ -281,15 +263,6 @@ profiles:
       architect: google-antigravity/gemini-3.1-pro-low:high
       critic:    xai/grok-4.6:high
 
-  eco:
-    required_providers: [openai-codex, opencode-go, google-antigravity]
-    model_mapping:
-      default:   openai-codex/gpt-5.6-terra:medium
-      executor:  opencode-go/glm-5.2
-      planner:   openai-codex/gpt-5.6-luna:medium
-      architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    google-antigravity/gemini-3-flash:low
-
   monorepo:
     required_providers: [anthropic, google-antigravity, opencode-go]
     model_mapping:
@@ -298,6 +271,15 @@ profiles:
       planner:   google-antigravity/gemini-3.1-pro-low:high
       architect: anthropic/claude-opus-5:high
       critic:    opencode-go/glm-5.2
+
+  budget:
+    required_providers: [openai-codex, google-antigravity, opencode-go]
+    model_mapping:
+      default:   openai-codex/gpt-5.6-terra:medium
+      executor:  opencode-go/glm-5.2
+      planner:   opencode-go/qwen3.8-max
+      architect: google-antigravity/gemini-3.1-pro-low:high
+      critic:    google-antigravity/gemini-3.1-pro-low:high
 ```
 
 </details>
@@ -309,7 +291,7 @@ profiles:
 
 </details>
 
-**Bundle rationale:** Each bundle trades role fit, vendor independence, access, and cost differently. See the Korean canonical [§5 catalog](./README.md#5-️-최종-카탈로그--10-번들--4계층) and [per-bundle rationale](./README.md#프로필별-설계-근거).
+**Bundle rationale:** Each bundle trades role fit, vendor independence, access, and cost differently. See the Korean canonical [§5 catalog](./README.md#5-️-최종-카탈로그--8-번들--4계층) and [per-bundle rationale](./README.md#프로필별-설계-근거).
 
 ---
 

@@ -1,4 +1,4 @@
-# GJC 멀티벤더 운영 규칙 v2 (본체 default 가 따른다 — 기본 Anthropic 플래그십; 예외는 opt-in `ultimate-sol`(Sol)과 Anthropic 미포함 `eco`(Terra)뿐)
+# GJC 멀티벤더 운영 규칙 v3 (본체 default 가 따른다 — 기본 Anthropic 플래그십; anthropic 미요구 번들은 적용 대상 아님)
 
 <!--
 사용법:
@@ -32,18 +32,18 @@
 ## 번들 카탈로그 — 4계층 (프로필 ≠ 워크플로)
 v2 카탈로그는 10개 user-facing 번들이며 신뢰 등급이 같지 않다:
 - **Core**: `daily`(평소 기본) · `coding-sprint`(구현 처리량) · `cyber-cop`(PR 리뷰·보안 감사) — 구독 OAuth 3벤더.
-- **Premium (experimental)**: `ultimate-opus` · `ultimate-sol` · `dream-team` — 최고품질 *가설*.
+- **Premium (experimental)**: `ultimate-opus` — 최고품질 *가설*.
   role-fit L3 실측 전이므로 "역할별 최강 검증됨"으로 광고 금지. xai 인증 필요(`/login xai` 또는 XAI_API_KEY).
 - **Workflow bundle**: `llm-council` · `escalation` — YAML 좌석표는 모델 배치만 한다.
   council 투표·quorum·실패 트리거는 아래 계약을 **본체가 실행**해야 발생한다.
-- **Specialized (experimental)**: `eco`(멀티벤더 저단가 실험 — 절대 최저가 아님, 최소 의존 저가는 GJC 내장 `codex-eco`) ·
+- **Specialized (experimental)**: `budget`(게이트 저단가 경로 — 절대 최저가 아님, 최소 의존 저가는 GJC 내장 `codex-eco`) ·
   `monorepo`(전역 1M ctx).
 
 ## 프로필 스왑 — 모드 경계에서만 (매 쿼리 스왑 ❌, 캐시 손실)
-- 평소: `daily`  |  구현 스프린트: `coding-sprint`  |  대량·비용압박: `eco`
+- 평소: `daily`  |  구현 스프린트: `coding-sprint`  |  대량·비용압박: `budget`
 - 머지·보안·결제·비가역: `escalation`  |  다계열 합의가 필요한 결정: `llm-council`
 - 거대 코드베이스: `monorepo`  |  **PR 리뷰·보안 감사 세션: `cyber-cop`** (아래 리뷰어 계약 적용)
-- 프리미엄 opt-in: `ultimate-opus`(Opus 기저) / `ultimate-sol`(Sol 기저·agentic 축) / `dream-team`(Fable 중심·credits 노출)
+- 프리미엄 opt-in: `ultimate-opus`(Opus 기저) / (그 외 프리미엄 번들 없음)
 - 단일 벤더만 보유: 이 카탈로그가 아니라 GJC 내장 프로필(`claude-opus`/`codex-*` 등)을 쓴다.
 
 ## Council 계약 — llm-council 번들 전용
@@ -82,7 +82,7 @@ v2 카탈로그는 10개 user-facing 번들이며 신뢰 등급이 같지 않다
 ## 검증된 셀렉터 하드룰 (위반 금지 — 기준 gjc 0.13.3, 2026-08-16 실호출)
 - `anthropic/claude-fable-5` — GJC 출하 상한 = **xhigh** (`:max`는 카탈로그에 없는데 호출은 OK로 돌아온다 — 실제로 xhigh로 클램프되는지 별도 심도인지 **미측정**. 측정 전까지 출하·광고 금지).
   thinking 상시-온(끌 수 없음). 안전 분류기 거부가 **HTTP 200 + `stop_reason: refusal`**로 옴 — "빈 응답"으로 오인 금지.
-  30-day retention 필수·ZDR 불가 — 민감 코드베이스에서 dream-team/escalation executor 사용 전 정책 확인.
+  30-day retention 필수·ZDR 불가 — 민감 코드베이스에서 escalation executor 사용 전 정책 확인.
 - `anthropic/claude-sonnet-5` — GJC 출하 상한 = **high** (카탈로그는 `xhigh,max`를 표기하고 `:xhigh` 호출도 OK지만 클램프 여부 **미측정** — validator는 fail-closed로 high 유지).
 - Gemini 고추론 = `google-antigravity/gemini-3.1-pro-low:high` 리터럴 핀.
   ★퍼지 공간 fail-closed 유지 — `gemini-3.1-pro-high`/`-bogus`는 "Model not found". 핀은 그대로 유지한다.
@@ -91,7 +91,7 @@ v2 카탈로그는 10개 user-facing 번들이며 신뢰 등급이 같지 않다
 - openai-codex 는 base GPT만 (`gpt-5.6-sol`/`gpt-5.6-terra`/`gpt-5.6-luna` · `gpt-5.5` · `gpt-5.4`) — `-codex` 변종 미지원.
   ctx는 모델별(0.13.3): **gpt-5.4=1M / gpt-5.5=272K / gpt-5.6 3종=372K** usable prompt budget(API 스펙 1.05M/128K와 별개).
   1M 급 입력은 gpt-5.4 또는 Opus/Gemini 레인.
-- openai-codex `gpt-5.6-sol/terra/luna` — Sol $5/$30 · Terra $2.5/$15 · Luna $1/$6(eco.planner 채용).
+- openai-codex `gpt-5.6-sol/terra/luna` — Sol $5/$30 · Terra $2.5/$15 · Luna $1/$6(daily.executor 채용).
   `:medium`/`:high`/`:xhigh` 검증 OK · `:max`는 수용되나 **심도 미검증 — 출하·광고 금지**.
   ⚠ METR이 Sol의 SWE 평가 게이밍을 적발 — SWE류 벤치 단독 근거 승격 금지.
 - xai `grok-4.6` — **`/login xai` 또는 XAI_API_KEY 설정**(08-17: XAI_API_KEY 환경변수 없이 호출 성공한 단일 계정 관찰 — 메커니즘 단정 금지) · $2/$6 (<200k prompt) / $4/$12 (≥200k) · ctx **500K**.

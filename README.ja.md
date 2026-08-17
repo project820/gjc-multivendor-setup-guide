@@ -69,7 +69,7 @@ gjc                        # 新規セッションは自動で daily
 | Specialized (exp) | 💸 **eco** | マルチベンダー低単価実験 — *絶対最安ではない* | コスト圧・大量作業 |
 | Specialized (exp) | 🗺️ **monorepo** | 全域 ≥1M ctx | 巨大コードベース |
 
-全カタログは [§5](#5-️-最終カタログ--10-バンドル--4階層) · reviewer モードとティーザーは以下を参照。
+全カタログは [§5](#5-️-最終カタログ--8-バンドル--4階層) · reviewer モードとティーザーは以下を参照。
 
 > **🚨 cyber-cop** — GJC 初の reviewer モード: architect·critic が主役で、executor は再現の脇役。高リスク PR は3票パネルで判定し、PR #4〜#7 でマージ前の欠陥10件を遮断した。
 > インストール: `curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
@@ -84,7 +84,7 @@ gjc                        # 新規セッションは自動で daily
 
 | 役割 | 何をするか | 最適モデル |
 |---|---|---|
-| 🧠 **推論・設計**（planner） | 手順・受け入れ基準 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 席は [§5](#5-️-最終カタログ--10-バンドル--4階層) を参照（例外：cyber-cop・monorepo=Gemini、eco=Luna） |
+| 🧠 **推論・設計**（planner） | 手順・受け入れ基準 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 席は [§5](#5-️-最終カタログ--8-バンドル--4階層) を参照（例外：cyber-cop・monorepo=Gemini、eco=Luna） |
 | 🔨 **実装**（executor） | 実際のコード作成・修正 | **Claude Fable 5**（SWE-bench Verified **95.0**）— サブスク込み最強は **Opus 5**（4.8 後継 · 同額 $5/$25 · 2026-07-24） |
 | 🔭 **コードレビュー**（architect） | 大規模リポ探索・アーキ | **Gemini 3.1 Pro**（マルチモーダル MMMU-Pro 81%） · 超長文脈（>200k）→ **Opus** |
 | ⚖️ **独立批評**（critic） | 敵対的検証 | **クロスファミリー**（メインループと別ベンダー） |
@@ -178,7 +178,7 @@ opencode-go/<model>                           （effort 省略 = モデル既定
 | executor（SWE-bench Verified） | **Fable 5** | **95.0%**（Opus 5 = **サブスク込み後継** · Opus 4.8 88.6 は前世代値 · GPT-5.5 82.6 · Gemini 3.1 Pro 80.6） |
 | planner（長期ワークフロー・推論） | **GPT-5.6 Sol**† | Agents' Last Exam 52.7（5.5：46.9）· AA Intelligence 58.9 — 科学知識特化は Gemini 3.1 Pro の 94.3（[役割配置の検討](./docs/deep-dive-role-fit.md#6-2-역할-배치-최적성-검토-deep-research--실측)） |
 | architect（文脈・マルチモーダル） | **Gemini 3.1 Pro**† | 1M 文脈 · MMMU-Pro 81% |
-| default（ツール呼び出し・誠実性） | **Opus 5 / Fable 5** | ルータ品質 = 全体の上限（Fable は [§5](#5-️-最終カタログ--10-バンドル--4階層) のキャベアットに注意） |
+| default（ツール呼び出し・誠実性） | **Opus 5 / Fable 5** | ルータ品質 = 全体の上限（Fable は [§5](#5-️-最終カタログ--8-バンドル--4階層) のキャベアットに注意） |
 | critic（独立性） | **クロスファミリー** | メタ審判 > 討論型集計 |
 
 **合意原則** — † planner は 2026-07-10 の Sol GA を反映して Gemini 3.1 Pro スナップショットを置換し、architect 軸は Gemini 3.5 Pro リリース時に再検証する。
@@ -191,7 +191,7 @@ opencode-go/<model>                           （effort 省略 = モデル既定
 
 ---
 
-## 5. 🗂️ 最終カタログ — 10 バンドル · 4階層
+## 5. 🗂️ 最終カタログ — 8 バンドル · 4階層
 
 <div align="center">
 <img src="assets/profiles-matrix.svg" alt="プロファイル × 役割 マトリクス" width="100%">
@@ -209,7 +209,7 @@ profiles:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
       default:   anthropic/claude-opus-5:medium
-      executor:  openai-codex/gpt-5.6-terra:high
+      executor:  openai-codex/gpt-5.6-luna:max
       planner:   openai-codex/gpt-5.6-sol:high
       architect: google-antigravity/gemini-3.1-pro-low:high
       critic:    google-antigravity/gemini-3.1-pro-low:high
@@ -241,24 +241,6 @@ profiles:
       architect: anthropic/claude-opus-5:high
       critic:    xai/grok-4.6:high
 
-  ultimate-sol:
-    required_providers: [openai-codex, anthropic, xai]
-    model_mapping:
-      default:   openai-codex/gpt-5.6-sol:high
-      executor:  openai-codex/gpt-5.6-sol:xhigh
-      planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: anthropic/claude-opus-5:high
-      critic:    xai/grok-4.6:high
-
-  dream-team:
-    required_providers: [anthropic, openai-codex, xai]
-    model_mapping:
-      default:   anthropic/claude-fable-5:high
-      executor:  anthropic/claude-fable-5:xhigh
-      planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: anthropic/claude-opus-5:high
-      critic:    xai/grok-4.6:high
-
   llm-council:
     required_providers: [anthropic, openai-codex, google-antigravity, xai]
     model_mapping:
@@ -277,15 +259,6 @@ profiles:
       architect: google-antigravity/gemini-3.1-pro-low:high
       critic:    xai/grok-4.6:high
 
-  eco:
-    required_providers: [openai-codex, opencode-go, google-antigravity]
-    model_mapping:
-      default:   openai-codex/gpt-5.6-terra:medium
-      executor:  opencode-go/glm-5.2
-      planner:   openai-codex/gpt-5.6-luna:medium
-      architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    google-antigravity/gemini-3-flash:low
-
   monorepo:
     required_providers: [anthropic, google-antigravity, opencode-go]
     model_mapping:
@@ -294,6 +267,15 @@ profiles:
       planner:   google-antigravity/gemini-3.1-pro-low:high
       architect: anthropic/claude-opus-5:high
       critic:    opencode-go/glm-5.2
+
+  budget:
+    required_providers: [openai-codex, google-antigravity, opencode-go]
+    model_mapping:
+      default:   openai-codex/gpt-5.6-terra:medium
+      executor:  opencode-go/glm-5.2
+      planner:   opencode-go/qwen3.8-max
+      architect: google-antigravity/gemini-3.1-pro-low:high
+      critic:    google-antigravity/gemini-3.1-pro-low:high
 ```
 
 </details>
@@ -305,7 +287,7 @@ profiles:
 
 </details>
 
-カタログ全体は韓国語正本の[§5](./README.md#5-️-최종-카탈로그--10-번들--4계층)、プロファイル別の設計根拠と `opencode-go` の補足は[設計根拠](./README.md#프로필별-설계-근거)を参照。
+カタログ全体は韓国語正本の[§5](./README.md#5-️-최종-카탈로그--8-번들--4계층)、プロファイル別の設計根拠と `opencode-go` の補足は[設計根拠](./README.md#프로필별-설계-근거)を参照。
 
 ---
 

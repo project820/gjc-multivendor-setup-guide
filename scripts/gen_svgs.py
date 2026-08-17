@@ -3,7 +3,7 @@
 """gen_svgs.py — GJC 멀티벤더 가이드 SVG 자산 재생성기 (v2.1.0)
 
 assets/ 아래 4개 SVG 를 데이터 기반으로 재생성한다:
-  - role-winners.svg     : 🔥 dream-team 역할별 최강 가설 배너
+  - role-winners.svg     : 🏆 ultimate-opus 역할별 최강 가설 배너
   - profiles-matrix.svg  : 10 번들 × 5 역할 매트릭스 (4계층)
   - effort-ladder.svg    : effort 6단계 사다리 + 모델별 클램프 스트립
   - architecture.svg     : 본체 1 + 서브에이전트 4 (본체 라벨 프로필-중립)
@@ -69,6 +69,7 @@ _PROVIDER_VENDOR = {
 
 # 모델 id → SVG 표시 이름. 새 모델이 좌석에 들어오면 여기 한 줄 추가해야 한다.
 _MODEL_DISPLAY = {
+    "qwen3.8-max": "Qwen3.8 Max",
     "claude-opus-5": "Opus 5",
     "claude-opus-4-8": "Opus 4.8",
     "claude-fable-5": "Fable 5",
@@ -91,11 +92,9 @@ _PROFILE_CHROME = {
     "coding-sprint":  ("🏎 coding-sprint", "Core"),
     "cyber-cop":      ("🚨 cyber-cop", "Core · reviewer 모드"),
     "ultimate-opus":  ("🏆 ultimate-opus", "Premium (exp)"),
-    "ultimate-sol":   ("🧪 ultimate-sol", "Premium (exp) · Sol 라우터"),
-    "dream-team":     ("🔥 dream-team", "Premium (exp) · Fable 중심"),
     "llm-council":    ("🏛 llm-council", "Workflow · 좌석표+계약"),
     "escalation":     ("🛡 escalation", "Workflow · 구원투수=Fable"),
-    "eco":            ("💸 eco", "Specialized (exp)"),
+    "budget":         ("💸 budget", "Specialized (exp) · 게이트"),
     "monorepo":       ("🗺 monorepo", "Specialized (exp)"),
 }
 
@@ -173,7 +172,7 @@ ARROW_DEF = ('<defs><marker id="ah" markerWidth="9" markerHeight="9" refX="6.5" 
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# 1. role-winners.svg — 🔥 dream-team 배너
+# 1. role-winners.svg — 🏆 ultimate-opus 배너
 # ═════════════════════════════════════════════════════════════════════════════
 def gen_role_winners():
     W, H = 1256, 268
@@ -190,9 +189,9 @@ def gen_role_winners():
         ("⚖ critic", "독립 적대 비평", X, "Grok 4.6", ":high",
          "xAI · 제3계열 독립 dissent"),
     ]
-    s = svg_open(W, H, "🔥 dream-team 셋업 — 역할별 최강 가설 (Premium · experimental)")
+    s = svg_open(W, H, "🏆 ultimate-opus 셋업 — 역할별 최강 가설 (Premium · experimental)")
     s += (f'<text x="24" y="44" font-size="22" font-weight="700" fill="#1A1A28">'
-          f'🔥 dream-team 셋업 — 역할별 최강 가설 (Premium · experimental)</text>\n')
+          f'🏆 ultimate-opus 셋업 — 역할별 최강 가설 (Premium · experimental)</text>\n')
     s += ('<text x="24" y="70" font-size="13" fill="#6B6B7B">한 벤더가 모든 역할에서 '
           '1위는 아니다 — 5역할을 강점별로 3개 벤더에 분산(Anthropic·OpenAI·xAI) · '
           'role-fit L3 실측 전 experimental</text>\n')
@@ -276,11 +275,11 @@ def gen_profiles_matrix():
                       f'opacity="0.8">{esc(effort)}</text>\n')
     # 푸터
     s += (f'<text x="24" y="{footer_y}" font-size="11.5" fill="#6B6B7B">불변식: '
-          f'전 번들 멀티벤더(providers ≥2) · default = Anthropic 플래그십(예외: opt-in ultimate-sol=Sol · anthropic 미포함 eco=Terra) · '
+          f'전 번들 멀티벤더(providers ≥2) · default = Anthropic 플래그십(anthropic 미요구 번들은 적용 대상 아님) · '
           f'critic = cross-family 기본(예외는 SAME_FAMILY_OK + WARN)'
           f'</text>\n')
     s += (f'<text x="24" y="{footer_y+20}" font-size="11.5" fill="#6B6B7B">'
-          f'엔진 effort 하드룰 합법 · 🔥 dream-team = Fable 5 '
+          f'엔진 effort 하드룰 합법 · 🏆 ultimate-opus = Opus 5 '
           f'(Max/premium Team 주간한도 50% 포함 · Pro 는 credits) · llm-council/escalation 은 좌석표+워크플로 계약 · gjc {GJC_VERSION}</text>\n')
     s += "</svg>"
     return s
@@ -385,7 +384,7 @@ def gen_architecture():
           'fill="#33334a" text-anchor="middle">📥 사용자 작업</text>\n')
     s += ('<line x1="500" y1="98" x2="500" y2="122" stroke="#9AA0AE" '
           'stroke-width="1.5" marker-end="url(#ah)"/>\n')
-    # 본체 박스 — 프로필-중립 라벨 (dream-team 은 Fable 5 · ultimate-sol 은 Sol default)
+    # 본체 박스 — 프로필-중립 라벨 (ultimate-opus 는 Opus 5 default)
     s += '<rect x="320" y="124" width="360" height="90" rx="14" fill="#D9583E"/>\n'
     s += ('<text x="500" y="150" font-size="14.5" font-weight="800" fill="#fff" '
           'text-anchor="middle">🎛 default · 본체</text>\n')

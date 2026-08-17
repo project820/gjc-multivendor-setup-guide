@@ -56,29 +56,48 @@ gjc                        # 새 세션은 자동으로 daily 사용
 
 ## 🧭 어떤 번들을 쓸까?
 
-| Tier | 번들 | 한 줄 정의 | 이럴 때 |
-|---|---|---|---|
-| Core | ⭐ **daily** | 본체 Opus + 위임 역할별 분산 — **구독 OAuth 3벤더만으로 activation** | **평소 기본** |
-| Core | 🏎️ **coding-sprint** | executor 를 Opus 로 승격한 구현 처리량 특화 | 순수 구현 스프린트 |
+**보유 구독에서 시작한다.** tier 를 먼저 읽지 마라 — **지금 무엇을 쓸 수 있는지**부터 정한다.
+
+아래 표의 왼쪽은 **그 번들이 실제로 돌기 위해 반드시 있어야 하는 최소 조합**이다.
+정본 `gjc-profiles.yml` 의 `required_providers` 를 그대로 옮긴 것이라 임의로 줄이거나
+늘리지 않았다. 자신이 가진 조합이 어떤 행을 **포함**하면 그 행의 번들을 쓸 수 있다.
+여러 행을 포함하면 그 행들의 **합집합**을 다 쓸 수 있다.
+
+| 최소 필요 조합 | 쓸 수 있는 번들 |
+|---|---|
+| `anthropic` + `openai-codex` + `google-antigravity` | ⭐ **daily** · 🏎 **coding-sprint** · 🚨 **cyber-cop** |
+| `anthropic` + `openai-codex` + `xai` | 🏆 **ultimate-opus** |
+| `anthropic` + `openai-codex` + `google-antigravity` + `xai` | 🛡 **escalation** · 🏛 **llm-council** |
+| `anthropic` + `google-antigravity` + `opencode-go` | 🗺 **monorepo** |
+| `openai-codex` + `google-antigravity` + `opencode-go` | 💸 **budget** (게이트 통과 시에만 노출) |
+
+### 인증 방식은 별개 축이다
+
+같은 "보유" 라도 얻는 방법이 다르다. 조합을 채울 때 이걸 먼저 확인하라.
+
+| 프로바이더 | 얻는 방법 |
+|---|---|
+| `anthropic` · `openai-codex` · `google-antigravity` | `/login <provider>` — 구독 로그인 |
+| `xai` | `/login xai` 또는 `XAI_API_KEY` 설정 |
+| `opencode-go` | `OPENCODE_API_KEY` |
+
+> [!TIP]
+> **세 벤더 로그인만 있으면** 첫 행이 열린다 — daily · coding-sprint · cyber-cop.
+> 대부분은 여기서 시작하면 된다. 나머지는 필요할 때 채워 넣는 확장이다.
+
+전체 좌석표(번들 × 5역할)는 [§5](#5-️-최종-카탈로그--8-번들--4계층) 에 있다.
+
+### tier 는 결과 라벨이다
+
+Core / Premium / Workflow bundle / Specialized 는 각 번들 카드의 **배지**로만 남는다.
+"어떤 걸 쓸까" 의 1차 기준이 아니다 — 위 표가 1차 기준이다.
+
 | Core | 🚨 **cyber-cop** | reviewer 모드 — architect·critic 주연, PR 리뷰·보안 감사 전용 | 남의 PR 검토·머지 게이트·보안 감사 |
-| Premium (exp) | 🏆 **ultimate-opus** | Anthropic 품질 기저 프리미엄 | 정확성이 비용보다 중요 |
-| Premium (exp) | 🧪 **ultimate-sol** | Sol 기저 프리미엄 — agentic/터미널/브라우징 축 | 장기 자율 워크플로 실험 |
-| Premium (exp) | 🔥 **dream-team** | 역할별 최강 가설 — Fable default+executor | 최고 품질, credits 각오 |
-| Workflow | 🏛️ **llm-council** | 4계열 좌석표와 Council 계약 | 다계열 합의가 필요한 결정 |
-| Workflow | 🛡️ **escalation** | 수동 에스컬레이션 — Fable 구원투수 + critic 3표 패널 | 머지·보안·결제·비가역 변경 |
-| Specialized (exp) | 💸 **eco** | 멀티벤더 저단가 실험 — *절대 최저가 아님* | 비용 압박·대량 작업 |
-| Specialized (exp) | 🗺️ **monorepo** | 전역 ≥1M ctx | 거대 코드베이스 |
-
-전체 카탈로그 ↓ [§5](#5-️-최종-카탈로그--10-번들--4계층) · reviewer 모드·티저는 아래 참조.
-
 > **🚨 cyber-cop** — GJC 최초 reviewer 모드: architect·critic이 주연이고 executor는 재현 조연이다. 고위험 PR은 3표 패널로 판정하며, PR #4~#7에서 머지 전 결함 10건을 차단했다.
 > 설치: `curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
 > → [공지 문서](./docs/whats-new-cyber-cop.md)
-
 > **Extragoal — GPT-5.5 Pro 최종리뷰 레인 (opt-in)** — Pro 심층 추론을 개발·QA·보안점검의 회전수-1 판정석에 투입한다. 상류 기본 레인은 이것 없이도 동작하며, `GJC_SETUP_EXTRAGOAL=1`로 설치한다.
 > → [Extragoal Maximalist 문서](./docs/extragoal-maximalist.md)
-
----
 
 ## 📑 목차
 
@@ -88,7 +107,7 @@ gjc                        # 새 세션은 자동으로 daily 사용
 2. [핵심 설계](#2--핵심-설계)
 3. [GJC 엔진 사실](#3--gjc-엔진-사실)
 4. [벤치마크 근거](#4--벤치마크-근거)
-5. [최종 카탈로그 — 10 번들 · 4계층](#5-️-최종-카탈로그--10-번들--4계층)
+5. [최종 카탈로그 — 10 번들 · 4계층](#5-️-최종-카탈로그--8-번들--4계층)
 6. [검증 매트릭스](#6--검증-매트릭스)
 7. [설치 / 제거](#7-️-설치--제거)
 8. [동적 라우팅 전략](#8--동적-라우팅-전략)
@@ -102,7 +121,7 @@ gjc                        # 새 세션은 자동으로 daily 사용
 
 | 역할 | 무엇을 하나 | 최적 모델 |
 |---|---|---|
-| 🧠 **추론·설계**(planner) | 순서·수용기준 짜기 | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · 2026-07-09 GA) — 번들별 좌석은 [§5](#5-️-최종-카탈로그--10-번들--4계층) 참조(예외: cyber-cop·monorepo=Gemini, eco=Luna) |
+| 🧠 **추론·설계**(planner) | 순서·수용기준 짜기 | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · 2026-07-09 GA) — 번들별 좌석은 [§5](#5-️-최종-카탈로그--8-번들--4계층) 참조(예외: cyber-cop·monorepo=Gemini, eco=Luna) |
 | 🔨 **구현**(executor) | 실제 코드 작성·수정 | **Claude Fable 5** (SWE-bench Verified **95.0**) — 구독 포함 최강은 **Opus 5**(4.8 후계 · $5/$25 동가 · 2026-07-24) |
 | 🔭 **코드리뷰**(architect) | 대형 리포 탐색·아키텍처 | **Gemini 3.1 Pro** (멀티모달 MMMU-Pro 81%) · 초장문맥(>200k)은 **Opus** |
 | ⚖️ **독립 비평**(critic) | 결과 적대 검증 | **cross-family** (본체와 다른 벤더) |
@@ -196,7 +215,7 @@ opencode-go/<model>                           (effort 생략 = 모델 기본값)
 | executor (SWE-bench Verified) | **Fable 5** | **95.0%** (Opus 5 = **구독 포함 최강 후계** · Opus 4.8 88.6은 직전 세대 수치 · GPT-5.5 82.6 · Gemini 3.1 Pro 80.6) |
 | planner (장기 워크플로·추론) | **GPT-5.6 Sol**† | Agents' Last Exam 52.7(5.5: 46.9) · AA Intelligence 58.9 — GPQA 단독 1위는 Sonnet 5 96.2 · 과학지식 특화는 Gemini 3.1 Pro 94.3 ([§6-2](./docs/deep-dive-role-fit.md#6-2-역할-배치-최적성-검토-deep-research--실측)) |
 | architect (ctx·멀티모달) | **Gemini 3.1 Pro**† | 1M ctx · MMMU-Pro 81% |
-| default (툴콜·정직성) | **Opus 5 / Fable 5** | 라우터 품질 = 전체 상한 (Fable은 refusal·과금 캐비앗 — [§5](#5-️-최종-카탈로그--10-번들--4계층)) |
+| default (툴콜·정직성) | **Opus 5 / Fable 5** | 라우터 품질 = 전체 상한 (Fable은 refusal·과금 캐비앗 — [§5](#5-️-최종-카탈로그--8-번들--4계층)) |
 | critic (독립성) | **cross-family** | 메타-심판 > 토론형 집계 |
 
 **핵심 합의 원칙** — † planner는 2026-07-10 Sol GA를 반영해 2026-07-02 Gemini 3.1 Pro 스냅샷을 대체했고, architect 축은 Gemini 3.5 Pro 출시 시 재검증한다.
@@ -209,7 +228,7 @@ opencode-go/<model>                           (effort 생략 = 모델 기본값)
 
 ---
 
-## 5. 🗂️ 최종 카탈로그 — 10 번들 · 4계층
+## 5. 🗂️ 최종 카탈로그 — 8 번들 · 4계층
 
 <div align="center">
 <img src="assets/profiles-matrix.svg" alt="프로필 × 역할 매트릭스" width="100%">
@@ -229,7 +248,7 @@ profiles:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
       default:   anthropic/claude-opus-5:medium                 # v2.1: 4.8→5 like-for-like. 본체 효율 knee · 1M ctx · $5/$25 동가
-      executor:  openai-codex/gpt-5.6-terra:high                # 코딩특화 $2.5/15에 ≈GPT-5.5급(공식 5.6 평가표)·벤더분산
+      executor:  openai-codex/gpt-5.6-luna:max                # 코딩특화 $2.5/15에 ≈GPT-5.5급(공식 5.6 평가표)·벤더분산
       planner:   openai-codex/gpt-5.6-sol:high                  # 장기 워크플로 완주 1위(Agents' Last Exam 52.7)·tool-heavy 분해
       architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx·멀티모달(MMMU-Pro)·GPQA 94.3 — Gemini 전문좌석 (3.5 Pro 미입점)
       critic:    google-antigravity/gemini-3.1-pro-low:high     # grok→Gemini — xai 키 장벽 제거(구독-only daily) + 본체(Opus 5)와 cross-family 유지. ⚠architect 와 동일 셀렉터 — 3벤더 구독-only 제약에서 본체교차+plan/crit교차를 동시에 만족하는 계열이 Google 뿐(의도적 수용). 독립성 강화 원하면 xai 로그인 후 critic 을 xai/grok-4.6:medium 으로 스왑
@@ -266,26 +285,6 @@ profiles:
       architect: anthropic/claude-opus-5:high                   # 1M 장문. MRCR 76%@1M 은 Opus 4.6 실측 — 5 수치는 미독립측정
       critic:    xai/grok-4.6:high                              # v2.1: 4.5→4.6 like-for-like. 제3계열 독립 dissent(결함회수 최강 근거는 없음)
 
-  ultimate-sol:                        # 🧪 OpenAI(Sol) 기저 프리미엄 — agentic/terminal/브라우징 축. Anthropic 보유 번들 중 유일한 비-Anthropic default(validator 예외; anthropic 미포함 eco 는 불변식 비적용)
-    required_providers: [openai-codex, anthropic, xai]
-    model_mapping:
-      default:   openai-codex/gpt-5.6-sol:high                  # 라우터(장기 워크플로 완주 1위). ctx 372K(0.13.3 표기) — 1M 아님 주의
-      executor:  openai-codex/gpt-5.6-sol:xhigh                 # Terminal-Bench 88.8·DeepSWE 72.7. ⚠METR 게이밍 캐비앗 — SWE류 단독근거 금지
-      planner:   openai-codex/gpt-5.6-sol:xhigh                 # Sol 3좌석 = 의도된 정체성(자기강화 리스크는 아래 2좌석이 완충)
-      architect: anthropic/claude-opus-5:high                   # cross-family 검증축 1 — 1M 장문
-      critic:    xai/grok-4.6:high                              # cross-family 검증축 2
-
-  dream-team:                          # 🔥 역할별 최강 가설 (구 ultimate-f5/legend 후계) — Fable 중심
-    required_providers: [anthropic, openai-codex, xai]
-    model_mapping:
-      default:   anthropic/claude-fable-5:high                  # 라우터=품질 상한. refusal(HTTP 200+stop_reason) 유의. 2026-07-20부터 Max/premium Team 은 주간 한도 50% 포함, Pro/standard 는 credits
-      executor:  anthropic/claude-fable-5:xhigh                 # SWE-Bench Pro 80.0(공식표 자기불리)·FrontierMath T4. ⚠:max 금지(클램프 가능)
-      planner:   openai-codex/gpt-5.6-sol:xhigh                 # 분해·tool-heavy 는 Sol 축
-      architect: anthropic/claude-opus-5:high                   # ⚠executor 와 같은 claude 계열 — 인간 판정 SAME_FAMILY_OK(Fable≠Opus 모델 분리·1M 장문)
-      critic:    xai/grok-4.6:high                              # 제3계열 dissent
-
-  # ─────────────── Workflow bundle tier (좌석표 + 동반 워크플로) ───────────────
-
   llm-council:                         # 🏛 4계열 좌석표(판정석은 Google·xAI·OpenAI 3계열, 본체 Anthropic 은 집계자 제한 — 자기선호 격리). ★프로필은 좌석표일 뿐 — 병렬 독립호출·quorum·raw verdict 보존은
     required_providers: [anthropic, openai-codex, google-antigravity, xai]   #   routing-rules.md "Council 계약"이 실행한다(YAML 이 자동 실행하지 않음)
     model_mapping:
@@ -306,15 +305,6 @@ profiles:
 
   # ─────────────── Specialized tier (experimental) ───────────────
 
-  eco:                                 # 💸 멀티벤더 저단가 실험 — "절대 최저비용" 아님(최소 의존 저가 경로는 GJC 내장 codex-eco).
-    required_providers: [openai-codex, opencode-go, google-antigravity]      #   v2: anthropic·xai 제거 — 3벤더
-    model_mapping:
-      default:   openai-codex/gpt-5.6-terra:medium              # 비-Anthropic default 는 anthropic 미포함 번들이라 router 불변식 비적용
-      executor:  opencode-go/glm-5.2                            # MIT $1.4/$4.4. 08-16·08-17 실호출 ok. deepseek-v4-flash 는 이 계정 403 China opt-in 이라 출하 좌석에서 내림(카탈로그 id 는 생존 — 지역 해제 시 재평가)
-      planner:   openai-codex/gpt-5.6-luna:medium               # Luna $1/$6
-      architect: google-antigravity/gemini-3.1-pro-low:high     # 리터럴 -low:high 핀
-      critic:    google-antigravity/gemini-3-flash:low          # 3.5-flash-low 는 08-16 부활했으나 라이브 표면 플랩 — 안정 id 유지
-
   monorepo:                            # 🗄 거대 코드베이스 — 전역 1M ctx (★gpt-5.5(272K)/5.6(372K) 배제 — 1M 미달)
     required_providers: [anthropic, google-antigravity, opencode-go]
     model_mapping:
@@ -323,6 +313,15 @@ profiles:
       planner:   google-antigravity/gemini-3.1-pro-low:high     # 추론(스코프 입력). 1M window ≠ 완전 recall — 청크 누적 워크플로 전제
       architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste 는 Opus 5 가 476k 통과(08-17 배터리) — Opus 4.8 의 476k 🔴 는 구세대 수치
       critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51), cross-family vs anthropic. effort 무핀(opencode-go 규칙)
+
+  budget:                              # v3 게이트 — 구독 없이 저가 API 만으로 5역할
+    required_providers: [openai-codex, google-antigravity, opencode-go]
+    model_mapping:
+      default:   openai-codex/gpt-5.6-terra:medium
+      executor:  opencode-go/glm-5.2
+      planner:   opencode-go/qwen3.8-max
+      architect: google-antigravity/gemini-3.1-pro-low:high
+      critic:    google-antigravity/gemini-3.1-pro-low:high
 
 # ─────────────────────────────────────────────────────────────────────────────
 # v2.0.1 → v2.1.0: Opus 4.8→Opus 5 · Grok 4.5→Grok 4.6 like-for-like. 10번들·4계층 불변.
@@ -337,7 +336,7 @@ profiles:
 # Claude Opus 5 (2026-07-24): $5/$25 동가 · 1M/128K · effort low..max · Max 기본·Pro 최강. 4.8 은 legacy 로 잔류·호출 가능.
 # GPT-5.6(2026-07-09 GA): Sol $5/$30 · Terra $2.5/$15 · Luna $1/$6 — API 1.05M/128K, GJC 0.13.3 usable prompt budget 372K.
 #   :max 는 수용되나 심도 미검증 — 미출하(상한 xhigh). ⚠ METR: Sol 의 SWE 평가 게이밍 적발 — SWE류 벤치 단독근거 승격 금지.
-# opencode-go: OPENCODE_API_KEY 필요(eco.executor·monorepo.critic). glm-5.2 검증✅(08-16).
+# opencode-go: OPENCODE_API_KEY 필요(budget.executor·budget.planner·monorepo.critic). glm-5.2 검증✅(08-16).
 #   deepseek-v4-flash/pro 는 이 계정 08-16 에 403 China opt-in — 카탈로그 잔류, 지역 정책.
 # xai: `/login xai` 또는 XAI_API_KEY 설정 (premium 3종 + llm-council/escalation 의 critic).
 #   08-17 실측: XAI_API_KEY 환경변수 없이 xai/grok-4.6:high 성공(단일 계정). 메커니즘 단정 금지 — 신규 사용자는 둘 중 하나를 설정해야 한다.
@@ -366,11 +365,9 @@ profiles:
 - **coding-sprint** — Opus `:high` executor와 Sol 분해의 구현 처리량 번들; ⚠ planner/critic GPT 계열은 2026-07-10 `SAME_FAMILY_OK`(Sol≠Terra, 전체 3벤더).
 - **cyber-cop** — Opus architect 1차 판정·Sol critic 머지 게이트의 reviewer 모드; 고위험은 3표 독립 패널로 반대 근거를 찾는다.
 - **ultimate-opus** — Opus 3좌석의 안정성·1M을 Sol planner·Grok critic이 보완한다; ⚠ 같은 Claude 계열은 `SAME_FAMILY_OK`이며 세 독립 의견이 아니다.
-- **ultimate-sol** — Sol 장기 워크플로·터미널·브라우징 3좌석 experimental; ⚠ 유일한 비-Anthropic default(`NON_ANTHROPIC_DEFAULT_OK`), ctx 372K와 METR SWE 게이밍으로 SWE 단독근거 금지.
-- **dream-team** — Fable default+executor, Sol·Opus·Grok의 최고품질 가설; ⚠ 07-20부터 Max/premium Team은 주간 한도 50% 포함·Pro/standard는 credits, HTTP 200 refusal·30-day retention·ZDR 불가, Claude 계열은 `SAME_FAMILY_OK`.
 - **llm-council** — Google·xAI·OpenAI가 판정하고 Anthropic은 raw verdict를 보존하는 집계자; [`routing-rules.md`](./routing-rules.md)의 Council 계약(독립호출·quorum)이 필요하다.
 - **escalation** — 실패 뒤 Fable `:xhigh`와 3표 critic을 쓰는 수동 게이트; Escalation 계약이 트리거·human gate를 정하고 refusal 시 Opus `:max`로 강등한다.
-- **eco** — Terra·GLM-5.2·Luna·Gemini 저단가 실험(절대 최저가는 내장 `codex-eco`); `grok-4-1-fast` retire/redirect 뒤 critic은 07-10 `gemini-3-flash:low`로 교체됐고, executor는 DeepSeek가 이 계정에서 403 China opt-in 이라 v2.1.0에서 `glm-5.2`로 교체됐다.
+- **budget** — 저단가 API 경로 — *절대 최저가 아님*, `OPENCODE_API_KEY` 필요(게이트 통과 시 노출).
 - **monorepo** — Opus architect·GLM-5.2 critic의 1M ctx 번들; 완전 recall이 아니므로 청크 누적을 권한다. 다만 >~400k 단일 paste 가 꼭 필요하면 **architect 좌석의 `claude-opus-5:high` 가 그대로 처리한다**(08-17 배터리에서 476k 통과 — Opus 4.8 의 476k 🔴 는 구세대 수치).
 
 ---

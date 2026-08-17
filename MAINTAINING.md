@@ -60,7 +60,13 @@ It also holds the dated deep-research / consultant / model-council reports that 
 
 - **MINOR** — profile/model placement change (must ship with `revalidate.sh` evidence), or a substantial standalone addition such as infra tooling or a new language (i18n) — see v1.2/v1.3.
 - **PATCH/Docs** — wording/rationale; keep version or `x.y.z`.
-- **MAJOR** — structural redesign (role model, setup flow, routing).
+- **MAJOR** — structural redesign (role model, setup flow, routing). Worked example: **v3.0.0**
+  cut the catalog from 10 bundles to 7 plus a gated `budget`, redefined the Core tier from
+  "three-provider entry point" to "activates with the three subscription logins alone
+  (`anthropic`, `openai-codex`, `google-antigravity`) — no API key and no `xai`", replaced the
+  tier-ordered selection funnel with a minimum-required-provider matrix, and amended the
+  validator itself (Luna-only `:max`, hard `default`↔`critic` family rule). A MAJOR is not
+  "many edits" — it is a change to a contract readers or the gate already depend on.
 - Every release: `python3 scripts/validate-profiles.py` green → update `CHANGELOG.md` → tag `vX.Y.Z`.
 - **Adding or moving a profile touches a 5-file set that must move together**: `gjc-profiles.yml` + the embedded YAML blocks in **all four** `README*.md` (the validator enforces README↔file parity and fails CI on any mismatch). `install.sh` derives its profile count/roster from the downloaded YAML (since v1.4), so it needs no manual edit — but sanity-check its output once.
 - **i18n**: when `gjc-profiles.yml` or the catalog changes, update the YAML block + tables in **all** language READMEs (`README.md` KO canonical · `README.en.md` · `README.zh.md` · `README.ja.md`). `validate-profiles.py` enforces YAML parity across every `README*.md`. Prose/comments translate; selectors stay verbatim. **KO-only blocks (intentional — do not "fix" translations by re-adding them)**: the §5 per-profile design-rationale block, the §5 `opencode-go`/grok-composer TIP, the table of contents, and the deep §6-2/§6-3 analysis (now `docs/deep-dive-role-fit.md`, KO-only doc) (translations carry a summary paragraph + links to the KO canonical instead). `routing-rules.md` ships **Korean-only** by design — selectors/profile names in it are language-neutral; keep a language note next to the injection command in EN/ZH/JA.

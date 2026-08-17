@@ -7,7 +7,7 @@
 
 | 항목 | 값 |
 |---|---|
-| 가이드 버전 | **v2.1.0** (2026-08-17 — Opus 5 · Grok 4.6 like-for-like + eco.executor 교체; 10번들·4계층 불변) |
+| 가이드 버전 | **v3.0.0** (카탈로그 재설계 — 8번들·4계층, daily.executor Luna:max) |
 | 기준 GJC | **0.13.3** (로컬 바이너리 확인 2026-08-16 · [upstream v0.13.3](https://github.com/Yeachan-Heo/gajae-code/releases/tag/v0.13.3) 2026-08-15) |
 | 번들 | **10종 · 4계층** (Core 3 · Premium exp 3 · Workflow 2 · Specialized exp 2) |
 | 실호출 검증 | 출하 좌석 게이트 정본 = **`evidence/2026-08-17-selectors-rerun-2.md`**(개정된 revalidate.sh 실행, 회귀 0). 단일 메시지 476k 근거 = `evidence/2026-08-17-selectors.md`(하네스 수정 전 산출물). `evidence/2026-08-16-selectors.md` 는 eco.executor 가 DeepSeek 이던 시점이라 그 좌석이 403 으로 실패해 있다 |
@@ -17,15 +17,13 @@
 
 | 번들 | default | executor | planner | architect | critic | 인증 |
 |---|---|---|---|---|---|---|
-| ⭐ daily | Opus5:med | Terra:high | Sol:high | Gemini`-low:high` | Gemini`-low:high`¹ | 구독 3 |
+| ⭐ daily | Opus5:med | Luna:max | Sol:high | Gemini`-low:high` | Gemini`-low:high`¹ | 구독 3 |
 | 🏎 coding-sprint | Opus5:med | Opus5:high | Sol:high² | Gemini`-low:high` | Terra:high² | 구독 3 |
 | 🚨 cyber-cop | Opus5:high | Sol:high | Gemini`-low:high` | Opus5:high | Sol:high | 구독 3 |
 | 🏆 ultimate-opus | Opus5:high | Opus5:high³ | Sol:xhigh | Opus5:high³ | Grok4.6:high | +xai |
-| 🧪 ultimate-sol | Sol:high⁴ | Sol:xhigh | Sol:xhigh | Opus5:high | Grok4.6:high | +xai |
-| 🔥 dream-team | Fable:high | Fable:xhigh³ | Sol:xhigh | Opus5:high³ | Grok4.6:high | +xai |
 | 🏛 llm-council | Opus5:high⁵ | Terra:high | Sol:xhigh | Gemini`-low:high` | Grok4.6:high | 구독 3+xai |
 | 🛡 escalation | Opus5:high | Fable:xhigh | Sol:xhigh | Gemini`-low:high` | Grok4.6:high | 구독 3+xai |
-| 💸 eco | Terra:med | GLM-5.2 | Luna:med | Gemini`-low:high` | Gemini 3-flash:low | codex+go+google |
+| 💸 budget | Terra:med | GLM-5.2 | Qwen3.8Max | Gemini`-low:high` | Gemini`-low:high` | codex+go+google |
 | 🗺 monorepo | Opus5:med | Opus5:high³ | Gemini`-low:high` | Opus5:high³ | GLM-5.2 | anthropic+google+go |
 
 ¹ architect와 동일 셀렉터 — 3벤더 구독-only 제약의 의도적 트레이드오프(xai 로그인 시 `grok-4.6:medium` 스왑 권장). ² plan/crit 동계열 — `SAME_FAMILY_OK` 인간판정. ³ exec/arch 동계열 — `SAME_FAMILY_OK`. ⁴ 유일한 Anthropic-보유 비-Anthropic 라우터(`NON_ANTHROPIC_DEFAULT_OK`, WARN). ⁵ 집계자 제한 — 판정석은 Google·xAI·OpenAI 3계열.
@@ -39,13 +37,14 @@
 | Claude Fable 5 | 10 / 50 (배치 5/25) | 1M/128K | **xhigh** 출하상한 (`:max` 수용·심도 미검증) · thinking 상시-온 · refusal=HTTP 200+`stop_reason` · 30d retention/ZDR 불가 · 07-20부터 Max/premium Team 주간한도 50% 포함, Pro=credits | 08-16✅ |
 | GPT-5.6 Sol | 5 / 30 | **372K**/128K (0.13.3 표기, API 1.05M과 별개) | **xhigh** 출하상한 (`:max` 수용·심도 미검증) | 08-16✅ |
 | GPT-5.6 Terra | 2.5 / 15 | 372K/128K | xhigh 출하상한 | 08-16✅ |
-| GPT-5.6 Luna | 1 / 6 | 372K/128K | xhigh 출하상한 | 08-16✅ |
+| GPT-5.6 Luna | 1 / 6 | 372K/128K | **:max 출하**(D-1 이 `{max}` 단독 강제) | 08-16✅ |
 | Gemini 3.1 Pro | 프리뷰/구독¹ | 1M/66K (MRCR 1M 26.3% — nominal ≠ recall) | `low`/`high` 2단 · **`-low:high` 리터럴 핀** | 08-16✅ |
 | Gemini 3-flash | 프리뷰/구독¹ | 1M/66K | minimal..high | 08-16✅ |
 | Grok 4.6 | 2 / 6 (<200k) · 4 / 12 (≥200k) | provider 500K | 카탈로그 **xhigh** · 출하 **high** · xai API | 08-16✅ |
 | Grok 4.5 | 2 / 6 | 500K | **high** (레거시 카나리) | 08-16✅ |
 | DeepSeek V4 Flash | 0.14 / 0.28 | 1M | effort 생략 | **미출하** — 카탈로그 잔류 · 이 계정 08-16·17 **403 China opt-in** |
-| GLM-5.2 | 1.40 / 4.40 | 1M/131K | effort 생략(opencode-go 규칙) | 08-16·17✅ — eco executor · monorepo critic |
+| GLM-5.2 | 1.40 / 4.40 | 1M/131K | effort 생략(opencode-go 규칙) | 08-16·17✅ — budget executor · monorepo critic |
+| Qwen3.8 Max | — | — | effort 생략(opencode-go 규칙) | 08-17✅ 프로브 ok — budget planner |
 
 ¹ Antigravity = 무료 공개 프리뷰 + AI Pro/Ultra 구독 시 한도 상향([공식 plans](https://antigravity.google/docs/plans)). Gemini 3.5 Pro 미입점.
 
@@ -61,7 +60,7 @@
 ## 5. 불변식 (validator 강제)
 
 1. 전 번들 멀티벤더 — **실사용 벤더 ≥2** (required_providers 패딩으로 우회 불가, 패딩은 WARN)
-2. default = Anthropic 플래그십 (예외: `ultimate-sol` WARN 등재 · anthropic 미포함 `eco`는 비적용)
+2. default = Anthropic 플래그십 (anthropic 미요구 번들은 적용 대상 아님 — 예외 목록 없음)
 3. exec/arch · plan/crit cross-family (예외는 `SAME_FAMILY_OK` 등재 + WARN 영구 표면화 — 현재 4건)
 4. effort 하드룰 (§3 상한 위반은 하드에러)
 5. required_providers ⊇ 실사용 provider

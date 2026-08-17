@@ -1,9 +1,9 @@
-# GJC 멀티벤더 셋업 v2.1.0 — 10 번들 (claude · gpt · grok · gemini · opencode go)
-# v2 구조: "10개 동등한 프로필"이 아니라 "10개 user-facing 번들, 4계층(tier)"이다.
+# GJC 멀티벤더 셋업 v3.0.0 — 8 번들 (claude · gpt · grok · gemini · opencode go)
+# v3 구조: "8개 동등한 프로필"이 아니라 "8개 user-facing 번들, 4계층(tier)"이다.
 #   Core            : daily · coding-sprint · cyber-cop        (실사용 진입점, 3-provider)
-#   Premium (exp)   : ultimate-opus · ultimate-sol · dream-team (최고품질 가설 — role-fit L3 통과 전 "최강" 단정 금지)
+#   Premium (exp)   : ultimate-opus                             (최고품질 가설 — role-fit L3 통과 전 "최강" 단정 금지)
 #   Workflow bundle : llm-council · escalation                  (YAML 좌석표만으로 동작하지 않음 — routing-rules.md 의 동반 워크플로 계약 필수)
-#   Specialized(exp): eco · monorepo                            (저단가 실험 / 거대 레포)
+#   Specialized(exp): budget · monorepo                         (게이트 저단가 / 거대 레포)
 # 설계 원칙: 전 번들 멀티벤더(required_providers >= 2, 단일 벤더 금지 — 단일 벤더 수요는 GJC 내장 프로필 몫) ·
 #   critic=cross-family 기본(예외는 validator SAME_FAMILY_OK 로만, WARN 영구 표면화) · 무조건 max 금지 · 매쿼리 스왑 금지.
 # 엔진 하드룰(GJC 0.13.3 실효, 2026-08-16 실호출): Gemini Pro={low,high} · Sonnet(4.6) 최대 high · Fable 5 최대 xhigh(:max는 수용되나 클램프 가능 — 미출하)
@@ -11,7 +11,7 @@
 #             · grok-build/grok-4.6 은 bare 만 해석(:high = not found) — 출하 좌석은 xai 핀.
 #             · antigravity 고추론 = gemini-3.1-pro-low:high 리터럴 핀. 퍼지 공간 fail-closed 유지 — gemini-3.1-pro-high 는 "not found".
 #             · Gemini 3.5 Pro 는 카탈로그에 없음. Flash 3.5/3.6 은 라이브이나 좌석 미승격(클래스 상이).
-#             · gpt-5.6 3종 카탈로그 low..max — :max 실호출 수용되나 심도 미검증, 출하 상한은 xhigh. usable prompt budget 372K(0.13.3 표기; 0.9.6은 373K).
+#             · gpt-5.6 3종 카탈로그 low..max — :max 실호출 수용되나 심도 미검증, 출하 상한 xhigh(Luna 는 :max 단독 허용 — D-1 강제). usable prompt budget 372K(0.13.3 표기; 0.9.6은 373K).
 # grok-4.6: `/login xai` 또는 XAI_API_KEY — $2/$6 (<200k prompt) / $4/$12 (≥200k) · ctx 500K. grok-build 변종은 bare 만 검증, 미출하.
 # Gemini 는 google-antigravity 프로바이더(무료 공개 프리뷰 + AI Pro/Ultra 는 한도 상향).
 # 근거: evidence/2026-08-16-catalog.txt · evidence/2026-08-16-selectors.md · evidence/2026-08-16-notes.md
@@ -28,7 +28,7 @@ profiles:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
       default:   anthropic/claude-opus-5:medium                 # v2.1: 4.8→5 like-for-like. 본체 효율 knee · 1M ctx · $5/$25 동가
-      executor:  openai-codex/gpt-5.6-terra:high                # 코딩특화 $2.5/15에 ≈GPT-5.5급(공식 5.6 평가표)·벤더분산
+      executor:  openai-codex/gpt-5.6-luna:max                # 코딩특화 $2.5/15에 ≈GPT-5.5급(공식 5.6 평가표)·벤더분산
       planner:   openai-codex/gpt-5.6-sol:high                  # 장기 워크플로 완주 1위(Agents' Last Exam 52.7)·tool-heavy 분해
       architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx·멀티모달(MMMU-Pro)·GPQA 94.3 — Gemini 전문좌석 (3.5 Pro 미입점)
       critic:    google-antigravity/gemini-3.1-pro-low:high     # grok→Gemini — xai 키 장벽 제거(구독-only daily) + 본체(Opus 5)와 cross-family 유지. ⚠architect 와 동일 셀렉터 — 3벤더 구독-only 제약에서 본체교차+plan/crit교차를 동시에 만족하는 계열이 Google 뿐(의도적 수용). 독립성 강화 원하면 xai 로그인 후 critic 을 xai/grok-4.6:medium 으로 스왑
@@ -65,26 +65,6 @@ profiles:
       architect: anthropic/claude-opus-5:high                   # 1M 장문. MRCR 76%@1M 은 Opus 4.6 실측 — 5 수치는 미독립측정
       critic:    xai/grok-4.6:high                              # v2.1: 4.5→4.6 like-for-like. 제3계열 독립 dissent(결함회수 최강 근거는 없음)
 
-  ultimate-sol:                        # 🧪 OpenAI(Sol) 기저 프리미엄 — agentic/terminal/브라우징 축. Anthropic 보유 번들 중 유일한 비-Anthropic default(validator 예외; anthropic 미포함 eco 는 불변식 비적용)
-    required_providers: [openai-codex, anthropic, xai]
-    model_mapping:
-      default:   openai-codex/gpt-5.6-sol:high                  # 라우터(장기 워크플로 완주 1위). ctx 372K(0.13.3 표기) — 1M 아님 주의
-      executor:  openai-codex/gpt-5.6-sol:xhigh                 # Terminal-Bench 88.8·DeepSWE 72.7. ⚠METR 게이밍 캐비앗 — SWE류 단독근거 금지
-      planner:   openai-codex/gpt-5.6-sol:xhigh                 # Sol 3좌석 = 의도된 정체성(자기강화 리스크는 아래 2좌석이 완충)
-      architect: anthropic/claude-opus-5:high                   # cross-family 검증축 1 — 1M 장문
-      critic:    xai/grok-4.6:high                              # cross-family 검증축 2
-
-  dream-team:                          # 🔥 역할별 최강 가설 (구 ultimate-f5/legend 후계) — Fable 중심
-    required_providers: [anthropic, openai-codex, xai]
-    model_mapping:
-      default:   anthropic/claude-fable-5:high                  # 라우터=품질 상한. refusal(HTTP 200+stop_reason) 유의. 2026-07-20부터 Max/premium Team 은 주간 한도 50% 포함, Pro/standard 는 credits
-      executor:  anthropic/claude-fable-5:xhigh                 # SWE-Bench Pro 80.0(공식표 자기불리)·FrontierMath T4. ⚠:max 금지(클램프 가능)
-      planner:   openai-codex/gpt-5.6-sol:xhigh                 # 분해·tool-heavy 는 Sol 축
-      architect: anthropic/claude-opus-5:high                   # ⚠executor 와 같은 claude 계열 — 인간 판정 SAME_FAMILY_OK(Fable≠Opus 모델 분리·1M 장문)
-      critic:    xai/grok-4.6:high                              # 제3계열 dissent
-
-  # ─────────────── Workflow bundle tier (좌석표 + 동반 워크플로) ───────────────
-
   llm-council:                         # 🏛 4계열 좌석표(판정석은 Google·xAI·OpenAI 3계열, 본체 Anthropic 은 집계자 제한 — 자기선호 격리). ★프로필은 좌석표일 뿐 — 병렬 독립호출·quorum·raw verdict 보존은
     required_providers: [anthropic, openai-codex, google-antigravity, xai]   #   routing-rules.md "Council 계약"이 실행한다(YAML 이 자동 실행하지 않음)
     model_mapping:
@@ -105,15 +85,6 @@ profiles:
 
   # ─────────────── Specialized tier (experimental) ───────────────
 
-  eco:                                 # 💸 멀티벤더 저단가 실험 — "절대 최저비용" 아님(최소 의존 저가 경로는 GJC 내장 codex-eco).
-    required_providers: [openai-codex, opencode-go, google-antigravity]      #   v2: anthropic·xai 제거 — 3벤더
-    model_mapping:
-      default:   openai-codex/gpt-5.6-terra:medium              # 비-Anthropic default 는 anthropic 미포함 번들이라 router 불변식 비적용
-      executor:  opencode-go/glm-5.2                            # MIT $1.4/$4.4. 08-16·08-17 실호출 ok. deepseek-v4-flash 는 이 계정 403 China opt-in 이라 출하 좌석에서 내림(카탈로그 id 는 생존 — 지역 해제 시 재평가)
-      planner:   openai-codex/gpt-5.6-luna:medium               # Luna $1/$6
-      architect: google-antigravity/gemini-3.1-pro-low:high     # 리터럴 -low:high 핀
-      critic:    google-antigravity/gemini-3-flash:low          # 3.5-flash-low 는 08-16 부활했으나 라이브 표면 플랩 — 안정 id 유지
-
   monorepo:                            # 🗄 거대 코드베이스 — 전역 1M ctx (★gpt-5.5(272K)/5.6(372K) 배제 — 1M 미달)
     required_providers: [anthropic, google-antigravity, opencode-go]
     model_mapping:
@@ -122,6 +93,15 @@ profiles:
       planner:   google-antigravity/gemini-3.1-pro-low:high     # 추론(스코프 입력). 1M window ≠ 완전 recall — 청크 누적 워크플로 전제
       architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste 는 Opus 5 가 476k 통과(08-17 배터리) — Opus 4.8 의 476k 🔴 는 구세대 수치
       critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51), cross-family vs anthropic. effort 무핀(opencode-go 규칙)
+
+  budget:                              # v3 게이트 — 구독 없이 저가 API 만으로 5역할
+    required_providers: [openai-codex, google-antigravity, opencode-go]
+    model_mapping:
+      default:   openai-codex/gpt-5.6-terra:medium
+      executor:  opencode-go/glm-5.2
+      planner:   opencode-go/qwen3.8-max
+      architect: google-antigravity/gemini-3.1-pro-low:high
+      critic:    google-antigravity/gemini-3.1-pro-low:high
 
 # ─────────────────────────────────────────────────────────────────────────────
 # v2.0.1 → v2.1.0: Opus 4.8→Opus 5 · Grok 4.5→Grok 4.6 like-for-like. 10번들·4계층 불변.
@@ -136,7 +116,7 @@ profiles:
 # Claude Opus 5 (2026-07-24): $5/$25 동가 · 1M/128K · effort low..max · Max 기본·Pro 최강. 4.8 은 legacy 로 잔류·호출 가능.
 # GPT-5.6(2026-07-09 GA): Sol $5/$30 · Terra $2.5/$15 · Luna $1/$6 — API 1.05M/128K, GJC 0.13.3 usable prompt budget 372K.
 #   :max 는 수용되나 심도 미검증 — 미출하(상한 xhigh). ⚠ METR: Sol 의 SWE 평가 게이밍 적발 — SWE류 벤치 단독근거 승격 금지.
-# opencode-go: OPENCODE_API_KEY 필요(eco.executor·monorepo.critic). glm-5.2 검증✅(08-16).
+# opencode-go: OPENCODE_API_KEY 필요(budget.executor·budget.planner·monorepo.critic). glm-5.2 검증✅(08-16).
 #   deepseek-v4-flash/pro 는 이 계정 08-16 에 403 China opt-in — 카탈로그 잔류, 지역 정책.
 # xai: `/login xai` 또는 XAI_API_KEY 설정 (premium 3종 + llm-council/escalation 의 critic).
 #   08-17 실측: XAI_API_KEY 환경변수 없이 xai/grok-4.6:high 성공(단일 계정). 메커니즘 단정 금지 — 신규 사용자는 둘 중 하나를 설정해야 한다.
