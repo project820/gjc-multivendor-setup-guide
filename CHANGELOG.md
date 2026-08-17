@@ -11,6 +11,32 @@
 
 ---
 
+## v2.1.0 — 2026-08-17
+
+### Changed (MINOR — 후계 like-for-like, 10번들·4계층 불변)
+- **Opus 4.8 → Opus 5** (2026-07-24 GA, [Anthropic](https://www.anthropic.com/research/claude-opus-5) · [models overview](https://platform.claude.com/docs/en/about-claude/models/overview)). $5/$25 동가 · 1M/128K · effort `minimal..max`. 전 Anthropic default/executor/architect 좌석 교체. 4.8 은 legacy 카나리로 잔류·호출 가능.
+- **Grok 4.5 → Grok 4.6** (2026-08-12, [xAI](https://x.ai/news/grok-4-6) · [docs](https://docs.x.ai/developers/models/grok-4.6)). $2/$6 (<200k prompt) / $4/$12 (≥200k) · 500K. critic 좌석(premium 3종·llm-council·escalation) + cyber-cop 패널. 카탈로그는 `xhigh`까지 찍지만 **출하 상한은 `:high`**(L3 없음). `grok-build/grok-4.6:high` 는 not found(bare 만 OK — 미출하).
+- **GJC 0.13.3 재기준화** ([릴리스](https://github.com/Yeachan-Heo/gajae-code/releases/tag/v0.13.3), 2026-08-15). gpt-5.6 3종 usable prompt budget 표기 **373K→372K**. antigravity 퍼지 fail-closed 유지.
+- **Fable 플랜 스플릿 반영** ([공식 Help Center](https://support.claude.com/en/articles/15424964-claude-fable-5-on-your-plan)): 프로모션 2026-07-19 23:59:59 PT 종료. 07-20부터 Max/premium Team = 주간 한도 50% 포함, Pro/standard = usage credits. dream-team/escalation 문구 정정(~7/12 폐기).
+- validator: `claude-opus-5` 풀 래더 · **`xai/grok-4.6` `low..high`**(카탈로그는 xhigh 를 찍고 라이브도 수용하지만 심도 미검증 — gpt-5.6 `:max` 와 동일하게 fail-closed. 거부 테스트 기록은 `evidence/2026-08-17-eco-executor.md`) · sonnet-5 출하 합법성은 high 유지(카탈로그 xhigh/max 는 클램프 미측정).
+- 도구 좌석 동기화: `cyber-cop-review.sh` architect/패널 · `revalidate.sh` 배터리 · `gen_svgs.py` · README×4 · routing-rules · MAINTAINING · factsheet.
+- **환경변수 개명: `GROK45_PANEL_MAX_BYTES` → `GROK_PANEL_MAX_BYTES`** (`scripts/cyber-cop-review.sh`). 좌석이 Grok 4.6 인데 이름이 4.5 시절 그대로였다. **기존 호출자가 옛 이름으로 값을 넘기면 조용히 무시된다** — CI/스크립트에서 이 변수를 설정하고 있었다면 새 이름으로 바꿔야 한다. 기본값 1600000 은 불변.
+- **eco.executor DeepSeek → `opencode-go/glm-5.2`** (리뷰 발견 수정, role-fit 프로브 동반). `deepseek-v4-flash` 는 카탈로그 id 가 살아 있으나 이 계정에서 **403 China opt-in** 이라 출하 좌석이 실제로는 안 돌았다. `gjc-cop` critic 이 "깨진 출하 좌석이 게이트를 통과한다"고 REQUEST_CHANGES. 좌석을 이미 실호출 검증된 `glm-5.2`(08-16 8.9s · 08-17 재확인)로 교체하고, `revalidate.sh` 에서 deepseek 를 **정보성 카나리로 명시 분류**(조용한 강등이 아님), README 의 "deepseek 검증됨" 문구를 정정했다. family 배치 불변(ocgo executor ↔ google architect). 좌석 배치는 핑이 아니라 **실제 코딩 프로브**로 뒷받침했다 — `merge_intervals` 8케이스에서 terra:medium 3.5s·luna:high 4.9s·glm-5.2 5.1s·kimi-k3 6.0s 전부 8/8 정확. `glm-5.2` 의 07-02 마이크로벤치 21.9s 는 재현되지 않아 README §6 지연표를 08-17 측정과 함께 갱신했다. 증거 `evidence/2026-08-17-eco-executor.md`.
+
+### Unchanged (보호 목록)
+- 10번들·4계층·Council/Escalation 계약 · Gemini 3.1 Pro `-low:high` 핀 · eco.critic `gemini-3-flash:low` · Sol/Terra/Luna 좌석 · Premium L3 미출하 · `evidence/` 과거 파일 불변.
+
+### Not shipped
+- Gemini 3.5 Pro 좌석(카탈로그 없음) · Flash 3.5/3.6 승격(클래스 상이·라이브 플랩) · grok-build critic · Grok/Sol/Fable 역할 재배치 · gpt-5.6 `:max` 심도 · DeepSeek 지역 정책 우회 스왑 · **`kimi-k3`/`kimi-k2.7-code` 좌석 채택**(08-17 프로브에서 kimi-k3 는 glm-5.2 와 동급 8/8 이지만 채울 좌석이 없고 가격·레이트리밋 문서가 없어 미출하 — 재평가 트리거로 등재).
+
+### Validation
+- 실호출(2026-08-16, **gjc 0.13.3**): `evidence/2026-08-16-selectors.md` — Opus 5 `:medium`/`:high`/`:xhigh` · Grok 4.6 `:medium`/`:high`/`:xhigh` · Sol/Terra/Luna · Gemini 3.1 Pro pin · glm-5.2 · Fable `:high`/`:xhigh` 그린. `gemini-3.1-pro-high`·`grok-4.6:bogus`·`grok-build/grok-4.6:high` fail-closed. DeepSeek flash/pro 이 계정 403 China opt-in(카탈로그 id 생존).
+- 실호출(2026-08-17): `evidence/2026-08-17-eco-executor.md` — `glm-5.2` 재확인 ok · `kimi-k3` ok(1M/131K) · `kimi-k2.7-code` ok(262K) · deepseek 403 재확인. **eco.executor role-fit 비교 프로브** 4후보 전부 8/8 정확, 지연 3.5~6.0s.
+- `python3 scripts/validate-profiles.py` green · `scripts/sync-readme-yaml.py` 멱등.
+
+### Evidence
+- `evidence/2026-08-16-catalog.txt` · `evidence/2026-08-16-selectors.md` · `evidence/2026-08-16-notes.md` · **`evidence/2026-08-17-selectors-rerun-2.md`**(출하 좌석 게이트 정본 — 개정된 revalidate.sh 실행) · `evidence/2026-08-17-selectors.md`(단일 메시지 476k 근거 · 하네스 수정 전 산출물) · `evidence/2026-08-17-eco-executor.md`.
+
 ## v2.0.1 — 2026-07-10
 
 ### Changed (PATCH — 문서 개편, 매핑/좌석 불변)

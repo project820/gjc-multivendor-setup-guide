@@ -12,9 +12,9 @@
 # (Fixes #10: a single `--mpreset` session has the default model role-play every seat.)
 #
 # Seats (from the `cyber-cop` profile in gjc-profiles.yml):
-#   architect = anthropic/claude-opus-4-8:high   (first-pass code-review adjudicator)
+#   architect = anthropic/claude-opus-5:high   (first-pass code-review adjudicator)
 #   critic    = openai-codex/gpt-5.6-sol:high    (merge gate, cross-family vs Claude author)
-#   --panel   → high-risk 3-vote panel adds xai/grok-4.5:high + google-antigravity/gemini-3.1-pro-low:high
+#   --panel   → high-risk 3-vote panel adds xai/grok-4.6:high + google-antigravity/gemini-3.1-pro-low:high
 # INVARIANTS are run by THIS script against the PR HEAD (not the local checkout), never model-claimed.
 # It NEVER merges — the verdict is surfaced to a human for the merge decision.
 set -euo pipefail
@@ -68,10 +68,10 @@ IDENTITY_WARN=""
 DIFF_BYTES=$(wc -c < "$WORK/pr.diff" 2>/dev/null | tr -d ' ' || echo 0)
 DIFF_TOO_BIG=0
 if [ "${DIFF_BYTES:-0}" -gt 5242880 ]; then DIFF_TOO_BIG=1; fi
-# Grok 4.5 provider metadata reports 500K context; keep exact-diff use below the
+# Grok 4.6 provider metadata reports 500K context; keep exact-diff use below the
 # documented ~400K-token safe budget. Approximate 4 bytes/token and void only the
 # optional xai panel seat above that threshold; required 1M-family lanes still run.
-GROK45_PANEL_MAX_BYTES="${GROK45_PANEL_MAX_BYTES:-1600000}"
+GROK_PANEL_MAX_BYTES="${GROK_PANEL_MAX_BYTES:-1600000}"
 
 # The headless reviewer contract is EMBEDDED here (not read from routing-rules.md) and
 # passed inline in every seat prompt below — so this path needs no external contract file.
@@ -174,8 +174,8 @@ echo "=== cyber-cop review (seat orchestrator): PR #${PR} @ ${REPO} ==="
 echo "(cross-family by call structure — each verdict below names its real executing model)"
 echo
 
-# --- 1. ARCHITECT (anthropic/claude-opus-4-8:high) ---
-ARCH_MODEL="anthropic/claude-opus-4-8:high"
+# --- 1. ARCHITECT (anthropic/claude-opus-5:high) ---
+ARCH_MODEL="anthropic/claude-opus-5:high"
 arch_out="$(run_seat "$ARCH_MODEL" "You are the cyber-cop ARCHITECT (first-pass code-review adjudicator) for PR #${PR} of ${REPO}. ${CONTRACT}
 Review the attached diff independently. Output your verdict token on the FIRST line, exactly one of: CLEAR | WATCH | BLOCK. Then give terse, file-backed reasons (path:line). Be evidence-first; no LGTM without searching for reasons to block.")"
 ARCH_V="$(arch_verdict "$arch_out")"
@@ -203,16 +203,16 @@ if [ "$PANEL" = "1" ]; then
   # 2-vote {gpt-5.6-sol, gemini} panel). A failed/unavailable GEMINI seat is NOT voidable —
   # that would silently change the documented panel composition — it FAILS CLOSED (BLOCK).
   panel_valid=1   # critic (gpt-5.6-sol) is one valid non-default vote
-  for pm in "xai/grok-4.5:high" "google-antigravity/gemini-3.1-pro-low:high"; do
-    if [ "$pm" = "xai/grok-4.5:high" ] && [ "${DIFF_BYTES:-0}" -gt "${GROK45_PANEL_MAX_BYTES:-1600000}" ]; then
-      echo "### panel vote (${pm}): VOID (diff ${DIFF_BYTES}B exceeds Grok 4.5 exact-diff guard ${GROK45_PANEL_MAX_BYTES}B — use 1M lanes)"; echo
+  for pm in "xai/grok-4.6:high" "google-antigravity/gemini-3.1-pro-low:high"; do
+    if [ "$pm" = "xai/grok-4.6:high" ] && [ "${DIFF_BYTES:-0}" -gt "${GROK_PANEL_MAX_BYTES:-1600000}" ]; then
+      echo "### panel vote (${pm}): VOID (diff ${DIFF_BYTES}B exceeds Grok 4.6 exact-diff guard ${GROK_PANEL_MAX_BYTES}B — use 1M lanes)"; echo
       continue
     fi
     p_out="$(run_seat "$pm" "You are an independent cyber-cop panel CRITIC for PR #${PR}. ${CONTRACT}
 First line = exactly one of: APPROVE | REQUEST_CHANGES | BLOCK. Then one file-backed reason. Vote independently; no debate.")"
     case "$p_out" in
       *"[seat error:"*)
-        if [ "$pm" = "xai/grok-4.5:high" ]; then
+        if [ "$pm" = "xai/grok-4.6:high" ]; then
           echo "### panel vote (${pm}): VOID (optional seat unavailable — 2-vote downgrade per routing-rules)"; echo
           continue
         fi

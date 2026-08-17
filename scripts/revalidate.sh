@@ -5,6 +5,7 @@
 #
 #   bash scripts/revalidate.sh            # full battery → evidence/<date>-selectors.md
 #   SELECTORS_ONLY=1 bash scripts/revalidate.sh   # skip the long-context probes
+#   DRY_RUN=1 bash scripts/revalidate.sh          # verify the script itself; writes NO evidence file
 #
 # Exit code: non-zero if any selector EXPECTED to work failed (regression).
 # Credential failures (expired/unauthorized/re-login needed) are recorded as
@@ -13,12 +14,25 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 DATE="$(date +%Y-%m-%d)"
 mkdir -p evidence
-OUT="evidence/${DATE}-selectors.md"
-if [ -e "$OUT" ]; then
-  n=2
-  while [ -e "evidence/${DATE}-selectors-rerun-${n}.md" ]; do n=$((n+1)); done
-  OUT="evidence/${DATE}-selectors-rerun-${n}.md"
+# DRY_RUN=1 은 evidence 파일을 만들지 않는다. 스크립트 자체를 검증할 때 쓴다 —
+# 중간에 끊긴 실행이 반쯤 찬 evidence 파일로 남아 append-only 기록을 오염시키는 걸 막는다.
+# (v2.1.0 리뷰에서 실제로 잘린 rerun-3/-4 가 커밋될 뻔했다.)
+if [ "${DRY_RUN:-0}" = 1 ]; then
+  # GNU coreutils 의 mktemp -t 는 X 가 없는 템플릿을 거부한다. BSD/GNU 공통 형태를 쓰고
+  # 종료 시 정리한다. 실패하면 조용히 넘어가지 않고 죽는다 — 빈 OUT 으로 라이브 프로브를
+  # 계속 돌리면 기록 없이 exit 0 이 될 수 있다.
+  OUT="$(mktemp "${TMPDIR:-/tmp}/revalidate-dryrun.XXXXXX")" || { echo "FATAL: mktemp failed"; exit 1; }
+  trap 'rm -f "$OUT"' EXIT
+  echo "## DRY_RUN=1 — evidence 파일을 쓰지 않는다 (임시: $OUT)"
+else
+  OUT="evidence/${DATE}-selectors.md"
+  if [ -e "$OUT" ]; then
+    n=2
+    while [ -e "evidence/${DATE}-selectors-rerun-${n}.md" ]; do n=$((n+1)); done
+    OUT="evidence/${DATE}-selectors-rerun-${n}.md"
+  fi
 fi
+[ -n "${OUT:-}" ] || { echo "FATAL: output path not set"; exit 1; }
 command -v gjc >/dev/null 2>&1 || { echo "gjc not found"; exit 2; }
 command -v perl >/dev/null 2>&1 || { echo "perl not found (used for per-call timeout)"; exit 2; }
 
@@ -52,44 +66,92 @@ P(){ local sel="$1" expect="$2" r a
   esac
 }
 
-# --- catalog selectors used by the current profiles, plus documented compatibility canaries (must stay ok) ---
-for s in \
-  "anthropic/claude-opus-4-8:high" "anthropic/claude-sonnet-4-6:high" \
-  "anthropic/claude-fable-5:high" "anthropic/claude-fable-5:xhigh" \
-  "anthropic/claude-sonnet-5:high" \
-  "openai-codex/gpt-5.6-sol:high" "openai-codex/gpt-5.6-sol:xhigh" \
-  "openai-codex/gpt-5.6-terra:high" "openai-codex/gpt-5.6-luna:high" \
-  "openai-codex/gpt-5.5:high" "openai-codex/gpt-5.4:high" \
-  "google-antigravity/gemini-3.1-pro-low" "google-antigravity/gemini-3.1-pro-low:high" \
-  "google-antigravity/gemini-3-flash:low" \
-  "anthropic/claude-opus-4-8:medium" \
-  "openai-codex/gpt-5.6-terra:medium" "openai-codex/gpt-5.6-luna:medium" \
-  "xai/grok-4.5:medium" "xai/grok-4.5:high" "xai/grok-4.3:high" "xai/grok-4-fast:high" \
-  "opencode-go/deepseek-v4-flash" "opencode-go/deepseek-v4-pro" \
-  "opencode-go/glm-5.2" ; do P "$s" ok; done
-# (glm-5.2 bundled since 0.7.10; grok-4.5 added to the catalog 2026-07-09 = xai/grok-4.5, xai API only, no grok-build variant.
-#  grok-4.5 native efforts low/med/high; :xhigh/:max exit 0 but clamp to high — shipped selectors are :medium/:high only.
-#  gpt-5.6-sol/terra/luna added 2026-07-10: catalog lists low..max; :max is accepted live but its depth is
-#  un-benchmarked — shipped selectors cap at :xhigh. gpt-5.5 kept as a canary (retired from profiles in v1.11).
-#  gemini-3-flash:low = v2 eco.critic (gemini-3.5-flash-low vanished from the live surface 07-10 PM — see below).)
+# --- shipped selectors: derived from gjc-profiles.yml, NOT hand-listed ---
+# 손으로 적은 로스터는 정본과 조용히 어긋난다. gen_svgs.py 가 같은 결함으로 공개 SVG 를
+# 정본과 반대로 렌더한 사고가 있었다(v2.1.0 리뷰). 여기서는 yml 에서 출하 셀렉터를 뽑고,
+# 아래 카나리는 "출하 아님"을 명시한 채 별도로 더한다.
+# 12행에서 이미 저장소 루트로 cd 했다. 여기서 $0 로 루트를 다시 계산하면
+# scripts/ 안에서 ./revalidate.sh 로 실행할 때 부모를 루트로 잘못 잡는다.
+SHIPPED_SELECTORS="$(python3 - "gjc-profiles.yml" <<'PYEOF'
+import sys, yaml
+with open(sys.argv[1], encoding="utf-8") as fh:
+    data = yaml.safe_load(fh)
+profiles = data.get("profiles") or data.get("model_profiles")
+if not isinstance(profiles, dict) or not profiles:
+    sys.exit("FATAL: gjc-profiles.yml has no usable 'profiles' mapping")
+seen = []
+for name, spec in profiles.items():
+    mapping = (spec or {}).get("model_mapping")
+    if not isinstance(mapping, dict) or not mapping:
+        sys.exit(f"FATAL: profile {name!r} has no model_mapping")
+    for sel in mapping.values():
+        if sel not in seen:
+            seen.append(sel)
+print("\n".join(seen))
+PYEOF
+)"
+if [ -z "$SHIPPED_SELECTORS" ]; then
+  echo "FATAL: could not derive shipped selectors from gjc-profiles.yml"; exit 1
+fi
+echo "## Shipped selectors (derived from gjc-profiles.yml: $(echo "$SHIPPED_SELECTORS" | wc -l | tr -d ' ') unique)"
+# 파이프라인 대신 here-string 을 쓴다. `printf | while` 은 서브셸이라 P() 안의
+# FAIL=1 이 부모로 안 올라오고, 회귀가 나도 마지막 `exit $FAIL` 이 0 이 된다.
+while IFS= read -r s; do
+  [ -n "$s" ] && P "$s" ok
+done <<< "$SHIPPED_SELECTORS"
+
+# --- documented compatibility canaries (NOT shipped seats; must still resolve) ---
+# 여기 있는 셀렉터는 위 파생 목록과 겹치면 안 된다. 겹치면 "출하 아님" 라벨이 거짓이 되고
+# 같은 셀렉터를 두 번 호출하게 된다. 아래 CANARY_OVERLAP 가드가 그걸 잡는다.
+CANARIES="
+anthropic/claude-opus-4-8:high
+anthropic/claude-sonnet-4-6:high
+anthropic/claude-sonnet-5:high
+openai-codex/gpt-5.6-luna:high
+openai-codex/gpt-5.5:high
+openai-codex/gpt-5.4:high
+google-antigravity/gemini-3.1-pro-low
+xai/grok-4.6:medium
+xai/grok-4.5:medium
+xai/grok-4.5:high
+xai/grok-4.3:high
+xai/grok-4-fast:high
+"
+CANARY_OVERLAP="$(printf '%s\n' "$SHIPPED_SELECTORS" "$CANARIES" | sed '/^$/d' | sort | uniq -d)"
+if [ -n "$CANARY_OVERLAP" ]; then
+  echo "FATAL: canary list overlaps shipped selectors (label says NOT shipped):"
+  printf '  %s\n' $CANARY_OVERLAP
+  exit 1
+fi
+while IFS= read -r s; do
+  [ -n "$s" ] && P "$s" ok
+done <<< "$CANARIES"
+# (v2.1.0 / gjc 0.13.3 / 2026-08-16: opus-5 + grok-4.6 added as shipped successors.
+#  grok-4.5 kept as a legacy canary. gpt-5.6 :max still un-benchmarked — shipped cap xhigh.
+#  gemini-3-flash:low stays eco.critic (3.5-flash-low resurrected 08-16 but live-surface flaps).
+#  deepseek-v4-flash/pro are catalog-live but this account 403s China-opt-in — informational below.)
 
 # --- retired/informational selectors (not counted as regression) ---
 # grok-4-1-fast: xAI retired the slug 2026-05-15 — legacy calls redirect to grok-4.3 at grok-4.3
-# pricing (official migration doc). Still answers, so keep as an informational canary only;
-# shipped profiles dropped it in v2 (eco.planner -> gpt-5.6-luna:medium).
-for s in "xai/grok-4-1-fast:high"; do P "$s" ok-live; done
+# pricing (official migration doc). Still answers, so keep as an informational canary only.
+# deepseek-v4-*: catalog id lives; 2026-08-16 this account 403s "China hosted / explicit opt-in".
+#   NOT a shipped seat anymore — eco.executor moved to opencode-go/glm-5.2 in v2.1.0 precisely so
+#   that no shipped seat depends on an entitlement this account lacks. Informational canary only;
+#   if the region policy lifts, re-probe and re-evaluate as a candidate.
+# grok-build/grok-4.6 (bare) resolves; :high does not — bare is informational only.
+# gemini-3.5-flash-low resurrected 08-16 after the 07-10 PM vanishing — flap, not a seat.
+for s in "xai/grok-4-1-fast:high" "opencode-go/deepseek-v4-flash" "opencode-go/deepseek-v4-pro" \
+  "grok-build/grok-4.6" "google-antigravity/gemini-3.5-flash-low"; do P "$s" ok-live; done
 
-# --- antigravity fuzzy/live-surface canaries (gjc 0.9.6: fail-closed; expected to FAIL) ---
-# 0.9.5 silently fuzzy-resolved unknown antigravity ids to gemini-3.1-pro-low (even -bogus).
-# 0.9.6 fails closed: gemini-3.1-pro-high / gemini-3.5-flash / -bogus all return "not found".
-# Also a live-surface retirement (07-10 PM): gemini-3.5-flash-low / -extra-low / gemini-pro-agent
-# vanished from live calls while --list-models still printed them — live calls are the truth.
+# --- antigravity fuzzy/live-surface canaries (fail-closed; expected to FAIL) ---
+# 0.9.6+ fails closed: gemini-3.1-pro-high / bare gemini-3.5-flash / -bogus all return "not found".
 # If any of these start SUCCEEDING again, that's a resolver/surface change — re-audit the fuzzy rules.
-for s in "google-antigravity/gemini-3.5-flash" "google-antigravity/gemini-3.5-flash-low" \
+for s in "google-antigravity/gemini-3.5-flash" \
   "google-antigravity/gemini-3.1-pro-high" "google-antigravity/gemini-3.1-pro-bogus"; do P "$s" fail; done
 
 # --- known rejections (documented; expected to FAIL) ---
-for s in "openai-codex/gpt-5.3-codex:high" "xai/grok-4.5:bogus" "openai-codex/gpt-5.6-sol:bogus"; do P "$s" fail; done
+for s in "openai-codex/gpt-5.3-codex:high" "xai/grok-4.6:bogus" "openai-codex/gpt-5.6-sol:bogus" \
+  "grok-build/grok-4.6:high"; do P "$s" fail; done
 
 if [ "${SELECTORS_ONLY:-0}" != 1 ]; then
   { echo; echo "## Single-message @file input limit (separate from the 1M context window)"; echo
@@ -101,8 +163,8 @@ if [ "${SELECTORS_ONLY:-0}" != 1 ]; then
     r="$(perl -e 'alarm 300; exec @ARGV' gjc -p --no-session --no-tools --model "$sel" @"$f" "Output only the PART_X value." 2>&1)"
     if printf '%s' "$r" | grep -q ZULU555; then a="found"; elif [ -z "$r" ]; then a="400/empty"; else a="resp(no-needle)"; fi
     printf '| `%s` | %s | %s |\n' "$sel" "$lbl" "$a" >> "$OUT"; }
-  B "anthropic/claude-opus-4-8:high"             "$T/350k.txt" 350k
-  B "anthropic/claude-opus-4-8:high"             "$T/476k.txt" 476k
+  B "anthropic/claude-opus-5:high"             "$T/350k.txt" 350k
+  B "anthropic/claude-opus-5:high"             "$T/476k.txt" 476k
   B "xai/grok-4-fast:high"                       "$T/476k.txt" 476k
   B "xai/grok-4-fast:high"                       "$T/857k.txt" 857k
   rm -rf "$T"
