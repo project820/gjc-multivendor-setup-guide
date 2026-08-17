@@ -74,9 +74,11 @@ if [ -z "$SHIPPED_SELECTORS" ]; then
   echo "FATAL: could not derive shipped selectors from gjc-profiles.yml"; exit 1
 fi
 echo "## Shipped selectors (derived from gjc-profiles.yml: $(echo "$SHIPPED_SELECTORS" | wc -l | tr -d ' ') unique)"
-printf '%s\n' "$SHIPPED_SELECTORS" | while IFS= read -r s; do
+# 파이프라인 대신 here-string 을 쓴다. `printf | while` 은 서브셸이라 P() 안의
+# FAIL=1 이 부모로 안 올라오고, 회귀가 나도 마지막 `exit $FAIL` 이 0 이 된다.
+while IFS= read -r s; do
   [ -n "$s" ] && P "$s" ok
-done
+done <<< "$SHIPPED_SELECTORS"
 
 # --- documented compatibility canaries (NOT shipped seats; must still resolve) ---
 # 여기 있는 셀렉터는 위 파생 목록과 겹치면 안 된다. 겹치면 "출하 아님" 라벨이 거짓이 되고
@@ -101,9 +103,9 @@ if [ -n "$CANARY_OVERLAP" ]; then
   printf '  %s\n' $CANARY_OVERLAP
   exit 1
 fi
-printf '%s\n' "$CANARIES" | while IFS= read -r s; do
+while IFS= read -r s; do
   [ -n "$s" ] && P "$s" ok
-done
+done <<< "$CANARIES"
 # (v2.1.0 / gjc 0.13.3 / 2026-08-16: opus-5 + grok-4.6 added as shipped successors.
 #  grok-4.5 kept as a legacy canary. gpt-5.6 :max still un-benchmarked — shipped cap xhigh.
 #  gemini-3-flash:low stays eco.critic (3.5-flash-low resurrected 08-16 but live-surface flaps).
