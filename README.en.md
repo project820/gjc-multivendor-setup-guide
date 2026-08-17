@@ -285,7 +285,7 @@ profiles:
     required_providers: [openai-codex, opencode-go, google-antigravity]
     model_mapping:
       default:   openai-codex/gpt-5.6-terra:medium
-      executor:  opencode-go/deepseek-v4-flash
+      executor:  opencode-go/glm-5.2
       planner:   openai-codex/gpt-5.6-luna:medium
       architect: google-antigravity/gemini-3.1-pro-low:high
       critic:    google-antigravity/gemini-3-flash:low
@@ -347,7 +347,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> The antigravity live surface can change within a day and `--list-models` can be cached. Live-call before adopting a seat; re-login/retry when discovery is stale, or use the bundle id (eco critic alternative: `opencode-go/deepseek-v4-pro`; add the `zai` provider for GLM).
+> The antigravity live surface can change within a day and `--list-models` can be cached. Live-call before adopting a seat; re-login/retry when discovery is stale, or use the bundle id (eco critic alternative: `opencode-go/glm-5.2`; add the `zai` provider to reach GLM as `zai/glm-5.2`. `deepseek-v4-pro` is excluded as an alternative — this account gets 403 China opt-in).
 
 <details>
 <summary><b>Latency reference (micro-bench 2026-07-02; 08-16 pings for Opus 5 · Grok 4.6)</b></summary>

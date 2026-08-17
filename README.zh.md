@@ -281,7 +281,7 @@ profiles:
     required_providers: [openai-codex, opencode-go, google-antigravity]
     model_mapping:
       default:   openai-codex/gpt-5.6-terra:medium
-      executor:  opencode-go/deepseek-v4-flash
+      executor:  opencode-go/glm-5.2
       planner:   openai-codex/gpt-5.6-luna:medium
       architect: google-antigravity/gemini-3.1-pro-low:high
       critic:    google-antigravity/gemini-3-flash:low
@@ -346,7 +346,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> antigravity 的 live 表面当日也会变化，`--list-models` 标示可能是缓存；采纳席位前真实调用。发现未刷新时重新登录/重试，或使用捆绑 id（eco critic 备选 `opencode-go/deepseek-v4-pro`；GLM 使用 `zai/glm-5.2` 并加入 `zai` provider）。
+> antigravity 的 live 表面当日也会变化，`--list-models` 标示可能是缓存；采纳席位前真实调用。发现未刷新时重新登录/重试，或使用捆绑 id（eco critic 备选 `opencode-go/glm-5.2`；若要经 zai 路径使用 GLM，加入 `zai` provider 后用 `zai/glm-5.2`。`deepseek-v4-pro` 因本账号 403 China opt-in 已从备选中移除）。
 
 <details>
 <summary><b>延迟参考（微基准 2026-07-02；08-16 ping 为 Opus 5·Grok 4.6）</b></summary>

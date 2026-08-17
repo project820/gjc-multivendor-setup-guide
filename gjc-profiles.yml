@@ -108,7 +108,7 @@ profiles:
     required_providers: [openai-codex, opencode-go, google-antigravity]      #   v2: anthropic·xai 제거 — 3벤더
     model_mapping:
       default:   openai-codex/gpt-5.6-terra:medium              # 비-Anthropic default 는 anthropic 미포함 번들이라 router 불변식 비적용
-      executor:  opencode-go/deepseek-v4-flash                  # $0.14/0.28. 08-16 이 계정은 403 China opt-in — 카탈로그 id 는 살아 있음. 지역 차단이면 GLM/Luna 로 수동 스왑
+      executor:  opencode-go/glm-5.2                            # MIT $1.4/$4.4. 08-16·08-17 실호출 ok. deepseek-v4-flash 는 이 계정 403 China opt-in 이라 출하 좌석에서 내림(카탈로그 id 는 생존 — 지역 해제 시 재평가)
       planner:   openai-codex/gpt-5.6-luna:medium               # Luna $1/$6
       architect: google-antigravity/gemini-3.1-pro-low:high     # 리터럴 -low:high 핀
       critic:    google-antigravity/gemini-3-flash:low          # 3.5-flash-low 는 08-16 부활했으나 라이브 표면 플랩 — 안정 id 유지
@@ -119,7 +119,7 @@ profiles:
       default:   anthropic/claude-opus-5:medium                 # 1M
       executor:  anthropic/claude-opus-5:high                   # 1M
       planner:   google-antigravity/gemini-3.1-pro-low:high     # 추론(스코프 입력). 1M window ≠ 완전 recall — 청크 누적 워크플로 전제
-      architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste ~400k 한도(실측 350k ✅/476k 🔴) — 한 방 >400k 는 opencode-go/deepseek-v4-pro
+      architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste ~400k 한도(실측 350k ✅/476k 🔴) — 한 방 >400k 는 opencode-go/glm-5.2 (deepseek-v4-pro 는 이 계정 403)
       critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51), cross-family vs anthropic. effort 무핀(opencode-go 규칙)
 
 # ─────────────────────────────────────────────────────────────────────────────

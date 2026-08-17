@@ -71,7 +71,7 @@ if [ "${DIFF_BYTES:-0}" -gt 5242880 ]; then DIFF_TOO_BIG=1; fi
 # Grok 4.6 provider metadata reports 500K context; keep exact-diff use below the
 # documented ~400K-token safe budget. Approximate 4 bytes/token and void only the
 # optional xai panel seat above that threshold; required 1M-family lanes still run.
-GROK45_PANEL_MAX_BYTES="${GROK45_PANEL_MAX_BYTES:-1600000}"
+GROK_PANEL_MAX_BYTES="${GROK_PANEL_MAX_BYTES:-1600000}"
 
 # The headless reviewer contract is EMBEDDED here (not read from routing-rules.md) and
 # passed inline in every seat prompt below — so this path needs no external contract file.
@@ -204,8 +204,8 @@ if [ "$PANEL" = "1" ]; then
   # that would silently change the documented panel composition — it FAILS CLOSED (BLOCK).
   panel_valid=1   # critic (gpt-5.6-sol) is one valid non-default vote
   for pm in "xai/grok-4.6:high" "google-antigravity/gemini-3.1-pro-low:high"; do
-    if [ "$pm" = "xai/grok-4.6:high" ] && [ "${DIFF_BYTES:-0}" -gt "${GROK45_PANEL_MAX_BYTES:-1600000}" ]; then
-      echo "### panel vote (${pm}): VOID (diff ${DIFF_BYTES}B exceeds Grok 4.6 exact-diff guard ${GROK45_PANEL_MAX_BYTES}B — use 1M lanes)"; echo
+    if [ "$pm" = "xai/grok-4.6:high" ] && [ "${DIFF_BYTES:-0}" -gt "${GROK_PANEL_MAX_BYTES:-1600000}" ]; then
+      echo "### panel vote (${pm}): VOID (diff ${DIFF_BYTES}B exceeds Grok 4.6 exact-diff guard ${GROK_PANEL_MAX_BYTES}B — use 1M lanes)"; echo
       continue
     fi
     p_out="$(run_seat "$pm" "You are an independent cyber-cop panel CRITIC for PR #${PR}. ${CONTRACT}

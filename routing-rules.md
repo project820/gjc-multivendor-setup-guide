@@ -108,7 +108,8 @@ v2 카탈로그는 10개 user-facing 번들이며 신뢰 등급이 같지 않다
 - 단, **단일 메시지(`@file`)로 한 방에 ~400k+ 토큰을 주입하면 Opus·Gemini 가 400**(메시지 크기 한도, 윈도우 아님. 레포 실측: 350k ✅ / 476k 🔴 — [딥다이브 §6-3](./docs/deep-dive-role-fit.md#6-3-잔여-공백-검토-gap-13--gjc-실효-컨텍스트-실측)).
 - **거대 입력은 한 메시지에 통째로 붓지 말고 청크로 나눠 누적**시키면 1M 윈도우 안에서 정상 처리된다.
   1M nominal window ≠ 완전 recall — monorepo 번들도 청크 누적 워크플로를 전제한다.
-  굳이 한 방에 >400k를 paste해야 하는 드문 경우에만 architect 를 `opencode-go/deepseek-v4-pro` 로(단일 메시지 476k 실수용 확인).
+  굳이 한 방에 >400k를 paste해야 하는 드문 경우에만 architect 를 `opencode-go/glm-5.2`(1M/131K) 로.
+  `deepseek-v4-pro` 는 476k 단일 메시지 실수용을 확인했던 후보이나 2026-08-16·17 이 계정에서 403 China opt-in 이라 권장하지 않는다.
 
 ## 신뢰성
 - 직렬 체인은 짧게(0.99^N 붕괴). 병렬 결과는 dedup 후 검증. 본체가 단일 진실원천 —

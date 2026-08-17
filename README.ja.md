@@ -281,7 +281,7 @@ profiles:
     required_providers: [openai-codex, opencode-go, google-antigravity]
     model_mapping:
       default:   openai-codex/gpt-5.6-terra:medium
-      executor:  opencode-go/deepseek-v4-flash
+      executor:  opencode-go/glm-5.2
       planner:   openai-codex/gpt-5.6-luna:medium
       architect: google-antigravity/gemini-3.1-pro-low:high
       critic:    google-antigravity/gemini-3-flash:low
@@ -343,7 +343,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> antigravity のライブ面は当日中にも変わり、`--list-models` 表記はキャッシュの場合がある。席に採用する前に実呼び出しで確認し、ディスカバリ未更新なら再ログイン/再試行またはバンドル id を使う（eco critic の代替は `opencode-go/deepseek-v4-pro`、GLM は `zai/glm-5.2` と `zai` プロバイダ追加）。
+> antigravity のライブ面は当日中にも変わり、`--list-models` 表記はキャッシュの場合がある。席に採用する前に実呼び出しで確認し、ディスカバリ未更新なら再ログイン/再試行またはバンドル id を使う（eco critic の代替は `opencode-go/glm-5.2`、GLM を zai 経路で使うなら `zai` プロバイダ追加のうえ `zai/glm-5.2`。`deepseek-v4-pro` はこのアカウントで 403 China opt-in のため代替から除外）。
 
 <details>
 <summary><b>レイテンシ参考（マイクロベンチ 2026-07-02; 08-16 ping は Opus 5·Grok 4.6）</b></summary>

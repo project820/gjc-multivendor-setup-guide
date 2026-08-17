@@ -76,6 +76,9 @@ for s in \
 # grok-4-1-fast: xAI retired the slug 2026-05-15 — legacy calls redirect to grok-4.3 at grok-4.3
 # pricing (official migration doc). Still answers, so keep as an informational canary only.
 # deepseek-v4-*: catalog id lives; 2026-08-16 this account 403s "China hosted / explicit opt-in".
+#   NOT a shipped seat anymore — eco.executor moved to opencode-go/glm-5.2 in v2.1.0 precisely so
+#   that no shipped seat depends on an entitlement this account lacks. Informational canary only;
+#   if the region policy lifts, re-probe and re-evaluate as a candidate.
 # grok-build/grok-4.6 (bare) resolves; :high does not — bare is informational only.
 # gemini-3.5-flash-low resurrected 08-16 after the 07-10 PM vanishing — flap, not a seat.
 for s in "xai/grok-4-1-fast:high" "opencode-go/deepseek-v4-flash" "opencode-go/deepseek-v4-pro" \

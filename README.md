@@ -310,7 +310,7 @@ profiles:
     required_providers: [openai-codex, opencode-go, google-antigravity]      #   v2: anthropic·xai 제거 — 3벤더
     model_mapping:
       default:   openai-codex/gpt-5.6-terra:medium              # 비-Anthropic default 는 anthropic 미포함 번들이라 router 불변식 비적용
-      executor:  opencode-go/deepseek-v4-flash                  # $0.14/0.28. 08-16 이 계정은 403 China opt-in — 카탈로그 id 는 살아 있음. 지역 차단이면 GLM/Luna 로 수동 스왑
+      executor:  opencode-go/glm-5.2                            # MIT $1.4/$4.4. 08-16·08-17 실호출 ok. deepseek-v4-flash 는 이 계정 403 China opt-in 이라 출하 좌석에서 내림(카탈로그 id 는 생존 — 지역 해제 시 재평가)
       planner:   openai-codex/gpt-5.6-luna:medium               # Luna $1/$6
       architect: google-antigravity/gemini-3.1-pro-low:high     # 리터럴 -low:high 핀
       critic:    google-antigravity/gemini-3-flash:low          # 3.5-flash-low 는 08-16 부활했으나 라이브 표면 플랩 — 안정 id 유지
@@ -321,7 +321,7 @@ profiles:
       default:   anthropic/claude-opus-5:medium                 # 1M
       executor:  anthropic/claude-opus-5:high                   # 1M
       planner:   google-antigravity/gemini-3.1-pro-low:high     # 추론(스코프 입력). 1M window ≠ 완전 recall — 청크 누적 워크플로 전제
-      architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste ~400k 한도(실측 350k ✅/476k 🔴) — 한 방 >400k 는 opencode-go/deepseek-v4-pro
+      architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste ~400k 한도(실측 350k ✅/476k 🔴) — 한 방 >400k 는 opencode-go/glm-5.2 (deepseek-v4-pro 는 이 계정 403)
       critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51), cross-family vs anthropic. effort 무핀(opencode-go 규칙)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -356,7 +356,7 @@ profiles:
 </details>
 
 > [!TIP]
-> **opencode-go** 는 `OPENCODE_API_KEY` 설정 시 `eco` executor·`monorepo` critic에서 활성화된다(검증✅). `deepseek-v4-flash/pro`·`glm-5.2`는 검증됐고, 신규 입점 후보 `kimi-k2.7-code`·`minimax-m3`는 미검증이다.
+> **opencode-go** 는 `OPENCODE_API_KEY` 설정 시 `eco` executor·`monorepo` critic에서 활성화된다(검증✅). 출하 좌석 `glm-5.2` 는 2026-08-16·08-17 실호출 ok. `deepseek-v4-flash/pro` 는 카탈로그 id 는 살아 있으나 **이 계정에서 403 China opt-in** 이라 v2.1.0 에서 출하 좌석에서 내렸다(정보성 카나리로만 유지 — 지역 정책 해제 시 재평가). 신규 입점 후보 `kimi-k2.7-code`·`minimax-m3` 는 미검증이다.
 
 #### 프로필별 설계 근거
 
@@ -407,7 +407,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> antigravity 라이브 표면은 당일에도 변하고 `--list-models` 표기는 캐시일 수 있다. 좌석 채택 전 실호출하고, 디스커버리 미갱신이면 재로그인/재시도 또는 번들 id를 사용하라(eco critic 대안 `opencode-go/deepseek-v4-pro`; GLM은 `zai/glm-5.2`와 `zai` provider 추가).
+> antigravity 라이브 표면은 당일에도 변하고 `--list-models` 표기는 캐시일 수 있다. 좌석 채택 전 실호출하고, 디스커버리 미갱신이면 재로그인/재시도 또는 번들 id를 사용하라(eco critic 대안 `opencode-go/glm-5.2`; GLM 을 zai 경로로 쓰려면 `zai/glm-5.2` 와 `zai` provider 추가. `deepseek-v4-pro` 는 이 계정 403 China opt-in 이라 대안에서 제외).
 
 <details>
 <summary><b>지연 참고 (마이크로벤치 2026-07-02; 08-16 ping은 Opus 5·Grok 4.6)</b></summary>
