@@ -215,7 +215,7 @@ opencode-go/<model>                           (effort 생략 = 모델 기본값)
 <img src="assets/profiles-matrix.svg" alt="프로필 × 역할 매트릭스" width="100%">
 </div>
 
-> ★ = 평소 권장. v2.0.0은 동등한 프로필 묶음이 아니라 4계층 10번들이다. 전 번들 `required_providers ≥ 2`, 기본 `critic=cross-family`(예외는 `SAME_FAMILY_OK`+WARN), 엔진 effort 하드룰과 셀렉터 검증([§6](#6--검증-매트릭스))을 따른다. 2026-08-16 gjc **0.13.3** 배터리에서 출하 좌석(Opus 5·Grok 4.6 포함)은 그린이었다.
+> ★ = 평소 권장. v2.0.0은 동등한 프로필 묶음이 아니라 4계층 10번들이다. 전 번들 `required_providers ≥ 2`, 기본 `critic=cross-family`(예외는 `SAME_FAMILY_OK`+WARN), 엔진 effort 하드룰과 셀렉터 검증([§6](#6--검증-매트릭스))을 따른다. 2026-08-17 최종 좌석 배터리에서 출하 좌석(Opus 5·Grok 4.6 포함)은 전부 그린이다. 08-16 실행은 eco.executor 교체 이전이다.
 
 <details>
 <summary><b>📋 전체 YAML 펼치기 (gjc-profiles.yml 와 동일 — 모델 매핑 기준, 주석의 §참조만 README에 맞춤)</b></summary>
