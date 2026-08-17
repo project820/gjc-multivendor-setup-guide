@@ -1,5 +1,9 @@
 # 🚨 What's New: `cyber-cop` — 첫 번째 reviewer 모드 프로필 (v1.5)
 
+> [!NOTE]
+> 이 문서는 **cyber-cop 도입 시점 공지**다. 본문은 당시 기준 그대로 보존한다.
+> 현재 카탈로그와 좌석은 [v3 안내](./whats-new-v3.md)를 보라.
+
 > **TL;DR** — 지금까지 12개 프로필은 전부 "코드를 **쓰는**" 세션용이었다. `cyber-cop`은 "코드를 **막아서는**" 세션용이다: 남의 PR을 검토하고, 반대 근거를 찾고, 머지 게이트에서 판정한다. 한 줄로 시작:
 >
 > ```bash
@@ -9,7 +13,7 @@
 > 또는 헬퍼 스크립트로 (가이드 체크아웃 기준): `$GUIDE/scripts/cyber-cop-review.sh <PR_NUMBER>` — `$GUIDE`=이 셋업가이드 레포 경로 (v1.5.1, §3 참조)
 
 > [!NOTE]
-> **이 문서는 non-normative 설명 공지다.** 아래의 셀렉터·프로필 표기는 독자 이해를 위한 인용이며, 실제 구성의 규범 출처는 [`gjc-profiles.yml`](../gjc-profiles.yml), 운영 계약의 규범 출처는 [`routing-rules.md`](../routing-rules.md)의 리뷰어 계약, 독자용 카탈로그·라우팅 요약은 [README §5](../README.md#5-%EF%B8%8F-최종-카탈로그--10-번들--4계층)·[§8](../README.md#8--동적-라우팅-전략)이다. 이 문서와 규범 문서가 다르면 규범 문서가 옳다.
+> **이 문서는 non-normative 설명 공지다.** 아래의 셀렉터·프로필 표기는 독자 이해를 위한 인용이며, 실제 구성의 규범 출처는 [`gjc-profiles.yml`](../gjc-profiles.yml), 운영 계약의 규범 출처는 [`routing-rules.md`](../routing-rules.md)의 리뷰어 계약, 독자용 카탈로그·라우팅 요약은 [README §5](../README.md#5-%EF%B8%8F-최종-카탈로그--8-번들--4계층)·[§8](../README.md#8--동적-라우팅-전략)이다. 이 문서와 규범 문서가 다르면 규범 문서가 옳다.
 
 ---
 
@@ -92,7 +96,7 @@ gjc --mpreset cyber-cop --append-system-prompt "@$GUIDE/routing-rules.md"
 > [!WARNING]
 > 리뷰 대상 레포 기준 상대 경로(`@routing-rules.md`)로 주입하지 마라 — 대상 레포에는 그 파일이 없고, 악성 레포가 동명 파일을 심어 리뷰어의 시스템 프롬프트를 오염시킬 수 있다. **신뢰하는 로컬 사본의 절대경로만** 사용한다.
 
-프로필 설치가 안 됐다면 [원클릭 설치](../README.md#-30초-설치-한-줄-복붙) 후 `gjc --mpreset cyber-cop`.
+프로필 설치가 안 됐다면 [원클릭 설치](../README.md#-30초-설치) 후 `gjc --mpreset cyber-cop`.
 
 원커맨드 헬퍼(동봉)도 있다 — **좌석 오케스트레이터**로, 좌석마다 `gjc -p --model …`를 따로 호출해 4섹션 verdict(architect/critic/불변식/머지 권고)를 조립한다. critic은 **실제로 `openai-codex/gpt-5.6-sol`(Claude 작성자 대비 cross-family)로 실행**되며 본체가 롤플레이하지 않는다 — cross-family가 프롬프트 순응이 아니라 **호출 구조로 보장**된다(#10). 각 섹션 헤더에 실행 모델이 명기되고, 불변식은 스크립트가 직접 실행하며, **절대 머지하지 않는다**:
 
@@ -215,7 +219,7 @@ README의 원클릭 설치는 편의 경로다. 보안 민감 환경에선 스�
 |---|---|
 | 프로필 매핑 | [`gjc-profiles.yml`](../gjc-profiles.yml) |
 | 리뷰어 계약 (위임 순서·집계자 제한·증거 계약·provenance fallback·LGTM 금지) | [`routing-rules.md`](../routing-rules.md) |
-| 카탈로그·설계 근거 | [README §5](../README.md#5-%EF%B8%8F-최종-카탈로그--10-번들--4계층) |
+| 카탈로그·설계 근거 | [README §5](../README.md#5-%EF%B8%8F-최종-카탈로그--8-번들--4계층) |
 | 스왑 시점 | [README §8-3](../README.md#8--동적-라우팅-전략) |
 | 헬퍼 스크립트 | [`scripts/cyber-cop-review.sh`](../scripts/cyber-cop-review.sh) ([MAINTAINING §2](../MAINTAINING.md)) |
 | 변경 이력 | [CHANGELOG v1.5 / v1.5.1](../CHANGELOG.md) |

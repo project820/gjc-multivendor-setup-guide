@@ -1,7 +1,11 @@
 # What's new — v2.0.0: 13 프로필 → 10 번들 · 4계층 (2026-07-10)
 
 > [!NOTE]
-> **이 문서는 non-normative 설명 공지다.** 규범 출처: 매핑 = [`gjc-profiles.yml`](../gjc-profiles.yml) · 운영 계약 = [`routing-rules.md`](../routing-rules.md) · 카탈로그 요약 = [README §5](../README.md#5-%EF%B8%8F-최종-카탈로그--10-번들--4계층) · 상세 이력 = [CHANGELOG v2.0.0](../CHANGELOG.md). 이 문서와 규범 문서가 다르면 규범 문서가 옳다.
+> 이 문서는 **v2 시점 공지**다. 본문은 당시 기준 그대로 보존한다.
+> 현재 카탈로그와 좌석은 [v3 안내](./whats-new-v3.md)를 보라.
+
+> [!NOTE]
+> **이 문서는 non-normative 설명 공지다.** 규범 출처: 매핑 = [`gjc-profiles.yml`](../gjc-profiles.yml) · 운영 계약 = [`routing-rules.md`](../routing-rules.md) · 카탈로그 요약 = [README §5](../README.md#5-%EF%B8%8F-최종-카탈로그--8-번들--4계층) · 상세 이력 = [CHANGELOG v2.0.0](../CHANGELOG.md). 이 문서와 규범 문서가 다르면 규범 문서가 옳다.
 
 ---
 

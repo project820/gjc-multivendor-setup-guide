@@ -1,0 +1,542 @@
+[
+ {
+  "task": "t01",
+  "effort": "max",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 30,
+  "sec": 3.4,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t01",
+  "effort": "max",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 29,
+  "sec": 3.0,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t01",
+  "effort": "max",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 29,
+  "sec": 3.1,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t01",
+  "effort": "xhigh",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 23,
+  "sec": 3.3,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t01",
+  "effort": "xhigh",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 22,
+  "sec": 3.1,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t01",
+  "effort": "xhigh",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 23,
+  "sec": 5.1,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t02",
+  "effort": "max",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 42,
+  "sec": 3.3,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t02",
+  "effort": "max",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 49,
+  "sec": 3.7,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t02",
+  "effort": "max",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 47,
+  "sec": 3.4,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t02",
+  "effort": "xhigh",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 36,
+  "sec": 3.4,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t02",
+  "effort": "xhigh",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 49,
+  "sec": 3.3,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t02",
+  "effort": "xhigh",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 42,
+  "sec": 3.0,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t03",
+  "effort": "max",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 56,
+  "sec": 3.8,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t03",
+  "effort": "max",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 51,
+  "sec": 3.8,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t03",
+  "effort": "max",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 56,
+  "sec": 3.9,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t03",
+  "effort": "xhigh",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 47,
+  "sec": 5.2,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t03",
+  "effort": "xhigh",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 43,
+  "sec": 3.7,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t03",
+  "effort": "xhigh",
+  "rep": 2,
+  "score": 0,
+  "outTokens": 45,
+  "sec": 3.3,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t04",
+  "effort": "max",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 37,
+  "sec": 3.2,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t04",
+  "effort": "max",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 75,
+  "sec": 3.7,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t04",
+  "effort": "max",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 27,
+  "sec": 2.6,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t04",
+  "effort": "xhigh",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 5,
+  "sec": 2.3,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t04",
+  "effort": "xhigh",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 23,
+  "sec": 3.8,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t04",
+  "effort": "xhigh",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 24,
+  "sec": 3.1,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t05",
+  "effort": "max",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 41,
+  "sec": 3.5,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t05",
+  "effort": "max",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 42,
+  "sec": 4.2,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t05",
+  "effort": "max",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 41,
+  "sec": 3.7,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t05",
+  "effort": "xhigh",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 36,
+  "sec": 3.2,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t05",
+  "effort": "xhigh",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 5,
+  "sec": 3.5,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t05",
+  "effort": "xhigh",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 37,
+  "sec": 3.0,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t06",
+  "effort": "max",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 31,
+  "sec": 3.1,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t06",
+  "effort": "max",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 30,
+  "sec": 4.8,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t06",
+  "effort": "max",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 30,
+  "sec": 3.6,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t06",
+  "effort": "xhigh",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 25,
+  "sec": 3.0,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t06",
+  "effort": "xhigh",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 5,
+  "sec": 2.5,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t06",
+  "effort": "xhigh",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 5,
+  "sec": 2.3,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t07",
+  "effort": "max",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 70,
+  "sec": 4.3,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t07",
+  "effort": "max",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 69,
+  "sec": 3.8,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t07",
+  "effort": "max",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 65,
+  "sec": 3.6,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t07",
+  "effort": "xhigh",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 64,
+  "sec": 3.5,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t07",
+  "effort": "xhigh",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 60,
+  "sec": 3.6,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t07",
+  "effort": "xhigh",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 60,
+  "sec": 3.5,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t08",
+  "effort": "max",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 58,
+  "sec": 3.4,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t08",
+  "effort": "max",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 72,
+  "sec": 4.0,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t08",
+  "effort": "max",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 67,
+  "sec": 3.7,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t08",
+  "effort": "xhigh",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 41,
+  "sec": 3.5,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t08",
+  "effort": "xhigh",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 39,
+  "sec": 3.9,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t08",
+  "effort": "xhigh",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 41,
+  "sec": 3.1,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t09",
+  "effort": "max",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 43,
+  "sec": 3.2,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t09",
+  "effort": "max",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 42,
+  "sec": 4.4,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t09",
+  "effort": "max",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 44,
+  "sec": 3.7,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t09",
+  "effort": "xhigh",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 39,
+  "sec": 3.2,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t09",
+  "effort": "xhigh",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 38,
+  "sec": 4.5,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t09",
+  "effort": "xhigh",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 36,
+  "sec": 3.6,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t10",
+  "effort": "max",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 44,
+  "sec": 3.1,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t10",
+  "effort": "max",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 47,
+  "sec": 6.1,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t10",
+  "effort": "max",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 48,
+  "sec": 3.2,
+  "thinkingLevel": "max"
+ },
+ {
+  "task": "t10",
+  "effort": "xhigh",
+  "rep": 0,
+  "score": 1,
+  "outTokens": 5,
+  "sec": 2.6,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t10",
+  "effort": "xhigh",
+  "rep": 1,
+  "score": 1,
+  "outTokens": 42,
+  "sec": 3.1,
+  "thinkingLevel": "xhigh"
+ },
+ {
+  "task": "t10",
+  "effort": "xhigh",
+  "rep": 2,
+  "score": 1,
+  "outTokens": 5,
+  "sec": 2.3,
+  "thinkingLevel": "xhigh"
+ }
+]

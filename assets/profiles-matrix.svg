@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1088" height="902" viewBox="0 0 1088 902" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img">
-<title>GJC 멀티벤더 — 10 번들 × 5 역할 매트릭스 (4계층)</title>
-<rect width="1088" height="902" rx="18" fill="#ffffff"/><rect width="1088" height="902" rx="18" fill="none" stroke="#ECECF1"/>
-<text x="24" y="46" font-size="22" font-weight="700" fill="#1A1A28">GJC 멀티벤더 — 10 번들 × 5 역할 (4계층)</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1088" height="770" viewBox="0 0 1088 770" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img">
+<title>GJC 멀티벤더 — 8 번들 × 5 역할 매트릭스 (4계층)</title>
+<rect width="1088" height="770" rx="18" fill="#ffffff"/><rect width="1088" height="770" rx="18" fill="none" stroke="#ECECF1"/>
+<text x="24" y="46" font-size="22" font-weight="700" fill="#1A1A28">GJC 멀티벤더 — 8 번들 × 5 역할 (4계층)</text>
 <text x="24" y="72" font-size="13" fill="#6B6B7B">행=번들 · 열=역할 · 색=벤더 · 08-17 (gjc 0.13.3): 출하 좌석 실호출 그린</text>
 <rect x="24" y="90" width="14" height="14" rx="3" fill="#FBE9E4" stroke="#D9583E"/>
 <text x="44" y="102" font-size="12" fill="#444">Anthropic</text>
@@ -26,8 +26,8 @@
 <text x="202" y="199" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
 <text x="202" y="216" font-size="10.5" fill="#8A2B1A" opacity="0.8">:medium</text>
 <rect x="364" y="177" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="364" y="177" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="378" y="199" font-size="11" font-weight="700" fill="#0A6B53">GPT-5.6 Terra</text>
-<text x="378" y="216" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
+<text x="378" y="199" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Luna</text>
+<text x="378" y="216" font-size="10.5" fill="#0A6B53" opacity="0.8">:max</text>
 <rect x="540" y="177" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="177" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="554" y="199" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="554" y="216" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
@@ -92,28 +92,28 @@
 <text x="906" y="397" font-size="12.5" font-weight="700" fill="#2D3A4D">Grok 4.6</text>
 <text x="906" y="414" font-size="10.5" fill="#2D3A4D" opacity="0.8">:high</text>
 <rect x="24" y="436" width="1040" height="58" rx="10" fill="#FFFFFF"/>
-<text x="34" y="463" font-size="13.5" font-weight="700" fill="#1A1A28">🧪 ultimate-sol</text>
-<text x="34" y="481" font-size="10.5" fill="#D9583E" font-weight="600">Premium (exp) · Sol 라우터</text>
-<rect x="188" y="441" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="188" y="441" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="202" y="463" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
-<text x="202" y="480" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
+<text x="34" y="463" font-size="13.5" font-weight="700" fill="#1A1A28">🏛 llm-council</text>
+<text x="34" y="481" font-size="10.5" fill="#D9583E" font-weight="600">Workflow · 좌석표+계약</text>
+<rect x="188" y="441" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="188" y="441" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="202" y="463" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
+<text x="202" y="480" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
 <rect x="364" y="441" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="364" y="441" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="378" y="463" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
-<text x="378" y="480" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
+<text x="378" y="463" font-size="11" font-weight="700" fill="#0A6B53">GPT-5.6 Terra</text>
+<text x="378" y="480" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="540" y="441" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="441" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="554" y="463" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="554" y="480" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
-<rect x="716" y="441" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="441" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="730" y="463" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
-<text x="730" y="480" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<rect x="716" y="441" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="441" width="4.5" height="48" rx="2" fill="#4285F4"/>
+<text x="730" y="463" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
+<text x="730" y="480" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
 <rect x="892" y="441" width="168" height="48" rx="8" fill="#EEF1F5"/><rect x="892" y="441" width="4.5" height="48" rx="2" fill="#475569"/>
 <text x="906" y="463" font-size="12.5" font-weight="700" fill="#2D3A4D">Grok 4.6</text>
 <text x="906" y="480" font-size="10.5" fill="#2D3A4D" opacity="0.8">:high</text>
 <rect x="24" y="502" width="1040" height="58" rx="10" fill="#FAFAFC"/>
-<text x="34" y="529" font-size="13.5" font-weight="700" fill="#1A1A28">🔥 dream-team</text>
-<text x="34" y="547" font-size="10.5" fill="#D9583E" font-weight="600">Premium (exp) · Fable 중심</text>
+<text x="34" y="529" font-size="13.5" font-weight="700" fill="#1A1A28">🛡 escalation</text>
+<text x="34" y="547" font-size="10.5" fill="#D9583E" font-weight="600">Workflow · 구원투수=Fable</text>
 <rect x="188" y="507" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="188" y="507" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="202" y="529" font-size="12.5" font-weight="700" fill="#8A2B1A">Fable 5</text>
+<text x="202" y="529" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
 <text x="202" y="546" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
 <rect x="364" y="507" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="364" y="507" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="378" y="529" font-size="12.5" font-weight="700" fill="#8A2B1A">Fable 5</text>
@@ -121,82 +121,45 @@
 <rect x="540" y="507" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="507" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="554" y="529" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="554" y="546" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
-<rect x="716" y="507" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="507" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="730" y="529" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
-<text x="730" y="546" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<rect x="716" y="507" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="507" width="4.5" height="48" rx="2" fill="#4285F4"/>
+<text x="730" y="529" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
+<text x="730" y="546" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
 <rect x="892" y="507" width="168" height="48" rx="8" fill="#EEF1F5"/><rect x="892" y="507" width="4.5" height="48" rx="2" fill="#475569"/>
 <text x="906" y="529" font-size="12.5" font-weight="700" fill="#2D3A4D">Grok 4.6</text>
 <text x="906" y="546" font-size="10.5" fill="#2D3A4D" opacity="0.8">:high</text>
 <rect x="24" y="568" width="1040" height="58" rx="10" fill="#FFFFFF"/>
-<text x="34" y="595" font-size="13.5" font-weight="700" fill="#1A1A28">🏛 llm-council</text>
-<text x="34" y="613" font-size="10.5" fill="#D9583E" font-weight="600">Workflow · 좌석표+계약</text>
+<text x="34" y="595" font-size="13.5" font-weight="700" fill="#1A1A28">🗺 monorepo</text>
+<text x="34" y="613" font-size="10.5" fill="#D9583E" font-weight="600">Specialized (exp)</text>
 <rect x="188" y="573" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="188" y="573" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="202" y="595" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
-<text x="202" y="612" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
-<rect x="364" y="573" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="364" y="573" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="378" y="595" font-size="11" font-weight="700" fill="#0A6B53">GPT-5.6 Terra</text>
-<text x="378" y="612" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
-<rect x="540" y="573" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="573" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="554" y="595" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
-<text x="554" y="612" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
-<rect x="716" y="573" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="573" width="4.5" height="48" rx="2" fill="#4285F4"/>
-<text x="730" y="595" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
-<text x="730" y="612" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
-<rect x="892" y="573" width="168" height="48" rx="8" fill="#EEF1F5"/><rect x="892" y="573" width="4.5" height="48" rx="2" fill="#475569"/>
-<text x="906" y="595" font-size="12.5" font-weight="700" fill="#2D3A4D">Grok 4.6</text>
-<text x="906" y="612" font-size="10.5" fill="#2D3A4D" opacity="0.8">:high</text>
+<text x="202" y="612" font-size="10.5" fill="#8A2B1A" opacity="0.8">:medium</text>
+<rect x="364" y="573" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="364" y="573" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="378" y="595" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
+<text x="378" y="612" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<rect x="540" y="573" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="540" y="573" width="4.5" height="48" rx="2" fill="#4285F4"/>
+<text x="554" y="595" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
+<text x="554" y="612" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
+<rect x="716" y="573" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="573" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="730" y="595" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
+<text x="730" y="612" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<rect x="892" y="573" width="168" height="48" rx="8" fill="#DFF3F4"/><rect x="892" y="573" width="4.5" height="48" rx="2" fill="#0E7490"/>
+<text x="906" y="602" font-size="12.5" font-weight="700" fill="#155E63">GLM-5.2</text>
 <rect x="24" y="634" width="1040" height="58" rx="10" fill="#FAFAFC"/>
-<text x="34" y="661" font-size="13.5" font-weight="700" fill="#1A1A28">🛡 escalation</text>
-<text x="34" y="679" font-size="10.5" fill="#D9583E" font-weight="600">Workflow · 구원투수=Fable</text>
-<rect x="188" y="639" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="188" y="639" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="202" y="661" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
-<text x="202" y="678" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
-<rect x="364" y="639" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="364" y="639" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="378" y="661" font-size="12.5" font-weight="700" fill="#8A2B1A">Fable 5</text>
-<text x="378" y="678" font-size="10.5" fill="#8A2B1A" opacity="0.8">:xhigh</text>
-<rect x="540" y="639" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="639" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="554" y="661" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
-<text x="554" y="678" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
+<text x="34" y="661" font-size="13.5" font-weight="700" fill="#1A1A28">💸 budget</text>
+<text x="34" y="679" font-size="10.5" fill="#D9583E" font-weight="600">Specialized (exp) · 게이트</text>
+<rect x="188" y="639" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="188" y="639" width="4.5" height="48" rx="2" fill="#10A37F"/>
+<text x="202" y="661" font-size="11" font-weight="700" fill="#0A6B53">GPT-5.6 Terra</text>
+<text x="202" y="678" font-size="10.5" fill="#0A6B53" opacity="0.8">:medium</text>
+<rect x="364" y="639" width="168" height="48" rx="8" fill="#DFF3F4"/><rect x="364" y="639" width="4.5" height="48" rx="2" fill="#0E7490"/>
+<text x="378" y="668" font-size="12.5" font-weight="700" fill="#155E63">GLM-5.2</text>
+<rect x="540" y="639" width="168" height="48" rx="8" fill="#DFF3F4"/><rect x="540" y="639" width="4.5" height="48" rx="2" fill="#0E7490"/>
+<text x="554" y="668" font-size="12.5" font-weight="700" fill="#155E63">Qwen3.8 Max</text>
 <rect x="716" y="639" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="639" width="4.5" height="48" rx="2" fill="#4285F4"/>
 <text x="730" y="661" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
 <text x="730" y="678" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
-<rect x="892" y="639" width="168" height="48" rx="8" fill="#EEF1F5"/><rect x="892" y="639" width="4.5" height="48" rx="2" fill="#475569"/>
-<text x="906" y="661" font-size="12.5" font-weight="700" fill="#2D3A4D">Grok 4.6</text>
-<text x="906" y="678" font-size="10.5" fill="#2D3A4D" opacity="0.8">:high</text>
-<rect x="24" y="700" width="1040" height="58" rx="10" fill="#FFFFFF"/>
-<text x="34" y="727" font-size="13.5" font-weight="700" fill="#1A1A28">💸 eco</text>
-<text x="34" y="745" font-size="10.5" fill="#D9583E" font-weight="600">Specialized (exp)</text>
-<rect x="188" y="705" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="188" y="705" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="202" y="727" font-size="11" font-weight="700" fill="#0A6B53">GPT-5.6 Terra</text>
-<text x="202" y="744" font-size="10.5" fill="#0A6B53" opacity="0.8">:medium</text>
-<rect x="364" y="705" width="168" height="48" rx="8" fill="#DFF3F4"/><rect x="364" y="705" width="4.5" height="48" rx="2" fill="#0E7490"/>
-<text x="378" y="734" font-size="12.5" font-weight="700" fill="#155E63">GLM-5.2</text>
-<rect x="540" y="705" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="705" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="554" y="727" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Luna</text>
-<text x="554" y="744" font-size="10.5" fill="#0A6B53" opacity="0.8">:medium</text>
-<rect x="716" y="705" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="705" width="4.5" height="48" rx="2" fill="#4285F4"/>
-<text x="730" y="727" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
-<text x="730" y="744" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
-<rect x="892" y="705" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="892" y="705" width="4.5" height="48" rx="2" fill="#4285F4"/>
-<text x="906" y="727" font-size="11" font-weight="700" fill="#1A56C4">Gemini 3-flash</text>
-<text x="906" y="744" font-size="10.5" fill="#1A56C4" opacity="0.8">:low</text>
-<rect x="24" y="766" width="1040" height="58" rx="10" fill="#FAFAFC"/>
-<text x="34" y="793" font-size="13.5" font-weight="700" fill="#1A1A28">🗺 monorepo</text>
-<text x="34" y="811" font-size="10.5" fill="#D9583E" font-weight="600">Specialized (exp)</text>
-<rect x="188" y="771" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="188" y="771" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="202" y="793" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
-<text x="202" y="810" font-size="10.5" fill="#8A2B1A" opacity="0.8">:medium</text>
-<rect x="364" y="771" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="364" y="771" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="378" y="793" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
-<text x="378" y="810" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
-<rect x="540" y="771" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="540" y="771" width="4.5" height="48" rx="2" fill="#4285F4"/>
-<text x="554" y="793" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
-<text x="554" y="810" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
-<rect x="716" y="771" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="771" width="4.5" height="48" rx="2" fill="#D9583E"/>
-<text x="730" y="793" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
-<text x="730" y="810" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
-<rect x="892" y="771" width="168" height="48" rx="8" fill="#DFF3F4"/><rect x="892" y="771" width="4.5" height="48" rx="2" fill="#0E7490"/>
-<text x="906" y="800" font-size="12.5" font-weight="700" fill="#155E63">GLM-5.2</text>
-<text x="24" y="860" font-size="11.5" fill="#6B6B7B">불변식: 전 번들 멀티벤더(providers ≥2) · default = Anthropic 플래그십(예외: opt-in ultimate-sol=Sol · anthropic 미포함 eco=Terra) · critic = cross-family 기본(예외는 SAME_FAMILY_OK + WARN)</text>
-<text x="24" y="880" font-size="11.5" fill="#6B6B7B">엔진 effort 하드룰 합법 · 🔥 dream-team = Fable 5 (Max/premium Team 주간한도 50% 포함 · Pro 는 credits) · llm-council/escalation 은 좌석표+워크플로 계약 · gjc 0.13.3</text>
+<rect x="892" y="639" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="892" y="639" width="4.5" height="48" rx="2" fill="#4285F4"/>
+<text x="906" y="661" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
+<text x="906" y="678" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
+<text x="24" y="728" font-size="11.5" fill="#6B6B7B">불변식: 전 번들 멀티벤더(providers ≥2) · default = Anthropic 플래그십(anthropic 미요구 번들은 적용 대상 아님) · critic = cross-family 기본(예외는 SAME_FAMILY_OK + WARN)</text>
+<text x="24" y="748" font-size="11.5" fill="#6B6B7B">엔진 effort 하드룰 합법 · 🏆 ultimate-opus = Opus 5 ($5/$25 · Max 기본·Pro 최강) · llm-council/escalation 은 좌석표+워크플로 계약 · gjc 0.13.3</text>
 </svg>

@@ -11,6 +11,72 @@
 
 ---
 
+## v3.0.0 — 2026-08-17
+
+### Changed (MAJOR — 카탈로그 재설계 · 선택 축 변경 · validator 개정)
+
+- **10번들 → 8번들** (`gjc-profiles.yml`). 삭제: `dream-team` · `eco` · `ultimate-sol`.
+  신규: `budget` — 게이트 3조건 **전부 판정 통과**(아래 Validation). 유지 7종은 좌석 변경
+  없음 — 아래 좌석 항목 하나만 예외.
+- **`daily.executor` `gpt-5.6-terra:high` → `gpt-5.6-luna:max`**. 사용자 정책 결정이며
+  **품질 비교는 FAIL 이었다**(사전등록 60콜: 효과크기 0/10, Wilcoxon p=0.1587,
+  토큰 47.1 vs 32.2). 측정된 승리가 아니라 **정책**으로 채택했다 —
+  근거는 `evidence/2026-08-17-v3-probes.md`.
+- **validator 개정 3건** (`scripts/validate-profiles.py`)
+  - **D-1** `gpt-5.6-luna` 는 **`:max` 단독**만 합법. `:xhigh`·`:medium` 포함 나머지는 거부.
+    (`:medium` 은 v2.1.0 에서 합법이었다 — 규칙이 실제로 좁아졌다.)
+  - **D-2** `default` ↔ `critic` 동일 계열은 **hard ERROR**(기존 WARN).
+  - **D-3** `NON_ANTHROPIC_DEFAULT_OK` **빈 집합** — `ultimate-sol` 이 드롭돼 예외가 사라졌다.
+    `budget` 은 예외가 아니라 **적용 대상 아님**(anthropic 을 요구하지 않는다).
+- **Core tier 재정의** — "3벤더 진입점" → **"`anthropic`·`openai-codex`·`google-antigravity`
+  구독 로그인만으로 activation"**. `xai` 도 `/login` 이 되므로 "키 없이 로그인만" 은
+  정의가 되지 않는다 — **필요한 벤더 집합**이 기준이다.
+- **선택 가이드 재설계** — tier 순 퍼널 → **최소 필요 프로바이더 조합 매트릭스**(5행).
+  tier 는 결과 라벨(배지)로 강등.
+- **fixture 5종** (`scripts/ci-fixture-check.sh`) — `luna-xhigh-fail`·`luna-medium-fail`·
+  `sol-max-fail`·`terra-max-fail`·`default-critic-fail`. accept 케이스는 `[canonical]` 이 담당.
+- **CI 스텝 추가** (`.github/workflows/validate.yml`) — fixture 배터리 ·
+  `required_providers` 패리티 · **링크 무결성**(파일 생존 + GitHub 앵커 슬러그).
+- **문서 동기화 표면 8개 갱신** — `gjc-profiles.yml` 헤더 · README ×4 · `docs/factsheet.md` ·
+  `routing-rules.md` · `scripts/gen_svgs.py` · `scripts/revalidate.sh` 주석.
+  `§5` 제목의 번들 개수가 바뀌어 **앵커 링크 17건**을 함께 갱신했다(퍼센트 인코딩 3건 포함).
+
+### Unchanged (보호 목록)
+
+- **4계층 구조** · Council/Escalation **워크플로 계약** · Gemini 3.1 Pro `-low:high` 리터럴 핀 ·
+  Sol/Terra 출하 상한 `xhigh`(Luna 만 `:max`) · Fable 5 출하 상한 `xhigh` ·
+  전 번들 멀티벤더(`required_providers ≥ 2`) · `critic` cross-family 기본 ·
+  `install.sh` 플래그 체계 · `gjc-cop` 구조 · `extragoal` 레인 · GJC 내장 `codex-eco` 언급.
+- **`install.sh` 는 손대지 않았다** — 관리블록 sentinel 이 옛 블록을 통째로 교체하므로
+  삭제된 3번들이 사용자 `models.yml` 에서 **자동으로 사라진다**(실측: 8번들·고아 0).
+
+### Not shipped
+
+- `trio` · `luna-scale` · `research-long` — **출하된 적 없다**(원안 후보 집합).
+- Gemini 3.5 Pro 좌석(카탈로그 없음) · Flash 3.5/3.6 승격 · `grok-build/grok-4.6:high`(not found).
+- **좌석을 잃은 셀렉터 2종을 canary 로 강하** — `gemini-3-flash:low`(v2.1.0 `eco.critic`) ·
+  `claude-fable-5:high`. `scripts/revalidate.sh` 의 `CANARIES` 로 옮겨 라이브 표면 회귀
+  신호는 유지하되 출하 좌석이 아님을 라벨로 못박았다(`grok-4.5`·`deepseek-v4-*` 와 동일 처리).
+  D-1 은 `gjc-profiles.yml` 이 담을 수 있는 effort 를 제한하는 규칙이고 canary 배터리를
+  금지하지 않는다 — `gpt-5.6-luna:high` 는 이미 canary 로 남아 Luna 라이브 표면을 커버한다.
+  `gpt-5.6-terra:medium` 은 `budget.default` 로 좌석을 유지한다.
+
+### Validation
+
+- 실호출(2026-08-17): `evidence/2026-08-17-v3-probes.md` — `luna:max` ok ·
+  `qwen3.8-max` ok · `glm-5.2` ok · `minimax-m3` ok · Daybreak Blue ok.
+- Luna 사전등록 비교 60콜 — **FAIL**(위 좌석 항목 참조). 원시 기록·채점기 보존.
+- 목표 상태 게이트 **15축** + 출하 게이트 포함 **25축** 전부 `ok`
+  (`scripts/check-v3-target-state.sh --ship`, v3 전환 1회용).
+- 게이트 음성 경로 **16종** 실증 — 각 축이 결함 주입 시 실제로 FAIL 함을 확인.
+- 링크 무결성 — 파일 링크 133건 · 내부/파일간 앵커 전수, 죽은 링크 0.
+- **`budget` 게이트 3조건 공식 판정 — 통과.** 조건 1(3종 dated 프로브 그린: `qwen3.8-max` ·
+  `glm-5.2` · `minimax-m3`) · 조건 2(비-ocgo 좌석으로 가족 분리 — default `gpt` / architect·critic
+  `google`) · **조건 3(이 브랜치의 실제 YAML 에서 validator green)**. 조건 3 은 시뮬레이션이 아니라
+  브랜치 트리 실행이다: `profiles checked: 8` · `OK — all invariants hold` · exit 0 · 의도된 WARN 3건.
+  기록: `evidence/2026-08-17-v3-budget-gate-ruling.md`.
+
+
 ## v2.1.0 — 2026-08-17
 
 ### Changed (MINOR — 후계 like-for-like, 10번들·4계층 불변)

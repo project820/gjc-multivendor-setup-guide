@@ -38,17 +38,11 @@ ROLES = {"default", "executor", "architect", "planner", "critic"}
 SAME_FAMILY_OK = {
     ("monorepo", "exec_arch"): "all roles >=1M ctx; gpt-5.5 (272K)/5.6 (372K) excluded — gpt-5.4 is 1M but Opus ranks at least equal",
     ("ultimate-opus", "exec_arch"): "human ruling 2026-07-10: Opus quality base; Sol planner + Grok critic carry cross-family verification (bundle stays 3-vendor)",
-    ("dream-team", "exec_arch"): "human ruling 2026-07-10: Fable executor vs Opus architect are distinct models; Sol planner + Grok critic carry cross-family verification",
     ("coding-sprint", "plan_crit"): "human ruling 2026-07-10: Sol planner + Terra critic are distinct models; bundle stays 3-vendor mixed collaboration",
 }
 
-# Documented non-Anthropic default routers (profile -> rationale). Surfaced as WARN.
-NON_ANTHROPIC_DEFAULT_OK = {
-    "ultimate-sol": "opt-in experimental Sol-base premium: Sol leads long-horizon workflow completion "
-    "(Agents' Last Exam 52.7 vs Fable 40.5, OpenAI launch table incl. competitor rows); trade-offs stay "
-    "surfaced — 372K codex-surface router ctx (vs 1M) and weaker tool-calling axis (Toolathlon 58 vs "
-    "Fable 61.7). Role-fit L3 pending (evidence/2026-08-16-selectors.md, two-axis synthesis A1).",
-}
+# D-3 (v3): ultimate-sol 드롭과 함께 이 예외는 사라진다. 비면 빈 dict 로 남긴다.
+NON_ANTHROPIC_DEFAULT_OK = {}
 
 # provider-id -> vendor family (for cross-family checks)
 FAMILY = {
@@ -71,6 +65,13 @@ FAMILY = {
 #   but its depth is un-benchmarked — deliberate fail-closed ceiling stays xhigh (gpt-5.[2-9] rule).
 def _eff_rules():
     return [
+        # D-1 (v3): Luna exact matcher — 반드시 일반 gpt-5.[2-9] 룰보다 앞에 온다.
+        # Sol/Terra 는 계속 xhigh 상한이고 Luna 는 **:max 만** 합법이다.
+        # 사용자 결정(2026-08-17): "luna 는 max 만 허용한다" — 계획 원안의
+        # {low,medium,high,xhigh,max} 를 {max} 단독으로 좁혔다. v3 에서 Luna 좌석은
+        # daily.executor 하나뿐이므로(eco.planner 는 eco 와 함께 삭제) 다른 effort 는
+        # 출하 경로가 없다. 좁은 쪽이 fail-closed 다.
+        (lambda p, m: p == "openai-codex" and m == "gpt-5.6-luna", {"max"}),
         (lambda p, m: m.startswith("claude-fable-5"), {"minimal","low","medium","high","xhigh"}),   # :max accepted; do not ship
         (lambda p, m: m.startswith("claude-sonnet-5"), {"minimal","low","medium","high"}),          # catalog lists xhigh/max; shipped legality stays high
         (lambda p, m: m.startswith("claude-opus-5"), {"minimal","low","medium","high","xhigh","max"}),
@@ -148,6 +149,9 @@ def main() -> int:
                     warns.append(f"[{name}] planner/critic same family ({fam['planner']}) — intentional: {SAME_FAMILY_OK[(name,'plan_crit')]}")
                 else:
                     errors.append(f"[{name}] planner/critic share family ({fam['planner']}) — breaks plan-critique independence")
+        # D-2 (v3): default 와 critic 이 같은 family 면 hard ERROR. allowlist 없음.
+        if fam["default"] == fam["critic"]:
+            errors.append(f"[{name}] default/critic share family ({fam['default']}) — breaks final-review independence")
         # 4. effort legality
         for role, sel in mm.items():
             prov, model, eff = split_selector(sel)

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""gen_svgs.py — GJC 멀티벤더 가이드 SVG 자산 재생성기 (v2.1.0)
+"""gen_svgs.py — GJC 멀티벤더 가이드 SVG 자산 재생성기 (v3.0.0)
 
 assets/ 아래 4개 SVG 를 데이터 기반으로 재생성한다:
-  - role-winners.svg     : 🔥 dream-team 역할별 최강 가설 배너
-  - profiles-matrix.svg  : 10 번들 × 5 역할 매트릭스 (4계층)
+  - role-winners.svg     : 🏆 ultimate-opus 역할별 최강 가설 배너
+  - profiles-matrix.svg  : 8 번들 × 5 역할 매트릭스 (4계층)
   - effort-ladder.svg    : effort 6단계 사다리 + 모델별 클램프 스트립
   - architecture.svg     : 본체 1 + 서브에이전트 4 (본체 라벨 프로필-중립)
 
@@ -14,8 +14,8 @@ routing-tree.svg 는 모델명 하드코딩이 없어 재생성 대상이 아니
   python3 scripts/gen_svgs.py            # repo 루트 기준 assets/ 에 출력
   python3 scripts/gen_svgs.py --out DIR  # 다른 디렉터리에 출력
 
-데이터 원천: gjc-profiles.yml (v2.1.0, 10 번들). 프로필이 바뀌면
-아래 PROFILES 테이블을 yml 과 동기화한 뒤 재실행한다.
+데이터 원천: gjc-profiles.yml (v3.0.0, 8 번들). 프로필이 바뀌면
+아래 _PROFILE_CHROME 테이블을 yml 과 동기화한 뒤 재실행한다.
 검증 스탬프 날짜는 VERIFY_DATE 하나만 고치면 된다.
 """
 
@@ -52,9 +52,9 @@ ROLES = ["🎛 default", "🔨 executor", "🧠 planner", "🔭 architect", "⚖
 # 셀을 만든다. 손으로 두는 것은 표시 이름과 tier 캡션뿐이고, 매핑에 없는 셀렉터가
 # 나오면 조용히 넘어가지 않고 하드 에러로 죽는다.
 #
-# 왜 이렇게 하나: 예전엔 PROFILES 가 하드코딩 테이블이라 yml 을 바꿔도 SVG 가
-# 그대로였다. 실제로 v2.1.0 리뷰에서 eco.executor 교체가 SVG 에 반영되지 않아
-# 공개 문서가 정본과 반대로 말하는 사고가 났다. 파생 + fail-closed 로 막는다.
+# 왜 이렇게 하나: 예전엔 좌석표가 하드코딩 테이블이라 yml 을 바꿔도 SVG 가
+# 그대로였다. 공개 문서가 정본과 반대로 말하는 사고를 막기 위해 좌석은 파생하고
+# 매핑에 없는 셀렉터는 fail-closed 로 막는다.
 A, O, G, X, C = "anthropic", "openai", "google", "xai", "opencode"
 
 # provider 접두사 → 팔레트 키
@@ -69,6 +69,7 @@ _PROVIDER_VENDOR = {
 
 # 모델 id → SVG 표시 이름. 새 모델이 좌석에 들어오면 여기 한 줄 추가해야 한다.
 _MODEL_DISPLAY = {
+    "qwen3.8-max": "Qwen3.8 Max",
     "claude-opus-5": "Opus 5",
     "claude-opus-4-8": "Opus 4.8",
     "claude-fable-5": "Fable 5",
@@ -91,11 +92,9 @@ _PROFILE_CHROME = {
     "coding-sprint":  ("🏎 coding-sprint", "Core"),
     "cyber-cop":      ("🚨 cyber-cop", "Core · reviewer 모드"),
     "ultimate-opus":  ("🏆 ultimate-opus", "Premium (exp)"),
-    "ultimate-sol":   ("🧪 ultimate-sol", "Premium (exp) · Sol 라우터"),
-    "dream-team":     ("🔥 dream-team", "Premium (exp) · Fable 중심"),
     "llm-council":    ("🏛 llm-council", "Workflow · 좌석표+계약"),
     "escalation":     ("🛡 escalation", "Workflow · 구원투수=Fable"),
-    "eco":            ("💸 eco", "Specialized (exp)"),
+    "budget":         ("💸 budget", "Specialized (exp) · 게이트"),
     "monorepo":       ("🗺 monorepo", "Specialized (exp)"),
 }
 
@@ -173,16 +172,16 @@ ARROW_DEF = ('<defs><marker id="ah" markerWidth="9" markerHeight="9" refX="6.5" 
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# 1. role-winners.svg — 🔥 dream-team 배너
+# 1. role-winners.svg — 🏆 ultimate-opus 배너
 # ═════════════════════════════════════════════════════════════════════════════
 def gen_role_winners():
     W, H = 1256, 268
     cards = [
         # (role, role_desc, vendor, model, effort, rationale)
-        ("🎛 default", "오케스트레이션·툴 신뢰성", A, "Claude Fable 5", ":high",
-         "Anthropic · 라우터=품질 상한"),
-        ("🔨 executor", "실코딩", A, "Claude Fable 5", ":xhigh",
-         "Anthropic · SWE-Bench Pro 80.0"),
+        ("🎛 default", "오케스트레이션·툴 신뢰성", A, "Claude Opus 5", ":high",
+         "Anthropic · $5/$25 · Max 기본"),
+        ("🔨 executor", "실코딩", A, "Claude Opus 5", ":high",
+         "Anthropic · 1M ctx · 구독 포함 코딩 최강"),
         ("🧠 planner", "최상위 추론·설계", O, "GPT-5.6 Sol", ":xhigh",
          "OpenAI · 5.6 플래그십 추론"),
         ("🔭 architect", "1M 실효검색·설계 리뷰", A, "Claude Opus 5", ":high",
@@ -190,9 +189,9 @@ def gen_role_winners():
         ("⚖ critic", "독립 적대 비평", X, "Grok 4.6", ":high",
          "xAI · 제3계열 독립 dissent"),
     ]
-    s = svg_open(W, H, "🔥 dream-team 셋업 — 역할별 최강 가설 (Premium · experimental)")
+    s = svg_open(W, H, "🏆 ultimate-opus 셋업 — 역할별 최강 가설 (Premium · experimental)")
     s += (f'<text x="24" y="44" font-size="22" font-weight="700" fill="#1A1A28">'
-          f'🔥 dream-team 셋업 — 역할별 최강 가설 (Premium · experimental)</text>\n')
+          f'🏆 ultimate-opus 셋업 — 역할별 최강 가설 (Premium · experimental)</text>\n')
     s += ('<text x="24" y="70" font-size="13" fill="#6B6B7B">한 벤더가 모든 역할에서 '
           '1위는 아니다 — 5역할을 강점별로 3개 벤더에 분산(Anthropic·OpenAI·xAI) · '
           'role-fit L3 실측 전 experimental</text>\n')
@@ -219,7 +218,7 @@ def gen_role_winners():
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# 2. profiles-matrix.svg — 10 번들 × 5 역할
+# 2. profiles-matrix.svg — 8 번들 × 5 역할
 # ═════════════════════════════════════════════════════════════════════════════
 def gen_profiles_matrix():
     n = len(PROFILES)
@@ -276,12 +275,12 @@ def gen_profiles_matrix():
                       f'opacity="0.8">{esc(effort)}</text>\n')
     # 푸터
     s += (f'<text x="24" y="{footer_y}" font-size="11.5" fill="#6B6B7B">불변식: '
-          f'전 번들 멀티벤더(providers ≥2) · default = Anthropic 플래그십(예외: opt-in ultimate-sol=Sol · anthropic 미포함 eco=Terra) · '
+          f'전 번들 멀티벤더(providers ≥2) · default = Anthropic 플래그십(anthropic 미요구 번들은 적용 대상 아님) · '
           f'critic = cross-family 기본(예외는 SAME_FAMILY_OK + WARN)'
           f'</text>\n')
     s += (f'<text x="24" y="{footer_y+20}" font-size="11.5" fill="#6B6B7B">'
-          f'엔진 effort 하드룰 합법 · 🔥 dream-team = Fable 5 '
-          f'(Max/premium Team 주간한도 50% 포함 · Pro 는 credits) · llm-council/escalation 은 좌석표+워크플로 계약 · gjc {GJC_VERSION}</text>\n')
+          f'엔진 effort 하드룰 합법 · 🏆 ultimate-opus = Opus 5 '
+          f'($5/$25 · Max 기본·Pro 최강) · llm-council/escalation 은 좌석표+워크플로 계약 · gjc {GJC_VERSION}</text>\n')
     s += "</svg>"
     return s
 
@@ -343,7 +342,7 @@ def gen_effort_ladder():
         "Opus 5 = minimal..max",
         "Fable 5 = 출하 ≤ xhigh (:max 수용·심도 미검증)",
         "Sonnet 4.6/5 = 출하 ≤ high (:xhigh/:max 수용·심도 미검증)",
-        "GPT-5.6 3종 = 출하 ≤ xhigh (:max 수용·심도 미검증)",
+        "GPT-5.6 Sol·Terra ≤xhigh · Luna=:max 단독(D-1)",
         "xai Grok 4.6 ≤ xhigh (출하 :high)",
         "Gemini Pro = {low, high}",
         "opencode-go = effort 생략",
@@ -385,7 +384,7 @@ def gen_architecture():
           'fill="#33334a" text-anchor="middle">📥 사용자 작업</text>\n')
     s += ('<line x1="500" y1="98" x2="500" y2="122" stroke="#9AA0AE" '
           'stroke-width="1.5" marker-end="url(#ah)"/>\n')
-    # 본체 박스 — 프로필-중립 라벨 (dream-team 은 Fable 5 · ultimate-sol 은 Sol default)
+    # 본체 박스 — 프로필-중립 라벨 (ultimate-opus 는 Opus 5 default)
     s += '<rect x="320" y="124" width="360" height="90" rx="14" fill="#D9583E"/>\n'
     s += ('<text x="500" y="150" font-size="14.5" font-weight="800" fill="#fff" '
           'text-anchor="middle">🎛 default · 본체</text>\n')
