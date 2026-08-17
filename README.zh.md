@@ -142,7 +142,7 @@ google-antigravity Gemini  gemini-3.1-pro-low:high（高推理）· gemini-3.1-p
 
 1. Gemini Pro 只支持 `low`/`high`；高推理必须字面钉住 `gemini-3.1-pro-low:high`（模糊空间 fail-closed）。Gemini 3.5 Pro 不在 08-16 目录中。
 2. openai-codex 上下文**按模型区分**：`gpt-5.4`=**1M** · `gpt-5.5`=**272K** · `gpt-5.6 3 种`=**372K**（0.13.3 打印；0.9.6 为 373K）。
-3. Sonnet（4.6/5）在 GJC 中不支持 `xhigh`/`max`；**Fable 5 不支持 `max`**（分别被夹取到 high/xhigh）。
+3. Sonnet（4.6/5）与 Fable 5 的**出货上限分别为 `high` / `xhigh`** — 更高档位调用会被接受但深度未验证，故不出货。
 4. opencode-go 省略 `:effort`（仅 deepseek-v4 系列例外支持）。
 5. xai `grok-4.6` 出货上限为 `high`（`:xhigh` 接受、深度未验证）。`grok-build/grok-4.6:high` 为 not found。
 
@@ -454,7 +454,7 @@ Gemini 使用 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 订�
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
 | GPT-5.6 Luna | 1 / 6 | eco planner（v2 新采用） |
 | Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3 种·llm-council·escalation）— xai API key |
-| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic · >400k 单条 paste 兜底 |
+| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **未出货** — 本账号 403 China opt-in（目录 id 仍在） |
 | Gemini 3.1 Pro / 3-flash | 预览/订阅 token | planner·architect·critic |
 

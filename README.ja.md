@@ -142,7 +142,7 @@ google-antigravity Gemini  gemini-3.1-pro-low:high（高推論）· gemini-3.1-p
 
 1. Gemini Pro は `low`/`high` のみ — 高推論は `gemini-3.1-pro-low:high` をリテラルにピン（ファジー空間 fail-closed）。Gemini 3.5 Pro は 08-16 カタログに無い。
 2. openai-codex の文脈はモデル別 — `gpt-5.4`=1M · `gpt-5.5`=272K · `gpt-5.6 3種`=372K（0.13.3 表記）。
-3. Sonnet（4.6/5）は `xhigh`/`max` 不可 · **Fable 5 は `max` 不可**（それぞれ high/xhigh にクランプ）。
+3. Sonnet（4.6/5）と Fable 5 の**出荷上限はそれぞれ `high` / `xhigh`** — 上位段は受理されるが深度未検証のため出荷しない。
 4. opencode-go は `:effort` を省略（deepseek-v4 系のみ例外）。
 5. xai `grok-4.6` の出荷上限は `high`（`:xhigh` 受理・深度未検証）。`grok-build/grok-4.6:high` は not found。
 
@@ -451,7 +451,7 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
 | GPT-5.6 Luna | 1 / 6 | eco planner（v2 新規採用） |
 | Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3種・llm-council・escalation）— xai API キー |
-| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic · >400k 単一 paste フォールバック |
+| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **未出荷** — このアカウントで 403 China opt-in（カタログ id は生存） |
 | Gemini 3.1 Pro / 3-flash | プレビュー/サブスクトークン | planner·architect·critic |
 

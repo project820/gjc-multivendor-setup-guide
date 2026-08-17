@@ -144,7 +144,7 @@ google-antigravity Gemini  gemini-3.1-pro-low:high (high reasoning) · gemini-3.
 
 1. Gemini Pro supports only `low`/`high`; high reasoning is the literal pin `gemini-3.1-pro-low:high` (fuzzy space fail-closed — bad ids return “not found”). Gemini 3.5 Pro is not in the 08-16 catalog.
 2. openai-codex ctx is **per-model** — `gpt-5.4`=**1M** · `gpt-5.5`=**272K** · the three `gpt-5.6` models=**372K** (0.13.3 print; 0.9.6 listed 373K; separate from the 1.05M API specification).
-3. Sonnet (4.6/5) cannot do `xhigh`/`max` in GJC; **Fable 5 cannot do `max`** (clamped to high / xhigh respectively).
+3. Sonnet (4.6/5) and Fable 5 **ship capped at `high` / `xhigh` respectively** — higher tiers are accepted but their depth is unverified, so they are not shipped.
 4. opencode-go omits `:effort` (only the deepseek-v4 family supports it).
 5. xai `grok-4.6` ships at `high` (`:xhigh` accepted, depth unverified). `grok-build/grok-4.6:high` is not found (bare OK — not shipped). The gpt-5.6 trio accepts `:max`, but its depth is unverified, so the shipped cap is `xhigh`.
 
@@ -461,7 +461,7 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
 | GPT-5.6 Luna | 1 / 6 | eco planner (new in v2) |
 | Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic (premium 3 bundles · llm-council · escalation) — xai API key |
-| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic · >400k single-paste fallback |
+| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **not shipped** — 403 China opt-in on this account (catalog id still live) |
 | Gemini 3.1 Pro / 3-flash | preview/subscription token | planner·architect·critic |
 

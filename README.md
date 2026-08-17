@@ -160,7 +160,7 @@ google-antigravity Gemini  gemini-3.1-pro-low:high (고추론) · gemini-3.1-pro
 
 1. Gemini Pro는 `low`/`high`만 — 고추론은 `gemini-3.1-pro-low:high` 리터럴 핀(퍼지 공간 fail-closed — 잘못된 id는 "not found"). Gemini 3.5 Pro는 08-16 카탈로그에 없음.
 2. openai-codex ctx는 **모델별** — `gpt-5.4`=**1M** · `gpt-5.5`=**272K** · `gpt-5.6 3종`=**372K**(0.13.3 표기; 0.9.6은 373K; API 스펙 1.05M과 별개의 usable prompt budget).
-3. Sonnet(4.6/5)은 GJC에서 `xhigh`/`max` 불가 · **Fable 5는 `max` 불가**(각각 high/xhigh로 클램프).
+3. Sonnet(4.6/5)·Fable 5 는 **출하 상한이 각각 `high`/`xhigh`** — 상위 티어는 호출이 수용되지만 심도 미검증이라 출하하지 않는다.
 4. opencode-go는 `:effort` 생략(deepseek-v4 계열만 예외적으로 지원).
 5. xai `grok-4.6` 출하 상한은 `high`(`:xhigh`는 수용·심도 미검증). `grok-build/grok-4.6:high`는 not found(bare만 OK — 미출하). gpt-5.6 3종 `:max`는 수용되나 심도 미검증이므로 출하 상한은 `xhigh`다.
 
@@ -321,7 +321,7 @@ profiles:
       default:   anthropic/claude-opus-5:medium                 # 1M
       executor:  anthropic/claude-opus-5:high                   # 1M
       planner:   google-antigravity/gemini-3.1-pro-low:high     # 추론(스코프 입력). 1M window ≠ 완전 recall — 청크 누적 워크플로 전제
-      architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste ~400k 한도(실측 350k ✅/476k 🔴) — 한 방 >400k 는 opencode-go/glm-5.2 (deepseek-v4-pro 는 이 계정 403)
+      architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste ~400k 한도(실측 350k ✅/476k 🔴) — >400k 단일 paste 는 현재 권장 셀렉터 없음(청크 누적으로 우회)
       critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51), cross-family vs anthropic. effort 무핀(opencode-go 규칙)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -369,7 +369,7 @@ profiles:
 - **llm-council** — Google·xAI·OpenAI가 판정하고 Anthropic은 raw verdict를 보존하는 집계자; [`routing-rules.md`](./routing-rules.md)의 Council 계약(독립호출·quorum)이 필요하다.
 - **escalation** — 실패 뒤 Fable `:xhigh`와 3표 critic을 쓰는 수동 게이트; Escalation 계약이 트리거·human gate를 정하고 refusal 시 Opus `:max`로 강등한다.
 - **eco** — Terra·GLM-5.2·Luna·Gemini 저단가 실험(절대 최저가는 내장 `codex-eco`); `grok-4-1-fast` retire/redirect 뒤 critic은 07-10 `gemini-3-flash:low`로 교체됐고, executor는 DeepSeek가 이 계정에서 403 China opt-in 이라 v2.1.0에서 `glm-5.2`로 교체됐다.
-- **monorepo** — Opus architect·GLM-5.2 critic의 1M ctx 번들; 완전 recall이 아니므로 청크 누적하고 >~400k paste만 `opencode-go/glm-5.2`(1M/131K)를 쓴다.
+- **monorepo** — Opus architect·GLM-5.2 critic의 1M ctx 번들; 완전 recall이 아니므로 청크 누적한다. >~400k 단일 paste 는 **현재 권장 셀렉터가 없다**(실측된 후보 `deepseek-v4-pro` 는 이 계정 403).
 
 ---
 
@@ -517,7 +517,7 @@ Gemini는 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 구독 �
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
 | GPT-5.6 Luna | 1 / 6 | eco planner (v2 신규 채용) |
 | Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic(premium 3종·llm-council·escalation) — xai API 키 |
-| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic · >400k 단일 paste 폴백 |
+| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **미출하** — 이 계정 403 China opt-in(카탈로그 잔류) |
 | Gemini 3.1 Pro / 3-flash | 프리뷰/구독 토큰 | planner·architect·critic |
 
