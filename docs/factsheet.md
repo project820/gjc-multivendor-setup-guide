@@ -21,12 +21,12 @@
 | 🏎 coding-sprint | Opus5:med | Opus5:high | Sol:high² | Gemini`-low:high` | Terra:high² | 구독 3 |
 | 🚨 cyber-cop | Opus5:high | Sol:high | Gemini`-low:high` | Opus5:high | Sol:high | 구독 3 |
 | 🏆 ultimate-opus | Opus5:high | Opus5:high³ | Sol:xhigh | Opus5:high³ | Grok4.6:high | +xai |
-| 🏛 llm-council | Opus5:high⁵ | Terra:high | Sol:xhigh | Gemini`-low:high` | Grok4.6:high | 구독 3+xai |
+| 🏛 llm-council | Opus5:high⁴ | Terra:high | Sol:xhigh | Gemini`-low:high` | Grok4.6:high | 구독 3+xai |
 | 🛡 escalation | Opus5:high | Fable:xhigh | Sol:xhigh | Gemini`-low:high` | Grok4.6:high | 구독 3+xai |
 | 💸 budget | Terra:med | GLM-5.2 | Qwen3.8Max | Gemini`-low:high` | Gemini`-low:high` | codex+go+google |
 | 🗺 monorepo | Opus5:med | Opus5:high³ | Gemini`-low:high` | Opus5:high³ | GLM-5.2 | anthropic+google+go |
 
-¹ architect와 동일 셀렉터 — 3벤더 구독-only 제약의 의도적 트레이드오프(xai 로그인 시 `grok-4.6:medium` 스왑 권장). ² plan/crit 동계열 — `SAME_FAMILY_OK` 인간판정. ³ exec/arch 동계열 — `SAME_FAMILY_OK`. ⁵ 집계자 제한 — 판정석은 Google·xAI·OpenAI 3계열.
+¹ architect와 동일 셀렉터 — 3벤더 구독-only 제약의 의도적 트레이드오프(xai 로그인 시 `grok-4.6:medium` 스왑 권장). ² plan/crit 동계열 — `SAME_FAMILY_OK` 인간판정. ³ exec/arch 동계열 — `SAME_FAMILY_OK`. ⁴ 집계자 제한 — 판정석은 Google·xAI·OpenAI 3계열.
 
 ## 3. 모델 팩트 (검증일 명기)
 

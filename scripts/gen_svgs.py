@@ -94,7 +94,7 @@ _PROFILE_CHROME = {
     "ultimate-opus":  ("🏆 ultimate-opus", "Premium (exp)"),
     "llm-council":    ("🏛 llm-council", "Workflow · 좌석표+계약"),
     "escalation":     ("🛡 escalation", "Workflow · 구원투수=Fable"),
-    "budget":         ("💸 budget", "Specialized (exp) · 게이트"),
+    "budget":         ("💸 budget", "Specialized (exp) · 저단가"),
     "monorepo":       ("🗺 monorepo", "Specialized (exp)"),
 }
 
@@ -173,6 +173,12 @@ ARROW_DEF = ('<defs><marker id="ah" markerWidth="9" markerHeight="9" refX="6.5" 
 
 # ═════════════════════════════════════════════════════════════════════════════
 # 1. role-winners.svg — 🏆 ultimate-opus 배너
+#
+# ⚠ 이 배너의 원본은 v2 의 `dream-team`(역할마다 다른 모델) 이었다. v3 에서 번들을
+# `ultimate-opus` 로 바꾸면 **전제가 깨진다** — ultimate-opus 는 default·executor·
+# architect 3좌석이 전부 같은 `claude-opus-5:high` 다. 그래서 "역할별 최강을 벤더에
+# 분산" 이라는 v2 문구를 그대로 쓰면 거짓이 된다(cyber-cop 패널 지적).
+# 현재 문구는 실제 구조 — Opus 품질 기저 3좌석 + planner/critic 교차검증 — 을 말한다.
 # ═════════════════════════════════════════════════════════════════════════════
 def gen_role_winners():
     W, H = 1256, 268
@@ -189,12 +195,12 @@ def gen_role_winners():
         ("⚖ critic", "독립 적대 비평", X, "Grok 4.6", ":high",
          "xAI · 제3계열 독립 dissent"),
     ]
-    s = svg_open(W, H, "🏆 ultimate-opus 셋업 — 역할별 최강 가설 (Premium · experimental)")
+    s = svg_open(W, H, "🏆 ultimate-opus 셋업 — Anthropic 품질 기저 + 교차검증 (Premium · experimental)")
     s += (f'<text x="24" y="44" font-size="22" font-weight="700" fill="#1A1A28">'
-          f'🏆 ultimate-opus 셋업 — 역할별 최강 가설 (Premium · experimental)</text>\n')
-    s += ('<text x="24" y="70" font-size="13" fill="#6B6B7B">한 벤더가 모든 역할에서 '
-          '1위는 아니다 — 5역할을 강점별로 3개 벤더에 분산(Anthropic·OpenAI·xAI) · '
-          'role-fit L3 실측 전 experimental</text>\n')
+          f'🏆 ultimate-opus 셋업 — Anthropic 품질 기저 + 교차검증 (Premium · experimental)</text>\n')
+    s += ('<text x="24" y="70" font-size="13" fill="#6B6B7B">Opus 5 가 default·executor·'
+          'architect 3좌석을 잡고, planner(Sol)·critic(Grok)이 교차검증을 맡는다 — '
+          '3벤더(Anthropic·OpenAI·xAI) · role-fit L3 실측 전 experimental</text>\n')
     cw, ch, gap, y0 = 232, 152, 12, 92
     for i, (role, desc, vendor, model, effort, why) in enumerate(cards):
         fill, accent, dark = VENDORS[vendor]

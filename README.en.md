@@ -14,7 +14,7 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
-<img src="assets/role-winners.svg" alt="ultimate-opus setup — strongest hypothesis per role" width="100%">
+<img src="assets/role-winners.svg" alt="ultimate-opus setup — Anthropic quality base + cross-checking" width="100%">
 
 </div>
 
@@ -359,7 +359,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> The antigravity live surface can change within a day and `--list-models` can be cached. Live-call before adopting a seat; re-login/retry when discovery is stale, or use the bundle id. **`gemini-3-flash:low` has zero shipping seats in v3** (v2.1.0 `eco.critic` was its only one) — `glm-5.2` is already that bundle's executor, so using it as critic destroys the cross-check, and `deepseek-v4-pro` returns 403 China opt-in on this account. Changing a seat requires re-checking family independence and `required_providers` together.
+> The antigravity live surface can change within a day and `--list-models` can be cached. Live-call before adopting a seat; re-login/retry when discovery is stale, or use the bundle id. **`gemini-3-flash:low` has zero shipping seats in v3** (v2.1.0 `eco.critic` was its only one) — `glm-5.2` is `budget.executor` in v3, so using it as that bundle's critic destroys the cross-check (`budget.critic` is Gemini Pro today), and `deepseek-v4-pro` returns 403 China opt-in on this account. Changing a seat requires re-checking family independence and `required_providers` together.
 
 <details>
 <summary><b>Latency reference (micro-bench 2026-07-02; 08-16 pings for Opus 5 · Grok 4.6)</b></summary>
@@ -472,7 +472,7 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 | GPT-5.6 Sol | 5 / 30 (Fast mode is 12.5/75) | planner (daily·sprint·ultimate-opus·council·escalation) · cyber-cop executor·critic |
 | GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`** (promoted in v3 — D-1 forces `{max}` alone) |
-| Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic (premium 3 bundles · llm-council · escalation) — `/login xai` or XAI_API_KEY |
+| Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic (ultimate-opus · llm-council · escalation) — `/login xai` or XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **not shipped** — 403 China opt-in on this account (catalog id still live) |
 | Gemini 3.1 Pro / 3-flash | preview/subscription token | planner·architect·critic |

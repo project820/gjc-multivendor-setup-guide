@@ -14,7 +14,7 @@
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
-<img src="assets/role-winners.svg" alt="ultimate-opus 構成 — 役割ごとの最強仮説" width="100%">
+<img src="assets/role-winners.svg" alt="ultimate-opus 構成 — Anthropic 品質基盤 + 相互検証" width="100%">
 
 </div>
 
@@ -360,7 +360,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> antigravity のライブ面は当日中にも変わり、`--list-models` 表記はキャッシュの場合がある。席に採用する前に実呼び出しで確認し、ディスカバリ未更新なら再ログイン/再試行またはバンドル id を使う。**`gemini-3-flash:low` は v3 で出荷席が0個**（v2.1.0 の `eco.critic` が唯一だった）— `glm-5.2` は同じバンドルの executor なので critic に使うと相互検証が消え、`deepseek-v4-pro` はこのアカウントで 403 China opt-in。席を変えるなら系統の独立性と `required_providers` を併せて再検討すること。
+> antigravity のライブ面は当日中にも変わり、`--list-models` 表記はキャッシュの場合がある。席に採用する前に実呼び出しで確認し、ディスカバリ未更新なら再ログイン/再試行またはバンドル id を使う。**`gemini-3-flash:low` は v3 で出荷席が0個**（v2.1.0 の `eco.critic` が唯一だった）— `glm-5.2` は v3 では `budget.executor` なので、そのバンドルの critic に使うと相互検証が消え（現在 `budget.critic` は Gemini Pro）、`deepseek-v4-pro` はこのアカウントで 403 China opt-in。席を変えるなら系統の独立性と `required_providers` を併せて再検討すること。
 
 <details>
 <summary><b>レイテンシ参考（マイクロベンチ 2026-07-02; 08-16 ping は Opus 5·Grok 4.6）</b></summary>
@@ -467,7 +467,7 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 | GPT-5.6 Sol | 5 / 30（Fast モードは 12.5/75） | planner（daily·sprint·ultimate-opus·council·escalation）· cyber-cop executor·critic |
 | GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`**（v3 昇格 — D-1 が `{max}` 単独強制） |
-| Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3種・llm-council・escalation）— `/login xai` または XAI_API_KEY |
+| Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（ultimate-opus・llm-council・escalation）— `/login xai` または XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **未出荷** — このアカウントで 403 China opt-in（カタログ id は生存） |
 | Gemini 3.1 Pro / 3-flash | プレビュー/サブスクトークン | planner·architect·critic |

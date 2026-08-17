@@ -14,7 +14,7 @@
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
-<img src="assets/role-winners.svg" alt="ultimate-opus 셋업 — 역할별 최강 가설" width="100%">
+<img src="assets/role-winners.svg" alt="ultimate-opus 셋업 — Anthropic 품질 기저 + 교차검증" width="100%">
 
 </div>
 
@@ -252,7 +252,8 @@ profiles:
     model_mapping:
       default:   anthropic/claude-opus-5:medium                 # v2.1: 4.8→5 like-for-like. 본체 효율 knee · 1M ctx · $5/$25 동가
       executor:  openai-codex/gpt-5.6-luna:max                # v3 승격(terra:high→luna:max): $1/$6 최저 단가·벤더분산. D-1 이 :max 단독 강제 — 다른 effort 는 validator 거부
-                                                              # ⚠ 측정으로 이긴 좌석이 아니다 — :max vs :xhigh 60콜 배터리에서 정확도 이득 0/10(Wilcoxon p=0.1587). 정책 좌석: docs/whats-new-v3.md
+                                                              # ⚠ 측정으로 이긴 좌석이 아니다 — :max vs :xhigh 60콜 배터리 정확도 이득 0/10, 30쌍 중 29쌍 동점이라 검정력이 사실상 없다
+                                                              # (Wilcoxon 은 동점 때문에 정규근사로 후퇴: p=0.1587 은 근사값이고 유효쌍 1개의 정확검정 p 는 0.5). 정책 좌석: docs/whats-new-v3.md
       planner:   openai-codex/gpt-5.6-sol:high                  # 장기 워크플로 완주 1위(Agents' Last Exam 52.7)·tool-heavy 분해
       architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx·멀티모달(MMMU-Pro)·GPQA 94.3 — Gemini 전문좌석 (3.5 Pro 미입점)
       critic:    google-antigravity/gemini-3.1-pro-low:high     # grok→Gemini — xai 키 장벽 제거(구독-only daily) + 본체(Opus 5)와 cross-family 유지. ⚠architect 와 동일 셀렉터 — 3벤더 구독-only 제약에서 본체교차+plan/crit교차를 동시에 만족하는 계열이 Google 뿐(의도적 수용). 독립성 강화 원하면 xai 로그인 후 critic 을 xai/grok-4.6:medium 으로 스왑
@@ -348,7 +349,7 @@ profiles:
 #   ⚠ METR: Sol 의 SWE 평가 게이밍 적발 — SWE류 벤치 단독근거 승격 금지.
 # opencode-go: OPENCODE_API_KEY 필요(budget.executor·budget.planner·monorepo.critic). glm-5.2 검증✅(08-16).
 #   deepseek-v4-flash/pro 는 이 계정 08-16 에 403 China opt-in — 카탈로그 잔류, 지역 정책.
-# xai: `/login xai` 또는 XAI_API_KEY 설정 (premium 3종 + llm-council/escalation 의 critic).
+# xai: `/login xai` 또는 XAI_API_KEY 설정 (ultimate-opus + llm-council/escalation 의 critic).
 #   08-17 실측: XAI_API_KEY 환경변수 없이 xai/grok-4.6:high 성공(단일 계정). 메커니즘 단정 금지 — 신규 사용자는 둘 중 하나를 설정해야 한다.
 #   grok-4.6 은 xai :high 검증✅.
 #   grok-build/grok-4.6 은 bare OK · :high not found — 출하 금지. grok-4.5 는 레거시 카나리.
@@ -416,7 +417,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> antigravity 라이브 표면은 당일에도 변하고 `--list-models` 표기는 캐시일 수 있다. 좌석 채택 전 실호출하고, 디스커버리 미갱신이면 재로그인/재시도 또는 번들 id를 사용하라. **`gemini-3-flash:low` 는 v3 에서 출하 좌석이 0개다**(v2.1.0 `eco.critic` 이 유일했다) — `glm-5.2` 는 같은 번들의 executor 라 critic 으로 쓰면 교차검증이 사라지고, `deepseek-v4-pro` 는 이 계정 403 China opt-in 이다. 좌석을 바꾸려면 계열 독립성과 `required_providers` 를 함께 재검토해야 한다.
+> antigravity 라이브 표면은 당일에도 변하고 `--list-models` 표기는 캐시일 수 있다. 좌석 채택 전 실호출하고, 디스커버리 미갱신이면 재로그인/재시도 또는 번들 id를 사용하라. **`gemini-3-flash:low` 는 v3 에서 출하 좌석이 0개다**(v2.1.0 `eco.critic` 이 유일했다) — `glm-5.2` 는 v3 에서 `budget.executor` 라 그 번들의 critic 으로 쓰면 교차검증이 사라지고(현재 `budget.critic` 은 Gemini Pro 다), `deepseek-v4-pro` 는 이 계정 403 China opt-in 이다. 좌석을 바꾸려면 계열 독립성과 `required_providers` 를 함께 재검토해야 한다.
 
 <details>
 <summary><b>지연 참고 (마이크로벤치 2026-07-02; 08-16 ping은 Opus 5·Grok 4.6)</b></summary>
@@ -525,7 +526,7 @@ Gemini는 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 구독 �
 | GPT-5.6 Sol | 5 / 30 (Fast 모드는 12.5/75) | planner(daily·sprint·ultimate-opus·council·escalation) · cyber-cop executor·critic |
 | GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`** (v3 승격 — D-1 이 `{max}` 단독 강제) |
-| Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic(premium 3종·llm-council·escalation) — `/login xai` 또는 XAI_API_KEY |
+| Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic(ultimate-opus·llm-council·escalation) — `/login xai` 또는 XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **미출하** — 이 계정 403 China opt-in(카탈로그 잔류) |
 | Gemini 3.1 Pro / 3-flash | 프리뷰/구독 토큰 | planner·architect·critic |

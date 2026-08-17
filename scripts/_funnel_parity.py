@@ -6,7 +6,7 @@
 중복 행을 가진 것이다(사용자가 어느 행을 봐야 할지 모른다).
 
 `check-v3-target-state.sh --ship` 이 호출한다. 단독 실행도 된다.
-출력: `OK …` 또는 `BAD …` 한 줄. 종료코드는 항상 0(호출부가 문자열로 판정).
+출력: `OK …` 또는 `BAD …`로 시작한다. 종료코드는 성공 시 0, 실패 시 1이다.
 """
 import pathlib
 import re
@@ -30,20 +30,15 @@ def _default_root():
     return pathlib.Path(top) if top else parent
 
 
-def main():
-    root = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else _default_root()
+def _funnel_rows(readme):
+    try:
+        txt = readme.read_text(encoding="utf-8")
+    except OSError as exc:
+        return None, f"읽지 못함 ({exc})"
 
-    data = yaml.safe_load((root / "gjc-profiles.yml").read_text(encoding="utf-8"))
-    profiles = data.get("profiles") or data.get("model_profiles")
-    if not isinstance(profiles, dict) or not profiles:
-        print("BAD gjc-profiles.yml 에서 profiles 를 읽지 못함")
-        return 1
-
-    txt = (root / "README.md").read_text(encoding="utf-8")
-    m = re.search(r"^## .*어떤 번들을 쓸까.*$", txt, re.M)
+    m = re.search(r"^## .*🧭.*$", txt, re.M)
     if not m:
-        print("BAD README 에서 퍼널 절 헤딩을 찾지 못함")
-        return 1
+        return None, "퍼널 절 헤딩(🧭)을 찾지 못함"
     seg = txt[m.end():]
     nxt = re.search(r"^## ", seg, re.M)
     if nxt:
@@ -67,12 +62,14 @@ def main():
                 # (cyber-cop 패널 지적). 계약의 절반을 검사하지 않은 것이다.
                 names = set(re.findall(r"\*\*([a-z0-9-]+)\*\*", cells[1] if len(cells) > 1 else ""))
                 rows.append((provs, names))
-        elif started and line.strip() == "":
+        elif started:
             break          # 첫 표 블록이 끝났다
     if not rows:
-        print("BAD 퍼널 표에서 최소 credential 행을 찾지 못함")
-        return 1
+        return None, "퍼널 표에서 최소 credential 행을 찾지 못함"
+    return rows, None
 
+
+def _problems(profiles, rows):
     problems = []
     for name, spec in profiles.items():
         req = set((spec or {}).get("required_providers") or [])
@@ -95,14 +92,40 @@ def main():
     for provs, names in rows:
         for ghost in sorted(names - set(profiles)):
             problems.append(f"{ghost}: 퍼널 표에 있으나 로스터에 없음 ({sorted(provs)})")
+    return problems
 
-    if problems:
-        print("BAD " + " | ".join(problems))
+
+def main():
+    root = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else _default_root()
+
+    data = yaml.safe_load((root / "gjc-profiles.yml").read_text(encoding="utf-8"))
+    profiles = data.get("profiles") or data.get("model_profiles")
+    if not isinstance(profiles, dict) or not profiles:
+        print("BAD gjc-profiles.yml 에서 profiles 를 읽지 못함")
         return 1
-    total = sum(len(names) for _, names in rows)
+
+    results = []
+    failures = []
+    for filename in ("README.md", "README.en.md", "README.zh.md", "README.ja.md"):
+        rows, error = _funnel_rows(root / filename)
+        if error:
+            failures.append(f"{filename}: {error}")
+            results.append(f"{filename} BAD")
+            continue
+        problems = _problems(profiles, rows)
+        if problems:
+            failures.append(f"{filename}: " + "; ".join(problems))
+            results.append(f"{filename} BAD")
+            continue
+        total = sum(len(names) for _, names in rows)
+        results.append(f"{filename} OK {len(rows)}행·{total}번들")
+
+    if failures:
+        print("BAD " + " | ".join(results) + " | " + " | ".join(failures))
+        return 1
     print(
-        f"OK 퍼널 {len(rows)}행 · {len(profiles)}번들 — 각 번들이 정확히 한 최소행과 일치, "
-        f"표에 실린 번들 {total}개 전부 로스터와 양방향 일치"
+        f"OK 퍼널 4개 README · {len(profiles)}번들 — " + " | ".join(results)
+        + " · 각 번들이 정확히 한 최소행과 일치, 표의 번들 전부 로스터와 양방향 일치"
     )
     return 0
 

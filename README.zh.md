@@ -14,7 +14,7 @@
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
-<img src="assets/role-winners.svg" alt="ultimate-opus 配置 — 各角色最强假设" width="100%">
+<img src="assets/role-winners.svg" alt="ultimate-opus 配置 — Anthropic 质量基座 + 交叉校验" width="100%">
 
 </div>
 
@@ -360,7 +360,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> antigravity 的 live 表面当日也会变化，`--list-models` 标示可能是缓存；采纳席位前真实调用。发现未刷新时重新登录/重试，或使用捆绑 id。**`gemini-3-flash:low` 在 v3 中的出货席位为 0**（v2.1.0 中唯一席位是 `eco.critic`）— `glm-5.2` 是同一捆绑的 executor，用作 critic 会失去交叉校验；`deepseek-v4-pro` 在本账号 403 China opt-in。更换席位需同时复核系列独立性与 `required_providers`。
+> antigravity 的 live 表面当日也会变化，`--list-models` 标示可能是缓存；采纳席位前真实调用。发现未刷新时重新登录/重试，或使用捆绑 id。**`gemini-3-flash:low` 在 v3 中的出货席位为 0**（v2.1.0 中唯一席位是 `eco.critic`）— `glm-5.2` 在 v3 中是 `budget.executor`，用作该捆绑的 critic 会失去交叉校验（当前 `budget.critic` 是 Gemini Pro）；`deepseek-v4-pro` 在本账号 403 China opt-in。更换席位需同时复核系列独立性与 `required_providers`。
 
 <details>
 <summary><b>延迟参考（微基准 2026-07-02；08-16 ping 为 Opus 5·Grok 4.6）</b></summary>
@@ -467,7 +467,7 @@ Gemini 使用 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 订�
 | GPT-5.6 Sol | 5 / 30（Fast 模式为 12.5/75） | planner（daily·sprint·ultimate-opus·council·escalation）·cyber-cop executor·critic |
 | GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`**（v3 晋升 — D-1 强制仅 `{max}`） |
-| Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3 种·llm-council·escalation）— `/login xai` 或 XAI_API_KEY |
+| Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（ultimate-opus·llm-council·escalation）— `/login xai` 或 XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **未出货** — 本账号 403 China opt-in（目录 id 仍在） |
 | Gemini 3.1 Pro / 3-flash | 预览/订阅 token | planner·architect·critic |

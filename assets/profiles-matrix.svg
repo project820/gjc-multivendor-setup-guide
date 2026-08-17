@@ -146,7 +146,7 @@
 <text x="906" y="602" font-size="12.5" font-weight="700" fill="#155E63">GLM-5.2</text>
 <rect x="24" y="634" width="1040" height="58" rx="10" fill="#FAFAFC"/>
 <text x="34" y="661" font-size="13.5" font-weight="700" fill="#1A1A28">💸 budget</text>
-<text x="34" y="679" font-size="10.5" fill="#D9583E" font-weight="600">Specialized (exp) · 게이트</text>
+<text x="34" y="679" font-size="10.5" fill="#D9583E" font-weight="600">Specialized (exp) · 저단가</text>
 <rect x="188" y="639" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="188" y="639" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="202" y="661" font-size="11" font-weight="700" fill="#0A6B53">GPT-5.6 Terra</text>
 <text x="202" y="678" font-size="10.5" fill="#0A6B53" opacity="0.8">:medium</text>

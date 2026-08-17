@@ -88,9 +88,16 @@ def main():
     for name in scope:
         path = os.path.join(root, name)
         txt = open(path, encoding="utf-8").read()
-        links = re.findall(r"\]\(([^)\s]+)\)", txt)
+        matches = [(m.group(1), m.start(1))
+                   for m in re.finditer(r"\]\(([^)\s]+)\)", txt)]
+        matches += [(m.group(2), m.start(2))
+                    for m in re.finditer(r"""<a\b[^>]*\bhref\s*=\s*(["'])(.*?)\1""",
+                                        txt, re.IGNORECASE)]
+        matches += [(m.group(1), m.start(1))
+                    for m in re.finditer(r"^\[[^\]]+\]:\s*(\S+)", txt, re.MULTILINE)]
+        links = [raw for raw, _ in matches]
         intra = cross = bad = 0
-        for raw in links:
+        for raw, position in matches:
             if raw.startswith(("http://", "https://", "mailto:")):
                 continue
             if "#" in raw:
@@ -106,19 +113,21 @@ def main():
                     os.path.join(os.path.dirname(name), urllib.parse.unquote(target)))
                 cross += 1
             if owner not in headings:
-                # md \uac00 \uc544\ub2c8\uba74 \uc575\ucee4\ub294 \ubabb \ubcf4\uc9c0\ub9cc **\ud30c\uc77c \uc0dd\uc874**\uc740 \ubcf8\ub2e4.
+                # md 가 아니면 앵커는 못 보지만 **파일 생존**은 본다.
                 if not os.path.exists(os.path.join(root, owner)):
                     bad += 1
-                    dead.append("%s \u2192 %s : \ub300\uc0c1 \ud30c\uc77c \uc5c6\uc74c (\ub4f1\uc7a5 %d\ud68c)"
-                                % (name, owner, links.count(raw)))
+                    dead.append("%s:%d → %s : 대상 파일 없음 (등장 %d회)"
+                                % (name, txt.count("\n", 0, position) + 1, owner,
+                                   links.count(raw)))
                 continue
             if frag is None:
-                continue          # \ud30c\uc77c\ub9cc \uac00\ub9ac\ud0a4\ub294 \ub9c1\ud06c \u2014 \uc0dd\uc874 \ud655\uc778\uc73c\ub85c \ub05d
+                continue          # 파일만 가리키는 링크 — 생존 확인으로 끝
             if frag not in headings[owner]:
                 bad += 1
-                dead.append("%s \u2192 %s%s : \ub300\uc0c1 \ud5e4\ub529 \uc5c6\uc74c (\ub4f1\uc7a5 %d\ud68c%s)"
-                            % (name, owner, frag, links.count(raw),
-                               ", \ud4fc\uc13c\ud2b8 \uc778\ucf54\ub529" if "%" in raw else ""))
+                dead.append("%s:%d → %s%s : 대상 헤딩 없음 (등장 %d회%s)"
+                            % (name, txt.count("\n", 0, position) + 1, owner, frag,
+                               links.count(raw),
+                               ", 퍼센트 인코딩" if "%" in raw else ""))
         print("%-30s \ud5e4\ub529 %3d \u00b7 \ub9c1\ud06c \ub0b4\ubd80 %2d/\ud30c\uc77c\uac04 %2d \u00b7 \uc8fd\uc740 \ub9c1\ud06c %d"
               % (name, len(headings[name]), intra, cross, bad))
 

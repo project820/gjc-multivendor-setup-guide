@@ -22,6 +22,8 @@ jobs:
         run: bash scripts/ci-fixture-check.sh
       - name: README required_providers parity
         run: python3 scripts/check-provider-parity.py
+      - name: Funnel matrix parity (4 READMEs)
+        run: python3 scripts/_funnel_parity.py
       - name: Link integrity (files + GitHub anchors)
         run: python3 scripts/slug-anchor-check.py --all
       - name: factsheet §2 parity
