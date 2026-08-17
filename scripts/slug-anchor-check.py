@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""링킬 무결성 검사 — 파일 생존 + 앵커 슬러그. 예전 헤딩 → GitHub 앵커 슬러그 계산 + 문서 내 링크와 대조.
+"""링크 무결성 검사 — 파일 생존 + 앵커 슬러그. 예전 헤딩 → GitHub 앵커 슬러그 계산 + 문서 내 링크와 대조.
 
 왜 필요한가
 -----------
@@ -26,7 +26,7 @@ def slug(heading):
     t = heading.lstrip("#").strip().lower()
     out = []
     for ch in t:
-        if ch.isalnum() or ch in "-_" or ch == "\ufe0f":
+        if ch.isalnum() or ch in "-_" or ch == "️":
             out.append(ch)
         elif ch == " ":
             out.append("-")
@@ -47,7 +47,7 @@ def find_root(explicit=None):
 
 
 def collect_headings(root):
-    """\uc804\uc218 .md \ud30c\uc77c \u2192 {\uc0c1\ub300\uacbd\ub85c: {\uc2ac\ub7ec\uadf8, \u2026}}"""
+    """전수 .md 파일 → {상대경로: {슬러그, …}}"""
     table = {}
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames[:] = [d for d in dirnames if d not in (".git", ".gjc", "node_modules")]
@@ -67,9 +67,9 @@ def collect_headings(root):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default=None)
-    ap.add_argument("--heading", default=None, help="\uc774 \ud5e4\ub529\uc758 \uc2ac\ub7ec\uadf8\ub9cc \uacc4\uc0b0\ud558\uace0 \uc885\ub8cc")
+    ap.add_argument("--heading", default=None, help="이 헤딩의 슬러그만 계산하고 종료")
     ap.add_argument("--all", action="store_true",
-                    help="README 4\uc885\uc774 \uc544\ub2c8\ub77c \uc804\uc218 .md \ub97c \uac80\uc0ac(\ud30c\uc77c\uac04 \ub9c1\ud06c \ud3ec\ud568)")
+                    help="README 4종이 아니라 전수 .md 를 검사(파일간 링크 포함)")
     args = ap.parse_args()
 
     if args.heading:
@@ -78,7 +78,7 @@ def main():
 
     root = find_root(args.root)
     if not os.path.exists(os.path.join(root, "gjc-profiles.yml")):
-        print("FAIL \u2014 gjc-profiles.yml \uc5c6\ub294 \ud2b8\ub9ac\ub2e4: %s" % root)
+        print("FAIL — gjc-profiles.yml 없는 트리다: %s" % root)
         return 1
 
     headings = collect_headings(root)
@@ -88,13 +88,29 @@ def main():
     for name in scope:
         path = os.path.join(root, name)
         txt = open(path, encoding="utf-8").read()
+        # 펜스 코드블록은 링크가 아니다. README 는 임베드 YAML 을, docs 는 HTML/markdown
+        # 샘플을 펜스에 담는다 — 그 안의 상대 href 를 죽은 링크로 잡으면 CI 가 링크가
+        # 아닌 것 때문에 실패한다(cyber-cop 패널 지적). 오프셋을 보존해야 리포트의
+        # 줄번호가 맞으므로, 펜스 구간은 지우지 말고 **같은 길이의 공백으로 덮는다.**
+        scan = list(txt)
+        in_fence = False
+        pos = 0
+        for line in txt.splitlines(keepends=True):
+            if line.lstrip().startswith("```"):
+                in_fence = not in_fence
+            elif in_fence:
+                for k in range(pos, pos + len(line)):
+                    if scan[k] != "\n":
+                        scan[k] = " "
+            pos += len(line)
+        scan = "".join(scan)
         matches = [(m.group(1), m.start(1))
-                   for m in re.finditer(r"\]\(([^)\s]+)\)", txt)]
+                   for m in re.finditer(r"\]\(([^)\s]+)\)", scan)]
         matches += [(m.group(2), m.start(2))
                     for m in re.finditer(r"""<a\b[^>]*\bhref\s*=\s*(["'])(.*?)\1""",
-                                        txt, re.IGNORECASE)]
+                                        scan, re.IGNORECASE)]
         matches += [(m.group(1), m.start(1))
-                    for m in re.finditer(r"^\[[^\]]+\]:\s*(\S+)", txt, re.MULTILINE)]
+                    for m in re.finditer(r"^\[[^\]]+\]:\s*(\S+)", scan, re.MULTILINE)]
         links = [raw for raw, _ in matches]
         intra = cross = bad = 0
         for raw, position in matches:
@@ -128,19 +144,19 @@ def main():
                             % (name, txt.count("\n", 0, position) + 1, owner, frag,
                                links.count(raw),
                                ", 퍼센트 인코딩" if "%" in raw else ""))
-        print("%-30s \ud5e4\ub529 %3d \u00b7 \ub9c1\ud06c \ub0b4\ubd80 %2d/\ud30c\uc77c\uac04 %2d \u00b7 \uc8fd\uc740 \ub9c1\ud06c %d"
+        print("%-30s 헤딩 %3d · 링크 내부 %2d/파일간 %2d · 죽은 링크 %d"
               % (name, len(headings[name]), intra, cross, bad))
 
     if dead:
-        print("\nFAIL \u2014 \uc8fd\uc740 \ub9c1\ud06c %d\uac74:" % len(dead))
+        print("\nFAIL — 죽은 링크 %d건:" % len(dead))
         for d in dead:
             print("  " + d)
-        print("\n\ud5e4\ub529\uc744 \ubc14\uafe8\ub2e4\uba74 \uac19\uc740 \ucee4\ubc0b\uc5d0\uc11c \ub9c1\ud06c\ub3c4 \uace0\uccd0\ub77c. \uc0c8 \uc2ac\ub7ec\uadf8\ub294")
-        print("  python3 slug-anchor-check.py --heading '<\uc0c8 \uc81c\ubaa9>'")
+        print("\n헤딩을 바꿨다면 같은 커밋에서 링크도 고쳐라. 새 슬러그는")
+        print("  python3 slug-anchor-check.py --heading '<새 제목>'")
         return 1
 
-    print("\nOK \u2014 \uac80\uc0ac\ud55c \ubaa8\ub4e0 \ub9c1\ud06c\uac00 \uc2e4\uc7ac \ud5e4\ub529\uc744 \uac00\ub9ac\ud0a8\ub2e4"
-          " (%s)" % ("\uc804\uc218 .md" if args.all else "README 4\uc885"))
+    print("\nOK — 검사한 모든 링크가 실재 헤딩을 가리킨다"
+          " (%s)" % ("전수 .md" if args.all else "README 4종"))
     print("root: %s" % root)
     return 0
 

@@ -36,9 +36,17 @@ def _funnel_rows(readme):
     except OSError as exc:
         return None, f"읽지 못함 ({exc})"
 
-    m = re.search(r"^## .*🧭.*$", txt, re.M)
-    if not m:
-        return None, "퍼널 절 헤딩(🧭)을 찾지 못함"
+    # 헤딩은 언어별로 다르므로 🧭 로 찾는다. 그런데 🧭 는 퍼널 절에만 있는 게 아니다 —
+    # `## 2. 🧭 핵심 설계`(§2)도 같은 이모지를 쓴다. 예전 코드는 첫 매치를 집어서 우연히
+    # 맞았을 뿐이고, 절 순서가 바뀌면 조용히 다른 절을 파싱했다(cyber-cop 패널 지적).
+    #
+    # 판별식: 퍼널 절은 **번호 없는** 절이다. §1~§11 은 전부 `## <숫자>.` 로 시작한다.
+    # 번호 없는 🧭 헤딩이 정확히 하나여야 하고, 아니면 코드가 대상을 정할 수 없으니 BAD.
+    heads = [h for h in re.findall(r"^## .*🧭.*$", txt, re.M)
+             if not re.match(r"^## \d", h)]
+    if len(heads) != 1:
+        return None, f"번호 없는 퍼널 헤딩(🧭)이 {len(heads)}개 — 정확히 1개여야 한다"
+    m = re.search(re.escape(heads[0]), txt)
     seg = txt[m.end():]
     nxt = re.search(r"^## ", seg, re.M)
     if nxt:
@@ -63,7 +71,10 @@ def _funnel_rows(readme):
                 names = set(re.findall(r"\*\*([a-z0-9-]+)\*\*", cells[1] if len(cells) > 1 else ""))
                 rows.append((provs, names))
         elif started:
-            break          # 첫 표 블록이 끝났다
+            # 표 블록은 `|` 아닌 첫 줄에서 끝난다. 표 중간에 주석줄(`<!-- -->`)이나 빈 줄을
+            # 끼우면 그 뒤 행이 조용히 빠진다 — 지금 레이아웃엔 그런 게 없고, 행이 하나도
+            # 안 잡히면 아래에서 BAD 로 떨어진다. 표 안에 뭘 끼우려면 이 조건을 먼저 봐라.
+            break
     if not rows:
         return None, "퍼널 표에서 최소 credential 행을 찾지 못함"
     return rows, None
