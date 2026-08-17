@@ -7,9 +7,9 @@
 Stop agonizing over model choice. **Install in one line** and let each role get its best-fit model automatically.
 
 [![GJC](https://img.shields.io/badge/for-Gajae%20Code%20(GJC)-e23?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code)
-[![Version](https://img.shields.io/badge/version-2.1.0-2496ED?style=flat-square)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-3.0.0-2496ED?style=flat-square)](./CHANGELOG.md)
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
-![Profiles](https://img.shields.io/badge/bundles-10%20·%204%20tiers-blue?style=flat-square)
+![Profiles](https://img.shields.io/badge/bundles-8%20·%204%20tiers-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
@@ -21,7 +21,7 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 **[한국어](./README.md) · English (this page) · [中文](./README.zh.md) · [日本語](./README.ja.md)**
 
 > [!NOTE]
-> The role and selector concepts were merged into the [official GJC docs](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) ([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). This repo provides the one-line installer, the 4-tier 10-bundle catalog, and [maintenance and validation tools](./MAINTAINING.md).
+> The role and selector concepts were merged into the [official GJC docs](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) ([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). This repo provides the one-line installer, the 4-tier 8-bundle catalog, and [maintenance and validation tools](./MAINTAINING.md).
 
 ---
 
@@ -160,7 +160,8 @@ Opus 5 / 4.8            minimal low medium high xhigh max   ← all 6 tiers (shi
 Fable 5                 minimal low medium high xhigh       ← :max accepted, depth unverified — shipped cap xhigh · thinking always-on
 Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max accepted, depth unverified — shipped cap high
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 defaults to xhigh
-GPT 5.6 Sol/Terra/Luna  low medium high xhigh (max)          ← :max accepted, depth unverified — shipped cap is xhigh
+GPT 5.6 Sol/Terra       low medium high xhigh (max)          ← :max accepted, depth unverified — shipped cap is xhigh
+GPT 5.6 Luna            max                                  ← v3 policy seat: D-1 forces :max only (not a measured win)
 Grok 4.6 (xai)          low medium high xhigh                ← shipped cap high (:xhigh accepted, depth unverified)
 Grok 4.5 (xai)          low medium high                      ← legacy canary
 grok-build/grok-4.3     ── bare selector only (effort suffixes don't resolve) ──
@@ -175,7 +176,7 @@ google-antigravity Gemini  gemini-3.1-pro-low:high (high reasoning) · gemini-3.
 2. openai-codex ctx is **per-model** — `gpt-5.4`=**1M** · `gpt-5.5`=**272K** · the three `gpt-5.6` models=**372K** (0.13.3 print; 0.9.6 listed 373K; separate from the 1.05M API specification).
 3. Sonnet (4.6/5) and Fable 5 **ship capped at `high` / `xhigh` respectively** — higher tiers are accepted but their depth is unverified, so they are not shipped.
 4. opencode-go omits `:effort` (only the deepseek-v4 family supports it).
-5. xai `grok-4.6` ships at `high` (`:xhigh` accepted, depth unverified). `grok-build/grok-4.6:high` is not found (bare OK — not shipped). The gpt-5.6 trio accepts `:max`, but its depth is unverified, so the shipped cap is `xhigh`.
+5. xai `grok-4.6` ships at `high` (`:xhigh` accepted, depth unverified). `grok-build/grok-4.6:high` is not found (bare OK — not shipped). gpt-5.6 Sol·Terra accept `:max`, but its depth is unverified, so the shipped cap is `xhigh`. Luna is `:max` only since v3 (D-1 — policy seat, not a measured win).
 
 > **Footnote (upstream gap):** Both Claude 5 models support up to `max` in the official API. On GJC 0.13.3, Fable `:max` still returns OK — treat as a possible clamp and **do not ship**. Sonnet 5’s catalog now lists xhigh/max; clamp-vs-real is unmeasured, so the shipped legality stays high.
 
@@ -332,14 +333,14 @@ profiles:
 | Provider | Verified selectors |
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high` (legacy) · `claude-sonnet-4-6:high` — sel ✅(08-16·**08-17 final-roster battery**) |
-| `openai-codex` | shipped seats: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 final-roster battery**). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` are canaries, not shipped seats; all green in the 08-17 battery |
+| `openai-codex` | shipped seats: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:max` — sel ✅(**08-17 final-roster battery**). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` are canaries, not shipped seats; all green in the 08-17 battery |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high` (legacy) · `grok-4.3:high` · `grok-4-fast:high` — sel ✅(08-16·**08-17 final-roster battery**) |
 | `grok-build` | `grok-4.6` (bare) — sel ✅(**08-17**). `grok-4.3` (bare) is the 07-02 record. Effort suffixes do not resolve (`grok-4.6:high` = not found) — not shipped |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(08-16·**08-17 final-roster battery**). Fuzzy `gemini-3.1-pro-high`/`-bogus` and bare `gemini-3.5-flash` confirmed fail-closed |
 | `opencode-go` | shipped seat `glm-5.2` — sel ✅(08-16, 08-17). `deepseek-v4-flash`/`-pro` keep a live catalog id but **403 China opt-in on this account**, so they are not shipped. `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` are from the 07-02 snapshot and were not re-verified in v2.1.0 |
 
 - `fable-5:max` is accepted but may clamp (not shipped). `grok-4.6:xhigh` is accepted with unverified depth (ship `:high`). `grok-build/grok-4.6:high` is not found.
-- The gpt-5.6 trio accepts `:max`, but its depth is unverified and it is not shipped; `gpt-5.5:high` is a 07-02 green canary.
+- gpt-5.6 Sol·Terra accept `:max`, but its depth is unverified and it is not shipped. Luna `:max` is the v3 policy seat (D-1). `gpt-5.5:high` is a 07-02 green canary.
 - `grok-4-1-fast` still calls but redirects to Grok 4.3 billing after its 2026-05-15 retirement, so v2 excludes it.
 - Since 0.9.6 Gemini’s fuzzy space is fail-closed; the 0.9.5 silent `gemini-3.1-pro-high` → `-low` interpretation no longer reproduces.
 - `glm-5.2` entered the bundled catalog in 0.7.10 and needs `OPENCODE_API_KEY`.
@@ -505,6 +506,6 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 <div align="center">
 
 **Install in one line, best model per role.**
-**v2.1.0** · [CHANGELOG](./CHANGELOG.md) · [Maintenance playbook](./MAINTAINING.md) · License [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
+**v3.0.0** · [CHANGELOG](./CHANGELOG.md) · [Maintenance playbook](./MAINTAINING.md) · License [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
 
 </div>

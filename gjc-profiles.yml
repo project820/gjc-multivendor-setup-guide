@@ -97,7 +97,7 @@ profiles:
       architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste 는 Opus 5 가 476k 통과(08-17 배터리) — Opus 4.8 의 476k 🔴 는 구세대 수치
       critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51), cross-family vs anthropic. effort 무핀(opencode-go 규칙)
 
-  budget:                              # v3 게이트 — 구독 없이 저가 API 만으로 5역할
+  budget:                              # v3 게이트 — anthropic 없이 저단가 레인 (codex+antigravity 로그인 + OPENCODE_API_KEY)
     required_providers: [openai-codex, google-antigravity, opencode-go]
     model_mapping:
       default:   openai-codex/gpt-5.6-terra:medium

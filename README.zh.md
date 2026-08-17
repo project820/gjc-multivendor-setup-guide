@@ -7,9 +7,9 @@
 不用再纠结选哪个模型。**一行安装**，让每个角色自动用上最合适的模型。
 
 [![GJC](https://img.shields.io/badge/for-Gajae%20Code%20(GJC)-e23?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code)
-[![Version](https://img.shields.io/badge/version-2.1.0-2496ED?style=flat-square)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-3.0.0-2496ED?style=flat-square)](./CHANGELOG.md)
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
-![Profiles](https://img.shields.io/badge/bundles-10%20·%204%20tiers-blue?style=flat-square)
+![Profiles](https://img.shields.io/badge/bundles-8%20·%204%20tiers-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
@@ -160,7 +160,8 @@ Opus 5 / 4.8            minimal low medium high xhigh max   ← 全 6 档（出�
 Fable 5                 minimal low medium high xhigh       ← :max 接受但深度未验证 — 出货上限 xhigh · thinking 常开
 Sonnet 4.6 / 5          minimal low medium high              ← :xhigh/:max 接受但深度未验证 — 出货上限 high
 GPT 5.4 / 5.5 (base)    low medium high xhigh                ← 5.5 默认 xhigh
-GPT 5.6 Sol/Terra/Luna  low medium high xhigh (max)          ← :max 接受但深度未验证 — 出货上限 xhigh
+GPT 5.6 Sol/Terra       low medium high xhigh (max)          ← :max 接受但深度未验证 — 出货上限 xhigh
+GPT 5.6 Luna            max                                  ← v3 政策席位：D-1 强制仅 :max（非实测胜利）
 Grok 4.6（xai）          low medium high xhigh                ← 出货上限 high（:xhigh 接受、深度未验证）
 Grok 4.5（xai）          low medium high                      ← 遗留金丝雀
 grok-build/grok-4.3     ── 仅裸选择器（effort 后缀不解析）──
@@ -175,7 +176,7 @@ google-antigravity Gemini  gemini-3.1-pro-low:high（高推理）· gemini-3.1-p
 2. openai-codex 上下文**按模型区分**：`gpt-5.4`=**1M** · `gpt-5.5`=**272K** · `gpt-5.6 3 种`=**372K**（0.13.3 打印；0.9.6 为 373K）。
 3. Sonnet（4.6/5）与 Fable 5 的**出货上限分别为 `high` / `xhigh`** — 更高档位调用会被接受但深度未验证，故不出货。
 4. opencode-go 省略 `:effort`（仅 deepseek-v4 系列例外支持）。
-5. xai `grok-4.6` 出货上限为 `high`（`:xhigh` 接受、深度未验证）。`grok-build/grok-4.6:high` 为 not found。
+5. xai `grok-4.6` 出货上限为 `high`（`:xhigh` 接受、深度未验证）。`grok-build/grok-4.6:high` 为 not found。gpt-5.6 Sol·Terra 的 `:max` 被接受但深度未验证，故出货上限为 `xhigh`。Luna 自 v3 起仅为 `:max`（D-1 — 政策席位，非实测胜利）。
 
 > **脚注（上游缺口）**：Claude 5 家族按 API 官方规格都支持到 `max`；GJC 0.13.3 上 Fable `:max` 仍会返回 OK——按可能夹取处理、**不出货**。Sonnet 5 目录现含 xhigh/max，夹取未测，出货合法性仍为 high。
 
@@ -333,14 +334,14 @@ profiles:
 | 提供方 | 已验证选择器 |
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`（遗留）· `claude-sonnet-4-6:high` — sel ✅（08-16·**08-17 最终席位批次**） |
-| `openai-codex` | 出货席位：`gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅（**08-17 最终席位批次**）。`gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` 为金丝雀而非出货席位；08-17 批次中均为绿 |
+| `openai-codex` | 出货席位：`gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:max` — sel ✅（**08-17 最终席位批次**）。`gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` 为金丝雀而非出货席位；08-17 批次中均为绿 |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（遗留）· `grok-4.3:high` · `grok-4-fast:high` — sel ✅（08-16·**08-17 最终席位批次**） |
 | `grok-build` | `grok-4.6`（裸选择器）— sel ✅（**08-17**）。`grok-4.3`（裸）为 07-02 记录。effort 后缀无法解析（`grok-4.6:high` = not found）— 不出货 |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅（08-16·**08-17 最终席位批次**）。模糊 `gemini-3.1-pro-high`/`-bogus` 与裸 `gemini-3.5-flash` 已确认 fail-closed |
 | `opencode-go` | 出货席位 `glm-5.2` — sel ✅（08-16·08-17）。`deepseek-v4-flash`/`-pro` 目录 id 仍在，但**本账号 403 China opt-in**，故不出货。`glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` 为 07-02 快照，v2.1.0 未重新验证 |
 
 - `fable-5:max` 仍接受但可能夹取（不出货）。`grok-4.6:xhigh` 接受、深度未验证（出货 `:high`）。`grok-build/grok-4.6:high` 为 not found。
-- GPT-5.6 三款 `:max` 被接受但深度未验证，故未出货；`gpt-5.5:high` 是 07-02 绿色金丝雀。
+- GPT-5.6 Sol·Terra 的 `:max` 被接受但深度未验证，故未出货。Luna `:max` 是 v3 政策席位（D-1）。`gpt-5.5:high` 是 07-02 绿色金丝雀。
 - `grok-4-1-fast` 即使能调用，也在 2026-05-15 retire 后按 grok-4.3 费率 redirect 计费，故 v2 排除。
 - 0.9.6 起 Gemini 模糊空间 fail-closed；`gemini-3.1-pro-high` 的 0.9.5 静默 `-low` 解析不再复现。
 - `glm-5.2` 自 0.7.10 起在捆绑目录中，且需要 `OPENCODE_API_KEY`。
@@ -500,6 +501,6 @@ Gemini 使用 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 订�
 <div align="center">
 
 **一行安装，各角色用最佳模型。**
-**v2.1.0** · [CHANGELOG](./CHANGELOG.md) · [维护与验证手册](./MAINTAINING.md) · 许可证 [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
+**v3.0.0** · [CHANGELOG](./CHANGELOG.md) · [维护与验证手册](./MAINTAINING.md) · 许可证 [CC BY 4.0](./LICENSE) · GJC = [Gajae Code](https://github.com/Yeachan-Heo/gajae-code)
 
 </div>

@@ -82,7 +82,7 @@ A compressed version of this guide **was merged upstream** as `docs/multi-vendor
 - selector verification evidence in the PR body,
 - **owner confirmation** for normative product claims (axis leaders, rankings, price/latency).
 
-This standalone repo keeps the **one-line installer + full 10-bundle catalog (4 tiers, incl. `cyber-cop` reviewer mode and the Council/Escalation workflow contracts) + benchmarking tooling** that the upstream docs page does not carry, so it stays useful after any upstream merge.
+This standalone repo keeps the **one-line installer + full 8-bundle catalog (4 tiers, incl. `cyber-cop` reviewer mode and the Council/Escalation workflow contracts) + benchmarking tooling** that the upstream docs page does not carry, so it stays useful after any upstream merge.
 
 ---
 
