@@ -450,7 +450,7 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 | GPT-5.6 Sol | 5 / 30（Fast モードは 12.5/75） | planner（daily·sprint·ultimate-opus·dream-team·council·escalation）· ultimate-sol 3席 · cyber-cop executor·critic |
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
 | GPT-5.6 Luna | 1 / 6 | eco planner（v2 新規採用） |
-| Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3種・llm-council・escalation）— xai API キー |
+| Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3種・llm-council・escalation）— `/login xai` または XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **未出荷** — このアカウントで 403 China opt-in（カタログ id は生存） |
 | Gemini 3.1 Pro / 3-flash | プレビュー/サブスクトークン | planner·architect·critic |

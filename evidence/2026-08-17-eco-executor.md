@@ -186,3 +186,52 @@ exit=1
 
 영구 fixture 스크립트(`scripts/ci-fixture-check.sh`)는 v3 범위로 계획돼 있다 — 이 PR 은
 규칙만 조이고 거부 동작을 위 기록으로 증명한다.
+
+---
+
+## 부록 4 — xai 인증 경로 실측 (2026-08-17)
+
+Ultragoal boundary cohort 의 architect 레인이 **product BLOCK** 을 냈다: 사용자 문서가
+xAI 인증 요구를 잘못 묶어 실제 활성화를 막을 수 있다는 지적.
+
+레포 안에서 서술이 갈려 있었다.
+- `README.md:48` 퀵스타트: `/login xai` 를 anthropic·openai-codex·google-antigravity 와
+  나란히 OAuth 로그인으로 제시하고, API 키 방식은 opencode-go 만 별도 명시.
+- `README.md:342` / `gjc-profiles.yml:19` / 가격표 4개 언어: **"XAI_API_KEY 필요"**.
+
+퀵스타트를 따른 독자는 `/login xai` 만 하고 premium 번들 활성화에 실패한다고 믿게 된다.
+
+### 확인
+
+```
+$ env | grep -i xai
+(출력 없음 — XAI_API_KEY 미설정)
+
+$ gjc -p --no-session --no-tools --model xai/grok-4.6:high "Reply OK"
+OK
+
+$ gjc -p --no-session --no-tools --model grok-build/grok-4.6 "Reply OK"
+OK
+```
+
+`~/.gjc/agent/config.yml` · `credential-auto-import-state.json` · `secrets/` 어디에도
+xai 키가 저장돼 있지 않다. `models.yml` 은 프로필 정의만 담는다.
+
+### 판정
+
+**"XAI_API_KEY 필요" 는 틀렸다** — 최소한 이 환경에서는 키 없이 `/login` 경로로 동작한다.
+키는 필수가 아니라 대안이다. 문서를 `/login xai` 또는 `XAI_API_KEY` 로 정정했다.
+
+정정 범위: `gjc-profiles.yml` 헤더 · `README.md` 프로바이더 주석 · README×4 §10 가격표
+Grok 행.
+
+### 이 관찰의 한계
+
+키가 없는 이 계정 하나에서의 관찰이다. `/login xai` 가 모든 지역·플랜에서 동일하게
+동작한다는 증거는 아니다. 그래서 문서는 "키 불필요" 가 아니라 **"둘 중 하나"** 로 적었다.
+
+### v3 에 미치는 영향 (범위 밖, 기록만)
+
+v3 는 Core tier 를 "키 없이 로그인만으로 도는 것" 으로 재정의하고, xai 를 키 기반으로
+전제해 Premium/Workflow 로 밀어냈다. 이 관찰이 맞다면 그 전제를 다시 봐야 한다 —
+v3 ralplan 의 재평가 항목으로 넘긴다. v2.1.0 은 좌석을 바꾸지 않고 표기만 고친다.

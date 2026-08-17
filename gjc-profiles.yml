@@ -16,7 +16,8 @@
 # Gemini 는 google-antigravity 프로바이더(무료 공개 프리뷰 + AI Pro/Ultra 는 한도 상향).
 # 근거: evidence/2026-08-16-catalog.txt · evidence/2026-08-16-selectors.md · evidence/2026-08-16-notes.md
 #       (v2 구조 freeze: research/2026-07-10-gjc-v2-profile-review/outputs/two-axis-synthesis-and-proposed-config-v1.md).
-# 설치 후 GJC 에서 /login: anthropic · openai-codex · google-antigravity (+ xai API 키, opencode-go 키는 해당 번들 사용 시).
+# 설치 후 GJC 에서 /login: anthropic · openai-codex · google-antigravity · xai (opencode-go 만 API 키).
+#   xai 는 08-17 실측상 XAI_API_KEY 없이 /login 경로로 동작한다 — 키는 대안이지 필수가 아니다.
 # 가이드: https://github.com/project820/gjc-multivendor-setup-guide
 
 profiles:

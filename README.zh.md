@@ -453,7 +453,7 @@ Gemini 使用 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 订�
 | GPT-5.6 Sol | 5 / 30（Fast 模式为 12.5/75） | planner（daily·sprint·ultimate-opus·dream-team·council·escalation）·ultimate-sol 3 席·cyber-cop executor·critic |
 | GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
 | GPT-5.6 Luna | 1 / 6 | eco planner（v2 新采用） |
-| Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3 种·llm-council·escalation）— xai API key |
+| Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3 种·llm-council·escalation）— `/login xai` 或 XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **未出货** — 本账号 403 China opt-in（目录 id 仍在） |
 | Gemini 3.1 Pro / 3-flash | 预览/订阅 token | planner·architect·critic |

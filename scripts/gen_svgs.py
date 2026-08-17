@@ -47,49 +47,101 @@ VENDOR_LABELS = [
 
 ROLES = ["🎛 default", "🔨 executor", "🧠 planner", "🔭 architect", "⚖ critic"]
 
-# ── 프로필 데이터 (gjc-profiles.yml v2.1.0 와 1:1 동기화) ─────────────────────
-# 셀 = (vendor, model_display, effort_display)  — effort_display None 이면 생략.
-# Gemini 셀렉터 gemini-3.1-pro-low:high 는 모델 'Gemini 3.1 Pro-low' + effort ':high'
-# 로 분리 표기한다 (과거 'low:high' 병합 오표기 금지).
+# ── 프로필 데이터 (gjc-profiles.yml 에서 파생) ────────────────────────────────
+# 좌석은 손으로 적지 않는다. gjc-profiles.yml 을 파싱해 (vendor, 표시이름, effort)
+# 셀을 만든다. 손으로 두는 것은 표시 이름과 tier 캡션뿐이고, 매핑에 없는 셀렉터가
+# 나오면 조용히 넘어가지 않고 하드 에러로 죽는다.
+#
+# 왜 이렇게 하나: 예전엔 PROFILES 가 하드코딩 테이블이라 yml 을 바꿔도 SVG 가
+# 그대로였다. 실제로 v2.1.0 리뷰에서 eco.executor 교체가 SVG 에 반영되지 않아
+# 공개 문서가 정본과 반대로 말하는 사고가 났다. 파생 + fail-closed 로 막는다.
 A, O, G, X, C = "anthropic", "openai", "google", "xai", "opencode"
-GEM_HI = (G, "Gemini 3.1 Pro-low", ":high")
 
-PROFILES = [
-    ("⭐ daily", "Core · 구독 3벤더", [
-        (A, "Opus 5", ":medium"), (O, "GPT-5.6 Terra", ":high"),
-        (O, "GPT-5.6 Sol", ":high"), GEM_HI, GEM_HI]),
-    ("🏎 coding-sprint", "Core", [
-        (A, "Opus 5", ":medium"), (A, "Opus 5", ":high"),
-        (O, "GPT-5.6 Sol", ":high"), GEM_HI, (O, "GPT-5.6 Terra", ":high")]),
-    ("🚨 cyber-cop", "Core · reviewer 모드", [
-        (A, "Opus 5", ":high"), (O, "GPT-5.6 Sol", ":high"),
-        GEM_HI, (A, "Opus 5", ":high"), (O, "GPT-5.6 Sol", ":high")]),
-    ("🏆 ultimate-opus", "Premium (exp)", [
-        (A, "Opus 5", ":high"), (A, "Opus 5", ":high"),
-        (O, "GPT-5.6 Sol", ":xhigh"), (A, "Opus 5", ":high"),
-        (X, "Grok 4.6", ":high")]),
-    ("🧪 ultimate-sol", "Premium (exp) · Sol 라우터", [
-        (O, "GPT-5.6 Sol", ":high"), (O, "GPT-5.6 Sol", ":xhigh"),
-        (O, "GPT-5.6 Sol", ":xhigh"), (A, "Opus 5", ":high"),
-        (X, "Grok 4.6", ":high")]),
-    ("🔥 dream-team", "Premium (exp) · Fable 중심", [
-        (A, "Fable 5", ":high"), (A, "Fable 5", ":xhigh"),
-        (O, "GPT-5.6 Sol", ":xhigh"), (A, "Opus 5", ":high"),
-        (X, "Grok 4.6", ":high")]),
-    ("🏛 llm-council", "Workflow · 좌석표+계약", [
-        (A, "Opus 5", ":high"), (O, "GPT-5.6 Terra", ":high"),
-        (O, "GPT-5.6 Sol", ":xhigh"), GEM_HI, (X, "Grok 4.6", ":high")]),
-    ("🛡 escalation", "Workflow · 구원투수=Fable", [
-        (A, "Opus 5", ":high"), (A, "Fable 5", ":xhigh"),
-        (O, "GPT-5.6 Sol", ":xhigh"), GEM_HI, (X, "Grok 4.6", ":high")]),
-    ("💸 eco", "Specialized (exp)", [
-        (O, "GPT-5.6 Terra", ":medium"), (C, "GLM-5.2", None),
-        (O, "GPT-5.6 Luna", ":medium"), GEM_HI,
-        (G, "Gemini 3-flash", ":low")]),
-    ("🗺 monorepo", "Specialized (exp)", [
-        (A, "Opus 5", ":medium"), (A, "Opus 5", ":high"),
-        GEM_HI, (A, "Opus 5", ":high"), (C, "GLM-5.2", None)]),
-]
+# provider 접두사 → 팔레트 키
+_PROVIDER_VENDOR = {
+    "anthropic": A,
+    "openai-codex": O,
+    "google-antigravity": G,
+    "xai": X,
+    "grok-build": X,
+    "opencode-go": C,
+}
+
+# 모델 id → SVG 표시 이름. 새 모델이 좌석에 들어오면 여기 한 줄 추가해야 한다.
+_MODEL_DISPLAY = {
+    "claude-opus-5": "Opus 5",
+    "claude-opus-4-8": "Opus 4.8",
+    "claude-fable-5": "Fable 5",
+    "claude-sonnet-5": "Sonnet 5",
+    "gpt-5.6-sol": "GPT-5.6 Sol",
+    "gpt-5.6-terra": "GPT-5.6 Terra",
+    "gpt-5.6-luna": "GPT-5.6 Luna",
+    "gemini-3.1-pro-low": "Gemini 3.1 Pro-low",
+    "gemini-3-flash": "Gemini 3-flash",
+    "grok-4.6": "Grok 4.6",
+    "grok-4.5": "Grok 4.5",
+    "glm-5.2": "GLM-5.2",
+    "deepseek-v4-flash": "DeepSeek V4 Flash",
+    "deepseek-v4-pro": "DeepSeek V4 Pro",
+}
+
+# 번들 id → (SVG 라벨, tier 캡션). yml 의 번들 집합과 정확히 일치해야 한다.
+_PROFILE_CHROME = {
+    "daily":          ("⭐ daily", "Core · 구독 3벤더"),
+    "coding-sprint":  ("🏎 coding-sprint", "Core"),
+    "cyber-cop":      ("🚨 cyber-cop", "Core · reviewer 모드"),
+    "ultimate-opus":  ("🏆 ultimate-opus", "Premium (exp)"),
+    "ultimate-sol":   ("🧪 ultimate-sol", "Premium (exp) · Sol 라우터"),
+    "dream-team":     ("🔥 dream-team", "Premium (exp) · Fable 중심"),
+    "llm-council":    ("🏛 llm-council", "Workflow · 좌석표+계약"),
+    "escalation":     ("🛡 escalation", "Workflow · 구원투수=Fable"),
+    "eco":            ("💸 eco", "Specialized (exp)"),
+    "monorepo":       ("🗺 monorepo", "Specialized (exp)"),
+}
+
+_ROLE_ORDER = ["default", "executor", "planner", "architect", "critic"]
+
+
+def _cell(selector):
+    """'provider/model:effort' → (vendor, 표시이름, ':effort' 또는 None)."""
+    provider, _, rest = selector.partition("/")
+    model, sep, effort = rest.partition(":")
+    vendor = _PROVIDER_VENDOR.get(provider)
+    if vendor is None:
+        raise SystemExit(f"gen_svgs: unknown provider {provider!r} in {selector!r} — "
+                         f"add it to _PROVIDER_VENDOR")
+    display = _MODEL_DISPLAY.get(model)
+    if display is None:
+        raise SystemExit(f"gen_svgs: unknown model {model!r} in {selector!r} — "
+                         f"add it to _MODEL_DISPLAY")
+    return (vendor, display, f":{effort}" if sep else None)
+
+
+def _load_profiles(root):
+    """gjc-profiles.yml 을 읽어 PROFILES 구조를 만든다."""
+    import yaml
+    path = os.path.join(root, "gjc-profiles.yml")
+    with open(path, encoding="utf-8") as fh:
+        data = yaml.safe_load(fh)
+    profiles = data.get("model_profiles") or data.get("profiles") or {}
+    unknown = sorted(set(profiles) - set(_PROFILE_CHROME))
+    if unknown:
+        raise SystemExit(f"gen_svgs: {path} has bundles with no SVG chrome: {unknown} — "
+                         f"add them to _PROFILE_CHROME")
+    missing = sorted(set(_PROFILE_CHROME) - set(profiles))
+    if missing:
+        raise SystemExit(f"gen_svgs: _PROFILE_CHROME lists bundles absent from {path}: "
+                         f"{missing} — remove them")
+    out = []
+    for name, spec in profiles.items():
+        label, tier = _PROFILE_CHROME[name]
+        mapping = spec["model_mapping"]
+        out.append((label, tier, [_cell(mapping[r]) for r in _ROLE_ORDER]))
+    return out
+
+
+GEM_HI = (G, "Gemini 3.1 Pro-low", ":high")
+PROFILES = []  # main() 에서 yml 파싱 결과로 채운다
 
 
 def esc(s):
@@ -373,7 +425,15 @@ def main():
     default_out = os.path.join(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__))), "assets")
     ap.add_argument("--out", default=default_out, help="출력 디렉터리 (기본: assets/)")
+    ap.add_argument("--root", default=os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))),
+        help="gjc-profiles.yml 이 있는 트리 (기본: repo 루트)")
     args = ap.parse_args()
+
+    # 좌석표는 yml 에서 파생한다. 하드코딩 테이블이 정본과 어긋나던 결함 클래스를
+    # 구조적으로 제거한다 — 모르는 셀렉터/번들이면 여기서 죽는다.
+    global PROFILES
+    PROFILES = _load_profiles(args.root)
     os.makedirs(args.out, exist_ok=True)
 
     outputs = {
