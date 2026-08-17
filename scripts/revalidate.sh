@@ -52,21 +52,42 @@ P(){ local sel="$1" expect="$2" r a
   esac
 }
 
-# --- catalog selectors used by the current profiles, plus documented compatibility canaries (must stay ok) ---
+# --- shipped selectors: derived from gjc-profiles.yml, NOT hand-listed ---
+# 손으로 적은 로스터는 정본과 조용히 어긋난다. gen_svgs.py 가 같은 결함으로 공개 SVG 를
+# 정본과 반대로 렌더한 사고가 있었다(v2.1.0 리뷰). 여기서는 yml 에서 출하 셀렉터를 뽑고,
+# 아래 카나리는 "출하 아님"을 명시한 채 별도로 더한다.
+_REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+SHIPPED_SELECTORS="$(python3 - "$_REPO_ROOT/gjc-profiles.yml" <<'PYEOF'
+import sys, yaml
+with open(sys.argv[1], encoding="utf-8") as fh:
+    data = yaml.safe_load(fh)
+profiles = data.get("profiles") or data.get("model_profiles") or {}
+seen = []
+for spec in profiles.values():
+    for sel in spec["model_mapping"].values():
+        if sel not in seen:
+            seen.append(sel)
+print("\n".join(seen))
+PYEOF
+)"
+if [ -z "$SHIPPED_SELECTORS" ]; then
+  echo "FATAL: could not derive shipped selectors from gjc-profiles.yml"; exit 1
+fi
+echo "## Shipped selectors (derived from gjc-profiles.yml: $(echo "$SHIPPED_SELECTORS" | wc -l | tr -d ' ') unique)"
+for s in $SHIPPED_SELECTORS; do P "$s" ok; done
+
+# --- documented compatibility canaries (NOT shipped seats; must still resolve) ---
 for s in \
-  "anthropic/claude-opus-5:high" "anthropic/claude-opus-5:medium" \
   "anthropic/claude-opus-4-8:high" "anthropic/claude-sonnet-4-6:high" \
-  "anthropic/claude-fable-5:high" "anthropic/claude-fable-5:xhigh" \
+  "anthropic/claude-fable-5:high" \
   "anthropic/claude-sonnet-5:high" \
-  "openai-codex/gpt-5.6-sol:high" "openai-codex/gpt-5.6-sol:xhigh" \
+  "openai-codex/gpt-5.6-sol:xhigh" \
   "openai-codex/gpt-5.6-terra:high" "openai-codex/gpt-5.6-luna:high" \
   "openai-codex/gpt-5.5:high" "openai-codex/gpt-5.4:high" \
-  "google-antigravity/gemini-3.1-pro-low" "google-antigravity/gemini-3.1-pro-low:high" \
-  "google-antigravity/gemini-3-flash:low" \
-  "openai-codex/gpt-5.6-terra:medium" "openai-codex/gpt-5.6-luna:medium" \
-  "xai/grok-4.6:medium" "xai/grok-4.6:high" \
+  "google-antigravity/gemini-3.1-pro-low" \
+  "xai/grok-4.6:medium" \
   "xai/grok-4.5:medium" "xai/grok-4.5:high" "xai/grok-4.3:high" "xai/grok-4-fast:high" \
-  "opencode-go/glm-5.2" ; do P "$s" ok; done
+  ; do P "$s" ok; done
 # (v2.1.0 / gjc 0.13.3 / 2026-08-16: opus-5 + grok-4.6 added as shipped successors.
 #  grok-4.5 kept as a legacy canary. gpt-5.6 :max still un-benchmarked — shipped cap xhigh.
 #  gemini-3-flash:low stays eco.critic (3.5-flash-low resurrected 08-16 but live-surface flaps).
