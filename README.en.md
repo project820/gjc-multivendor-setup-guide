@@ -23,6 +23,9 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 > [!NOTE]
 > The role and selector concepts were merged into the [official GJC docs](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) ([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). This repo provides the one-line installer, the 4-tier 8-bundle catalog, and [maintenance and validation tools](./MAINTAINING.md).
 
+> [!IMPORTANT]
+> **Gemini is excluded from the v3 catalog except `budget`.** This is an operator/audience policy call, not a quality ranking — readers already have xAI / Grok 4.6. The default path (`daily`) and every other non-budget bundle have no Gemini seats. Gemini stays only on the cheap lane (`budget`).
+
 ---
 
 ## ⚡ 30-second install
@@ -62,11 +65,9 @@ The left column below is the **minimum provider set a bundle actually needs to r
 
 | Minimum providers needed | Bundles you can run |
 |---|---|
-| `anthropic` + `openai-codex` + `google-antigravity` | ⭐ **daily** · 🏎 **coding-sprint** · 🚨 **cyber-cop** |
-| `anthropic` + `openai-codex` + `xai` | 🏆 **ultimate-opus** |
-| `anthropic` + `openai-codex` + `google-antigravity` + `xai` | 🛡 **escalation** · 🏛 **llm-council** |
-| `anthropic` + `google-antigravity` + `opencode-go` | 🗺 **monorepo** |
-| `openai-codex` + `google-antigravity` + `opencode-go` | 💸 **budget** |
+| `anthropic` + `openai-codex` + `xai` | ⭐ **daily** · 🏎 **coding-sprint** · 🚨 **cyber-cop** · 🏆 **ultimate-opus** · 🛡 **escalation** · 🏛 **llm-council** |
+| `anthropic` + `opencode-go` | 🗺 **monorepo** |
+| `openai-codex` + `google-antigravity` + `opencode-go` | 💸 **budget** — the only row that still seats Gemini |
 
 ### Authentication is a separate axis
 
@@ -79,7 +80,7 @@ Having a provider and how you obtain it are separate. Check this first while com
 | `opencode-go` | `OPENCODE_API_KEY` |
 
 > [!TIP]
-> **Three subscription logins alone** open the first row — daily · coding-sprint · cyber-cop. Most people start there and add the rest when needed.
+> **`anthropic` + `openai-codex` + `xai`** open the first row — six bundles including daily. `google-antigravity` is `budget`-only. An `opencode-go` key unlocks monorepo and budget.
 
 Full catalog: [§5](#5-️-final-catalog--8-bundles--4-tiers) — the full seating chart (bundle × 5 roles).
 
@@ -91,7 +92,7 @@ Use this table as a secondary reference for what each bundle is; tier is only a 
 
 | Tier | Bundle | One-liner | Use when |
 |---|---|---|---|
-| Core | ⭐ **daily** | Opus main loop + role-split delegation — **activates with subscription OAuth across 3 vendors only** | **everyday default** |
+| Core | ⭐ **daily** | Opus main loop + Grok critic — **no Gemini** (policy; `budget` only) | **everyday default** |
 | Core | 🏎️ **coding-sprint** | implementation-throughput bundle with executor promoted to Opus | pure implementation sprint |
 | Core | 🚨 **cyber-cop** | reviewer mode — architect and critic lead, dedicated to PR review and security audits | reviewing others' PRs · merge gates · security audits |
 | Premium (exp) | 🏆 **ultimate-opus** | Anthropic-quality premium baseline | accuracy matters more than cost |
@@ -240,31 +241,31 @@ opencode-go/<model>                           (omit effort = model default)
 profiles:
 
   daily:
-    required_providers: [anthropic, openai-codex, google-antigravity]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:medium
       executor:  openai-codex/gpt-5.6-luna:max
       planner:   openai-codex/gpt-5.6-sol:high
-      architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    google-antigravity/gemini-3.1-pro-low:high
+      architect: anthropic/claude-opus-5:high
+      critic:    xai/grok-4.6:high
 
   coding-sprint:
-    required_providers: [anthropic, openai-codex, google-antigravity]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:medium
       executor:  anthropic/claude-opus-5:high
       planner:   openai-codex/gpt-5.6-sol:high
-      architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    openai-codex/gpt-5.6-terra:high
+      architect: anthropic/claude-opus-5:high
+      critic:    xai/grok-4.6:high
 
   cyber-cop:
-    required_providers: [anthropic, openai-codex, google-antigravity]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high
       executor:  openai-codex/gpt-5.6-sol:high
-      planner:   google-antigravity/gemini-3.1-pro-low:high
+      planner:   openai-codex/gpt-5.6-sol:high
       architect: anthropic/claude-opus-5:high
-      critic:    openai-codex/gpt-5.6-sol:high
+      critic:    xai/grok-4.6:high
 
   ultimate-opus:
     required_providers: [anthropic, openai-codex, xai]
@@ -276,29 +277,29 @@ profiles:
       critic:    xai/grok-4.6:high
 
   llm-council:
-    required_providers: [anthropic, openai-codex, google-antigravity, xai]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high
       executor:  openai-codex/gpt-5.6-terra:high
       planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: google-antigravity/gemini-3.1-pro-low:high
+      architect: anthropic/claude-opus-5:high
       critic:    xai/grok-4.6:high
 
   escalation:
-    required_providers: [anthropic, openai-codex, google-antigravity, xai]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high
       executor:  anthropic/claude-fable-5:xhigh
       planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: google-antigravity/gemini-3.1-pro-low:high
+      architect: anthropic/claude-opus-5:high
       critic:    xai/grok-4.6:high
 
   monorepo:
-    required_providers: [anthropic, google-antigravity, opencode-go]
+    required_providers: [anthropic, opencode-go]
     model_mapping:
       default:   anthropic/claude-opus-5:medium
       executor:  anthropic/claude-opus-5:high
-      planner:   google-antigravity/gemini-3.1-pro-low:high
+      planner:   opencode-go/qwen3.8-max
       architect: anthropic/claude-opus-5:high
       critic:    opencode-go/glm-5.2
 
@@ -454,7 +455,7 @@ serial chain, 5 steps (0.99 each):  0.99^5 ≈ 95.1%    /    parallel independen
 ```
 
 - critic = **different vendor from the main loop, parallel independent vote, then the main loop tallies** (no debate — meta-judge wins).
-- critic panel example: `{openai-codex/gpt-5.6-sol:high, xai/grok-4.6:high, google-antigravity/gemini-3.1-pro-low:high}` in parallel → 2/3 dissent or any CRITICAL/BLOCK blocks. **CRITICAL/HIGH dissent cannot be majority-voted away** — resolve it or use a human gate.
+- critic panel example: `{xai/grok-4.6:high, openai-codex/gpt-5.6-sol:high}` in parallel → 2/2 dissent or any CRITICAL/BLOCK blocks. The Gemini third vote is retired (budget-only). **CRITICAL/HIGH dissent cannot be majority-voted away** — resolve it or use a human gate.
 - executor fan-out only when **the work is truly independent** (no shared state).
 - keep chains short, with the main loop as the single source of truth (no direct sub-agent consensus).
 
@@ -472,10 +473,10 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 | GPT-5.6 Sol | 5 / 30 (Fast mode is 12.5/75) | planner (daily·sprint·ultimate-opus·council·escalation) · cyber-cop executor·critic |
 | GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`** (promoted in v3 — D-1 forces `{max}` alone) |
-| Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic (premium 3 bundles · llm-council · escalation) — `/login xai` or XAI_API_KEY |
+| Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic (daily · coding-sprint · cyber-cop · ultimate-opus · llm-council · escalation) — `/login xai` or XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **not shipped** — 403 China opt-in on this account (catalog id still live) |
-| Gemini 3.1 Pro / 3-flash | preview/subscription token | planner·architect·critic |
+| Gemini 3.1 Pro / 3-flash | preview/subscription token | **budget architect·critic only** (excluded elsewhere — policy) |
 
 > † Fable 5 is exactly 2× Opus pricing. From 2026-07-20 Max/premium Team include up to 50% of weekly limits; Pro/standard use credits.
 > ‡ Sonnet 5’s tokenizer change makes the same text ~30% more tokens — budget its effective cost above the sticker price.
@@ -489,7 +490,7 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 | ultimate-opus | ●●●●○ | Opus 3 seats at `:high~xhigh` + Grok critic (`/login xai` or XAI_API_KEY) |
 | llm-council | ●●●●○ | 4-vendor auth + Sol `:xhigh` planner — council workflow bills by vote count when executed |
 | coding-sprint | ●●●○○ | executor Opus `:high` (raise to max only on failure signals) |
-| daily | ●●●○○ | main loop Opus `:medium`, delegation spread across mid/cheap models — subscription OAuth across 3 vendors |
+| daily | ●●●○○ | main loop Opus `:medium`, delegation spread across mid/cheap models — anthropic+codex+xai. No Gemini |
 | monorepo | ●●●○○ | executor/architect Opus + Gemini (preview/subscription) + GLM-5.2 |
 | budget | ●○○○○ | executor GLM-5.2 ($1.40) + planner Qwen3.8 Max + Gemini preview — but the absolute cheapest is the built-in `codex-eco` |
 

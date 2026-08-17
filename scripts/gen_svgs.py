@@ -88,7 +88,7 @@ _MODEL_DISPLAY = {
 
 # 번들 id → (SVG 라벨, tier 캡션). yml 의 번들 집합과 정확히 일치해야 한다.
 _PROFILE_CHROME = {
-    "daily":          ("⭐ daily", "Core · 구독 3벤더"),
+    "daily":          ("⭐ daily", "Core · 기본 (Gemini 배제)"),
     "coding-sprint":  ("🏎 coding-sprint", "Core"),
     "cyber-cop":      ("🚨 cyber-cop", "Core · reviewer 모드"),
     "ultimate-opus":  ("🏆 ultimate-opus", "Premium (exp)"),

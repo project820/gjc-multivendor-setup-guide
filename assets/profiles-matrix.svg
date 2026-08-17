@@ -21,7 +21,7 @@
 <text x="976" y="148" font-size="13" font-weight="600" fill="#33334a" text-anchor="middle">⚖ critic</text>
 <rect x="24" y="172" width="1040" height="58" rx="10" fill="#FFFFFF"/>
 <text x="34" y="199" font-size="13.5" font-weight="700" fill="#1A1A28">⭐ daily</text>
-<text x="34" y="217" font-size="10.5" fill="#D9583E" font-weight="600">Core · 구독 3벤더</text>
+<text x="34" y="217" font-size="10.5" fill="#D9583E" font-weight="600">Core · 기본 (Gemini 배제)</text>
 <rect x="188" y="177" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="188" y="177" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="202" y="199" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
 <text x="202" y="216" font-size="10.5" fill="#8A2B1A" opacity="0.8">:medium</text>
@@ -31,12 +31,12 @@
 <rect x="540" y="177" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="177" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="554" y="199" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="554" y="216" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
-<rect x="716" y="177" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="177" width="4.5" height="48" rx="2" fill="#4285F4"/>
-<text x="730" y="199" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
-<text x="730" y="216" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
-<rect x="892" y="177" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="892" y="177" width="4.5" height="48" rx="2" fill="#4285F4"/>
-<text x="906" y="199" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
-<text x="906" y="216" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
+<rect x="716" y="177" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="177" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="730" y="199" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
+<text x="730" y="216" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<rect x="892" y="177" width="168" height="48" rx="8" fill="#EEF1F5"/><rect x="892" y="177" width="4.5" height="48" rx="2" fill="#475569"/>
+<text x="906" y="199" font-size="12.5" font-weight="700" fill="#2D3A4D">Grok 4.6</text>
+<text x="906" y="216" font-size="10.5" fill="#2D3A4D" opacity="0.8">:high</text>
 <rect x="24" y="238" width="1040" height="58" rx="10" fill="#FAFAFC"/>
 <text x="34" y="265" font-size="13.5" font-weight="700" fill="#1A1A28">🏎 coding-sprint</text>
 <text x="34" y="283" font-size="10.5" fill="#D9583E" font-weight="600">Core</text>
@@ -49,12 +49,12 @@
 <rect x="540" y="243" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="243" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="554" y="265" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="554" y="282" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
-<rect x="716" y="243" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="243" width="4.5" height="48" rx="2" fill="#4285F4"/>
-<text x="730" y="265" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
-<text x="730" y="282" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
-<rect x="892" y="243" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="892" y="243" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="906" y="265" font-size="11" font-weight="700" fill="#0A6B53">GPT-5.6 Terra</text>
-<text x="906" y="282" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
+<rect x="716" y="243" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="243" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="730" y="265" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
+<text x="730" y="282" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
+<rect x="892" y="243" width="168" height="48" rx="8" fill="#EEF1F5"/><rect x="892" y="243" width="4.5" height="48" rx="2" fill="#475569"/>
+<text x="906" y="265" font-size="12.5" font-weight="700" fill="#2D3A4D">Grok 4.6</text>
+<text x="906" y="282" font-size="10.5" fill="#2D3A4D" opacity="0.8">:high</text>
 <rect x="24" y="304" width="1040" height="58" rx="10" fill="#FFFFFF"/>
 <text x="34" y="331" font-size="13.5" font-weight="700" fill="#1A1A28">🚨 cyber-cop</text>
 <text x="34" y="349" font-size="10.5" fill="#D9583E" font-weight="600">Core · reviewer 모드</text>
@@ -64,15 +64,15 @@
 <rect x="364" y="309" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="364" y="309" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="378" y="331" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="378" y="348" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
-<rect x="540" y="309" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="540" y="309" width="4.5" height="48" rx="2" fill="#4285F4"/>
-<text x="554" y="331" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
-<text x="554" y="348" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
+<rect x="540" y="309" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="309" width="4.5" height="48" rx="2" fill="#10A37F"/>
+<text x="554" y="331" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
+<text x="554" y="348" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
 <rect x="716" y="309" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="309" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="730" y="331" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
 <text x="730" y="348" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
-<rect x="892" y="309" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="892" y="309" width="4.5" height="48" rx="2" fill="#10A37F"/>
-<text x="906" y="331" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
-<text x="906" y="348" font-size="10.5" fill="#0A6B53" opacity="0.8">:high</text>
+<rect x="892" y="309" width="168" height="48" rx="8" fill="#EEF1F5"/><rect x="892" y="309" width="4.5" height="48" rx="2" fill="#475569"/>
+<text x="906" y="331" font-size="12.5" font-weight="700" fill="#2D3A4D">Grok 4.6</text>
+<text x="906" y="348" font-size="10.5" fill="#2D3A4D" opacity="0.8">:high</text>
 <rect x="24" y="370" width="1040" height="58" rx="10" fill="#FAFAFC"/>
 <text x="34" y="397" font-size="13.5" font-weight="700" fill="#1A1A28">🏆 ultimate-opus</text>
 <text x="34" y="415" font-size="10.5" fill="#D9583E" font-weight="600">Premium (exp)</text>
@@ -103,9 +103,9 @@
 <rect x="540" y="441" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="441" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="554" y="463" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="554" y="480" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
-<rect x="716" y="441" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="441" width="4.5" height="48" rx="2" fill="#4285F4"/>
-<text x="730" y="463" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
-<text x="730" y="480" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
+<rect x="716" y="441" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="441" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="730" y="463" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
+<text x="730" y="480" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
 <rect x="892" y="441" width="168" height="48" rx="8" fill="#EEF1F5"/><rect x="892" y="441" width="4.5" height="48" rx="2" fill="#475569"/>
 <text x="906" y="463" font-size="12.5" font-weight="700" fill="#2D3A4D">Grok 4.6</text>
 <text x="906" y="480" font-size="10.5" fill="#2D3A4D" opacity="0.8">:high</text>
@@ -121,9 +121,9 @@
 <rect x="540" y="507" width="168" height="48" rx="8" fill="#E3F4EE"/><rect x="540" y="507" width="4.5" height="48" rx="2" fill="#10A37F"/>
 <text x="554" y="529" font-size="12.5" font-weight="700" fill="#0A6B53">GPT-5.6 Sol</text>
 <text x="554" y="546" font-size="10.5" fill="#0A6B53" opacity="0.8">:xhigh</text>
-<rect x="716" y="507" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="716" y="507" width="4.5" height="48" rx="2" fill="#4285F4"/>
-<text x="730" y="529" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
-<text x="730" y="546" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
+<rect x="716" y="507" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="507" width="4.5" height="48" rx="2" fill="#D9583E"/>
+<text x="730" y="529" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
+<text x="730" y="546" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
 <rect x="892" y="507" width="168" height="48" rx="8" fill="#EEF1F5"/><rect x="892" y="507" width="4.5" height="48" rx="2" fill="#475569"/>
 <text x="906" y="529" font-size="12.5" font-weight="700" fill="#2D3A4D">Grok 4.6</text>
 <text x="906" y="546" font-size="10.5" fill="#2D3A4D" opacity="0.8">:high</text>
@@ -136,9 +136,8 @@
 <rect x="364" y="573" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="364" y="573" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="378" y="595" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
 <text x="378" y="612" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>
-<rect x="540" y="573" width="168" height="48" rx="8" fill="#E8F0FE"/><rect x="540" y="573" width="4.5" height="48" rx="2" fill="#4285F4"/>
-<text x="554" y="595" font-size="10.2" font-weight="700" fill="#1A56C4">Gemini 3.1 Pro-low</text>
-<text x="554" y="612" font-size="10.5" fill="#1A56C4" opacity="0.8">:high</text>
+<rect x="540" y="573" width="168" height="48" rx="8" fill="#DFF3F4"/><rect x="540" y="573" width="4.5" height="48" rx="2" fill="#0E7490"/>
+<text x="554" y="602" font-size="12.5" font-weight="700" fill="#155E63">Qwen3.8 Max</text>
 <rect x="716" y="573" width="168" height="48" rx="8" fill="#FBE9E4"/><rect x="716" y="573" width="4.5" height="48" rx="2" fill="#D9583E"/>
 <text x="730" y="595" font-size="12.5" font-weight="700" fill="#8A2B1A">Opus 5</text>
 <text x="730" y="612" font-size="10.5" fill="#8A2B1A" opacity="0.8">:high</text>

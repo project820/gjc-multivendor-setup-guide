@@ -135,7 +135,7 @@ then
   expect_reject terra-max-fail 's|gpt-5.6-terra:high|gpt-5.6-terra:max|g' \
     "illegal effort 'max' for gpt-5.6-terra"
   expect_reject default-critic-fail \
-    's|      critic:    google-antigravity/gemini-3.1-pro-low:high|      critic:    anthropic/claude-opus-5:high|' \
+    's|      critic:    xai/grok-4.6:high|      critic:    anthropic/claude-opus-5:high|' \
     "default/critic"
 else
   echo "## v3 validator 개정 fixtures — SKIP (Luna exact matcher 미적용 = v2.1.0 validator)"

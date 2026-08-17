@@ -11,6 +11,21 @@
 
 ---
 
+## Unreleased
+
+### Changed (operator policy — Gemini 는 `budget` 만)
+
+- **비-budget 번들에서 Gemini / `google-antigravity` 좌석 전부 제거.** 품질 비교가 아니라
+  운영 정책(독자가 이미 Grok 4.6 / xAI 에 닿음). `budget.architect`·`budget.critic` 만 유지.
+- **`daily`**: architect → `anthropic/claude-opus-5:high`, critic → `xai/grok-4.6:high`
+  (`:high` = sibling Grok critic 출하 effort). `required_providers` 에 `xai`, google 제거.
+- **자리 재균형**: coding-sprint critic Terra→Grok · cyber-cop planner Gemini→Sol 후
+  critic Sol→Grok · llm-council/escalation architect Gemini→Opus · monorepo planner
+  Gemini→Qwen. 8번들·Luna `:max` 불변.
+- 구 서사 삭제: "daily critic 은 xAI 키 장벽 때문에 Gemini / 로그인하면 grok 로 스왑".
+
+---
+
 ## v3.0.0 — 2026-08-17
 
 ### Changed (MAJOR — 카탈로그 재설계 · 선택 축 변경 · validator 개정)

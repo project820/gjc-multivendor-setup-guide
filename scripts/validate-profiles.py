@@ -36,9 +36,11 @@ ROLES = {"default", "executor", "architect", "planner", "critic"}
 # Documented intentional same-family pairs (design choices, not bugs).
 # (profile, pair) -> rationale ; pair in {"exec_arch","plan_crit"}.
 SAME_FAMILY_OK = {
-    ("monorepo", "exec_arch"): "all roles >=1M ctx; gpt-5.5 (272K)/5.6 (372K) excluded — gpt-5.4 is 1M but Opus ranks at least equal",
+    ("monorepo", "exec_arch"): "1M paste path is Opus; gpt-5.6 excluded (372K). Gemini planner removed (budget-only policy)",
+    ("monorepo", "plan_crit"): "qwen planner + glm critic are distinct ocgo models; gpt-5.6 excluded from this 1M bundle; Grok critic is 500K so not used here",
     ("ultimate-opus", "exec_arch"): "human ruling 2026-07-10: Opus quality base; Sol planner + Grok critic carry cross-family verification (bundle stays 3-vendor)",
-    ("coding-sprint", "plan_crit"): "human ruling 2026-07-10: Sol planner + Terra critic are distinct models; bundle stays 3-vendor mixed collaboration",
+    ("coding-sprint", "exec_arch"): "Opus throughput executor+architect; Sol planner + Grok critic carry cross-family verification after Gemini architect was removed (budget-only policy)",
+    ("escalation", "exec_arch"): "Fable rescue executor + Opus architect (both claude); Sol planner + Grok critic carry cross-family verification after Gemini architect was removed (budget-only policy)",
 }
 
 # D-3 (v3): ultimate-sol 드롭과 함께 이 예외는 사라진다. 비면 빈 dict 로 남긴다.

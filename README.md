@@ -23,6 +23,9 @@
 > [!NOTE]
 > 핵심 역할·셀렉터 개념은 [GJC 공식 문서](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md)에 업스트림 머지됐다([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). 이 레포는 원클릭 설치, 4계층 8번들 카탈로그와 [유지보수·검증 도구](./MAINTAINING.md)를 제공한다.
 
+> [!IMPORTANT]
+> **Gemini 는 지금 v3 카탈로그에서 `budget` 을 제외하고 배제한다.** 품질 비교가 아니라 운영 정책이다 — 이 가이드의 독자는 이미 xAI / Grok 4.6 에 닿는다. 기본 경로(`daily`)를 포함한 비-budget 번들에는 Gemini 좌석이 없다. 저단가 레인(`budget`)에만 남긴다.
+
 ---
 
 ## ⚡ 30초 설치
@@ -65,11 +68,9 @@ gjc                        # 새 세션은 자동으로 daily 사용
 
 | 최소 필요 조합 | 쓸 수 있는 번들 |
 |---|---|
-| `anthropic` + `openai-codex` + `google-antigravity` | ⭐ **daily** · 🏎 **coding-sprint** · 🚨 **cyber-cop** |
-| `anthropic` + `openai-codex` + `xai` | 🏆 **ultimate-opus** |
-| `anthropic` + `openai-codex` + `google-antigravity` + `xai` | 🛡 **escalation** · 🏛 **llm-council** |
-| `anthropic` + `google-antigravity` + `opencode-go` | 🗺 **monorepo** |
-| `openai-codex` + `google-antigravity` + `opencode-go` | 💸 **budget** (v3 신설) |
+| `anthropic` + `openai-codex` + `xai` | ⭐ **daily** · 🏎 **coding-sprint** · 🚨 **cyber-cop** · 🏆 **ultimate-opus** · 🛡 **escalation** · 🏛 **llm-council** |
+| `anthropic` + `opencode-go` | 🗺 **monorepo** |
+| `openai-codex` + `google-antigravity` + `opencode-go` | 💸 **budget** — Gemini 가 남는 유일한 행 |
 
 ### 인증 방식은 별개 축이다
 
@@ -82,8 +83,8 @@ gjc                        # 새 세션은 자동으로 daily 사용
 | `opencode-go` | `OPENCODE_API_KEY` |
 
 > [!TIP]
-> **세 벤더 로그인만 있으면** 첫 행이 열린다 — daily · coding-sprint · cyber-cop.
-> 대부분은 여기서 시작하면 된다. 나머지는 필요할 때 채워 넣는 확장이다.
+> **`anthropic` + `openai-codex` + `xai` 가 있으면** 첫 행이 열린다 — daily 를 포함해 6개 번들.
+> `google-antigravity` 는 `budget` 전용이다. `opencode-go` 키는 monorepo·budget 확장이다.
 
 전체 좌석표(번들 × 5역할)는 [§5](#5-️-최종-카탈로그--8-번들--4계층) 에 있다.
 
@@ -247,36 +248,36 @@ profiles:
 
   # ───────────────────────── Core tier ─────────────────────────
 
-  daily:                               # ★ 평소 기본 (--default daily) — 구독 OAuth 3벤더만으로 activation
-    required_providers: [anthropic, openai-codex, google-antigravity]
+  daily:                               # ★ 평소 기본 (--default daily) — Gemini 배제(정책). architect=Opus:high · critic=Grok 4.6:high
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:medium                 # v2.1: 4.8→5 like-for-like. 본체 효율 knee · 1M ctx · $5/$25 동가
       executor:  openai-codex/gpt-5.6-luna:max                # v3 승격(terra:high→luna:max): $1/$6 최저 단가·벤더분산. D-1 이 :max 단독 강제 — 다른 effort 는 validator 거부
                                                               # ⚠ 측정으로 이긴 좌석이 아니다 — :max vs :xhigh 60콜 배터리에서 정확도 이득 0/10(Wilcoxon p=0.1587). 정책 좌석: docs/whats-new-v3.md
       planner:   openai-codex/gpt-5.6-sol:high                  # 장기 워크플로 완주 1위(Agents' Last Exam 52.7)·tool-heavy 분해
-      architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx·멀티모달(MMMU-Pro)·GPQA 94.3 — Gemini 전문좌석 (3.5 Pro 미입점)
-      critic:    google-antigravity/gemini-3.1-pro-low:high     # grok→Gemini — xai 키 장벽 제거(구독-only daily) + 본체(Opus 5)와 cross-family 유지. ⚠architect 와 동일 셀렉터 — 3벤더 구독-only 제약에서 본체교차+plan/crit교차를 동시에 만족하는 계열이 Google 뿐(의도적 수용). 독립성 강화 원하면 xai 로그인 후 critic 을 xai/grok-4.6:medium 으로 스왑
+      architect: anthropic/claude-opus-5:high                   # sibling architect (cyber-cop·ultimate-opus·monorepo). Gemini 는 budget 만
+      critic:    xai/grok-4.6:high                              # 제3계열 독립 dissent. :high = sibling Grok critic 출하 effort (ultimate-opus·llm-council·escalation). validator 는 medium 도 허용하나 daily 만 낮추지 않는다
 
   coding-sprint:                       # 🏎 순수 구현 처리량 — daily 대비 executor 를 Opus 로 승격
-    required_providers: [anthropic, openai-codex, google-antigravity]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:medium                 # 본체 오케스트레이션
       executor:  anthropic/claude-opus-5:high                   # 구독 포함 코딩 최강 계열(실패신호 시에만 max 격상, routing-rules 사다리)
       planner:   openai-codex/gpt-5.6-sol:high                  # 스프린트 분해는 Sol 축(Terminal-Bench 88.8·DeepSWE 72.7)
-      architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx 리뷰
-      critic:    openai-codex/gpt-5.6-terra:high                # 코딩인지 critic. ⚠planner 와 같은 gpt 계열 — 인간 판정(2026-07-10)으로 SAME_FAMILY_OK 등재(번들 전체는 3벤더 유지)
+      architect: anthropic/claude-opus-5:high                   # sibling architect. ⚠executor 와 같은 claude 계열 — SAME_FAMILY_OK (Sol planner + Grok critic 이 교차검증)
+      critic:    xai/grok-4.6:high                              # Gemini architect 제거 후 plan/crit 동계열(Sol/Terra)을 Grok 제3계열로 재균형. sibling Grok critic :high
 
   cyber-cop:                           # 🚨 reviewer 모드 — PR 리뷰·보안 감사 (author 모드의 역상)
-    required_providers: [anthropic, openai-codex, google-antigravity]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high                   # 집계자 제한 — critic raw verdict 보존·노출(routing-rules 계약)
       executor:  openai-codex/gpt-5.6-sol:high                  # 조연 — 재현 PoC·failing test·harness (Terminal-Bench 2.1 88.8 SOTA)
-      planner:   google-antigravity/gemini-3.1-pro-low:high     # 리뷰 체크리스트·감사 범위 (critic 과 cross-family)
+      planner:   openai-codex/gpt-5.6-sol:high                  # sibling planner (daily·coding-sprint). Gemini planner 제거 — budget 만
       architect: anthropic/claude-opus-5:high                   # 주연1 — 1차 코드리뷰 판정자(CLEAR/WATCH/BLOCK)
-      critic:    openai-codex/gpt-5.6-sol:high                  # 주연2 — 머지 게이트, Claude-작성 코드와 cross-family
-      # 고위험 PR·보안 감사: critic 3표 병렬 패널 {openai-codex/gpt-5.6-sol:high, xai/grok-4.6:high,
-      # google-antigravity/gemini-3.1-pro-low:high} — 독립 투표 후 본체 집계(토론 금지), 2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단
-      # (3표째 grok 은 xai 로그인 시 — 미보유면 2표 {gpt-5.6-sol, gemini}로도 provenance 최소치(non-default family ≥2) 충족)
+      critic:    xai/grok-4.6:high                              # 주연2 — 머지 게이트. planner 를 Sol 로 옮기면 구 critic(Sol) 과 동계열 → Grok 으로 재균형
+      # 고위험 PR·보안 감사: critic 2표 병렬 패널 {xai/grok-4.6:high, openai-codex/gpt-5.6-sol:high}
+      # — 독립 투표 후 본체 집계(토론 금지), 2/2 반박 또는 CRITICAL/BLOCK 1건이면 차단
+      # Gemini 3표째는 폐지(budget 외 배제). provenance 최소치(non-default family ≥2 = grok+gpt) 는 2표로 충족. 본체(claude)는 집계만
 
   # ─────────────── Premium tier (experimental — role-fit L3 전) ───────────────
 
@@ -291,36 +292,36 @@ profiles:
 
   # ─────────────── Workflow bundle tier (좌석표 + 동반 워크플로) ───────────────
 
-  llm-council:                         # 🏛 4계열 좌석표(판정석은 Google·xAI·OpenAI 3계열, 본체 Anthropic 은 집계자 제한 — 자기선호 격리). ★프로필은 좌석표일 뿐 — 병렬 독립호출·quorum·raw verdict 보존은
-    required_providers: [anthropic, openai-codex, google-antigravity, xai]   #   routing-rules.md "Council 계약"이 실행한다(YAML 이 자동 실행하지 않음)
+  llm-council:                         # 🏛 좌석표(판정석 Claude·xAI·OpenAI, 본체 Anthropic 은 집계자 제한). ★프로필은 좌석표일 뿐 — 병렬 독립호출·quorum·raw verdict 보존은
+    required_providers: [anthropic, openai-codex, xai]          #   routing-rules.md "Council 계약"이 실행한다(YAML 이 자동 실행하지 않음). Gemini 판정석은 폐지(budget 만)
     model_mapping:
       default:   anthropic/claude-opus-5:high                   # 집계자 제한 — 요약·은폐 없이 raw verdict 보존
       executor:  openai-codex/gpt-5.6-terra:high                # 재현·검증 잡무
       planner:   openai-codex/gpt-5.6-sol:xhigh                 # 의제 분해
-      architect: google-antigravity/gemini-3.1-pro-low:high     # council 판정석 1 (Google)
-      critic:    xai/grok-4.6:high                              # council 판정석 2 (xAI)
+      architect: anthropic/claude-opus-5:high                   # sibling architect. Google 판정석 제거 — cyber-cop 과 같이 default+architect 가 Opus
+      critic:    xai/grok-4.6:high                              # council 판정석 (xAI)
 
   escalation:                          # 🚑 고실패비용 구원투수 — ★수동 에스컬레이션 번들. 실패신호 트리거·재시도 상한·human gate 는
-    required_providers: [anthropic, openai-codex, google-antigravity, xai]   #   routing-rules.md 가 정의한다(프로필이 자동 감지하지 않음)
+    required_providers: [anthropic, openai-codex, xai]          #   routing-rules.md 가 정의한다(프로필이 자동 감지하지 않음). Gemini architect 제거
     model_mapping:
       default:   anthropic/claude-opus-5:high
       executor:  anthropic/claude-fable-5:xhigh                 # 실패한 작업의 구원투수. 간헐 사용 = credits 과금과도 궁합
       planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    xai/grok-4.6:high                              # + 3표 교차벤더 critic 패널(독립투표→본체집계)
+      architect: anthropic/claude-opus-5:high                   # sibling architect. ⚠Fable executor 와 같은 claude 계열 — SAME_FAMILY_OK (Sol+Grok 교차검증)
+      critic:    xai/grok-4.6:high                              # + 2표 교차벤더 critic 패널 {grok, sol} (독립투표→본체집계). Gemini 표 폐지
 
   # ─────────────── Specialized tier (experimental) ───────────────
 
   monorepo:                            # 🗄 거대 코드베이스 — 전역 1M ctx (★gpt-5.5(272K)/5.6(372K) 배제 — 1M 미달)
-    required_providers: [anthropic, google-antigravity, opencode-go]
+    required_providers: [anthropic, opencode-go]
     model_mapping:
       default:   anthropic/claude-opus-5:medium                 # 1M
       executor:  anthropic/claude-opus-5:high                   # 1M
-      planner:   google-antigravity/gemini-3.1-pro-low:high     # 추론(스코프 입력). 1M window ≠ 완전 recall — 청크 누적 워크플로 전제
+      planner:   opencode-go/qwen3.8-max                        # sibling planner (budget). Gemini 제거. gpt-5.6 은 372K 라 1M 번들에 못 씀
       architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste 는 Opus 5 가 476k 통과(08-17 배터리) — Opus 4.8 의 476k 🔴 는 구세대 수치
-      critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51), cross-family vs anthropic. effort 무핀(opencode-go 규칙)
+      critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51). ⚠planner 와 같은 ocgo 계열 — SAME_FAMILY_OK (qwen≠glm). Grok 은 500K 라 1M 비평에 안 씀
 
-  budget:                              # v3 게이트 — anthropic 없이 저단가 레인 (codex+antigravity 로그인 + OPENCODE_API_KEY)
+  budget:                              # v3 게이트 — 카탈로그에서 Gemini 를 유지하는 유일한 번들 (저단가 레인 · 정책)
     required_providers: [openai-codex, google-antigravity, opencode-go]
     model_mapping:
       default:   openai-codex/gpt-5.6-terra:medium
@@ -348,7 +349,8 @@ profiles:
 #   ⚠ METR: Sol 의 SWE 평가 게이밍 적발 — SWE류 벤치 단독근거 승격 금지.
 # opencode-go: OPENCODE_API_KEY 필요(budget.executor·budget.planner·monorepo.critic). glm-5.2 검증✅(08-16).
 #   deepseek-v4-flash/pro 는 이 계정 08-16 에 403 China opt-in — 카탈로그 잔류, 지역 정책.
-# xai: `/login xai` 또는 XAI_API_KEY 설정 (premium 3종 + llm-council/escalation 의 critic).
+# xai: `/login xai` 또는 XAI_API_KEY 설정 (daily·coding-sprint·cyber-cop·ultimate-opus·llm-council·escalation 의 critic).
+#   Gemini / google-antigravity 출하 좌석은 budget.architect·budget.critic 만 (정책 — 품질 비교 아님).
 #   08-17 실측: XAI_API_KEY 환경변수 없이 xai/grok-4.6:high 성공(단일 계정). 메커니즘 단정 금지 — 신규 사용자는 둘 중 하나를 설정해야 한다.
 #   grok-4.6 은 xai :high 검증✅.
 #   grok-build/grok-4.6 은 bare OK · :high not found — 출하 금지. grok-4.5 는 레거시 카나리.
@@ -371,14 +373,14 @@ profiles:
 
 #### 프로필별 설계 근거
 
-- **daily** — Opus `:medium`·Terra·Sol·Gemini의 일상 균형점; ⚠ architect·critic 동일 Gemini는 구독 OAuth 3벤더 제약에서 의도 수용(독립성 강화는 xai critic 스왑).
-- **coding-sprint** — Opus `:high` executor와 Sol 분해의 구현 처리량 번들; ⚠ planner/critic GPT 계열은 2026-07-10 `SAME_FAMILY_OK`(Sol≠Terra, 전체 3벤더).
-- **cyber-cop** — Opus architect 1차 판정·Sol critic 머지 게이트의 reviewer 모드; 고위험은 3표 독립 패널로 반대 근거를 찾는다.
+- **daily** — Opus `:medium` 본체 · Luna executor · Sol planner · Opus architect · Grok critic. Gemini 없음(정책).
+- **coding-sprint** — Opus `:high` executor+architect 처리량 번들; Sol planner · Grok critic 이 교차검증(`SAME_FAMILY_OK` exec/arch).
+- **cyber-cop** — Opus architect 1차 판정·Grok critic 머지 게이트의 reviewer 모드; 고위험은 2표 {Grok, Sol} 패널.
 - **ultimate-opus** — Opus 3좌석의 안정성·1M을 Sol planner·Grok critic이 보완한다; ⚠ 같은 Claude 계열은 `SAME_FAMILY_OK`이며 세 독립 의견이 아니다.
-- **llm-council** — Google·xAI·OpenAI가 판정하고 Anthropic은 raw verdict를 보존하는 집계자; [`routing-rules.md`](./routing-rules.md)의 Council 계약(독립호출·quorum)이 필요하다.
+- **llm-council** — Opus·Grok·Sol이 판정하고 본체 Anthropic은 raw verdict를 보존하는 집계자; [`routing-rules.md`](./routing-rules.md)의 Council 계약(독립호출·quorum)이 필요하다. Gemini 판정석 없음.
 - **escalation** — 실패 뒤 Fable `:xhigh`와 3표 critic을 쓰는 수동 게이트; Escalation 계약이 트리거·human gate를 정하고 refusal 시 Opus `:max`로 강등한다.
 - **budget** — 저단가 API 경로 — *절대 최저가 아님*, `OPENCODE_API_KEY` 필요.
-- **monorepo** — Opus architect·GLM-5.2 critic의 1M ctx 번들; 완전 recall이 아니므로 청크 누적을 권한다. 다만 >~400k 단일 paste 가 꼭 필요하면 **architect 좌석의 `claude-opus-5:high` 가 그대로 처리한다**(08-17 배터리에서 476k 통과 — Opus 4.8 의 476k 🔴 는 구세대 수치).
+- **monorepo** — Opus architect·Qwen planner·GLM-5.2 critic의 1M ctx 번들; Gemini 없음. 완전 recall이 아니므로 청크 누적을 권한다. 다만 >~400k 단일 paste 가 꼭 필요하면 **architect 좌석의 `claude-opus-5:high` 가 그대로 처리한다**(08-17 배터리에서 476k 통과 — Opus 4.8 의 476k 🔴 는 구세대 수치).
 
 ---
 
@@ -507,7 +509,7 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 되돌리기(백�
 ```
 
 - critic은 **본체와 다른 벤더로, 병렬 독립 투표 후 본체가 집계**(debate 금지 — 메타-심판이 우월).
-- critic 패널 예: `{openai-codex/gpt-5.6-sol:high, xai/grok-4.6:high, google-antigravity/gemini-3.1-pro-low:high}` 동시 → 2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단. **CRITICAL/HIGH dissent 는 다수결로 기각 불가** — 해소 또는 human gate.
+- critic 패널 예: `{xai/grok-4.6:high, openai-codex/gpt-5.6-sol:high}` 동시 → 2/2 반박 또는 CRITICAL/BLOCK 1건이면 차단. Gemini 3표째는 폐지(`budget` 외 배제). **CRITICAL/HIGH dissent 는 다수결로 기각 불가** — 해소 또는 human gate.
 - executor fan-out은 **작업이 진짜 독립**(공유 상태 없음)일 때만.
 - 체인은 짧게, 본체를 단일 진실원천으로(서브끼리 직접 합의 금지).
 
@@ -525,10 +527,10 @@ Gemini는 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 구독 �
 | GPT-5.6 Sol | 5 / 30 (Fast 모드는 12.5/75) | planner(daily·sprint·ultimate-opus·council·escalation) · cyber-cop executor·critic |
 | GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`** (v3 승격 — D-1 이 `{max}` 단독 강제) |
-| Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic(premium 3종·llm-council·escalation) — `/login xai` 또는 XAI_API_KEY |
+| Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic(daily·coding-sprint·cyber-cop·ultimate-opus·llm-council·escalation) — `/login xai` 또는 XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **미출하** — 이 계정 403 China opt-in(카탈로그 잔류) |
-| Gemini 3.1 Pro / 3-flash | 프리뷰/구독 토큰 | planner·architect·critic |
+| Gemini 3.1 Pro / 3-flash | 프리뷰/구독 토큰 | **budget architect·critic 만** (그 외 번들 배제 — 정책) |
 
 > † Fable 5는 Opus의 정확히 2배 단가. 07-20부터 Max/premium Team은 주간 한도의 50%까지 포함, Pro/standard는 credits.
 > ‡ Sonnet 5는 **토크나이저 변경으로 동일 텍스트가 ~30% 더 많은 토큰**이 된다 — 실효 비용은 스티커 단가보다 높게 잡을 것.
@@ -542,7 +544,7 @@ Gemini는 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 구독 �
 | ultimate-opus | ●●●●○ | Opus 3좌석 `:high~xhigh` + Grok critic(`/login xai` 또는 XAI_API_KEY) |
 | llm-council | ●●●●○ | 4벤더 인증 + Sol `:xhigh` planner — council 워크플로 실행 시 표 수만큼 과금 |
 | coding-sprint | ●●●○○ | executor Opus `:high`(실패신호 시에만 max 격상) |
-| daily | ●●●○○ | 본체 Opus `:medium`, 위임은 중·저가로 분산 — 구독 OAuth 3벤더 |
+| daily | ●●●○○ | 본체 Opus `:medium`, 위임은 중·저가로 분산 — anthropic+codex+xai. Gemini 없음 |
 | monorepo | ●●●○○ | executor/architect Opus + Gemini(프리뷰/구독) + GLM-5.2 |
 | budget | ●○○○○ | executor GLM-5.2($1.40) + planner Qwen3.8 Max + Gemini 프리뷰 — 단, *절대 최저가는 내장 `codex-eco`* |
 

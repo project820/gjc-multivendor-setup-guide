@@ -3,6 +3,9 @@
 > [!NOTE]
 > **이 문서는 non-normative 요약이다.** 규범 출처: 매핑 = [`gjc-profiles.yml`](../gjc-profiles.yml) · 운영 계약 = [`routing-rules.md`](../routing-rules.md) · 검증 원본 = [`evidence/`](../evidence/). 모든 수치는 **기재된 검증일 시점**이며 시점 민감하다 — 카탈로그·라이브 표면은 당일에도 변한다(07-10 오후 `gemini-3.5-flash*` 소멸 실측).
 
+> [!IMPORTANT]
+> **Gemini 는 지금 v3 카탈로그에서 `budget` 을 제외하고 배제한다.** 품질 비교가 아니라 운영 정책이다 — 이 가이드의 독자는 이미 xAI / Grok 4.6 에 닿는다. Gemini 좌석은 저단가 레인(`budget`)에만 남긴다.
+
 ## 1. 릴리스
 
 | 항목 | 값 |
@@ -17,16 +20,16 @@
 
 | 번들 | default | executor | planner | architect | critic | 인증 |
 |---|---|---|---|---|---|---|
-| ⭐ daily | Opus5:med | Luna:max | Sol:high | Gemini`-low:high` | Gemini`-low:high`¹ | 구독 3 |
-| 🏎 coding-sprint | Opus5:med | Opus5:high | Sol:high² | Gemini`-low:high` | Terra:high² | 구독 3 |
-| 🚨 cyber-cop | Opus5:high | Sol:high | Gemini`-low:high` | Opus5:high | Sol:high | 구독 3 |
-| 🏆 ultimate-opus | Opus5:high | Opus5:high³ | Sol:xhigh | Opus5:high³ | Grok4.6:high | +xai |
-| 🏛 llm-council | Opus5:high⁵ | Terra:high | Sol:xhigh | Gemini`-low:high` | Grok4.6:high | 구독 3+xai |
-| 🛡 escalation | Opus5:high | Fable:xhigh | Sol:xhigh | Gemini`-low:high` | Grok4.6:high | 구독 3+xai |
+| ⭐ daily | Opus5:med | Luna:max | Sol:high | Opus5:high | Grok4.6:high | anth+codex+xai |
+| 🏎 coding-sprint | Opus5:med | Opus5:high¹ | Sol:high | Opus5:high¹ | Grok4.6:high | anth+codex+xai |
+| 🚨 cyber-cop | Opus5:high³ | Sol:high | Sol:high | Opus5:high | Grok4.6:high | anth+codex+xai |
+| 🏆 ultimate-opus | Opus5:high | Opus5:high¹ | Sol:xhigh | Opus5:high¹ | Grok4.6:high | anth+codex+xai |
+| 🏛 llm-council | Opus5:high³ | Terra:high | Sol:xhigh | Opus5:high | Grok4.6:high | anth+codex+xai |
+| 🛡 escalation | Opus5:high | Fable:xhigh¹ | Sol:xhigh | Opus5:high¹ | Grok4.6:high | anth+codex+xai |
 | 💸 budget | Terra:med | GLM-5.2 | Qwen3.8Max | Gemini`-low:high` | Gemini`-low:high` | codex+go+google |
-| 🗺 monorepo | Opus5:med | Opus5:high³ | Gemini`-low:high` | Opus5:high³ | GLM-5.2 | anthropic+google+go |
+| 🗺 monorepo | Opus5:med | Opus5:high¹ | Qwen3.8Max² | Opus5:high¹ | GLM-5.2² | anthropic+go |
 
-¹ architect와 동일 셀렉터 — 3벤더 구독-only 제약의 의도적 트레이드오프(xai 로그인 시 `grok-4.6:medium` 스왑 권장). ² plan/crit 동계열 — `SAME_FAMILY_OK` 인간판정. ³ exec/arch 동계열 — `SAME_FAMILY_OK`. ⁵ 집계자 제한 — 판정석은 Google·xAI·OpenAI 3계열.
+¹ exec/arch 동계열 — `SAME_FAMILY_OK`. ² plan/crit 동계열(qwen≠glm) — `SAME_FAMILY_OK`. ³ 집계자 제한 — 판정에 참여하지 않음. Gemini 는 `budget` 만 (정책).
 
 ## 3. 모델 팩트 (검증일 명기)
 

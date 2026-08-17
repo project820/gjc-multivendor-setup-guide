@@ -13,8 +13,8 @@
 #
 # Seats (from the `cyber-cop` profile in gjc-profiles.yml):
 #   architect = anthropic/claude-opus-5:high   (first-pass code-review adjudicator)
-#   critic    = openai-codex/gpt-5.6-sol:high    (merge gate, cross-family vs Claude author)
-#   --panel   → high-risk 3-vote panel adds xai/grok-4.6:high + google-antigravity/gemini-3.1-pro-low:high
+#   critic    = xai/grok-4.6:high                  (merge gate, third-lineage vs Claude author)
+#   --panel   → high-risk 2-vote panel adds openai-codex/gpt-5.6-sol:high (Gemini panel seat retired — budget-only)
 # INVARIANTS are run by THIS script against the PR HEAD (not the local checkout), never model-claimed.
 # It NEVER merges — the verdict is surfaced to a human for the merge decision.
 set -euo pipefail
@@ -35,13 +35,13 @@ case "$PR" in ''|*[!0-9]*) echo "PR number must be a positive integer: '$PR'" >&
 # Critic seat (merge gate). Override: CYBER_COP_CRIT_MODEL pins a different cross-family critic
 # (e.g. the previous openai-codex/gpt-5.5:high) — escape hatch per PR #19 (Sol role-fit not yet
 # A/B-measured; availability + n=1 live defect-recall only).
-CRIT_MODEL="${CYBER_COP_CRIT_MODEL:-openai-codex/gpt-5.6-sol:high}"
-# Fail-closed override guard, validated BEFORE any seat call (PR #19 round-3): the critic seat
-# MUST stay cross-family vs the assumed-Claude author, and MUST NOT reuse a reserved panel
-# family (xai/google) — that would double-count one family in the 2-of-3 provenance quorum.
+CRIT_MODEL="${CYBER_COP_CRIT_MODEL:-xai/grok-4.6:high}"
+# Fail-closed override guard, validated BEFORE any seat call: the critic seat MUST stay
+# cross-family vs the assumed-Claude author. Default is Grok (third-lineage). Escape hatch
+# may pin openai-codex/* (PR #19 Sol hatch) — google-antigravity is budget-only and rejected.
 case "$CRIT_MODEL" in
-  openai-codex/*|openai/*) : ;;
-  *) echo "FATAL: CYBER_COP_CRIT_MODEL='$CRIT_MODEL' rejected — critic override must be an openai-codex/* (or openai/*) selector (cross-family vs the assumed-Claude author; xai/google-antigravity are reserved panel families)." >&2
+  xai/*|openai-codex/*|openai/*) : ;;
+  *) echo "FATAL: CYBER_COP_CRIT_MODEL='$CRIT_MODEL' rejected — critic override must be an xai/* or openai-codex/* (or openai/*) selector (cross-family vs the assumed-Claude author; google-antigravity is budget-only)." >&2
      exit 2 ;;
 esac
 
@@ -189,21 +189,23 @@ CRIT_V="$(crit_verdict "$crit_out")"
 echo "## 2. CRITIC VERDICT (${CRIT_MODEL}): ${CRIT_V}"
 echo "$crit_out"; echo
 
-# --- optional high-risk 3-vote cross-family panel (block on ANY BLOCK or >=2/3 dissent) ---
+# --- optional high-risk 2-vote cross-family panel (block on ANY BLOCK or 2/2 dissent) ---
 PANEL_BLOCK=0
 if [ "$PANEL" = "1" ]; then
   echo "## 2b. HIGH-RISK PANEL (independent cross-family votes)"
   panel_dissent=0; panel_hard_block=0
-  # critic counts as one of the three votes
+  # YAML critic is vote 1. Extra vote is the complementary non-default family.
+  # Gemini panel seat retired (budget-only policy). Provenance minimum = 2 families.
   case "$CRIT_V" in
     BLOCK) panel_hard_block=1; panel_dissent=$((panel_dissent+1)) ;;
     REQUEST_CHANGES) panel_dissent=$((panel_dissent+1)) ;;
   esac
-  # ONLY the grok seat is optional per routing-rules.md (no-xai-login downgrades to the
-  # 2-vote {gpt-5.6-sol, gemini} panel). A failed/unavailable GEMINI seat is NOT voidable —
-  # that would silently change the documented panel composition — it FAILS CLOSED (BLOCK).
-  panel_valid=1   # critic (gpt-5.6-sol) is one valid non-default vote
-  for pm in "xai/grok-4.6:high" "google-antigravity/gemini-3.1-pro-low:high"; do
+  panel_valid=1
+  case "$CRIT_MODEL" in
+    xai/*) EXTRA_PANEL="openai-codex/gpt-5.6-sol:high" ;;
+    *)     EXTRA_PANEL="xai/grok-4.6:high" ;;
+  esac
+  for pm in "$EXTRA_PANEL"; do
     if [ "$pm" = "xai/grok-4.6:high" ] && [ "${DIFF_BYTES:-0}" -gt "${GROK_PANEL_MAX_BYTES:-1600000}" ]; then
       echo "### panel vote (${pm}): VOID (diff ${DIFF_BYTES}B exceeds Grok 4.6 exact-diff guard ${GROK_PANEL_MAX_BYTES}B — use 1M lanes)"; echo
       continue
@@ -212,10 +214,6 @@ if [ "$PANEL" = "1" ]; then
 First line = exactly one of: APPROVE | REQUEST_CHANGES | BLOCK. Then one file-backed reason. Vote independently; no debate.")"
     case "$p_out" in
       *"[seat error:"*)
-        if [ "$pm" = "xai/grok-4.6:high" ]; then
-          echo "### panel vote (${pm}): VOID (optional seat unavailable — 2-vote downgrade per routing-rules)"; echo
-          continue
-        fi
         echo "### panel vote (${pm}): BLOCK (required seat failed — fail-closed, not voidable)"; echo
         panel_hard_block=1; panel_dissent=$((panel_dissent+1))
         continue ;;

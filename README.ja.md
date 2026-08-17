@@ -23,6 +23,9 @@
 > [!NOTE]
 > 役割・セレクタの中核概念は [GJC 公式ドキュメント](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) に上流マージ済み（[PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860)、`dev`）。本リポジトリはワンクリック導入、4階層8バンドルのカタログ、[保守・検証ツール](./MAINTAINING.md)を提供する。
 
+> [!IMPORTANT]
+> **Gemini はいま v3 カタログで `budget` 以外から除外する。** 品質比較ではなく運用ポリシーである — このガイドの読者はすでに xAI / Grok 4.6 に届く。既定経路（`daily`）を含む非 budget バンドルに Gemini 席はない。安いレーン（`budget`）にだけ残す。
+
 ---
 
 ## ⚡ 30秒インストール
@@ -65,11 +68,9 @@ gjc                        # 新規セッションは自動で daily
 
 | 最小必要組み合わせ | 使えるバンドル |
 |---|---|
-| `anthropic` + `openai-codex` + `google-antigravity` | ⭐ **daily** · 🏎 **coding-sprint** · 🚨 **cyber-cop** |
-| `anthropic` + `openai-codex` + `xai` | 🏆 **ultimate-opus** |
-| `anthropic` + `openai-codex` + `google-antigravity` + `xai` | 🛡 **escalation** · 🏛 **llm-council** |
-| `anthropic` + `google-antigravity` + `opencode-go` | 🗺 **monorepo** |
-| `openai-codex` + `google-antigravity` + `opencode-go` | 💸 **budget**（v3 新設） |
+| `anthropic` + `openai-codex` + `xai` | ⭐ **daily** · 🏎 **coding-sprint** · 🚨 **cyber-cop** · 🏆 **ultimate-opus** · 🛡 **escalation** · 🏛 **llm-council** |
+| `anthropic` + `opencode-go` | 🗺 **monorepo** |
+| `openai-codex` + `google-antigravity` + `opencode-go` | 💸 **budget** — Gemini が残る唯一の行 |
 
 ### 認証方式は別の軸
 
@@ -82,8 +83,8 @@ gjc                        # 新規セッションは自動で daily
 | `opencode-go` | `OPENCODE_API_KEY` |
 
 > [!TIP]
-> **3ベンダーへのサブスクログインだけで**最初の行が開く — daily · coding-sprint · cyber-cop。
-> ほとんどの人はここから始めればよい。残りは必要になったときに加える拡張である。
+> **`anthropic` + `openai-codex` + `xai` があれば**最初の行が開く — daily を含む 6 バンドル。
+> `google-antigravity` は `budget` 専用。`opencode-go` キーは monorepo·budget の拡張である。
 
 全カタログは [§5](#5-️-最終カタログ--8-バンドル--4階層) · reviewer モードとティーザーは以下を参照。
 
@@ -96,7 +97,7 @@ Core / Premium / Workflow bundle / Specialized は各バンドルの**バッジ*
 
 | Tier | バンドル | 一言定義 | こんな時 |
 |---|---|---|---|
-| Core | ⭐ **daily** | 本体 Opus + 委譲役割別に分散 — **サブスク OAuth 3 ベンダーだけで activation** | **日常の既定** |
+| Core | ⭐ **daily** | 本体 Opus + Grok critic — **Gemini なし**（ポリシー。残すのは `budget` だけ） | **日常の既定** |
 | Core | 🏎️ **coding-sprint** | executor を Opus に昇格した実装スループット特化 | 純粋な実装スプリント |
 | Core | 🚨 **cyber-cop** | reviewer モード — architect·critic が主役 | PRレビュー・セキュリティ監査 |
 | Premium (exp) | 🏆 **ultimate-opus** | Anthropic 品質基盤のプレミアム | 正確性がコストより重要 |
@@ -241,31 +242,31 @@ opencode-go/<model>                           （effort 省略 = モデル既定
 profiles:
 
   daily:
-    required_providers: [anthropic, openai-codex, google-antigravity]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:medium
       executor:  openai-codex/gpt-5.6-luna:max
       planner:   openai-codex/gpt-5.6-sol:high
-      architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    google-antigravity/gemini-3.1-pro-low:high
+      architect: anthropic/claude-opus-5:high
+      critic:    xai/grok-4.6:high
 
   coding-sprint:
-    required_providers: [anthropic, openai-codex, google-antigravity]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:medium
       executor:  anthropic/claude-opus-5:high
       planner:   openai-codex/gpt-5.6-sol:high
-      architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    openai-codex/gpt-5.6-terra:high
+      architect: anthropic/claude-opus-5:high
+      critic:    xai/grok-4.6:high
 
   cyber-cop:
-    required_providers: [anthropic, openai-codex, google-antigravity]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high
       executor:  openai-codex/gpt-5.6-sol:high
-      planner:   google-antigravity/gemini-3.1-pro-low:high
+      planner:   openai-codex/gpt-5.6-sol:high
       architect: anthropic/claude-opus-5:high
-      critic:    openai-codex/gpt-5.6-sol:high
+      critic:    xai/grok-4.6:high
 
   ultimate-opus:
     required_providers: [anthropic, openai-codex, xai]
@@ -277,29 +278,29 @@ profiles:
       critic:    xai/grok-4.6:high
 
   llm-council:
-    required_providers: [anthropic, openai-codex, google-antigravity, xai]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high
       executor:  openai-codex/gpt-5.6-terra:high
       planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: google-antigravity/gemini-3.1-pro-low:high
+      architect: anthropic/claude-opus-5:high
       critic:    xai/grok-4.6:high
 
   escalation:
-    required_providers: [anthropic, openai-codex, google-antigravity, xai]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high
       executor:  anthropic/claude-fable-5:xhigh
       planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: google-antigravity/gemini-3.1-pro-low:high
+      architect: anthropic/claude-opus-5:high
       critic:    xai/grok-4.6:high
 
   monorepo:
-    required_providers: [anthropic, google-antigravity, opencode-go]
+    required_providers: [anthropic, opencode-go]
     model_mapping:
       default:   anthropic/claude-opus-5:medium
       executor:  anthropic/claude-opus-5:high
-      planner:   google-antigravity/gemini-3.1-pro-low:high
+      planner:   opencode-go/qwen3.8-max
       architect: anthropic/claude-opus-5:high
       critic:    opencode-go/glm-5.2
 
@@ -449,7 +450,7 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 巻き戻し（バ
 ```
 
 - critic は**メインループと別ベンダーで、並列独立投票後にメインループが集計**（討論禁止 — メタ審判が優位）。
-- critic パネル例：`{openai-codex/gpt-5.6-sol:high, xai/grok-4.6:high, google-antigravity/gemini-3.1-pro-low:high}` を同時実行 → 2/3 反対または CRITICAL/BLOCK 1件なら遮断。**CRITICAL/HIGH dissent は多数決で棄却不可** — 解消または human gate。
+- critic パネル例：`{xai/grok-4.6:high, openai-codex/gpt-5.6-sol:high}` を同時実行 → 2/2 反対または CRITICAL/BLOCK 1件なら遮断。Gemini 3票目は廃止（`budget` 以外）。**CRITICAL/HIGH dissent は多数決で棄却不可** — 解消または human gate。
 - executor の fan-out は**作業が真に独立**（共有状態なし）なときだけ。
 - チェーンは短く、メインループを単一の真実源にする（サブ同士で直接合意させない）。
 
@@ -467,10 +468,10 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 | GPT-5.6 Sol | 5 / 30（Fast モードは 12.5/75） | planner（daily·sprint·ultimate-opus·council·escalation）· cyber-cop executor·critic |
 | GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`**（v3 昇格 — D-1 が `{max}` 単独強制） |
-| Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3種・llm-council・escalation）— `/login xai` または XAI_API_KEY |
+| Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（daily·coding-sprint·cyber-cop·ultimate-opus·llm-council·escalation）— `/login xai` または XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **未出荷** — このアカウントで 403 China opt-in（カタログ id は生存） |
-| Gemini 3.1 Pro / 3-flash | プレビュー/サブスクトークン | planner·architect·critic |
+| Gemini 3.1 Pro / 3-flash | プレビュー/サブスクトークン | **budget architect·critic のみ**（他バンドルは除外 — ポリシー） |
 
 > † Fable 5 は Opus のちょうど2倍の単価。07-20 以降 Max/premium Team は週次上限の 50% 込み、Pro/standard は credits。
 > ‡ Sonnet 5 は**トークナイザ変更で同一テキストが約30%多くトークン化**される — 実効コストは表示単価より高く見積もること。
@@ -484,7 +485,7 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 | ultimate-opus | ●●●●○ | Opus 3席 `:high~xhigh` + Grok critic（`/login xai` または XAI_API_KEY） |
 | llm-council | ●●●●○ | 4 ベンダー認証 + Sol `:xhigh` planner — council 実行時は票数分課金 |
 | coding-sprint | ●●●○○ | executor Opus `:high`（失敗シグナル時のみ max 昇格） |
-| daily | ●●●○○ | 本体 Opus `:medium`、委譲は中・低価格へ分散 — サブスク OAuth 3ベンダー |
+| daily | ●●●○○ | 本体 Opus `:medium`、委譲は中・低価格へ分散 — anthropic+codex+xai。Gemini なし |
 | monorepo | ●●●○○ | executor/architect Opus + Gemini（プレビュー/サブスク）+ GLM-5.2 |
 | budget | ●○○○○ | executor GLM-5.2（$1.40）+ planner Qwen3.8 Max + Gemini プレビュー — *絶対最安は内蔵 `codex-eco`* |
 
