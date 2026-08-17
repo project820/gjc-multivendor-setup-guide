@@ -47,6 +47,7 @@ _MODEL_TOKEN = {
     # (시뮬레이션 릴리스 트리에서 실측). gen_svgs.py 의 `_MODEL_DISPLAY` 와 같은 계열의
     # 하드코딩 테이블이고, v3 로스터에 모델이 추가되면 **두 곳을 같이** 고쳐야 한다.
     "qwen3.8-max": "qwen3.8max",
+    "gpt-daybreak-blue-latest": "daybreakblue",
 }
 _EFFORT_TOKEN = {
     "minimal": "min",

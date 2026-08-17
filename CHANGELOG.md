@@ -27,6 +27,10 @@
   라이브 YAML 에 맞춤 (`monorepo`=`[anthropic, opencode-go]`, council/escalation=3벤더).
   패널 표 수를 실제 2석에 맞춤. Council 계약을 architect Opus 판정·Gemini 판정석 폐지로 재기술.
   factsheet `SAME_FAMILY_OK` 3건→5건, Sol/Terra 역할 행을 cyber-cop/coding-sprint 재균형 후로 갱신.
+- **Daybreak Blue** (`openai-codex/gpt-daybreak-blue-latest:high`) 를 `cyber-cop` planner·executor 에
+  앉힘. 2표 패널은 `{grok, daybreak-blue}`. 카탈로그 상한 xhigh — `:max` 없음.
+  cyber-safeguard alias (Sol 과 다른 베이스가 아님). Red/Cyber 미출하.
+  daily·budget·monorepo·ultimate-opus 에는 안 씀.
 
 ---
 

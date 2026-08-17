@@ -114,7 +114,7 @@ Use this table as a secondary reference for what each bundle is; tier is only a 
 
 | Role | What it does | Best model |
 |---|---|---|
-| 🧠 **reasoning/planning** (planner) | sequencing, acceptance criteria | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · GA 2026-07-09) — bundle-specific seats: see §5 (exceptions: monorepo/budget=Qwen3.8 Max) |
+| 🧠 **reasoning/planning** (planner) | sequencing, acceptance criteria | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · GA 2026-07-09) — bundle-specific seats: see §5 (exceptions: cyber-cop=Daybreak Blue, monorepo/budget=Qwen3.8 Max) |
 | 🔨 **implementation** (executor) | writing/editing real code | **Claude Fable 5** (SWE-bench Verified **95.0**) — strongest *subscription-included* is **Opus 5** (Opus 4.8 successor · same $5/$25 · 2026-07-24) |
 | 🔭 **code review** (architect) | large-repo navigation, architecture | **Gemini 3.1 Pro** (multimodal MMMU-Pro 81%) · ultra-long-context (>200k) → **Opus** |
 | ⚖️ **independent critique** (critic) | adversarial verification | **cross-family** (different vendor than the main loop) |
@@ -262,8 +262,8 @@ profiles:
     required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high
-      executor:  openai-codex/gpt-5.6-sol:high
-      planner:   openai-codex/gpt-5.6-sol:high
+      executor:  openai-codex/gpt-daybreak-blue-latest:high
+      planner:   openai-codex/gpt-daybreak-blue-latest:high
       architect: anthropic/claude-opus-5:high
       critic:    xai/grok-4.6:high
 
@@ -334,7 +334,7 @@ profiles:
 | Provider | Verified selectors |
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high` (legacy) · `claude-sonnet-4-6:high` — sel ✅(08-16·**08-17 final-roster battery**) |
-| `openai-codex` | shipped seats: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:max` — sel ✅(**08-17 final-roster battery**). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` are canaries, not shipped seats; all green in the 08-17 battery |
+| `openai-codex` | shipped seats: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:max` — sel ✅(**08-17 final-roster battery**). `gpt-daybreak-blue-latest:high` — cyber-cop planner·executor (probe ✅ 08-17). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` are canaries, not shipped seats; all green in the 08-17 battery |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high` (legacy) · `grok-4.3:high` · `grok-4-fast:high` — sel ✅(08-16·**08-17 final-roster battery**) |
 | `grok-build` | `grok-4.6` (bare) — sel ✅(**08-17**). `grok-4.3` (bare) is the 07-02 record. Effort suffixes do not resolve (`grok-4.6:high` = not found) — not shipped |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(08-16·**08-17 final-roster battery**). Fuzzy `gemini-3.1-pro-high`/`-bogus` and bare `gemini-3.5-flash` confirmed fail-closed |
@@ -455,7 +455,7 @@ serial chain, 5 steps (0.99 each):  0.99^5 ≈ 95.1%    /    parallel independen
 ```
 
 - critic = **different vendor from the main loop, parallel independent vote, then the main loop tallies** (no debate — meta-judge wins).
-- critic panel example: `{xai/grok-4.6:high, openai-codex/gpt-5.6-sol:high}` in parallel → 2/2 dissent or any CRITICAL/BLOCK blocks. The Gemini third vote is retired (budget-only). **CRITICAL/HIGH dissent cannot be majority-voted away** — resolve it or use a human gate.
+- critic panel example: `{xai/grok-4.6:high, openai-codex/gpt-daybreak-blue-latest:high}` in parallel → 2/2 dissent or any CRITICAL/BLOCK blocks. The Gemini third vote is retired (budget-only). **CRITICAL/HIGH dissent cannot be majority-voted away** — resolve it or use a human gate.
 - executor fan-out only when **the work is truly independent** (no shared state).
 - keep chains short, with the main loop as the single source of truth (no direct sub-agent consensus).
 
@@ -470,9 +470,10 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 | Claude Fable 5 | 10 / 50 (batch 5/25 · cache hits 1)† | escalation executor |
 | Claude Opus 5 | 5 / 25 | default·executor backbone (4.8 successor) |
 | Claude Sonnet 5 | 3 / 15 (intro 2/10 through 2026-08-31)‡ | **not shipped** — no seat |
-| GPT-5.6 Sol | 5 / 30 (Fast mode is 12.5/75) | planner (daily·sprint·cyber-cop·ultimate-opus·council·escalation) · cyber-cop executor |
+| GPT-5.6 Sol | 5 / 30 (Fast mode is 12.5/75) | planner (daily·sprint·ultimate-opus·council·escalation) |
 | GPT-5.6 Terra | 2.5 / 15 | llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`** (promoted in v3 — D-1 forces `{max}` alone) |
+| Daybreak Blue | — | **cyber-cop planner·executor `:high`** — GJC pin `gpt-daybreak-blue-latest`. cyber-safeguard alias (not a different base than Sol). no `:max` |
 | Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic (daily · coding-sprint · cyber-cop · ultimate-opus · llm-council · escalation) — `/login xai` or XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **not shipped** — 403 China opt-in on this account (catalog id still live) |

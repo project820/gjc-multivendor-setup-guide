@@ -13,6 +13,7 @@
 #             · antigravity 고추론 = gemini-3.1-pro-low:high 리터럴 핀. 퍼지 공간 fail-closed 유지 — gemini-3.1-pro-high 는 "not found".
 #             · Gemini 3.5 Pro 는 카탈로그에 없음. Flash 3.5/3.6 은 라이브이나 좌석 미승격(클래스 상이).
 #             · gpt-5.6 3종 카탈로그 low..max — :max 실호출 수용되나 심도 미검증, 출하 상한 xhigh(Luna 는 :max 단독 허용 — D-1 강제). usable prompt budget 372K(0.13.3 표기; 0.9.6은 373K).
+#             · openai-codex/gpt-daybreak-blue-latest 카탈로그 minimal..xhigh (:max 없음). 출하 좌석은 cyber-cop planner·executor :high 만.
 # grok-4.6: `/login xai` 또는 XAI_API_KEY — $2/$6 (<200k prompt) / $4/$12 (≥200k) · ctx 500K. grok-build 변종은 bare 만 검증, 미출하.
 # Gemini 는 google-antigravity 프로바이더(무료 공개 프리뷰 + AI Pro/Ultra 는 한도 상향).
 # 근거: evidence/2026-08-16-catalog.txt · evidence/2026-08-16-selectors.md · evidence/2026-08-16-notes.md
@@ -48,13 +49,13 @@ profiles:
     required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high                   # 집계자 제한 — critic raw verdict 보존·노출(routing-rules 계약)
-      executor:  openai-codex/gpt-5.6-sol:high                  # 조연 — 재현 PoC·failing test·harness (Terminal-Bench 2.1 88.8 SOTA)
-      planner:   openai-codex/gpt-5.6-sol:high                  # sibling planner (daily·coding-sprint). Gemini planner 제거 — budget 만
+      executor:  openai-codex/gpt-daybreak-blue-latest:high     # 조연 — 재현 PoC. GJC openai-codex 핀 Daybreak Blue (cyber-safeguard alias — Sol 과 다른 베이스가 아님). :max 없음(카탈로그 상한 xhigh)
+      planner:   openai-codex/gpt-daybreak-blue-latest:high     # 방어 레인 분해. 동일 핀. Red/Cyber 미출하. daily·budget·monorepo·ultimate-opus 에는 안 씀
       architect: anthropic/claude-opus-5:high                   # 주연1 — 1차 코드리뷰 판정자(CLEAR/WATCH/BLOCK)
-      critic:    xai/grok-4.6:high                              # 주연2 — 머지 게이트. planner 를 Sol 로 옮기면 구 critic(Sol) 과 동계열 → Grok 으로 재균형
-      # 고위험 PR·보안 감사: critic 2표 병렬 패널 {xai/grok-4.6:high, openai-codex/gpt-5.6-sol:high}
+      critic:    xai/grok-4.6:high                              # 주연2 — 머지 게이트. 제3계열 독립 dissent
+      # 고위험 PR·보안 감사: critic 2표 병렬 패널 {xai/grok-4.6:high, openai-codex/gpt-daybreak-blue-latest:high}
       # — 독립 투표 후 본체 집계(토론 금지), 2/2 반박 또는 CRITICAL/BLOCK 1건이면 차단
-      # Gemini 3표째는 폐지(budget 외 배제). provenance 최소치(non-default family ≥2 = grok+gpt) 는 2표로 충족. 본체(claude)는 집계만
+      # Gemini 3표째는 없음(budget 외 배제). provenance 최소치(non-default family ≥2 = grok+gpt) 는 2표로 충족. 본체(claude)는 집계만
 
   # ─────────────── Premium tier (experimental — role-fit L3 전) ───────────────
 
@@ -127,6 +128,8 @@ profiles:
 # opencode-go: OPENCODE_API_KEY 필요(budget.executor·budget.planner·monorepo.critic). glm-5.2 검증✅(08-16).
 #   deepseek-v4-flash/pro 는 이 계정 08-16 에 403 China opt-in — 카탈로그 잔류, 지역 정책.
 # xai: `/login xai` 또는 XAI_API_KEY 설정 (daily·coding-sprint·cyber-cop·ultimate-opus·llm-council·escalation 의 critic).
+#   Daybreak Blue = openai-codex/gpt-daybreak-blue-latest (GJC 핀). cyber-cop planner·executor :high 만.
+#   OpenAI 문서상 cyber-safeguard alias — Sol 과 다른 베이스라고 쓰지 않는다. daybreak-red · gpt-5.6-cyber 미출하.
 #   Gemini / google-antigravity 출하 좌석은 budget.architect·budget.critic 만 (정책 — 품질 비교 아님).
 #   08-17 실측: XAI_API_KEY 환경변수 없이 xai/grok-4.6:high 성공(단일 계정). 메커니즘 단정 금지 — 신규 사용자는 둘 중 하나를 설정해야 한다.
 #   grok-4.6 은 xai :high 검증✅.

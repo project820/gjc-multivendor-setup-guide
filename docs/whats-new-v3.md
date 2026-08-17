@@ -69,8 +69,9 @@ v3.0.0 출하 직후 가정("daily critic 은 xAI 키 장벽 때문에 Gemini")�
 | `daily` | critic | Gemini `-low:high` | **`xai/grok-4.6:high`** (sibling Grok critic 출하 effort) |
 | `coding-sprint` | architect | Gemini `-low:high` | **`anthropic/claude-opus-5:high`** |
 | `coding-sprint` | critic | Terra `:high` | **`xai/grok-4.6:high`** (plan/crit 동계열 해소) |
-| `cyber-cop` | planner | Gemini `-low:high` | **`openai-codex/gpt-5.6-sol:high`** (sibling planner) |
-| `cyber-cop` | critic | Sol `:high` | **`xai/grok-4.6:high`** (planner 를 Sol 로 옮긴 뒤 동계열 방지) |
+| `cyber-cop` | planner | Gemini `-low:high` | **`openai-codex/gpt-daybreak-blue-latest:high`** (방어 레인 핀) |
+| `cyber-cop` | executor | Sol `:high` | **`openai-codex/gpt-daybreak-blue-latest:high`** (동일 핀) |
+| `cyber-cop` | critic | Sol `:high` | **`xai/grok-4.6:high`** (제3계열 머지 게이트) |
 | `llm-council` | architect | Gemini `-low:high` | **`anthropic/claude-opus-5:high`** |
 | `escalation` | architect | Gemini `-low:high` | **`anthropic/claude-opus-5:high`** |
 | `monorepo` | planner | Gemini `-low:high` | **`opencode-go/qwen3.8-max`** (budget sibling; gpt-5.6 은 372K 라 1M 번들 제외) |
@@ -81,6 +82,8 @@ v3.0.0 출하 직후 가정("daily critic 은 xAI 키 장벽 때문에 Gemini")�
 **validator 가 Luna 를 `:max` 단독으로 강제한다.** `gpt-5.6-luna` 에 다른 effort 를
 쓰면 검증이 거부한다(`illegal effort '…' for gpt-5.6-luna (legal: ['max'])`).
 Sol·Terra 의 출하 상한은 `xhigh` 로 그대로다.
+Daybreak Blue (`gpt-daybreak-blue-latest`) 는 cyber-cop 방어 레인에만 `:high` 로 앉힌다
+(카탈로그 상한 xhigh, `:max` 없음).
 
 ## 업그레이드하면 내 설정은 어떻게 되나 (2026-08-17 실측)
 
@@ -131,9 +134,10 @@ tier 나열을 버렸다. **보유 구독**에서 시작해 실행 가능한 번
 ## 이 릴리스가 약속하지 않는 것
 
 - **검증 없는 셀렉터는 문서에 없다.** 신규 좌석은 dated 실호출 기록이 있어야 오른다.
-- Gemini 3.7 · `gpt-5.6-cyber` · `grok-build/grok-4.6:high` 는 실호출이 not found 라 미출하.
-- Daybreak Blue 는 **승인 계정 보유자 한정 opt-in 각주**다. Core 필수 의존이 아니고,
-  미보유자는 기존 구성 그대로 돌아간다(패널 좌석이 아니라 수동 교차확인 핀이다).
+- Gemini 3.7 · `gpt-5.6-cyber` · `daybreak-red` · `grok-build/grok-4.6:high` 는 이 캐시에 없거나 실호출이 not found 라 미출하.
+- Daybreak Blue 는 GJC openai-codex 핀 `gpt-daybreak-blue-latest` 다. **cyber-cop planner·executor `:high`**
+  방어 레인에만 쓴다. OpenAI 문서상 cyber-safeguard alias 이며 Sol 과 다른 베이스가 아니다.
+  카탈로그 effort 는 minimal..xhigh (`:max` 없음). daily·budget·monorepo·ultimate-opus 에는 안 앉힌다.
 
 ## 이전 안내
 

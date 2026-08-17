@@ -22,7 +22,7 @@
 |---|---|---|---|---|---|---|
 | ⭐ daily | Opus5:med | Luna:max | Sol:high | Opus5:high | Grok4.6:high | anth+codex+xai |
 | 🏎 coding-sprint | Opus5:med | Opus5:high¹ | Sol:high | Opus5:high¹ | Grok4.6:high | anth+codex+xai |
-| 🚨 cyber-cop | Opus5:high³ | Sol:high | Sol:high | Opus5:high | Grok4.6:high | anth+codex+xai |
+| 🚨 cyber-cop | Opus5:high³ | DaybreakBlue:high | DaybreakBlue:high | Opus5:high | Grok4.6:high | anth+codex+xai |
 | 🏆 ultimate-opus | Opus5:high | Opus5:high¹ | Sol:xhigh | Opus5:high¹ | Grok4.6:high | anth+codex+xai |
 | 🏛 llm-council | Opus5:high³ | Terra:high | Sol:xhigh | Opus5:high | Grok4.6:high | anth+codex+xai |
 | 🛡 escalation | Opus5:high | Fable:xhigh¹ | Sol:xhigh | Opus5:high¹ | Grok4.6:high | anth+codex+xai |
@@ -41,6 +41,7 @@
 | GPT-5.6 Sol | 5 / 30 | **372K**/128K (0.13.3 표기, API 1.05M과 별개) | **xhigh** 출하상한 (`:max` 수용·심도 미검증) | 08-16✅ |
 | GPT-5.6 Terra | 2.5 / 15 | 372K/128K | xhigh 출하상한 | 08-16✅ |
 | GPT-5.6 Luna | 1 / 6 | 372K/128K | **:max 출하**(D-1 이 `{max}` 단독 강제) | 08-16✅ |
+| Daybreak Blue (`gpt-daybreak-blue-latest`) | — | openai-codex 캐시 | 카탈로그 **minimal..xhigh** (`:max` 없음) · 출하 **:high** · cyber-cop planner·executor 만. cyber-safeguard alias (Sol 과 다른 베이스가 아님). Red/Cyber 미출하 | 08-17✅ 프로브 ok |
 | Gemini 3.1 Pro | 프리뷰/구독¹ | 1M/66K (MRCR 1M 26.3% — nominal ≠ recall) | `low`/`high` 2단 · **`-low:high` 리터럴 핀** | 08-16✅ |
 | Gemini 3-flash | 프리뷰/구독¹ | 1M/66K | minimal..high | 08-16✅ |
 | Grok 4.6 | 2 / 6 (<200k) · 4 / 12 (≥200k) | provider 500K | 카탈로그 **xhigh** · 출하 **high** · xai API | 08-16✅ |

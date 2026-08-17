@@ -119,7 +119,7 @@ Core / Premium / Workflow bundle / Specialized は各バンドルの**バッジ*
 
 | 役割 | 何をするか | 最適モデル |
 |---|---|---|
-| 🧠 **推論・設計**（planner） | 手順・受け入れ基準 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 席は [§5](#5-️-最終カタログ--8-バンドル--4階層) を参照（例外：monorepo・budget=Qwen3.8 Max） |
+| 🧠 **推論・設計**（planner） | 手順・受け入れ基準 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 席は [§5](#5-️-最終カタログ--8-バンドル--4階層) を参照（例外：cyber-cop=Daybreak Blue、monorepo・budget=Qwen3.8 Max） |
 | 🔨 **実装**（executor） | 実際のコード作成・修正 | **Claude Fable 5**（SWE-bench Verified **95.0**）— サブスク込み最強は **Opus 5**（4.8 後継 · 同額 $5/$25 · 2026-07-24） |
 | 🔭 **コードレビュー**（architect） | 大規模リポ探索・アーキ | **Gemini 3.1 Pro**（マルチモーダル MMMU-Pro 81%） · 超長文脈（>200k）→ **Opus** |
 | ⚖️ **独立批評**（critic） | 敵対的検証 | **クロスファミリー**（メインループと別ベンダー） |
@@ -263,8 +263,8 @@ profiles:
     required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high
-      executor:  openai-codex/gpt-5.6-sol:high
-      planner:   openai-codex/gpt-5.6-sol:high
+      executor:  openai-codex/gpt-daybreak-blue-latest:high
+      planner:   openai-codex/gpt-daybreak-blue-latest:high
       architect: anthropic/claude-opus-5:high
       critic:    xai/grok-4.6:high
 
@@ -335,7 +335,7 @@ profiles:
 | プロバイダ | 検証済みセレクタ |
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`（レガシー）· `claude-sonnet-4-6:high` — sel ✅(08-16·**08-17 最終ロスター・バッテリー**) |
-| `openai-codex` | 出荷席: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:max` — sel ✅(**08-17 最終ロスター・バッテリー**). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` は出荷席ではなくカナリアで、08-17 バッテリーでもグリーン |
+| `openai-codex` | 出荷席: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:max` — sel ✅(**08-17 最終ロスター・バッテリー**). `gpt-daybreak-blue-latest:high` — cyber-cop planner·executor（プローブ ✅ 08-17）。`gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` は出荷席ではなくカナリアで、08-17 バッテリーでもグリーン |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（レガシー）· `grok-4.3:high` · `grok-4-fast:high` — sel ✅(08-16·**08-17 最終ロスター・バッテリー**) |
 | `grok-build` | `grok-4.6`（bare）— sel ✅(**08-17**)。`grok-4.3`（bare）は 07-02 記録。effort サフィックスは解決しない（`grok-4.6:high` = not found）— 未出荷 |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(08-16・**08-17 最終ロスター・バッテリー**)。ファジー `gemini-3.1-pro-high`/`-bogus` と bare `gemini-3.5-flash` は fail-closed を確認 |
@@ -450,7 +450,7 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 巻き戻し（バ
 ```
 
 - critic は**メインループと別ベンダーで、並列独立投票後にメインループが集計**（討論禁止 — メタ審判が優位）。
-- critic パネル例：`{xai/grok-4.6:high, openai-codex/gpt-5.6-sol:high}` を同時実行 → 2/2 反対または CRITICAL/BLOCK 1件なら遮断。Gemini 3票目は廃止（`budget` 以外）。**CRITICAL/HIGH dissent は多数決で棄却不可** — 解消または human gate。
+- critic パネル例：`{xai/grok-4.6:high, openai-codex/gpt-daybreak-blue-latest:high}` を同時実行 → 2/2 反対または CRITICAL/BLOCK 1件なら遮断。Gemini 3票目は廃止（`budget` 以外）。**CRITICAL/HIGH dissent は多数決で棄却不可** — 解消または human gate。
 - executor の fan-out は**作業が真に独立**（共有状態なし）なときだけ。
 - チェーンは短く、メインループを単一の真実源にする（サブ同士で直接合意させない）。
 
@@ -465,9 +465,10 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 | Claude Fable 5 | 10 / 50（バッチ 5/25 · キャッシュヒット 1）† | escalation executor |
 | Claude Opus 5 | 5 / 25 | default·executor の基幹（4.8 後継） |
 | Claude Sonnet 5 | 3 / 15（イントロ 2/10 ~2026-08-31）‡ | **未出荷** — 席なし（参考用） |
-| GPT-5.6 Sol | 5 / 30（Fast モードは 12.5/75） | planner（daily·sprint·cyber-cop·ultimate-opus·council·escalation）· cyber-cop executor |
+| GPT-5.6 Sol | 5 / 30（Fast モードは 12.5/75） | planner（daily·sprint·ultimate-opus·council·escalation） |
 | GPT-5.6 Terra | 2.5 / 15 | llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`**（v3 昇格 — D-1 が `{max}` 単独強制） |
+| Daybreak Blue | — | **cyber-cop planner·executor `:high`** — GJC ピン `gpt-daybreak-blue-latest`。cyber-safeguard alias（Sol とは別ベースではない）。`:max` なし |
 | Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（daily·coding-sprint·cyber-cop·ultimate-opus·llm-council·escalation）— `/login xai` または XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **未出荷** — このアカウントで 403 China opt-in（カタログ id は生存） |

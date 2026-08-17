@@ -124,7 +124,7 @@ Core / Premium / Workflow bundle / Specialized 는 각 번들 카드의 **배지
 
 | 역할 | 무엇을 하나 | 최적 모델 |
 |---|---|---|
-| 🧠 **추론·설계**(planner) | 순서·수용기준 짜기 | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · 2026-07-09 GA) — 번들별 좌석은 [§5](#5-️-최종-카탈로그--8-번들--4계층) 참조(예외: monorepo·budget=Qwen3.8 Max) |
+| 🧠 **추론·설계**(planner) | 순서·수용기준 짜기 | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · 2026-07-09 GA) — 번들별 좌석은 [§5](#5-️-최종-카탈로그--8-번들--4계층) 참조(예외: cyber-cop=Daybreak Blue, monorepo·budget=Qwen3.8 Max) |
 | 🔨 **구현**(executor) | 실제 코드 작성·수정 | **Claude Fable 5** (SWE-bench Verified **95.0**) — 구독 포함 최강은 **Opus 5**(4.8 후계 · $5/$25 동가 · 2026-07-24) |
 | 🔭 **코드리뷰**(architect) | 대형 리포 탐색·아키텍처 | **Gemini 3.1 Pro** (멀티모달 MMMU-Pro 81%) · 초장문맥(>200k)은 **Opus** |
 | ⚖️ **독립 비평**(critic) | 결과 적대 검증 | **cross-family** (본체와 다른 벤더) |
@@ -271,13 +271,13 @@ profiles:
     required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high                   # 집계자 제한 — critic raw verdict 보존·노출(routing-rules 계약)
-      executor:  openai-codex/gpt-5.6-sol:high                  # 조연 — 재현 PoC·failing test·harness (Terminal-Bench 2.1 88.8 SOTA)
-      planner:   openai-codex/gpt-5.6-sol:high                  # sibling planner (daily·coding-sprint). Gemini planner 제거 — budget 만
+      executor:  openai-codex/gpt-daybreak-blue-latest:high     # 조연 — 재현 PoC. GJC openai-codex 핀 Daybreak Blue (cyber-safeguard alias — Sol 과 다른 베이스가 아님). :max 없음(카탈로그 상한 xhigh)
+      planner:   openai-codex/gpt-daybreak-blue-latest:high     # 방어 레인 분해. 동일 핀. Red/Cyber 미출하. daily·budget·monorepo·ultimate-opus 에는 안 씀
       architect: anthropic/claude-opus-5:high                   # 주연1 — 1차 코드리뷰 판정자(CLEAR/WATCH/BLOCK)
-      critic:    xai/grok-4.6:high                              # 주연2 — 머지 게이트. planner 를 Sol 로 옮기면 구 critic(Sol) 과 동계열 → Grok 으로 재균형
-      # 고위험 PR·보안 감사: critic 2표 병렬 패널 {xai/grok-4.6:high, openai-codex/gpt-5.6-sol:high}
+      critic:    xai/grok-4.6:high                              # 주연2 — 머지 게이트. 제3계열 독립 dissent
+      # 고위험 PR·보안 감사: critic 2표 병렬 패널 {xai/grok-4.6:high, openai-codex/gpt-daybreak-blue-latest:high}
       # — 독립 투표 후 본체 집계(토론 금지), 2/2 반박 또는 CRITICAL/BLOCK 1건이면 차단
-      # Gemini 3표째는 폐지(budget 외 배제). provenance 최소치(non-default family ≥2 = grok+gpt) 는 2표로 충족. 본체(claude)는 집계만
+      # Gemini 3표째는 없음(budget 외 배제). provenance 최소치(non-default family ≥2 = grok+gpt) 는 2표로 충족. 본체(claude)는 집계만
 
   # ─────────────── Premium tier (experimental — role-fit L3 전) ───────────────
 
@@ -350,6 +350,8 @@ profiles:
 # opencode-go: OPENCODE_API_KEY 필요(budget.executor·budget.planner·monorepo.critic). glm-5.2 검증✅(08-16).
 #   deepseek-v4-flash/pro 는 이 계정 08-16 에 403 China opt-in — 카탈로그 잔류, 지역 정책.
 # xai: `/login xai` 또는 XAI_API_KEY 설정 (daily·coding-sprint·cyber-cop·ultimate-opus·llm-council·escalation 의 critic).
+#   Daybreak Blue = openai-codex/gpt-daybreak-blue-latest (GJC 핀). cyber-cop planner·executor :high 만.
+#   OpenAI 문서상 cyber-safeguard alias — Sol 과 다른 베이스라고 쓰지 않는다. daybreak-red · gpt-5.6-cyber 미출하.
 #   Gemini / google-antigravity 출하 좌석은 budget.architect·budget.critic 만 (정책 — 품질 비교 아님).
 #   08-17 실측: XAI_API_KEY 환경변수 없이 xai/grok-4.6:high 성공(단일 계정). 메커니즘 단정 금지 — 신규 사용자는 둘 중 하나를 설정해야 한다.
 #   grok-4.6 은 xai :high 검증✅.
@@ -375,7 +377,7 @@ profiles:
 
 - **daily** — Opus `:medium` 본체 · Luna executor · Sol planner · Opus architect · Grok critic. Gemini 없음(정책).
 - **coding-sprint** — Opus `:high` executor+architect 처리량 번들; Sol planner · Grok critic 이 교차검증(`SAME_FAMILY_OK` exec/arch).
-- **cyber-cop** — Opus architect 1차 판정·Grok critic 머지 게이트의 reviewer 모드; 고위험은 2표 {Grok, Sol} 패널.
+- **cyber-cop** — Opus architect 1차 판정·Grok critic 머지 게이트의 reviewer 모드; planner·executor 는 Daybreak Blue (`gpt-daybreak-blue-latest:high`, cyber-safeguard alias). 고위험은 2표 {Grok, Daybreak Blue} 패널.
 - **ultimate-opus** — Opus 3좌석의 안정성·1M을 Sol planner·Grok critic이 보완한다; ⚠ 같은 Claude 계열은 `SAME_FAMILY_OK`이며 세 독립 의견이 아니다.
 - **llm-council** — architect Opus·critic Grok·planner Sol이 판정하고, 본체 default(Opus)는 raw verdict를 보존하는 집계자; [`routing-rules.md`](./routing-rules.md)의 Council 계약(독립호출·quorum)이 필요하다. Gemini 판정석 없음.
 - **escalation** — 실패 뒤 Fable `:xhigh`와 2표 critic 패널 {Grok, Sol}을 쓰는 수동 게이트; Escalation 계약이 트리거·human gate를 정하고 refusal 시 Opus `:max`로 강등한다.
@@ -392,7 +394,7 @@ profiles:
 | 프로바이더 | 검증된 셀렉터 |
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`(레거시) · `claude-sonnet-4-6:high` — sel ✅(08-16·**08-17 최종 좌석 배터리**) |
-| `openai-codex` | 출하 좌석 `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:max` — sel ✅(**08-17 최종 좌석 배터리**). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` 는 출하 좌석이 아닌 카나리이며 08-17 배터리에서도 그린이다 |
+| `openai-codex` | 출하 좌석 `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:max` — sel ✅(**08-17 최종 좌석 배터리**). `gpt-daybreak-blue-latest:high` — cyber-cop planner·executor (프로브 ✅ 08-17). `gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` 는 출하 좌석이 아닌 카나리이며 08-17 배터리에서도 그린이다 |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`(레거시) · `grok-4.3:high` · `grok-4-fast:high` — sel ✅(08-16·**08-17 최종 좌석 배터리**) |
 | `grok-build` | `grok-4.6` (bare) — sel ✅(**08-17**). `grok-4.3` (bare) 는 07-02 기록. effort 서픽스는 해석되지 않는다(`grok-4.6:high` = not found) — 미출하 |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(08-16·**08-17 최종 좌석 배터리**). 퍼지 `gemini-3.1-pro-high`/`-bogus`·bare `gemini-3.5-flash` 는 fail-closed 확인 |
@@ -509,7 +511,7 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 되돌리기(백�
 ```
 
 - critic은 **본체와 다른 벤더로, 병렬 독립 투표 후 본체가 집계**(debate 금지 — 메타-심판이 우월).
-- critic 패널 예: `{xai/grok-4.6:high, openai-codex/gpt-5.6-sol:high}` 동시 → 2/2 반박 또는 CRITICAL/BLOCK 1건이면 차단. Gemini 3표째는 폐지(`budget` 외 배제). **CRITICAL/HIGH dissent 는 다수결로 기각 불가** — 해소 또는 human gate.
+- critic 패널 예: `{xai/grok-4.6:high, openai-codex/gpt-daybreak-blue-latest:high}` 동시 → 2/2 반박 또는 CRITICAL/BLOCK 1건이면 차단. Gemini 3표째는 폐지(`budget` 외 배제). **CRITICAL/HIGH dissent 는 다수결로 기각 불가** — 해소 또는 human gate.
 - executor fan-out은 **작업이 진짜 독립**(공유 상태 없음)일 때만.
 - 체인은 짧게, 본체를 단일 진실원천으로(서브끼리 직접 합의 금지).
 
@@ -524,9 +526,10 @@ Gemini는 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 구독 �
 | Claude Fable 5 | 10 / 50 (배치 5/25 · 캐시 히트 1)† | escalation executor |
 | Claude Opus 5 | 5 / 25 | default·executor 기간산업 (4.8 후계) |
 | Claude Sonnet 5 | 3 / 15 (인트로 2/10 ~2026-08-31)‡ | **미출하** — 좌석 없음(참고용) |
-| GPT-5.6 Sol | 5 / 30 (Fast 모드는 12.5/75) | planner(daily·sprint·cyber-cop·ultimate-opus·council·escalation) · cyber-cop executor |
+| GPT-5.6 Sol | 5 / 30 (Fast 모드는 12.5/75) | planner(daily·sprint·ultimate-opus·council·escalation) |
 | GPT-5.6 Terra | 2.5 / 15 | llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`** (v3 승격 — D-1 이 `{max}` 단독 강제) |
+| Daybreak Blue | — | **cyber-cop planner·executor `:high`** — GJC 핀 `gpt-daybreak-blue-latest`. cyber-safeguard alias (Sol 과 다른 베이스가 아님). `:max` 없음 |
 | Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic(daily·coding-sprint·cyber-cop·ultimate-opus·llm-council·escalation) — `/login xai` 또는 XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **미출하** — 이 계정 403 China opt-in(카탈로그 잔류) |

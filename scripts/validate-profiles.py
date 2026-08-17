@@ -74,6 +74,8 @@ def _eff_rules():
         # daily.executor 하나뿐이므로(eco.planner 는 eco 와 함께 삭제) 다른 effort 는
         # 출하 경로가 없다. 좁은 쪽이 fail-closed 다.
         (lambda p, m: p == "openai-codex" and m == "gpt-5.6-luna", {"max"}),
+        # Daybreak Blue — GJC openai-codex 핀. 카탈로그 minimal..xhigh (:max 없음). 출하 좌석은 :high.
+        (lambda p, m: p == "openai-codex" and m == "gpt-daybreak-blue-latest", {"minimal","low","medium","high","xhigh"}),
         (lambda p, m: m.startswith("claude-fable-5"), {"minimal","low","medium","high","xhigh"}),   # :max accepted; do not ship
         (lambda p, m: m.startswith("claude-sonnet-5"), {"minimal","low","medium","high"}),          # catalog lists xhigh/max; shipped legality stays high
         (lambda p, m: m.startswith("claude-opus-5"), {"minimal","low","medium","high","xhigh","max"}),

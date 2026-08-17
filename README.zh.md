@@ -116,7 +116,7 @@ Core / Premium / Workflow bundle / Specialized 只保留为各捆绑卡片的**�
 
 | 角色 | 做什么 | 最佳模型 |
 |---|---|---|
-| 🧠 **推理/规划**（planner） | 排序、验收标准 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 各捆绑席位见[§5](#5-️-最终目录--8-个捆绑--4-层级)（例外：monorepo·budget=Qwen3.8 Max） |
+| 🧠 **推理/规划**（planner） | 排序、验收标准 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 各捆绑席位见[§5](#5-️-最终目录--8-个捆绑--4-层级)（例外：cyber-cop=Daybreak Blue，monorepo·budget=Qwen3.8 Max） |
 | 🔨 **实现**（executor） | 真正写/改代码 | **Claude Fable 5**（SWE-bench Verified **95.0**）— 订阅内最强是 **Opus 5**（4.8 后继 · 同价 $5/$25 · 2026-07-24） |
 | 🔭 **代码评审**（architect） | 大型仓库导航、架构 | **Gemini 3.1 Pro**（多模态 MMMU-Pro 81%） · 超长上下文（>200k）→ **Opus** |
 | ⚖️ **独立批评**（critic） | 对抗式验证 | **cross-family**（与主循环不同厂商） |
@@ -260,8 +260,8 @@ profiles:
     required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high
-      executor:  openai-codex/gpt-5.6-sol:high
-      planner:   openai-codex/gpt-5.6-sol:high
+      executor:  openai-codex/gpt-daybreak-blue-latest:high
+      planner:   openai-codex/gpt-daybreak-blue-latest:high
       architect: anthropic/claude-opus-5:high
       critic:    xai/grok-4.6:high
 
@@ -335,7 +335,7 @@ profiles:
 | 提供方 | 已验证选择器 |
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`（遗留）· `claude-sonnet-4-6:high` — sel ✅（08-16·**08-17 最终席位批次**） |
-| `openai-codex` | 出货席位：`gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:max` — sel ✅（**08-17 最终席位批次**）。`gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` 为金丝雀而非出货席位；08-17 批次中均为绿 |
+| `openai-codex` | 出货席位：`gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:max` — sel ✅（**08-17 最终席位批次**）。`gpt-daybreak-blue-latest:high` — cyber-cop planner·executor（探针 ✅ 08-17）。`gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` 为金丝雀而非出货席位；08-17 批次中均为绿 |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（遗留）· `grok-4.3:high` · `grok-4-fast:high` — sel ✅（08-16·**08-17 最终席位批次**） |
 | `grok-build` | `grok-4.6`（裸选择器）— sel ✅（**08-17**）。`grok-4.3`（裸）为 07-02 记录。effort 后缀无法解析（`grok-4.6:high` = not found）— 不出货 |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅（08-16·**08-17 最终席位批次**）。模糊 `gemini-3.1-pro-high`/`-bogus` 与裸 `gemini-3.5-flash` 已确认 fail-closed |
@@ -450,7 +450,7 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 回滚（恢复备
 ```
 
 - critic 必须**与主循环不同厂商，先并行独立投票、再由主循环汇总**（禁止辩论 — 元裁判更优）。
-- critic 评审团示例：`{xai/grok-4.6:high, openai-codex/gpt-5.6-sol:high}` 并行 → 2/2 反对或任一 CRITICAL/BLOCK 即拦截。Gemini 第三票已废止（`budget` 以外）。**CRITICAL/HIGH dissent 不可由多数票否决**，必须解决或进入 human gate。
+- critic 评审团示例：`{xai/grok-4.6:high, openai-codex/gpt-daybreak-blue-latest:high}` 并行 → 2/2 反对或任一 CRITICAL/BLOCK 即拦截。Gemini 第三票已废止（`budget` 以外）。**CRITICAL/HIGH dissent 不可由多数票否决**，必须解决或进入 human gate。
 - executor 扇出仅在工作真正独立（无共享状态）时。
 - 链要短，主循环作为唯一事实源（子代理之间不直接达成共识）。
 
@@ -465,9 +465,10 @@ Gemini 使用 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 订�
 | Claude Fable 5 | 10 / 50（批量 5/25 · 缓存命中 1）† | escalation executor |
 | Claude Opus 5 | 5 / 25 | default·executor 基础设施（4.8 后继） |
 | Claude Sonnet 5 | 3 / 15（入门价 2/10 至 2026-08-31）‡ | **未出货** — 无席位（供参考） |
-| GPT-5.6 Sol | 5 / 30（Fast 模式为 12.5/75） | planner（daily·sprint·cyber-cop·ultimate-opus·council·escalation）·cyber-cop executor |
+| GPT-5.6 Sol | 5 / 30（Fast 模式为 12.5/75） | planner（daily·sprint·ultimate-opus·council·escalation） |
 | GPT-5.6 Terra | 2.5 / 15 | llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`**（v3 晋升 — D-1 强制仅 `{max}`） |
+| Daybreak Blue | — | **cyber-cop planner·executor `:high`** — GJC 钉 `gpt-daybreak-blue-latest`。cyber-safeguard 别名（并非与 Sol 不同的基座）。无 `:max` |
 | Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（daily·coding-sprint·cyber-cop·ultimate-opus·llm-council·escalation）— `/login xai` 或 XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **未出货** — 本账号 403 China opt-in（目录 id 仍在） |

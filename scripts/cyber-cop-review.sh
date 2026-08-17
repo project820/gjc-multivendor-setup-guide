@@ -7,14 +7,14 @@
 #
 # Cross-family independence is guaranteed by CALL STRUCTURE, not prompt compliance:
 # each seat is a separate `gjc -p --model <selector>` invocation, so the critic really
-# runs on openai-codex/gpt-5.6-sol (cross-family vs the assumed-Claude author) — it is NOT
+# runs on xai/grok-4.6:high (cross-family vs the assumed-Claude author) — it is NOT
 # role-played by the default model. Each section header names the model that produced it.
 # (Fixes #10: a single `--mpreset` session has the default model role-play every seat.)
 #
 # Seats (from the `cyber-cop` profile in gjc-profiles.yml):
 #   architect = anthropic/claude-opus-5:high   (first-pass code-review adjudicator)
 #   critic    = xai/grok-4.6:high                  (merge gate, third-lineage vs Claude author)
-#   --panel   → high-risk 2-vote panel adds openai-codex/gpt-5.6-sol:high (Gemini panel seat retired — budget-only)
+#   --panel   → high-risk 2-vote panel adds openai-codex/gpt-daybreak-blue-latest:high (Gemini panel seat retired — budget-only)
 # INVARIANTS are run by THIS script against the PR HEAD (not the local checkout), never model-claimed.
 # It NEVER merges — the verdict is surfaced to a human for the merge decision.
 set -euo pipefail
@@ -202,7 +202,7 @@ if [ "$PANEL" = "1" ]; then
   esac
   panel_valid=1
   case "$CRIT_MODEL" in
-    xai/*) EXTRA_PANEL="openai-codex/gpt-5.6-sol:high" ;;
+    xai/*) EXTRA_PANEL="openai-codex/gpt-daybreak-blue-latest:high" ;;
     *)     EXTRA_PANEL="xai/grok-4.6:high" ;;
   esac
   for pm in "$EXTRA_PANEL"; do
