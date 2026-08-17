@@ -74,20 +74,36 @@ if [ -z "$SHIPPED_SELECTORS" ]; then
   echo "FATAL: could not derive shipped selectors from gjc-profiles.yml"; exit 1
 fi
 echo "## Shipped selectors (derived from gjc-profiles.yml: $(echo "$SHIPPED_SELECTORS" | wc -l | tr -d ' ') unique)"
-for s in $SHIPPED_SELECTORS; do P "$s" ok; done
+printf '%s\n' "$SHIPPED_SELECTORS" | while IFS= read -r s; do
+  [ -n "$s" ] && P "$s" ok
+done
 
 # --- documented compatibility canaries (NOT shipped seats; must still resolve) ---
-for s in \
-  "anthropic/claude-opus-4-8:high" "anthropic/claude-sonnet-4-6:high" \
-  "anthropic/claude-fable-5:high" \
-  "anthropic/claude-sonnet-5:high" \
-  "openai-codex/gpt-5.6-sol:xhigh" \
-  "openai-codex/gpt-5.6-terra:high" "openai-codex/gpt-5.6-luna:high" \
-  "openai-codex/gpt-5.5:high" "openai-codex/gpt-5.4:high" \
-  "google-antigravity/gemini-3.1-pro-low" \
-  "xai/grok-4.6:medium" \
-  "xai/grok-4.5:medium" "xai/grok-4.5:high" "xai/grok-4.3:high" "xai/grok-4-fast:high" \
-  ; do P "$s" ok; done
+# 여기 있는 셀렉터는 위 파생 목록과 겹치면 안 된다. 겹치면 "출하 아님" 라벨이 거짓이 되고
+# 같은 셀렉터를 두 번 호출하게 된다. 아래 CANARY_OVERLAP 가드가 그걸 잡는다.
+CANARIES="
+anthropic/claude-opus-4-8:high
+anthropic/claude-sonnet-4-6:high
+anthropic/claude-sonnet-5:high
+openai-codex/gpt-5.6-luna:high
+openai-codex/gpt-5.5:high
+openai-codex/gpt-5.4:high
+google-antigravity/gemini-3.1-pro-low
+xai/grok-4.6:medium
+xai/grok-4.5:medium
+xai/grok-4.5:high
+xai/grok-4.3:high
+xai/grok-4-fast:high
+"
+CANARY_OVERLAP="$(printf '%s\n' "$SHIPPED_SELECTORS" "$CANARIES" | sed '/^$/d' | sort | uniq -d)"
+if [ -n "$CANARY_OVERLAP" ]; then
+  echo "FATAL: canary list overlaps shipped selectors (label says NOT shipped):"
+  printf '  %s\n' $CANARY_OVERLAP
+  exit 1
+fi
+printf '%s\n' "$CANARIES" | while IFS= read -r s; do
+  [ -n "$s" ] && P "$s" ok
+done
 # (v2.1.0 / gjc 0.13.3 / 2026-08-16: opus-5 + grok-4.6 added as shipped successors.
 #  grok-4.5 kept as a legacy canary. gpt-5.6 :max still un-benchmarked — shipped cap xhigh.
 #  gemini-3-flash:low stays eco.critic (3.5-flash-low resurrected 08-16 but live-surface flaps).
