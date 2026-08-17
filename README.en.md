@@ -360,7 +360,7 @@ profiles:
 | `grok-4.6:medium` / `:high` | 1.8s ping (08-16) | — | shipped critic cap is high · `:xhigh` not shipped |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | coding-latency outlier |
-| `glm-5.2` | **21.9s** | 4.0s | slowest at coding — fine for critic |
+| `glm-5.2` | 07-02: **21.9s** · 08-17: **5.1s** | 4.0s | the 07-02 figure did not reproduce — 08-17 coding probe scored 8/8 at 5.1s ([evidence](./evidence/2026-08-17-eco-executor.md)) |
 
 </details>
 

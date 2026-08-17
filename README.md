@@ -356,7 +356,7 @@ profiles:
 </details>
 
 > [!TIP]
-> **opencode-go** 는 `OPENCODE_API_KEY` 설정 시 `eco` executor·`monorepo` critic에서 활성화된다(검증✅). 출하 좌석 `glm-5.2` 는 2026-08-16·08-17 실호출 ok. `deepseek-v4-flash/pro` 는 카탈로그 id 는 살아 있으나 **이 계정에서 403 China opt-in** 이라 v2.1.0 에서 출하 좌석에서 내렸다(정보성 카나리로만 유지 — 지역 정책 해제 시 재평가). `kimi-k3`(1M/131K)·`kimi-k2.7-code`(262K)·`minimax-m3` 는 **실호출은 되지만 role-fit 미검증이라 미출하**다 — 08-17 프로브 기록은 [`evidence/2026-08-17-eco-executor.md`](./evidence/2026-08-17-eco-executor.md).
+> **opencode-go** 는 `OPENCODE_API_KEY` 설정 시 `eco` executor·`monorepo` critic에서 활성화된다(검증✅). 출하 좌석 `glm-5.2` 는 2026-08-16·08-17 실호출 ok 이고 08-17 코딩 프로브에서 8/8·5.1s([증거](./evidence/2026-08-17-eco-executor.md)). `deepseek-v4-flash/pro` 는 카탈로그 id 는 살아 있으나 **이 계정에서 403 China opt-in** 이라 v2.1.0 에서 출하 좌석에서 내렸다(정보성 카나리로만 유지). `kimi-k3` 는 같은 프로브에서 8/8·6.0s 로 동급이지만 **채울 좌석이 없고 레포에 가격·레이트리밋 문서가 없어 미출하**다 — 재평가 트리거로 등재. `kimi-k2.7-code`(262K)·`minimax-m3` 도 미출하.
 
 #### 프로필별 설계 근거
 
@@ -420,7 +420,7 @@ profiles:
 | `grok-4.6:medium` / `:high` | 1.8s ping (08-16) | — | high는 critic 출하 상한 · `:xhigh` 미출하 |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | 코딩 지연 아웃라이어 |
-| `glm-5.2` | **21.9s** | 4.0s | 코딩 최저속 — critic엔 무방 |
+| `glm-5.2` | 07-02: **21.9s** · 08-17: **5.1s** | 4.0s | 07-02 수치는 재현 안 됨 — 08-17 코딩 프로브 8/8 정확·5.1s([증거](./evidence/2026-08-17-eco-executor.md)) |
 
 </details>
 

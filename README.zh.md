@@ -359,7 +359,7 @@ profiles:
 | `grok-4.6:medium` / `:high` | 1.8s ping（08-16） | — | critic 出货上限 high · `:xhigh` 未出货 |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | 编码延迟离群值 |
-| `glm-5.2` | **21.9s** | 4.0s | 编码最慢 — 当 critic 无妨 |
+| `glm-5.2` | 07-02：**21.9s** · 08-17：**5.1s** | 4.0s | 07-02 数值未复现 — 08-17 编码探针 8/8 正确、5.1s（[证据](./evidence/2026-08-17-eco-executor.md)） |
 
 </details>
 

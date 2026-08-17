@@ -356,7 +356,7 @@ profiles:
 | `grok-4.6:medium` / `:high` | 1.8s ping (08-16) | — | critic 出荷上限 high · `:xhigh` 未出荷 |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | コーディング遅延の外れ値 |
-| `glm-5.2` | **21.9s** | 4.0s | コーディング最遅 — critic には支障なし |
+| `glm-5.2` | 07-02: **21.9s** · 08-17: **5.1s** | 4.0s | 07-02 の数値は再現せず — 08-17 コーディングプローブは 8/8 正解・5.1s（[証拠](./evidence/2026-08-17-eco-executor.md)） |
 
 </details>
 
