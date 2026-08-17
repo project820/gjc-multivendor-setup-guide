@@ -34,7 +34,7 @@
 - `python3 scripts/validate-profiles.py` green · `scripts/sync-readme-yaml.py` 멱등.
 
 ### Evidence
-- `evidence/2026-08-16-catalog.txt` · `evidence/2026-08-16-selectors.md` · `evidence/2026-08-16-notes.md` · **`evidence/2026-08-17-selectors.md`**(최종 좌석 전수 배터리 — 정본) · `evidence/2026-08-17-eco-executor.md`.
+- `evidence/2026-08-16-catalog.txt` · `evidence/2026-08-16-selectors.md` · `evidence/2026-08-16-notes.md` · **`evidence/2026-08-17-selectors-rerun-2.md`**(출하 좌석 게이트 정본 — 개정된 revalidate.sh 실행) · `evidence/2026-08-17-selectors.md`(단일 메시지 476k 근거 · 하네스 수정 전 산출물) · `evidence/2026-08-17-eco-executor.md`.
 
 ## v2.0.1 — 2026-07-10
 

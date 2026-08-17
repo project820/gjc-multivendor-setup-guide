@@ -339,8 +339,8 @@ profiles:
 #   :max 는 수용되나 심도 미검증 — 미출하(상한 xhigh). ⚠ METR: Sol 의 SWE 평가 게이밍 적발 — SWE류 벤치 단독근거 승격 금지.
 # opencode-go: OPENCODE_API_KEY 필요(eco.executor·monorepo.critic). glm-5.2 검증✅(08-16).
 #   deepseek-v4-flash/pro 는 이 계정 08-16 에 403 China opt-in — 카탈로그 잔류, 지역 정책.
-# xai: `/login xai` OAuth 또는 XAI_API_KEY (premium 3종 + llm-council/escalation 의 critic).
-#   08-17 실측: XAI_API_KEY 미설정 환경에서 xai/grok-4.6:high 성공 — 키는 필수가 아니라 대안 경로다(단일 계정 관찰).
+# xai: `/login xai` 또는 XAI_API_KEY 설정 (premium 3종 + llm-council/escalation 의 critic).
+#   08-17 실측: XAI_API_KEY 환경변수 없이 xai/grok-4.6:high 성공(단일 계정). 메커니즘 단정 금지 — 신규 사용자는 둘 중 하나를 설정해야 한다.
 #   grok-4.6 은 xai :high 검증✅.
 #   grok-build/grok-4.6 은 bare OK · :high not found — 출하 금지. grok-4.5 는 레거시 카나리.
 # Grok critic 좌석의 의미: "검증된 결함회수 최강"이 아니라 "제3계열 독립 dissent" — 2축 리서치 합의(critic-specific 근거 0건).
@@ -378,7 +378,7 @@ profiles:
 ## 6. ✅ 검증 매트릭스
 
 > 범례: ✅ 실호출 그린(괄호=검증일) · 🔴 실패 · ⚠ 주의/클램프 · †‡ 각주 · ●○ 상대비용.
-> 실호출 배터리는 두 번 돌렸다. **08-16**(gjc 0.13.3, 전 프로바이더 핵심 셀렉터 — [기록](./evidence/2026-08-16-selectors.md); 0.9.6 그린은 07-10 rerun-3)과 **08-17**(v2.1.0 최종 좌석 기준 재실행 + 단일 메시지 한도 — [기록](./evidence/2026-08-17-selectors.md)). 08-16 배터리는 eco.executor 가 아직 DeepSeek 이던 시점이라 최종 좌석 전수 커버는 **08-17 실행이 정본**이다. v2.1 출하 좌석은 08-17 기준 전부 그린이고, DeepSeek 는 이 계정에서 403 China opt-in 이라 출하 좌석에서 내렸다.
+> 실호출 기록은 셋이고 용도가 다르다. **08-16**(gjc 0.13.3, 전 프로바이더 핵심 셀렉터 — [기록](./evidence/2026-08-16-selectors.md); 0.9.6 그린은 07-10 rerun-3)은 eco.executor 가 아직 DeepSeek 이던 시점이라 최종 좌석 전수 커버가 아니다. **출하 좌석 게이트 정본은 [08-17 재실행](./evidence/2026-08-17-selectors-rerun-2.md)** — 이 PR 에서 고친 `revalidate.sh`(YAML 파생 로스터 · 카나리 겹침 가드 · FAIL 서브셸 버그 수정)를 실행한 결과이며 종료코드 0, 회귀 0건이다. **단일 메시지 476k 입력 근거는 [08-17 최초 실행](./evidence/2026-08-17-selectors.md)** 에 있다(그 파일은 하네스 수정 전 산출물이라 게이트 정본으로는 쓰지 않는다). v2.1 출하 좌석은 전부 그린이고, DeepSeek 는 이 계정에서 403 China opt-in 이라 출하 좌석에서 내렸다.
 
 | 프로바이더 | 검증된 셀렉터 |
 |---|---|

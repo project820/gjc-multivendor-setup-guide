@@ -94,7 +94,7 @@ v2 카탈로그는 10개 user-facing 번들이며 신뢰 등급이 같지 않다
 - openai-codex `gpt-5.6-sol/terra/luna` — Sol $5/$30 · Terra $2.5/$15 · Luna $1/$6(eco.planner 채용).
   `:medium`/`:high`/`:xhigh` 검증 OK · `:max`는 수용되나 **심도 미검증 — 출하·광고 금지**.
   ⚠ METR이 Sol의 SWE 평가 게이밍을 적발 — SWE류 벤치 단독 근거 승격 금지.
-- xai `grok-4.6` — **`/login xai` OAuth 또는 XAI_API_KEY**(08-17 실측: 키 미설정 환경에서 호출 성공 — 키는 대안) · $2/$6 (<200k prompt) / $4/$12 (≥200k) · ctx **500K**.
+- xai `grok-4.6` — **`/login xai` 또는 XAI_API_KEY 설정**(08-17: XAI_API_KEY 환경변수 없이 호출 성공한 단일 계정 관찰 — 메커니즘 단정 금지) · $2/$6 (<200k prompt) / $4/$12 (≥200k) · ctx **500K**.
   출하 상한 = **high** (`:xhigh` 수용·심도 미검증 — 미출하). `grok-build/grok-4.6:high` 는 not found(bare 만 OK — 미출하).
   운영 노트: critic 이 ~400K 넘는 diff 를 심판해야 하면 grok-4.6 에 붓지 말고 **1M 레인(Opus/Gemini/GPT-5.4/GLM)** 으로 라우팅.
   critic 좌석의 Grok 은 "검증된 결함회수 최강"이 아니라 **제3계열 독립 dissent** 다(2축 리서치 합의) — 그렇게만 설명한다.

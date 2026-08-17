@@ -316,7 +316,7 @@ profiles:
 ## 6. ✅ Verification matrix
 
 > Legend: ✅ live-call green (date in parentheses) · 🔴 failure · ⚠ caveat/clamp · †‡ footnotes · ●○ relative cost.
-> Two live batteries were run: **08-16** (gjc 0.13.3, core selectors across providers — [record](./evidence/2026-08-16-selectors.md); 0.9.6 green is 07-10 rerun-3) and **08-17** (final v2.1.0 roster plus the single-message limit — [record](./evidence/2026-08-17-selectors.md)). The 08-16 run predates the eco.executor change, so **08-17 is authoritative** for full final-roster coverage. Every v2.1 shipped seat is green as of 08-17; DeepSeek 403s China opt-in on this account and was dropped from shipped seats.
+> Three live records exist with different purposes. **08-16** (gjc 0.13.3, core selectors across providers — [record](./evidence/2026-08-16-selectors.md); 0.9.6 green is 07-10 rerun-3) predates the eco.executor change, so it is not full final-roster coverage. **The shipped-seat gate record is the [08-17 rerun](./evidence/2026-08-17-selectors-rerun-2.md)**, produced by the `revalidate.sh` this PR fixed (YAML-derived roster, canary overlap guard, FAIL subshell fix), exit 0 with zero regressions. **The 476k single-message evidence lives in the [first 08-17 run](./evidence/2026-08-17-selectors.md)**, which is a pre-fix harness output and is therefore not used as the gate record. Every v2.1 shipped seat is green; DeepSeek 403s China opt-in on this account and was dropped from shipped seats.
 
 | Provider | Verified selectors |
 |---|---|
