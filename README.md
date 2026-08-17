@@ -407,7 +407,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> antigravity 라이브 표면은 당일에도 변하고 `--list-models` 표기는 캐시일 수 있다. 좌석 채택 전 실호출하고, 디스커버리 미갱신이면 재로그인/재시도 또는 번들 id를 사용하라(eco critic 대안 `opencode-go/glm-5.2`; GLM 을 zai 경로로 쓰려면 `zai/glm-5.2` 와 `zai` provider 추가. `deepseek-v4-pro` 는 이 계정 403 China opt-in 이라 대안에서 제외).
+> antigravity 라이브 표면은 당일에도 변하고 `--list-models` 표기는 캐시일 수 있다. 좌석 채택 전 실호출하고, 디스커버리 미갱신이면 재로그인/재시도 또는 번들 id를 사용하라. **eco critic 대체 셀렉터는 현재 권장안이 없다** — `glm-5.2` 는 같은 번들의 executor 라 critic 으로 쓰면 교차검증이 사라지고, `deepseek-v4-pro` 는 이 계정 403 China opt-in 이다. 좌석을 바꾸려면 계열 독립성과 `required_providers` 를 함께 재검토해야 한다.
 
 <details>
 <summary><b>지연 참고 (마이크로벤치 2026-07-02; 08-16 ping은 Opus 5·Grok 4.6)</b></summary>

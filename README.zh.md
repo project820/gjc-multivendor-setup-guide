@@ -346,7 +346,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> antigravity 的 live 表面当日也会变化，`--list-models` 标示可能是缓存；采纳席位前真实调用。发现未刷新时重新登录/重试，或使用捆绑 id（eco critic 备选 `opencode-go/glm-5.2`；若要经 zai 路径使用 GLM，加入 `zai` provider 后用 `zai/glm-5.2`。`deepseek-v4-pro` 因本账号 403 China opt-in 已从备选中移除）。
+> antigravity 的 live 表面当日也会变化，`--list-models` 标示可能是缓存；采纳席位前真实调用。发现未刷新时重新登录/重试，或使用捆绑 id。**eco critic 目前没有推荐的替代 selector** — `glm-5.2` 已是同一 bundle 的 executor，用作 critic 会失去交叉校验；`deepseek-v4-pro` 在本账号 403 China opt-in。更换席位需同时复核系列独立性与 `required_providers`。
 
 <details>
 <summary><b>延迟参考（微基准 2026-07-02；08-16 ping 为 Opus 5·Grok 4.6）</b></summary>

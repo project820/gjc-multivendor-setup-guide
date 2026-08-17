@@ -347,7 +347,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> The antigravity live surface can change within a day and `--list-models` can be cached. Live-call before adopting a seat; re-login/retry when discovery is stale, or use the bundle id (eco critic alternative: `opencode-go/glm-5.2`; add the `zai` provider to reach GLM as `zai/glm-5.2`. `deepseek-v4-pro` is excluded as an alternative — this account gets 403 China opt-in).
+> The antigravity live surface can change within a day and `--list-models` can be cached. Live-call before adopting a seat; re-login/retry when discovery is stale, or use the bundle id. **There is currently no recommended replacement selector for the eco critic** — `glm-5.2` is already this bundle's executor, so using it as critic destroys the cross-check, and `deepseek-v4-pro` returns 403 China opt-in on this account. Changing a seat requires re-checking family independence and `required_providers` together.
 
 <details>
 <summary><b>Latency reference (micro-bench 2026-07-02; 08-16 pings for Opus 5 · Grok 4.6)</b></summary>

@@ -343,7 +343,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> antigravity のライブ面は当日中にも変わり、`--list-models` 表記はキャッシュの場合がある。席に採用する前に実呼び出しで確認し、ディスカバリ未更新なら再ログイン/再試行またはバンドル id を使う（eco critic の代替は `opencode-go/glm-5.2`、GLM を zai 経路で使うなら `zai` プロバイダ追加のうえ `zai/glm-5.2`。`deepseek-v4-pro` はこのアカウントで 403 China opt-in のため代替から除外）。
+> antigravity のライブ面は当日中にも変わり、`--list-models` 表記はキャッシュの場合がある。席に採用する前に実呼び出しで確認し、ディスカバリ未更新なら再ログイン/再試行またはバンドル id を使う。**eco critic の代替セレクタは現在推奨案が無い** — `glm-5.2` は同じバンドルの executor なので critic に使うと相互検証が消え、`deepseek-v4-pro` はこのアカウントで 403 China opt-in。席を変えるなら系統の独立性と `required_providers` を併せて再検討すること。
 
 <details>
 <summary><b>レイテンシ参考（マイクロベンチ 2026-07-02; 08-16 ping は Opus 5·Grok 4.6）</b></summary>
