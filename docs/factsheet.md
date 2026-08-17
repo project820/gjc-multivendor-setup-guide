@@ -29,7 +29,7 @@
 | 💸 budget | Terra:med | GLM-5.2 | Qwen3.8Max | Gemini`-low:high` | Gemini`-low:high` | codex+go+google |
 | 🗺 monorepo | Opus5:med | Opus5:high¹ | Qwen3.8Max² | Opus5:high¹ | GLM-5.2² | anthropic+go |
 
-¹ exec/arch 동계열 — `SAME_FAMILY_OK`. ² plan/crit 동계열(qwen≠glm) — `SAME_FAMILY_OK`. ³ 집계자 제한 — 판정에 참여하지 않음. Gemini 는 `budget` 만 (정책).
+¹ exec/arch 동계열 — `SAME_FAMILY_OK`. ² plan/crit 동계열(qwen≠glm) — `SAME_FAMILY_OK`. ³ default 집계자 제한 — 그 좌석은 판정에 참여하지 않음(llm-council.architect Opus 는 판정). Gemini 는 `budget` 만 (정책).
 
 ## 3. 모델 팩트 (검증일 명기)
 
@@ -64,7 +64,7 @@
 
 1. 전 번들 멀티벤더 — **실사용 벤더 ≥2** (required_providers 패딩으로 우회 불가, 패딩은 WARN)
 2. default = Anthropic 플래그십 (anthropic 미요구 번들은 적용 대상 아님 — 예외 목록 없음)
-3. exec/arch · plan/crit cross-family (예외는 `SAME_FAMILY_OK` 등재 + WARN 영구 표면화 — 현재 3건)
+3. exec/arch · plan/crit cross-family (예외는 `SAME_FAMILY_OK` 등재 + WARN 영구 표면화 — 현재 5건: monorepo exec_arch·plan_crit, ultimate-opus/coding-sprint/escalation exec_arch)
 4. effort 하드룰 (§3 상한 위반은 하드에러)
 5. required_providers ⊇ 실사용 provider
 6. README×4 임베드 YAML == `gjc-profiles.yml` (parsed-mapping 비교 — `scripts/sync-readme-yaml.py`로 동기화)

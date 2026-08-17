@@ -98,12 +98,12 @@ Core / Premium / Workflow bundle / Specialized 只保留为各捆绑卡片的**�
 | Core | 🏎️ **coding-sprint** | 把 executor 升到 Opus 的实现吞吐特化 | 纯实现冲刺 |
 | Core | 🚨 **cyber-cop** | reviewer 模式 — architect·critic 主导，专用于 PR 审查·安全审计 | 审查他人 PR·合并门禁·安全审计 |
 | Premium (exp) | 🏆 **ultimate-opus** | Anthropic 质量基底 premium | 精度比成本更重要 |
-| Workflow | 🏛️ **llm-council** | 4 系列座位表与 Council 契约 | 需要多系列共识的决策 |
-| Workflow | 🛡️ **escalation** | 手动升级 — Fable 救援投手 + critic 3 票评审团 | 合并·安全·支付·不可逆变更 |
+| Workflow | 🏛️ **llm-council** | 3 系列座位表（architect Opus 判定，default 只汇总）与 Council 契约 | 需要多系列共识的决策 |
+| Workflow | 🛡️ **escalation** | 手动升级 — Fable 救援投手 + critic 2 票评审团 | 合并·安全·支付·不可逆变更 |
 | Specialized (exp) | 💸 **budget** | 低成本多厂商实验 — *不是绝对最低价* | 成本压力·大批量 |
 | Specialized (exp) | 🗺️ **monorepo** | 全局 ≥1M ctx | 巨型代码库 |
 
-> **🚨 cyber-cop** — GJC 首个 reviewer 模式：architect·critic 是主角，executor 是复现配角。高风险 PR 使用三票评审团；PR #4~#7 曾在合并前拦截 10 个缺陷。
+> **🚨 cyber-cop** — GJC 首个 reviewer 模式：architect·critic 是主角，executor 是复现配角。高风险 PR 使用两票评审团；PR #4~#7 曾在合并前拦截 10 个缺陷。
 > 安装 wrapper：`curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
 > → [公告文档](./docs/whats-new-cyber-cop.md)
 
@@ -116,7 +116,7 @@ Core / Premium / Workflow bundle / Specialized 只保留为各捆绑卡片的**�
 
 | 角色 | 做什么 | 最佳模型 |
 |---|---|---|
-| 🧠 **推理/规划**（planner） | 排序、验收标准 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 各捆绑席位见[§5](#5-️-最终目录--8-个捆绑--4-层级)（例外：cyber-cop·monorepo=Gemini，budget=Qwen3.8 Max） |
+| 🧠 **推理/规划**（planner） | 排序、验收标准 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 各捆绑席位见[§5](#5-️-最终目录--8-个捆绑--4-层级)（例外：monorepo·budget=Qwen3.8 Max） |
 | 🔨 **实现**（executor） | 真正写/改代码 | **Claude Fable 5**（SWE-bench Verified **95.0**）— 订阅内最强是 **Opus 5**（4.8 后继 · 同价 $5/$25 · 2026-07-24） |
 | 🔭 **代码评审**（architect） | 大型仓库导航、架构 | **Gemini 3.1 Pro**（多模态 MMMU-Pro 81%） · 超长上下文（>200k）→ **Opus** |
 | ⚖️ **独立批评**（critic） | 对抗式验证 | **cross-family**（与主循环不同厂商） |
@@ -465,8 +465,8 @@ Gemini 使用 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 订�
 | Claude Fable 5 | 10 / 50（批量 5/25 · 缓存命中 1）† | escalation executor |
 | Claude Opus 5 | 5 / 25 | default·executor 基础设施（4.8 后继） |
 | Claude Sonnet 5 | 3 / 15（入门价 2/10 至 2026-08-31）‡ | **未出货** — 无席位（供参考） |
-| GPT-5.6 Sol | 5 / 30（Fast 模式为 12.5/75） | planner（daily·sprint·ultimate-opus·council·escalation）·cyber-cop executor·critic |
-| GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
+| GPT-5.6 Sol | 5 / 30（Fast 模式为 12.5/75） | planner（daily·sprint·cyber-cop·ultimate-opus·council·escalation）·cyber-cop executor |
+| GPT-5.6 Terra | 2.5 / 15 | llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`**（v3 晋升 — D-1 强制仅 `{max}`） |
 | Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（daily·coding-sprint·cyber-cop·ultimate-opus·llm-council·escalation）— `/login xai` 或 XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
@@ -481,12 +481,12 @@ Gemini 使用 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 订�
 
 | 配置 | 成本 | 主要成本来源 |
 |---|---|---|
-| escalation | ●●●●● | executor Fable `:xhigh`（救援投手 — 间歇使用）+ planner Sol `:xhigh` + 4 厂商认证 |
+| escalation | ●●●●● | executor Fable `:xhigh`（救援投手 — 间歇使用）+ planner Sol `:xhigh` + 3 厂商认证（anthropic+codex+xai） |
 | ultimate-opus | ●●●●○ | Opus 3 席 `:high~xhigh` + Grok critic（`/login xai` 或 XAI_API_KEY） |
-| llm-council | ●●●●○ | 4 厂商认证 + Sol `:xhigh` planner — 执行 Council 工作流时按票数计费 |
+| llm-council | ●●●●○ | 3 厂商认证（anthropic+codex+xai）+ Sol `:xhigh` planner — 执行 Council 工作流时按票数计费 |
 | coding-sprint | ●●●○○ | executor Opus `:high`（仅失败信号时升 max） |
 | daily | ●●●○○ | 主循环 Opus `:medium`，委派中低价分散 — anthropic+codex+xai。无 Gemini |
-| monorepo | ●●●○○ | executor/architect Opus + Gemini（预览/订阅）+ GLM-5.2 |
+| monorepo | ●●●○○ | executor/architect Opus + Qwen planner + GLM-5.2（anthropic+opencode-go）。无 Gemini |
 | budget | ●○○○○ | executor GLM-5.2（$1.40）+ planner Qwen3.8 Max + Gemini 预览；但*绝对最低价*是内置 `codex-eco` |
 
 ---

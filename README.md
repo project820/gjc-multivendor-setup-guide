@@ -93,7 +93,7 @@ gjc                        # 새 세션은 자동으로 daily 사용
 Core / Premium / Workflow bundle / Specialized 는 각 번들 카드의 **배지**로만 남는다.
 "어떤 걸 쓸까" 의 1차 기준이 아니다 — 위 표가 1차 기준이다.
 
-> **🚨 cyber-cop** — GJC 최초 reviewer 모드: architect·critic이 주연이고 executor는 재현 조연이다. 고위험 PR은 3표 패널로 판정하며, PR #4~#7에서 머지 전 결함 10건을 차단했다.
+> **🚨 cyber-cop** — GJC 최초 reviewer 모드: architect·critic이 주연이고 executor는 재현 조연이다. 고위험 PR은 2표 패널로 판정하며, PR #4~#7에서 머지 전 결함 10건을 차단했다.
 > 설치: `curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
 > → [공지 문서](./docs/whats-new-cyber-cop.md)
 
@@ -124,7 +124,7 @@ Core / Premium / Workflow bundle / Specialized 는 각 번들 카드의 **배지
 
 | 역할 | 무엇을 하나 | 최적 모델 |
 |---|---|---|
-| 🧠 **추론·설계**(planner) | 순서·수용기준 짜기 | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · 2026-07-09 GA) — 번들별 좌석은 [§5](#5-️-최종-카탈로그--8-번들--4계층) 참조(예외: cyber-cop·monorepo=Gemini, budget=Qwen3.8 Max) |
+| 🧠 **추론·설계**(planner) | 순서·수용기준 짜기 | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · 2026-07-09 GA) — 번들별 좌석은 [§5](#5-️-최종-카탈로그--8-번들--4계층) 참조(예외: monorepo·budget=Qwen3.8 Max) |
 | 🔨 **구현**(executor) | 실제 코드 작성·수정 | **Claude Fable 5** (SWE-bench Verified **95.0**) — 구독 포함 최강은 **Opus 5**(4.8 후계 · $5/$25 동가 · 2026-07-24) |
 | 🔭 **코드리뷰**(architect) | 대형 리포 탐색·아키텍처 | **Gemini 3.1 Pro** (멀티모달 MMMU-Pro 81%) · 초장문맥(>200k)은 **Opus** |
 | ⚖️ **독립 비평**(critic) | 결과 적대 검증 | **cross-family** (본체와 다른 벤더) |
@@ -292,13 +292,13 @@ profiles:
 
   # ─────────────── Workflow bundle tier (좌석표 + 동반 워크플로) ───────────────
 
-  llm-council:                         # 🏛 좌석표(판정석 Claude·xAI·OpenAI, 본체 Anthropic 은 집계자 제한). ★프로필은 좌석표일 뿐 — 병렬 독립호출·quorum·raw verdict 보존은
-    required_providers: [anthropic, openai-codex, xai]          #   routing-rules.md "Council 계약"이 실행한다(YAML 이 자동 실행하지 않음). Gemini 판정석은 폐지(budget 만)
+  llm-council:                         # 🏛 좌석표(판정석 architect=Opus · critic=Grok · planner=Sol · executor=Terra). ★프로필은 좌석표일 뿐 — 병렬 독립호출·quorum·raw verdict 보존은
+    required_providers: [anthropic, openai-codex, xai]          #   routing-rules.md "Council 계약"이 실행한다(YAML 이 자동 실행하지 않음). Gemini 판정석 없음. 본체 default 만 집계자
     model_mapping:
-      default:   anthropic/claude-opus-5:high                   # 집계자 제한 — 요약·은폐 없이 raw verdict 보존
-      executor:  openai-codex/gpt-5.6-terra:high                # 재현·검증 잡무
-      planner:   openai-codex/gpt-5.6-sol:xhigh                 # 의제 분해
-      architect: anthropic/claude-opus-5:high                   # sibling architect. Google 판정석 제거 — cyber-cop 과 같이 default+architect 가 Opus
+      default:   anthropic/claude-opus-5:high                   # 집계자 제한 — 요약·은폐 없이 raw verdict 보존. 판정은 architect/critic/planner/executor 좌석
+      executor:  openai-codex/gpt-5.6-terra:high                # 재현·검증 잡무 (판정석)
+      planner:   openai-codex/gpt-5.6-sol:xhigh                 # 의제 분해 (판정석)
+      architect: anthropic/claude-opus-5:high                   # 판정석. Gemini 판정석 폐지 — default 는 집계, architect Opus 는 판정
       critic:    xai/grok-4.6:high                              # council 판정석 (xAI)
 
   escalation:                          # 🚑 고실패비용 구원투수 — ★수동 에스컬레이션 번들. 실패신호 트리거·재시도 상한·human gate 는
@@ -377,8 +377,8 @@ profiles:
 - **coding-sprint** — Opus `:high` executor+architect 처리량 번들; Sol planner · Grok critic 이 교차검증(`SAME_FAMILY_OK` exec/arch).
 - **cyber-cop** — Opus architect 1차 판정·Grok critic 머지 게이트의 reviewer 모드; 고위험은 2표 {Grok, Sol} 패널.
 - **ultimate-opus** — Opus 3좌석의 안정성·1M을 Sol planner·Grok critic이 보완한다; ⚠ 같은 Claude 계열은 `SAME_FAMILY_OK`이며 세 독립 의견이 아니다.
-- **llm-council** — Opus·Grok·Sol이 판정하고 본체 Anthropic은 raw verdict를 보존하는 집계자; [`routing-rules.md`](./routing-rules.md)의 Council 계약(독립호출·quorum)이 필요하다. Gemini 판정석 없음.
-- **escalation** — 실패 뒤 Fable `:xhigh`와 3표 critic을 쓰는 수동 게이트; Escalation 계약이 트리거·human gate를 정하고 refusal 시 Opus `:max`로 강등한다.
+- **llm-council** — architect Opus·critic Grok·planner Sol이 판정하고, 본체 default(Opus)는 raw verdict를 보존하는 집계자; [`routing-rules.md`](./routing-rules.md)의 Council 계약(독립호출·quorum)이 필요하다. Gemini 판정석 없음.
+- **escalation** — 실패 뒤 Fable `:xhigh`와 2표 critic 패널 {Grok, Sol}을 쓰는 수동 게이트; Escalation 계약이 트리거·human gate를 정하고 refusal 시 Opus `:max`로 강등한다.
 - **budget** — 저단가 API 경로 — *절대 최저가 아님*, `OPENCODE_API_KEY` 필요.
 - **monorepo** — Opus architect·Qwen planner·GLM-5.2 critic의 1M ctx 번들; Gemini 없음. 완전 recall이 아니므로 청크 누적을 권한다. 다만 >~400k 단일 paste 가 꼭 필요하면 **architect 좌석의 `claude-opus-5:high` 가 그대로 처리한다**(08-17 배터리에서 476k 통과 — Opus 4.8 의 476k 🔴 는 구세대 수치).
 
@@ -524,8 +524,8 @@ Gemini는 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 구독 �
 | Claude Fable 5 | 10 / 50 (배치 5/25 · 캐시 히트 1)† | escalation executor |
 | Claude Opus 5 | 5 / 25 | default·executor 기간산업 (4.8 후계) |
 | Claude Sonnet 5 | 3 / 15 (인트로 2/10 ~2026-08-31)‡ | **미출하** — 좌석 없음(참고용) |
-| GPT-5.6 Sol | 5 / 30 (Fast 모드는 12.5/75) | planner(daily·sprint·ultimate-opus·council·escalation) · cyber-cop executor·critic |
-| GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
+| GPT-5.6 Sol | 5 / 30 (Fast 모드는 12.5/75) | planner(daily·sprint·cyber-cop·ultimate-opus·council·escalation) · cyber-cop executor |
+| GPT-5.6 Terra | 2.5 / 15 | llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`** (v3 승격 — D-1 이 `{max}` 단독 강제) |
 | Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic(daily·coding-sprint·cyber-cop·ultimate-opus·llm-council·escalation) — `/login xai` 또는 XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
@@ -540,12 +540,12 @@ Gemini는 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 구독 �
 
 | 프로필 | 비용 | 핵심 비용 동인 |
 |---|---|---|
-| escalation | ●●●●● | executor Fable `:xhigh`(구원투수 — 간헐 사용) + planner Sol `:xhigh` + 4벤더 인증 |
+| escalation | ●●●●● | executor Fable `:xhigh`(구원투수 — 간헐 사용) + planner Sol `:xhigh` + 3벤더 인증 (anthropic+codex+xai) |
 | ultimate-opus | ●●●●○ | Opus 3좌석 `:high~xhigh` + Grok critic(`/login xai` 또는 XAI_API_KEY) |
-| llm-council | ●●●●○ | 4벤더 인증 + Sol `:xhigh` planner — council 워크플로 실행 시 표 수만큼 과금 |
+| llm-council | ●●●●○ | 3벤더 인증 (anthropic+codex+xai) + Sol `:xhigh` planner — council 워크플로 실행 시 표 수만큼 과금 |
 | coding-sprint | ●●●○○ | executor Opus `:high`(실패신호 시에만 max 격상) |
 | daily | ●●●○○ | 본체 Opus `:medium`, 위임은 중·저가로 분산 — anthropic+codex+xai. Gemini 없음 |
-| monorepo | ●●●○○ | executor/architect Opus + Gemini(프리뷰/구독) + GLM-5.2 |
+| monorepo | ●●●○○ | executor/architect Opus + Qwen planner + GLM-5.2 (anthropic+opencode-go). Gemini 없음 |
 | budget | ●○○○○ | executor GLM-5.2($1.40) + planner Qwen3.8 Max + Gemini 프리뷰 — 단, *절대 최저가는 내장 `codex-eco`* |
 
 ---

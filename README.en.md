@@ -96,12 +96,12 @@ Use this table as a secondary reference for what each bundle is; tier is only a 
 | Core | 🏎️ **coding-sprint** | implementation-throughput bundle with executor promoted to Opus | pure implementation sprint |
 | Core | 🚨 **cyber-cop** | reviewer mode — architect and critic lead, dedicated to PR review and security audits | reviewing others' PRs · merge gates · security audits |
 | Premium (exp) | 🏆 **ultimate-opus** | Anthropic-quality premium baseline | accuracy matters more than cost |
-| Workflow | 🏛️ **llm-council** | 4-family seating chart and Council contract | decisions needing multi-family consensus |
-| Workflow | 🛡️ **escalation** | manual escalation — Fable rescue pitcher + 3-vote critic panel | merges · security · billing · irreversible changes |
+| Workflow | 🏛️ **llm-council** | 3-family seating chart (Opus architect judges; default aggregates) and Council contract | decisions needing multi-family consensus |
+| Workflow | 🛡️ **escalation** | manual escalation — Fable rescue pitcher + 2-vote critic panel | merges · security · billing · irreversible changes |
 | Specialized (exp) | 💸 **budget** | low-cost multi-vendor experiment — *not absolute cheapest* | cost pressure · bulk work |
 | Specialized (exp) | 🗺️ **monorepo** | ≥1M ctx everywhere | huge codebases |
 
-> **🚨 cyber-cop** — GJC's first reviewer mode: architect and critic lead while executor supports reproduction. High-risk PRs use a 3-vote panel; it blocked 10 defects before merge across PRs #4–#7.
+> **🚨 cyber-cop** — GJC's first reviewer mode: architect and critic lead while executor supports reproduction. High-risk PRs use a 2-vote panel; it blocked 10 defects before merge across PRs #4–#7.
 > Install the wrapper: `curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
 > → [Announcement](./docs/whats-new-cyber-cop.md)
 
@@ -114,7 +114,7 @@ Use this table as a secondary reference for what each bundle is; tier is only a 
 
 | Role | What it does | Best model |
 |---|---|---|
-| 🧠 **reasoning/planning** (planner) | sequencing, acceptance criteria | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · GA 2026-07-09) — bundle-specific seats: see §5 (exceptions: cyber-cop/monorepo=Gemini, budget=Qwen3.8 Max) |
+| 🧠 **reasoning/planning** (planner) | sequencing, acceptance criteria | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · GA 2026-07-09) — bundle-specific seats: see §5 (exceptions: monorepo/budget=Qwen3.8 Max) |
 | 🔨 **implementation** (executor) | writing/editing real code | **Claude Fable 5** (SWE-bench Verified **95.0**) — strongest *subscription-included* is **Opus 5** (Opus 4.8 successor · same $5/$25 · 2026-07-24) |
 | 🔭 **code review** (architect) | large-repo navigation, architecture | **Gemini 3.1 Pro** (multimodal MMMU-Pro 81%) · ultra-long-context (>200k) → **Opus** |
 | ⚖️ **independent critique** (critic) | adversarial verification | **cross-family** (different vendor than the main loop) |
@@ -470,8 +470,8 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 | Claude Fable 5 | 10 / 50 (batch 5/25 · cache hits 1)† | escalation executor |
 | Claude Opus 5 | 5 / 25 | default·executor backbone (4.8 successor) |
 | Claude Sonnet 5 | 3 / 15 (intro 2/10 through 2026-08-31)‡ | **not shipped** — no seat |
-| GPT-5.6 Sol | 5 / 30 (Fast mode is 12.5/75) | planner (daily·sprint·ultimate-opus·council·escalation) · cyber-cop executor·critic |
-| GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
+| GPT-5.6 Sol | 5 / 30 (Fast mode is 12.5/75) | planner (daily·sprint·cyber-cop·ultimate-opus·council·escalation) · cyber-cop executor |
+| GPT-5.6 Terra | 2.5 / 15 | llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`** (promoted in v3 — D-1 forces `{max}` alone) |
 | Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic (daily · coding-sprint · cyber-cop · ultimate-opus · llm-council · escalation) — `/login xai` or XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
@@ -486,12 +486,12 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 
 | Bundle | Cost | Main driver |
 |---|---|---|
-| escalation | ●●●●● | executor Fable `:xhigh` (rescue pitcher — intermittent use) + planner Sol `:xhigh` + 4-vendor auth |
+| escalation | ●●●●● | executor Fable `:xhigh` (rescue pitcher — intermittent use) + planner Sol `:xhigh` + 3-vendor auth (anthropic+codex+xai) |
 | ultimate-opus | ●●●●○ | Opus 3 seats at `:high~xhigh` + Grok critic (`/login xai` or XAI_API_KEY) |
-| llm-council | ●●●●○ | 4-vendor auth + Sol `:xhigh` planner — council workflow bills by vote count when executed |
+| llm-council | ●●●●○ | 3-vendor auth (anthropic+codex+xai) + Sol `:xhigh` planner — council workflow bills by vote count when executed |
 | coding-sprint | ●●●○○ | executor Opus `:high` (raise to max only on failure signals) |
 | daily | ●●●○○ | main loop Opus `:medium`, delegation spread across mid/cheap models — anthropic+codex+xai. No Gemini |
-| monorepo | ●●●○○ | executor/architect Opus + Gemini (preview/subscription) + GLM-5.2 |
+| monorepo | ●●●○○ | executor/architect Opus + Qwen planner + GLM-5.2 (anthropic+opencode-go). No Gemini |
 | budget | ●○○○○ | executor GLM-5.2 ($1.40) + planner Qwen3.8 Max + Gemini preview — but the absolute cheapest is the built-in `codex-eco` |
 
 ---

@@ -69,13 +69,13 @@ profiles:
 
   # ─────────────── Workflow bundle tier (좌석표 + 동반 워크플로) ───────────────
 
-  llm-council:                         # 🏛 좌석표(판정석 Claude·xAI·OpenAI, 본체 Anthropic 은 집계자 제한). ★프로필은 좌석표일 뿐 — 병렬 독립호출·quorum·raw verdict 보존은
-    required_providers: [anthropic, openai-codex, xai]          #   routing-rules.md "Council 계약"이 실행한다(YAML 이 자동 실행하지 않음). Gemini 판정석은 폐지(budget 만)
+  llm-council:                         # 🏛 좌석표(판정석 architect=Opus · critic=Grok · planner=Sol · executor=Terra). ★프로필은 좌석표일 뿐 — 병렬 독립호출·quorum·raw verdict 보존은
+    required_providers: [anthropic, openai-codex, xai]          #   routing-rules.md "Council 계약"이 실행한다(YAML 이 자동 실행하지 않음). Gemini 판정석 없음. 본체 default 만 집계자
     model_mapping:
-      default:   anthropic/claude-opus-5:high                   # 집계자 제한 — 요약·은폐 없이 raw verdict 보존
-      executor:  openai-codex/gpt-5.6-terra:high                # 재현·검증 잡무
-      planner:   openai-codex/gpt-5.6-sol:xhigh                 # 의제 분해
-      architect: anthropic/claude-opus-5:high                   # sibling architect. Google 판정석 제거 — cyber-cop 과 같이 default+architect 가 Opus
+      default:   anthropic/claude-opus-5:high                   # 집계자 제한 — 요약·은폐 없이 raw verdict 보존. 판정은 architect/critic/planner/executor 좌석
+      executor:  openai-codex/gpt-5.6-terra:high                # 재현·검증 잡무 (판정석)
+      planner:   openai-codex/gpt-5.6-sol:xhigh                 # 의제 분해 (판정석)
+      architect: anthropic/claude-opus-5:high                   # 판정석. Gemini 판정석 폐지 — default 는 집계, architect Opus 는 판정
       critic:    xai/grok-4.6:high                              # council 판정석 (xAI)
 
   escalation:                          # 🚑 고실패비용 구원투수 — ★수동 에스컬레이션 번들. 실패신호 트리거·재시도 상한·human gate 는

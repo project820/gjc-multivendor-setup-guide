@@ -23,6 +23,10 @@
   critic Sol→Grok · llm-council/escalation architect Gemini→Opus · monorepo planner
   Gemini→Qwen. 8번들·Luna `:max` 불변.
 - 구 서사 삭제: "daily critic 은 xAI 키 장벽 때문에 Gemini / 로그인하면 grok 로 스왑".
+- **문서 정합 (Stage 1 P2)**: README×4 비용표의 monorepo Gemini 좌석·council/escalation 4벤더 과금을
+  라이브 YAML 에 맞춤 (`monorepo`=`[anthropic, opencode-go]`, council/escalation=3벤더).
+  패널 표 수를 실제 2석에 맞춤. Council 계약을 architect Opus 판정·Gemini 판정석 폐지로 재기술.
+  factsheet `SAME_FAMILY_OK` 3건→5건, Sol/Terra 역할 행을 cyber-cop/coding-sprint 재균형 후로 갱신.
 
 ---
 

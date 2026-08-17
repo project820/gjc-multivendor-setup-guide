@@ -50,8 +50,9 @@ v3 카탈로그는 8개 user-facing 번들이며 신뢰 등급이 같지 않다:
 - **프로필은 좌석표다**: YAML 활성화만으로 council 은 시작되지 않는다. 본체가 아래 절차를 실행한다.
 - **독립 호출**: 의제를 각 판정석(architect=Opus, critic=Grok, planner=Sol, executor=Terra — **판정석은 Claude·xAI·OpenAI**)에
   **병렬·상호 비공개**로 보낸다. 좌석끼리 서로의 답을 보게 하지 않는다(no cross-talk).
-  본체 Anthropic(Opus)은 자기선호 편향 격리를 위해 **판정에 참여하지 않는다** — 4계열 "합의"가 아니라 "3계열 판정 + 제4계열 집계"다.
-- **raw verdict 보존**: 본체(Opus)는 집계자 제한 — 각 좌석의 판정 원문을 요약·은폐 없이 보존·노출한다.
+  architect 좌석의 Opus는 판정한다. Gemini 판정석은 없다. 본체 default(Opus)는 집계자 제한 —
+  자기 좌석의 판정에 참여하지 않고 raw verdict 를 보존한다.
+- **raw verdict 보존**: 본체 default(Opus)는 집계자 제한 — 각 좌석의 판정 원문을 요약·은폐 없이 보존·노출한다.
 - **quorum**: 다수결이 검증을 대체하지 못한다. **CRITICAL/HIGH dissent 1건은 다수결로 기각 불가** —
   해소(반증) 또는 human gate 로만 닫는다. minority opinion 은 최종 보고에 반드시 남긴다.
 - **벤더 수 ≠ 독립 표 수**: 서로 다른 계열도 오류가 상관된다 — 표 수 산술로 확신을 부풀리지 않는다.
@@ -60,16 +61,16 @@ v3 카탈로그는 8개 user-facing 번들이며 신뢰 등급이 같지 않다:
 - **수동 에스컬레이션이다**: 실패를 자동 감지하지 않는다. 트리거는 본체/사람이 판단한다.
 - **트리거**: 동일 과제 2회 연속 실패 · critic BLOCK · 비가역 작업(머지·배포·결제·삭제) 진입.
 - **절차**: 트리거 발화 → `escalation` 스왑 → Fable executor 재시도(재시도 예산 명시: 기본 1회) →
-  critic 3표 교차벤더 패널(독립투표→본체집계) → 통과 못 하면 **human gate** (더 올릴 사다리 없음).
+  critic 2표 교차벤더 패널 `{xai/grok-4.6:high, openai-codex/gpt-5.6-sol:high}`(독립투표→본체집계) → 통과 못 하면 **human gate** (더 올릴 사다리 없음).
 - Fable refusal(HTTP 200 + `stop_reason: refusal`) 시 escalation 이 조용히 멈출 수 있다 —
   refusal 을 감지하면 executor 를 Opus:max 로 강등하고 사람에게 보고한다.
 
 ## 리뷰어 계약 — cyber-cop 프로필 전용 (PR 리뷰·보안 감사 세션)
 - **위임 순서**: 리뷰 진입 → **architect 선호출**(1차 코드리뷰 판정자: CLEAR/WATCH/BLOCK) →
-  머지 게이트 → **critic**. 고위험 PR·보안 감사는 critic **3표 병렬 패널**
+  머지 게이트 → **critic**. 고위험 PR·보안 감사는 critic **2표 병렬 패널**
   `{xai/grok-4.6:high, openai-codex/gpt-5.6-sol:high}` —
   독립 투표 후 본체가 집계(토론 금지), **2/2 반박 또는 CRITICAL/BLOCK 1건이면 차단**.
-  Gemini 3표째는 폐지(budget 외 배제). provenance 최소치(non-default family ≥2 = grok+gpt)는 2표로 충족된다.
+  Gemini 3표째는 없다(budget 외 배제). provenance 최소치(non-default family ≥2 = grok+gpt)는 이 2표로 충족된다.
 - **default=집계자 제한**: 본체는 critic/패널의 raw verdict를 **요약·은폐 없이 보존·노출**한다.
   본체(Anthropic)가 Claude-작성 PR을 재해석하면 자기선호 편향이 재생된다(arXiv 2410.21819) — 판정 원문이 진실원천.
 - **증거 계약**: critic 1표당 **file-backed blocking issue 최소 1건** 또는 **명시적 no-finding rationale** 필수.

@@ -101,12 +101,12 @@ Core / Premium / Workflow bundle / Specialized は各バンドルの**バッジ*
 | Core | 🏎️ **coding-sprint** | executor を Opus に昇格した実装スループット特化 | 純粋な実装スプリント |
 | Core | 🚨 **cyber-cop** | reviewer モード — architect·critic が主役 | PRレビュー・セキュリティ監査 |
 | Premium (exp) | 🏆 **ultimate-opus** | Anthropic 品質基盤のプレミアム | 正確性がコストより重要 |
-| Workflow | 🏛️ **llm-council** | 4 系列の座席表と Council 契約 | 多系列合意が必要な決定 |
-| Workflow | 🛡️ **escalation** | 手動エスカレーション — Fable 救援投手 + critic 3票パネル | 不可逆変更 |
+| Workflow | 🏛️ **llm-council** | 3 系列の座席表（architect Opus が判定、default は集計）と Council 契約 | 多系列合意が必要な決定 |
+| Workflow | 🛡️ **escalation** | 手動エスカレーション — Fable 救援投手 + critic 2票パネル | 不可逆変更 |
 | Specialized (exp) | 💸 **budget** | 低コストマルチベンダー実験 — *絶対最安ではない* | コスト圧・大量作業 |
 | Specialized (exp) | 🗺️ **monorepo** | 全域 ≥1M ctx | 巨大コードベース |
 
-> **🚨 cyber-cop** — GJC 初の reviewer モード: architect·critic が主役で、executor は再現の脇役。高リスク PR は3票パネルで判定し、PR #4〜#7 でマージ前の欠陥10件を遮断した。
+> **🚨 cyber-cop** — GJC 初の reviewer モード: architect·critic が主役で、executor は再現の脇役。高リスク PR は2票パネルで判定し、PR #4〜#7 でマージ前の欠陥10件を遮断した。
 > インストール: `curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
 > → [アナウンス文書](./docs/whats-new-cyber-cop.md)
 
@@ -119,7 +119,7 @@ Core / Premium / Workflow bundle / Specialized は各バンドルの**バッジ*
 
 | 役割 | 何をするか | 最適モデル |
 |---|---|---|
-| 🧠 **推論・設計**（planner） | 手順・受け入れ基準 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 席は [§5](#5-️-最終カタログ--8-バンドル--4階層) を参照（例外：cyber-cop・monorepo=Gemini、budget=Qwen3.8 Max） |
+| 🧠 **推論・設計**（planner） | 手順・受け入れ基準 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 席は [§5](#5-️-最終カタログ--8-バンドル--4階層) を参照（例外：monorepo・budget=Qwen3.8 Max） |
 | 🔨 **実装**（executor） | 実際のコード作成・修正 | **Claude Fable 5**（SWE-bench Verified **95.0**）— サブスク込み最強は **Opus 5**（4.8 後継 · 同額 $5/$25 · 2026-07-24） |
 | 🔭 **コードレビュー**（architect） | 大規模リポ探索・アーキ | **Gemini 3.1 Pro**（マルチモーダル MMMU-Pro 81%） · 超長文脈（>200k）→ **Opus** |
 | ⚖️ **独立批評**（critic） | 敵対的検証 | **クロスファミリー**（メインループと別ベンダー） |
@@ -465,8 +465,8 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 | Claude Fable 5 | 10 / 50（バッチ 5/25 · キャッシュヒット 1）† | escalation executor |
 | Claude Opus 5 | 5 / 25 | default·executor の基幹（4.8 後継） |
 | Claude Sonnet 5 | 3 / 15（イントロ 2/10 ~2026-08-31）‡ | **未出荷** — 席なし（参考用） |
-| GPT-5.6 Sol | 5 / 30（Fast モードは 12.5/75） | planner（daily·sprint·ultimate-opus·council·escalation）· cyber-cop executor·critic |
-| GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
+| GPT-5.6 Sol | 5 / 30（Fast モードは 12.5/75） | planner（daily·sprint·cyber-cop·ultimate-opus·council·escalation）· cyber-cop executor |
+| GPT-5.6 Terra | 2.5 / 15 | llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`**（v3 昇格 — D-1 が `{max}` 単独強制） |
 | Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（daily·coding-sprint·cyber-cop·ultimate-opus·llm-council·escalation）— `/login xai` または XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
@@ -481,12 +481,12 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 
 | プロファイル | コスト | 主因 |
 |---|---|---|
-| escalation | ●●●●● | executor Fable `:xhigh`（救援投手 — 間欠使用）+ planner Sol `:xhigh` + 4 ベンダー認証 |
+| escalation | ●●●●● | executor Fable `:xhigh`（救援投手 — 間欠使用）+ planner Sol `:xhigh` + 3 ベンダー認証（anthropic+codex+xai） |
 | ultimate-opus | ●●●●○ | Opus 3席 `:high~xhigh` + Grok critic（`/login xai` または XAI_API_KEY） |
-| llm-council | ●●●●○ | 4 ベンダー認証 + Sol `:xhigh` planner — council 実行時は票数分課金 |
+| llm-council | ●●●●○ | 3 ベンダー認証（anthropic+codex+xai）+ Sol `:xhigh` planner — council 実行時は票数分課金 |
 | coding-sprint | ●●●○○ | executor Opus `:high`（失敗シグナル時のみ max 昇格） |
 | daily | ●●●○○ | 本体 Opus `:medium`、委譲は中・低価格へ分散 — anthropic+codex+xai。Gemini なし |
-| monorepo | ●●●○○ | executor/architect Opus + Gemini（プレビュー/サブスク）+ GLM-5.2 |
+| monorepo | ●●●○○ | executor/architect Opus + Qwen planner + GLM-5.2（anthropic+opencode-go）。Gemini なし |
 | budget | ●○○○○ | executor GLM-5.2（$1.40）+ planner Qwen3.8 Max + Gemini プレビュー — *絶対最安は内蔵 `codex-eco`* |
 
 ---
