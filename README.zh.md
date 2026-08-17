@@ -11,7 +11,7 @@
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/bundles-10%20·%204%20tiers-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
-![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--16-brightgreen?style=flat-square)
+![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
 <img src="assets/role-winners.svg" alt="dream-team 配置 — 各角色最强假设" width="100%">
@@ -319,11 +319,11 @@ profiles:
 
 | 提供方 | 已验证选择器 |
 |---|---|
-| `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`（遗留）· `claude-sonnet-4-6:high` — sel ✅（08-16） |
-| `openai-codex` | `gpt-5.6-sol:medium`/`:high`/`:xhigh` · `gpt-5.6-terra:high`/`:xhigh` · `gpt-5.6-luna:high` · `gpt-5.5:high` · `gpt-5.4:high` — sel ✅（07-10；5.5=07-02） |
-| `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（遗留）· `grok-4-fast:high` — sel ✅（08-16） |
+| `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`（遗留）· `claude-sonnet-4-6:high` — sel ✅（08-16·**08-17 最终席位批次**） |
+| `openai-codex` | 出货席位：`gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅（**08-17 最终席位批次**）。`gpt-5.5:high` · `gpt-5.4:high` 为 07-10 金丝雀（5.5=07-02） |
+| `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（遗留）· `grok-4-fast:high` — sel ✅（08-16·**08-17 最终席位批次**） |
 | `grok-build` | `grok-4.3`（裸选择器）— sel ✅（07-02） |
-| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅（07-10） |
+| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅（07-10·**08-17 最终席位批次**） |
 | `opencode-go` | 出货席位 `glm-5.2` — sel ✅（08-16·08-17）。`deepseek-v4-flash`/`-pro` 目录 id 仍在，但**本账号 403 China opt-in**，故不出货。`glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` 为 07-02 快照，v2.1.0 未重新验证 |
 
 - `fable-5:max` 仍接受但可能夹取（不出货）。`grok-4.6:xhigh` 接受、深度未验证（出货 `:high`）。`grok-build/grok-4.6:high` 为 not found。

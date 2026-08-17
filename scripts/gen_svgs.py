@@ -23,7 +23,7 @@ import argparse
 import os
 import re
 
-VERIFY_DATE = "2026-08-16"
+VERIFY_DATE = "2026-08-17"
 GJC_VERSION = "0.13.3"
 
 FONT = "-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"

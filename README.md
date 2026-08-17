@@ -11,7 +11,7 @@
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/bundles-10%20·%204%20tiers-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
-![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--16-brightgreen?style=flat-square)
+![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
 <img src="assets/role-winners.svg" alt="dream-team 셋업 — 역할별 최강 가설" width="100%">
@@ -382,11 +382,11 @@ profiles:
 
 | 프로바이더 | 검증된 셀렉터 |
 |---|---|
-| `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`(레거시) · `claude-sonnet-4-6:high` — sel ✅(08-16) |
-| `openai-codex` | `gpt-5.6-sol:medium`/`:high`/`:xhigh` · `gpt-5.6-terra:high`/`:xhigh` · `gpt-5.6-luna:high` · `gpt-5.5:high` · `gpt-5.4:high` — sel ✅(07-10; 5.5=07-02) |
-| `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`(레거시) · `grok-4-fast:high` — sel ✅(08-16) |
+| `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`(레거시) · `claude-sonnet-4-6:high` — sel ✅(08-16·**08-17 최종 좌석 배터리**) |
+| `openai-codex` | 출하 좌석 `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 최종 좌석 배터리**). `gpt-5.5:high` · `gpt-5.4:high` 는 07-10 카나리(5.5=07-02) |
+| `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`(레거시) · `grok-4.3:high` · `grok-4-fast:high` — sel ✅(08-16·**08-17 최종 좌석 배터리**) |
 | `grok-build` | `grok-4.3` (bare) — sel ✅(07-02) |
-| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅(08-16) |
+| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(08-16·**08-17 최종 좌석 배터리**). 퍼지 `gemini-3.1-pro-high`/`-bogus`·bare `gemini-3.5-flash` 는 fail-closed 확인 |
 | `opencode-go` | 출하 좌석 `glm-5.2` — sel ✅(08-16·08-17). `deepseek-v4-flash`/`-pro` 는 카탈로그 id 는 살아 있으나 **이 계정 403 China opt-in** 이라 미출하. `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` 는 07-02 스냅샷 기준이며 v2.1.0 에서 재검증하지 않았다 |
 
 - `fable-5:max`는 수용되나 클램프 가능(미출하). `grok-4.6:xhigh`는 수용·심도 미검증(출하 `:high`). `grok-build/grok-4.6:high`는 not found.

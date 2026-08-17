@@ -7,7 +7,7 @@
 
 | 항목 | 값 |
 |---|---|
-| 가이드 버전 | **v2.1.0** (2026-08-16 — Opus 5 · Grok 4.6 like-for-like; 10번들·4계층 불변) |
+| 가이드 버전 | **v2.1.0** (2026-08-17 — Opus 5 · Grok 4.6 like-for-like + eco.executor 교체; 10번들·4계층 불변) |
 | 기준 GJC | **0.13.3** (로컬 바이너리 2026-08-16 · [upstream v0.13.3](https://github.com/Yeachan-Heo/gajae-code/releases/tag/v0.13.3) 2026-08-15) |
 | 번들 | **10종 · 4계층** (Core 3 · Premium exp 3 · Workflow 2 · Specialized exp 2) |
 | 실호출 검증 | **`evidence/2026-08-17-selectors.md`** — v2.1.0 최종 좌석 전수 그린(정본). `evidence/2026-08-16-selectors.md` 는 eco.executor 가 DeepSeek 이던 시점이라 그 좌석이 403 으로 실패해 있다 |

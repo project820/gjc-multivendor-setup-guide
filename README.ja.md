@@ -11,7 +11,7 @@
 [![Upstream](https://img.shields.io/badge/upstream-merged%20into%20GJC%20docs-brightgreen?style=flat-square)](https://github.com/Yeachan-Heo/gajae-code/pull/860)
 ![Profiles](https://img.shields.io/badge/bundles-10%20·%204%20tiers-blue?style=flat-square)
 ![Vendors](https://img.shields.io/badge/vendors-5-success?style=flat-square)
-![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--16-brightgreen?style=flat-square)
+![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
 <img src="assets/role-winners.svg" alt="dream-team 構成 — 役割ごとの最強仮説" width="100%">
@@ -316,11 +316,11 @@ profiles:
 
 | プロバイダ | 検証済みセレクタ |
 |---|---|
-| `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`（レガシー）· `claude-sonnet-4-6:high` — sel ✅(08-16) |
-| `openai-codex` | `gpt-5.6-sol:medium`/`:high`/`:xhigh` · `gpt-5.6-terra:high`/`:xhigh` · `gpt-5.6-luna:high` · `gpt-5.5:high` · `gpt-5.4:high` — sel ✅(07-10; 5.5=07-02) |
-| `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（レガシー）· `grok-4-fast:high` — sel ✅(08-16) |
+| `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`（レガシー）· `claude-sonnet-4-6:high` — sel ✅(08-16·**08-17 最終ロスター・バッテリー**) |
+| `openai-codex` | 出荷席: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 最終ロスター・バッテリー**). `gpt-5.5:high` · `gpt-5.4:high` = 07-10 カナリア (5.5=07-02) |
+| `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（レガシー）· `grok-4-fast:high` — sel ✅(08-16·**08-17 最終ロスター・バッテリー**) |
 | `grok-build` | `grok-4.3`（bare）— sel ✅(07-02) |
-| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅(07-10) |
+| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅(07-10·**08-17 最終ロスター・バッテリー**) |
 | `opencode-go` | 出荷席 `glm-5.2` — sel ✅(08-16・08-17)。`deepseek-v4-flash`/`-pro` はカタログ id は生存だが**このアカウントで 403 China opt-in** のため未出荷。`glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` は 07-02 スナップショットで v2.1.0 では再検証していない |
 
 - `fable-5:max` は受理されるがクランプの可能性（未出荷）。`grok-4.6:xhigh` は受理・深度未検証（出荷 `:high`）。`grok-build/grok-4.6:high` は not found。
