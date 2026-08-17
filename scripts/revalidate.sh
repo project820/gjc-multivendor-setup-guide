@@ -18,7 +18,11 @@ mkdir -p evidence
 # 중간에 끊긴 실행이 반쯤 찬 evidence 파일로 남아 append-only 기록을 오염시키는 걸 막는다.
 # (v2.1.0 리뷰에서 실제로 잘린 rerun-3/-4 가 커밋될 뻔했다.)
 if [ "${DRY_RUN:-0}" = 1 ]; then
-  OUT="$(mktemp -t revalidate-dryrun)"
+  # GNU coreutils 의 mktemp -t 는 X 가 없는 템플릿을 거부한다. BSD/GNU 공통 형태를 쓰고
+  # 종료 시 정리한다. 실패하면 조용히 넘어가지 않고 죽는다 — 빈 OUT 으로 라이브 프로브를
+  # 계속 돌리면 기록 없이 exit 0 이 될 수 있다.
+  OUT="$(mktemp "${TMPDIR:-/tmp}/revalidate-dryrun.XXXXXX")" || { echo "FATAL: mktemp failed"; exit 1; }
+  trap 'rm -f "$OUT"' EXIT
   echo "## DRY_RUN=1 — evidence 파일을 쓰지 않는다 (임시: $OUT)"
 else
   OUT="evidence/${DATE}-selectors.md"
@@ -28,6 +32,7 @@ else
     OUT="evidence/${DATE}-selectors-rerun-${n}.md"
   fi
 fi
+[ -n "${OUT:-}" ] || { echo "FATAL: output path not set"; exit 1; }
 command -v gjc >/dev/null 2>&1 || { echo "gjc not found"; exit 2; }
 command -v perl >/dev/null 2>&1 || { echo "perl not found (used for per-call timeout)"; exit 2; }
 

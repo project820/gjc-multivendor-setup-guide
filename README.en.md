@@ -201,7 +201,7 @@ opencode-go/<model>                           (omit effort = model default)
 
 </div>
 
-> ★ = everyday recommendation. v2.0.0 is not a set of equal profiles but 10 bundles across 4 tiers. Every bundle has `required_providers ≥ 2`; `critic=cross-family` by default (exceptions are `SAME_FAMILY_OK` with WARN); it follows engine effort hard-rules and selector verification ([§6](#6--verification-matrix)). Every shipped seat (including Opus 5 · Grok 4.6) was green in the 2026-08-17 final-roster battery; the 2026-08-16 run predates the eco.executor change.
+> ★ = everyday recommendation. The v2.1.0 catalog is not a set of equal profiles but 10 bundles across 4 tiers. Every bundle has `required_providers ≥ 2`; `critic=cross-family` by default (exceptions are `SAME_FAMILY_OK` with WARN); it follows engine effort hard-rules and selector verification ([§6](#6--verification-matrix)). Every shipped seat (including Opus 5 · Grok 4.6) was green in the 2026-08-17 final-roster battery; the 2026-08-16 run predates the eco.executor change.
 
 <details>
 <summary><b>📋 Expand the full YAML (identical to gjc-profiles.yml by model mapping — comments stripped; the annotated Korean canonical lives in <a href="./gjc-profiles.yml">gjc-profiles.yml</a>)</b></summary>
