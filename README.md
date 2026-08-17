@@ -371,7 +371,7 @@ profiles:
 - **llm-council** — Google·xAI·OpenAI가 판정하고 Anthropic은 raw verdict를 보존하는 집계자; [`routing-rules.md`](./routing-rules.md)의 Council 계약(독립호출·quorum)이 필요하다.
 - **escalation** — 실패 뒤 Fable `:xhigh`와 3표 critic을 쓰는 수동 게이트; Escalation 계약이 트리거·human gate를 정하고 refusal 시 Opus `:max`로 강등한다.
 - **eco** — Terra·GLM-5.2·Luna·Gemini 저단가 실험(절대 최저가는 내장 `codex-eco`); `grok-4-1-fast` retire/redirect 뒤 critic은 07-10 `gemini-3-flash:low`로 교체됐고, executor는 DeepSeek가 이 계정에서 403 China opt-in 이라 v2.1.0에서 `glm-5.2`로 교체됐다.
-- **monorepo** — Opus architect·GLM-5.2 critic의 1M ctx 번들; 완전 recall이 아니므로 청크 누적한다. >~400k 단일 paste 는 **현재 권장 셀렉터가 없다**(실측된 후보 `deepseek-v4-pro` 는 이 계정 403).
+- **monorepo** — Opus architect·GLM-5.2 critic의 1M ctx 번들; 완전 recall이 아니므로 청크 누적을 권한다. 다만 >~400k 단일 paste 가 꼭 필요하면 **architect 좌석의 `claude-opus-5:high` 가 그대로 처리한다**(08-17 배터리에서 476k 통과 — Opus 4.8 의 476k 🔴 는 구세대 수치).
 
 ---
 
