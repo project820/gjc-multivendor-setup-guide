@@ -417,9 +417,9 @@ profiles:
 | 셀렉터 | 코딩 | 추론 | 비고 |
 |---|---|---|---|
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **전체 최속** |
-| `opus-5:high` | 2.4s (08-16 ping) | — | 마이크로벤치 미재측정 |
+| `opus-5:high` | — | — | 마이크로벤치 미측정. 08-16 해석 ping 2.4s 는 지연 벤치가 아니다 |
 | `fable-5:medium`~`:xhigh` | 6.7~7.7s | 3.5~6.3s | 코딩에서 sonnet-5 대비 +3~4s |
-| `grok-4.6:medium` / `:high` | 1.8s ping (08-16) | — | high는 critic 출하 상한 · `:xhigh` 미출하 |
+| `grok-4.6:medium` / `:high` | — | — | 마이크로벤치 미측정. 08-16 해석 ping 1.8s 는 지연 벤치가 아니다. high 는 critic 출하 상한 · `:xhigh` 미출하 |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | 코딩 지연 아웃라이어 |
 | `glm-5.2` | 07-02: **21.9s** · 08-17: **5.1s** | 4.0s | 07-02 수치는 재현 안 됨 — 08-17 코딩 프로브 8/8 정확·5.1s([증거](./evidence/2026-08-17-eco-executor.md)) |
@@ -533,7 +533,7 @@ Gemini는 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 구독 �
 |---|---|---|
 | dream-team | ●●●●● | default·executor Fable 5 — Max/premium Team 주간 한도 50% 포함, Pro는 credits $10/50 |
 | escalation | ●●●●● | executor Fable `:xhigh`(구원투수 — 간헐 사용) + planner Sol `:xhigh` + 4벤더 인증 |
-| ultimate-opus / ultimate-sol | ●●●●○ | Opus 또는 Sol 3좌석 `:high~xhigh` + Grok critic(xai API) |
+| ultimate-opus / ultimate-sol | ●●●●○ | Opus 또는 Sol 3좌석 `:high~xhigh` + Grok critic(`/login xai` 또는 XAI_API_KEY) |
 | llm-council | ●●●●○ | 4벤더 인증 + Sol `:xhigh` planner — council 워크플로 실행 시 표 수만큼 과금 |
 | coding-sprint | ●●●○○ | executor Opus `:high`(실패신호 시에만 max 격상) |
 | daily | ●●●○○ | 본체 Opus `:medium`, 위임은 중·저가로 분산 — 구독 OAuth 3벤더 |

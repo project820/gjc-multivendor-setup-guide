@@ -320,7 +320,7 @@ profiles:
 | `openai-codex` | 出荷席: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 最終ロスター・バッテリー**). `gpt-5.5:high` · `gpt-5.4:high` = 07-10 カナリア (5.5=07-02) |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（レガシー）· `grok-4-fast:high` — sel ✅(08-16·**08-17 最終ロスター・バッテリー**) |
 | `grok-build` | `grok-4.3`（bare）— sel ✅(07-02) |
-| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅(07-10·**08-17 最終ロスター・バッテリー**) |
+| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(07-10·**08-17 最終ロスター・バッテリー**) |
 | `opencode-go` | 出荷席 `glm-5.2` — sel ✅(08-16・08-17)。`deepseek-v4-flash`/`-pro` はカタログ id は生存だが**このアカウントで 403 China opt-in** のため未出荷。`glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` は 07-02 スナップショットで v2.1.0 では再検証していない |
 
 - `fable-5:max` は受理されるがクランプの可能性（未出荷）。`grok-4.6:xhigh` は受理・深度未検証（出荷 `:high`）。`grok-build/grok-4.6:high` は not found。
@@ -351,9 +351,9 @@ profiles:
 | セレクタ | コーディング | 推論 | 備考 |
 |---|---|---|---|
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **全体最速** |
-| `opus-5:high` | 2.4s ping (08-16) | — | マイクロベンチ未再測定 |
+| `opus-5:high` | — | — | マイクロベンチ未実施。08-16 の解決 ping 2.4s はレイテンシ基準ではない |
 | `fable-5:medium`~`:xhigh` | 6.7~7.7s | 3.5~6.3s | コーディングで sonnet-5 比 +3~4s |
-| `grok-4.6:medium` / `:high` | 1.8s ping (08-16) | — | critic 出荷上限 high · `:xhigh` 未出荷 |
+| `grok-4.6:medium` / `:high` | — | — | マイクロベンチ未実施。08-16 の解決 ping 1.8s はレイテンシ基準ではない。critic 出荷上限 high · `:xhigh` 未出荷 |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | コーディング遅延の外れ値 |
 | `glm-5.2` | 07-02: **21.9s** · 08-17: **5.1s** | 4.0s | 07-02 の数値は再現せず — 08-17 コーディングプローブは 8/8 正解・5.1s（[証拠](./evidence/2026-08-17-eco-executor.md)） |
@@ -465,7 +465,7 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 |---|---|---|
 | dream-team | ●●●●● | default·executor Fable 5 — Max/premium Team 週次上限 50%、Pro は credits $10/50 |
 | escalation | ●●●●● | executor Fable `:xhigh`（救援投手 — 間欠使用）+ planner Sol `:xhigh` + 4 ベンダー認証 |
-| ultimate-opus / ultimate-sol | ●●●●○ | Opus または Sol 3席 `:high~xhigh` + Grok critic（xai API） |
+| ultimate-opus / ultimate-sol | ●●●●○ | Opus または Sol 3席 `:high~xhigh` + Grok critic（`/login xai` または XAI_API_KEY） |
 | llm-council | ●●●●○ | 4 ベンダー認証 + Sol `:xhigh` planner — council 実行時は票数分課金 |
 | coding-sprint | ●●●○○ | executor Opus `:high`（失敗シグナル時のみ max 昇格） |
 | daily | ●●●○○ | 本体 Opus `:medium`、委譲は中・低価格へ分散 — サブスク OAuth 3ベンダー |

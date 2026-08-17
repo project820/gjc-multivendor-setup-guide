@@ -34,7 +34,7 @@
 - `python3 scripts/validate-profiles.py` green · `scripts/sync-readme-yaml.py` 멱등.
 
 ### Evidence
-- `evidence/2026-08-16-catalog.txt` · `evidence/2026-08-16-selectors.md` · `evidence/2026-08-16-notes.md` · `evidence/2026-08-17-eco-executor.md`.
+- `evidence/2026-08-16-catalog.txt` · `evidence/2026-08-16-selectors.md` · `evidence/2026-08-16-notes.md` · **`evidence/2026-08-17-selectors.md`**(최종 좌석 전수 배터리 — 정본) · `evidence/2026-08-17-eco-executor.md`.
 
 ## v2.0.1 — 2026-07-10
 

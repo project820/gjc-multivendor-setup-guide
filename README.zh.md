@@ -323,7 +323,7 @@ profiles:
 | `openai-codex` | 出货席位：`gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅（**08-17 最终席位批次**）。`gpt-5.5:high` · `gpt-5.4:high` 为 07-10 金丝雀（5.5=07-02） |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（遗留）· `grok-4-fast:high` — sel ✅（08-16·**08-17 最终席位批次**） |
 | `grok-build` | `grok-4.3`（裸选择器）— sel ✅（07-02） |
-| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅（07-10·**08-17 最终席位批次**） |
+| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅（07-10·**08-17 最终席位批次**） |
 | `opencode-go` | 出货席位 `glm-5.2` — sel ✅（08-16·08-17）。`deepseek-v4-flash`/`-pro` 目录 id 仍在，但**本账号 403 China opt-in**，故不出货。`glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` 为 07-02 快照，v2.1.0 未重新验证 |
 
 - `fable-5:max` 仍接受但可能夹取（不出货）。`grok-4.6:xhigh` 接受、深度未验证（出货 `:high`）。`grok-build/grok-4.6:high` 为 not found。
@@ -354,9 +354,9 @@ profiles:
 | 选择器 | 编码 | 推理 | 备注 |
 |---|---|---|---|
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **全场最快** |
-| `opus-5:high` | 2.4s ping（08-16） | — | 微基准未重跑 |
+| `opus-5:high` | — | — | 未做微基准。08-16 的解析 ping 2.4s 不是延迟基准 |
 | `fable-5:medium`~`:xhigh` | 6.7~7.7s | 3.5~6.3s | 编码比 sonnet-5 慢 +3~4s |
-| `grok-4.6:medium` / `:high` | 1.8s ping（08-16） | — | critic 出货上限 high · `:xhigh` 未出货 |
+| `grok-4.6:medium` / `:high` | — | — | 未做微基准。08-16 的解析 ping 1.8s 不是延迟基准。critic 出货上限 high · `:xhigh` 未出货 |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | 编码延迟离群值 |
 | `glm-5.2` | 07-02：**21.9s** · 08-17：**5.1s** | 4.0s | 07-02 数值未复现 — 08-17 编码探针 8/8 正确、5.1s（[证据](./evidence/2026-08-17-eco-executor.md)） |
@@ -468,7 +468,7 @@ Gemini 使用 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 订�
 |---|---|---|
 | dream-team | ●●●●● | default·executor Fable 5 — Max/premium Team 每周额度 50%；Pro 用 credits $10/50 |
 | escalation | ●●●●● | executor Fable `:xhigh`（救援投手 — 间歇使用）+ planner Sol `:xhigh` + 4 厂商认证 |
-| ultimate-opus / ultimate-sol | ●●●●○ | Opus 或 Sol 3 席 `:high~xhigh` + Grok critic（xai API） |
+| ultimate-opus / ultimate-sol | ●●●●○ | Opus 或 Sol 3 席 `:high~xhigh` + Grok critic（`/login xai` 或 XAI_API_KEY） |
 | llm-council | ●●●●○ | 4 厂商认证 + Sol `:xhigh` planner — 执行 Council 工作流时按票数计费 |
 | coding-sprint | ●●●○○ | executor Opus `:high`（仅失败信号时升 max） |
 | daily | ●●●○○ | 主循环 Opus `:medium`，委派中低价分散 — 订阅 OAuth 3 厂商 |

@@ -324,7 +324,7 @@ profiles:
 | `openai-codex` | shipped seats: `gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:medium` — sel ✅(**08-17 final-roster battery**). `gpt-5.5:high` · `gpt-5.4:high` = 07-10 canaries (5.5=07-02) |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high` (legacy) · `grok-4-fast:high` — sel ✅(08-16·**08-17 final-roster battery**) |
 | `grok-build` | `grok-4.3` (bare) — sel ✅(07-02) |
-| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash`/`:low` — sel ✅(07-10·**08-17 final-roster battery**) |
+| `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅(07-10·**08-17 final-roster battery**) |
 | `opencode-go` | shipped seat `glm-5.2` — sel ✅(08-16, 08-17). `deepseek-v4-flash`/`-pro` keep a live catalog id but **403 China opt-in on this account**, so they are not shipped. `glm-5.1` · `minimax-m2.7` · `qwen3.7-max` · `kimi-k2.6` · `mimo-v2.5` are from the 07-02 snapshot and were not re-verified in v2.1.0 |
 
 - `fable-5:max` is accepted but may clamp (not shipped). `grok-4.6:xhigh` is accepted with unverified depth (ship `:high`). `grok-build/grok-4.6:high` is not found.
@@ -355,9 +355,9 @@ profiles:
 | Selector | Coding | Reasoning | Notes |
 |---|---|---|---|
 | `sonnet-5:medium` / `:high` | **3.1s** / 3.5s | 3.5s / 3.4s | **fastest overall** |
-| `opus-5:high` | 2.4s ping (08-16) | — | micro-bench not re-run |
+| `opus-5:high` | — | — | not micro-benched. The 08-16 resolution ping of 2.4s is not a latency benchmark |
 | `fable-5:medium`~`:xhigh` | 6.7~7.7s | 3.5~6.3s | +3~4s vs sonnet-5 on coding |
-| `grok-4.6:medium` / `:high` | 1.8s ping (08-16) | — | shipped critic cap is high · `:xhigh` not shipped |
+| `grok-4.6:medium` / `:high` | — | — | not micro-benched. The 08-16 resolution ping of 1.8s is not a latency benchmark. Shipped critic cap is high · `:xhigh` not shipped |
 | `deepseek-v4-flash` | 4.6s | 5.5s | |
 | `gemini-3.1-pro-low:high` | **17.4s** | 5.7s | coding-latency outlier |
 | `glm-5.2` | 07-02: **21.9s** · 08-17: **5.1s** | 4.0s | the 07-02 figure did not reproduce — 08-17 coding probe scored 8/8 at 5.1s ([evidence](./evidence/2026-08-17-eco-executor.md)) |
@@ -475,7 +475,7 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 |---|---|---|
 | dream-team | ●●●●● | default·executor Fable 5 — Max/premium Team 50% of weekly limits; Pro uses credits $10/50 |
 | escalation | ●●●●● | executor Fable `:xhigh` (rescue pitcher — intermittent use) + planner Sol `:xhigh` + 4-vendor auth |
-| ultimate-opus / ultimate-sol | ●●●●○ | Opus or Sol 3 seats at `:high~xhigh` + Grok critic (xai API) |
+| ultimate-opus / ultimate-sol | ●●●●○ | Opus or Sol 3 seats at `:high~xhigh` + Grok critic (`/login xai` or XAI_API_KEY) |
 | llm-council | ●●●●○ | 4-vendor auth + Sol `:xhigh` planner — council workflow bills by vote count when executed |
 | coding-sprint | ●●●○○ | executor Opus `:high` (raise to max only on failure signals) |
 | daily | ●●●○○ | main loop Opus `:medium`, delegation spread across mid/cheap models — subscription OAuth across 3 vendors |
