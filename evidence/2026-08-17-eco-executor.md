@@ -145,3 +145,44 @@ v3 `budget` 좌석 후보로 재평가한다.
 단발 알고리즘 태스크 1건이다. 지속적 agentic 코딩, 도구 호출, 다중 파일 편집,
 장문 컨텍스트 거동은 측정하지 않았다. eco 는 Specialized(exp) 저단가 실험 번들이며
 이 좌석은 그 수준의 증거로 배치된 것이다 — 프리미엄 좌석 승격 근거로 쓰지 말 것.
+
+---
+
+## 부록 3 — grok-4.6 출하 상한 게이트 조임 (2026-08-17)
+
+`gjc-cop` critic 지적: `validate-profiles.py` 가 `xai/grok-4.6:xhigh` 를 합법으로 두는데
+`routing-rules.md` 와 README×4 는 출하 상한을 `:high` 로 선언한다. 문서가 미출하라고 한
+셀렉터를 릴리스 게이트가 통과시킨다.
+
+이 규칙은 v2.1.0 이 새로 추가한 것이라(그 전엔 grok-4.5 `low..high` 만 있었다) 이 PR 의
+책임이다. 같은 파일의 gpt-5.6 규칙은 이미 fail-closed 로 처리돼 있었다 — 카탈로그가
+`max` 를 찍고 라이브도 수용하지만 심도 미검증이라 상한을 `xhigh` 로 묶는다. grok-4.6 만
+그 원칙에서 빠져 있었다.
+
+### 조치
+
+`_eff_rules()` 의 grok-4.6 허용 집합을 `{low,medium,high,xhigh}` → **`{low,medium,high}`** 로.
+주석도 gpt-5.6 과 같은 논리(카탈로그 표기 ≠ 출하 상한, 심도 미검증이면 fail-closed)로 갱신.
+
+현재 출하 좌석 중 `grok-4.6:xhigh` 를 쓰는 곳은 없다 — 조여도 정상 트리는 그대로 green.
+
+### 거부 테스트 (실행 결과)
+
+임시 디렉터리에 실제 `gjc-profiles.yml` 을 복사하되 모든 `xai/grok-4.6:high` 를
+`:xhigh` 로 치환한 fixture 를 만들고 `--root` 로 검증:
+
+```
+$ python3 scripts/validate-profiles.py --root <fixture>
+FAIL (5 error(s)):
+  ERROR [ultimate-opus.critic] illegal effort 'xhigh' for grok-4.6 (legal: ['high', 'low', 'medium'])
+  ERROR [ultimate-sol.critic]  illegal effort 'xhigh' for grok-4.6 (legal: ['high', 'low', 'medium'])
+  ERROR [dream-team.critic]    illegal effort 'xhigh' for grok-4.6 (legal: ['high', 'low', 'medium'])
+  ERROR [llm-council.critic]   illegal effort 'xhigh' for grok-4.6 (legal: ['high', 'low', 'medium'])
+  ERROR [escalation.critic]    illegal effort 'xhigh' for grok-4.6 (legal: ['high', 'low', 'medium'])
+exit=1
+```
+
+정상 트리는 `OK — all invariants hold`, exit 0 유지.
+
+영구 fixture 스크립트(`scripts/ci-fixture-check.sh`)는 v3 범위로 계획돼 있다 — 이 PR 은
+규칙만 조이고 거부 동작을 위 기록으로 증명한다.

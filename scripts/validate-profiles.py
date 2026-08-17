@@ -63,7 +63,8 @@ FAMILY = {
 #   fable-5 <=xhigh (:max still returns OK — possible silent clamp; never shipped)
 #   sonnet-5 shipped legality stays <=high (catalog now lists xhigh/max; clamp-vs-real unmeasured)
 #   opus-5 / opus-4.x = full ladder including max
-#   xai grok-4.6 catalog low..xhigh (:xhigh accepted 2026-08-16; shipped seats stay :high — no L3)
+#   xai grok-4.6: catalog lists low..xhigh and :xhigh resolves live (2026-08-16), but its depth is
+#   un-benchmarked — deliberate fail-closed ceiling stays high, same treatment as gpt-5.6 :max below
 #   xai grok-4.5 <=high
 #   grok-build effort suffixes still don't resolve (grok-4.6:high = not found; bare grok-4.6 OK)
 #   gpt-5.6-sol/terra/luna: catalog lists low..max and :max is accepted live,
@@ -81,7 +82,7 @@ def _eff_rules():
         (lambda p, m: m.startswith("gpt-5"), {"minimal","low","medium","high"}),  # base gpt-5/gpt-5.1 (catalog: minimal..high)
         (lambda p, m: "gemini" in m and "pro" in m, {"low","high"}),
         (lambda p, m: "gemini" in m and "flash" in m, {"minimal","low","medium","high"}),
-        (lambda p, m: p == "xai" and m.startswith("grok-4.6"), {"low","medium","high","xhigh"}),  # 0.13.3 catalog; shipped seats :high
+        (lambda p, m: p == "xai" and m.startswith("grok-4.6"), {"low","medium","high"}),  # catalog has xhigh; shipped ceiling high (depth un-benchmarked)
         (lambda p, m: p == "xai" and m.startswith("grok-4.5"), {"low","medium","high"}),
         (lambda p, m: p == "xai" and m.startswith("grok"), {"minimal","low","medium","high"}),
         (lambda p, m: p == "grok-build" and m.startswith("grok"), set()),  # effort suffixes don't resolve — bare selectors only
