@@ -282,12 +282,12 @@ if [ "$SHIP" = 1 ]; then
   echo
   echo "## 출하 게이트 (계획 10단계)"
 
-  # `_funnel_parity.py` 는 실패 시 **exit 1** 을 낸다(CI 스텝이 그 코드로 판정한다).
+  # `check-funnel-parity.py` 는 실패 시 **exit 1** 을 낸다(CI 스텝이 그 코드로 판정한다).
   # 이 스크립트는 26행에서 `set -uo pipefail` 만 켠다 — `-e` 는 **의도적으로 없다.**
   # `-e` 를 켜면 아래 명령치환의 비영 종료가 25축 순회를 중간에 끊어버려서 `bad funnel`
   # 을 기록하지 못한다. 축 하나가 실패해도 나머지 축은 계속 재야 한다.
   # #5 퍼널 매트릭스: 각 shipped 번들의 required_providers 가 정확히 하나의 최소행과 집합 동일
-  FUNNEL="$(python3 scripts/_funnel_parity.py 2>&1)"
+  FUNNEL="$(python3 scripts/check-funnel-parity.py 2>&1)"
   case "$FUNNEL" in
     OK*)  ok funnel "$FUNNEL" ;;
     *)    bad funnel "$FUNNEL" ;;
@@ -308,18 +308,28 @@ if [ "$SHIP" = 1 ]; then
   #
   # 범위도 좁힌다 — CHANGELOG 는 **첫 릴리스 헤딩(`## v…`) 앞**까지가 배너 자리다.
   # 그 아래 항목 본문의 인용문이 파일명을 언급하는 것은 배너가 아니다.
-  _has_banner() {  # $1=file  $2=최대 검사 줄수(0=전체)
+  # `$2` 는 **명시적 센티널**을 쓴다: `all` = 파일 전체, 숫자 = 그 줄수까지.
+  # 예전엔 `0` 을 "전체" 로 썼는데, CHANGELOG 가 곧바로 `## v…` 로 시작하면 배너 영역이
+  # 0줄이고 awk 도 `0` 을 돌려준다. 그러면 "전체 스캔" 으로 조용히 되돌아가 이 hunk 가
+  # 없애려던 #27 오탐이 다시 살아난다(cyber-cop 패널 지적). awk 실패·파일 부재도 같다.
+  _has_banner() {  # $1=file  $2=all | <줄수>
     [ -f "$1" ] || return 1
-    if [ "${2:-0}" -gt 0 ]; then head -n "$2" "$1"; else cat "$1"; fi \
+    if [ "$2" = "all" ]; then cat "$1"; else head -n "$2" "$1"; fi \
       | grep -qE '^[[:space:]]*>.*whats-new-v3\.md'
   }
   if [ -f docs/whats-new-v3.md ]; then ok whats-new "docs/whats-new-v3.md 존재"; else bad whats-new "docs/whats-new-v3.md 없음"; fi
   for f in docs/whats-new-v2.md docs/whats-new-cyber-cop.md; do
-    if _has_banner "$f" 0; then ok banner "$f 배너 존재(인용줄 모양)"; else bad banner "$f 배너 없음 — 파일명만 언급된 것은 배너가 아니다"; fi
+    if _has_banner "$f" all; then ok banner "$f 배너 존재(인용줄 모양)"; else bad banner "$f 배너 없음 — 파일명만 언급된 것은 배너가 아니다"; fi
   done
-  # CHANGELOG 의 배너 자리 = 첫 `## v…` 헤딩 앞
-  CL_HEAD="$(awk '/^## v/{exit} {n++} END{print n+0}' CHANGELOG.md 2>/dev/null || echo 0)"
-  if _has_banner CHANGELOG.md "${CL_HEAD:-0}"; then bad banner "CHANGELOG.md 머리에 공지 배너가 들어갔다(계획상 제외 대상)"; else ok banner "CHANGELOG.md 머리에 공지 배너 없음(의도대로 — 항목 내 파일명 언급은 정상)"; fi
+  # CHANGELOG 의 배너 자리 = 첫 `## v…` 헤딩 앞. awk 가 실패하면 0줄(= 검사 안 함)이 아니라
+  # **실패로 본다** — 범위를 못 정한 채 통과시키면 그게 무가드다.
+  if ! CL_HEAD="$(awk '/^## v/{exit} {n++} END{print n+0}' CHANGELOG.md 2>/dev/null)"; then
+    bad banner "CHANGELOG.md 배너 영역을 계산하지 못했다(awk 실패)"
+  elif _has_banner CHANGELOG.md "$CL_HEAD"; then
+    bad banner "CHANGELOG.md 머리 ${CL_HEAD}줄에 공지 배너가 들어갔다(계획상 제외 대상)"
+  else
+    ok banner "CHANGELOG.md 머리 ${CL_HEAD}줄에 공지 배너 없음(의도대로 — 항목 내 파일명 언급은 정상)"
+  fi
 
   # #11 CHANGELOG v3.0.0 + MAINTAINING MAJOR 사례
   if grep -qE '^#+ .*v?3\.0\.0' CHANGELOG.md 2>/dev/null; then ok changelog "v3.0.0 항목 존재"; else bad changelog "CHANGELOG 에 v3.0.0 항목 없음"; fi

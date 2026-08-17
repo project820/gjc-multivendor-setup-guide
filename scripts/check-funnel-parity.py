@@ -5,8 +5,10 @@
 집합으로 동일해야 한다. 0개면 그 번들이 퍼널에서 빠진 것이고, 2개 이상이면 표가
 중복 행을 가진 것이다(사용자가 어느 행을 봐야 할지 모른다).
 
-`check-v3-target-state.sh --ship` 이 호출한다. 단독 실행도 된다.
+`.github/workflows/validate.yml` 의 상시 CI 스텝이 호출하고, `check-v3-target-state.sh
+--ship` 도 호출한다. 단독 실행도 된다.
 출력: `OK …` 또는 `BAD …`로 시작한다. 종료코드는 성공 시 0, 실패 시 1이다.
+검사 대상은 **네 언어 README 전부**다(KO 정본 + EN/ZH/JA 미러).
 """
 import pathlib
 import re
@@ -132,7 +134,9 @@ def main():
         results.append(f"{filename} OK {len(rows)}행·{total}번들")
 
     if failures:
-        print("BAD " + " | ".join(results) + " | " + " | ".join(failures))
+        # `results` 는 파일별 OK/BAD 한 줄 요약, `failures` 는 사유다. 예전엔 실패
+        # 파일명이 양쪽에 다 찍혀 중복됐다 — 요약에서는 상태만, 사유에서만 이름을 쓴다.
+        print("BAD " + " | ".join(results) + " || " + " | ".join(failures))
         return 1
     print(
         f"OK 퍼널 4개 README · {len(profiles)}번들 — " + " | ".join(results)

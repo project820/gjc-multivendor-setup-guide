@@ -27,7 +27,7 @@ python3 (로컬)            3.9.6 · CI 핀 3.12
   MAINTAINING-v3-updates.md  37개 절
 
 정본 ultragoal 원장 (네 곳 중 이것만 정본)
-  경로  .gjc/_session-01a00aa9-781a-7000-9614-6e933a8b3625/ultragoal/
+  경로  .gjc/_session-<redacted>/ultragoal/
   goals.json sha256  c9a36e9be2c28391f99972f1883d2cb23b090e6097ade9797274ad238a47f977
   ledger.jsonl 줄수   52
   goal 상태          G001=complete G002=complete G003=blocked G004=blocked G005=blocked G006=complete
@@ -97,5 +97,8 @@ OK — 검증 12 종 전부 통과 (사람 액션은 별개)
 검증 결과로 인용했다면 오독이다. 브랜치 검증은 각 커밋의 게이트 실행 출력과
 `evidence/2026-08-17-v3-budget-gate-ruling.md` 를 봐라.
 
-또한 본문에 머신 로컬 세션 UUID(`.gjc/_session-…`)와 줄바꿈이 깨진 지문 블록이
-들어 있다. 식별자로 쓰지 마라 — 이 레포 밖에서는 아무 의미가 없다.
+또한 30행의 머신 로컬 세션 UUID 는 **`<redacted>` 로 지웠다.** append-only 는 측정값을
+보호하는 원칙이고, 이 레포 밖에서 아무 의미도 없는 로컬 식별자를 공개 저장소에 남길
+근거는 아니다(cyber-cop 패널 지적). 지운 것은 UUID 문자열뿐이고 그 줄의 나머지·다른
+모든 측정값은 그대로다. 줄바꿈이 깨진 지문 블록도 원문 그대로 뒀다 — 판독은 어렵지만
+측정 기록이다.

@@ -26,7 +26,11 @@ def slug(heading):
     t = heading.lstrip("#").strip().lower()
     out = []
     for ch in t:
-        if ch.isalnum() or ch in "-_" or ch == "️":
+        # U+FE0F(variation selector-16)는 GitHub 슬러그에서 **살아남는다**. 이 한 글자는
+        # 반드시 이스케이프로 둔다 — 리터럴로 쓰면 diff 에서 보이지 않아 리뷰가 불가능하고,
+        # 에디터·정규화기가 지우면 조건이 `ch == ""`(항상 False)로 바뀌어 모든 이모지 헤딩의
+        # 슬러그가 조용히 달라진다. 테스트도 안 깨진다(cyber-cop 패널 지적).
+        if ch.isalnum() or ch in "-_" or ch == "\ufe0f":
             out.append(ch)
         elif ch == " ":
             out.append("-")
@@ -92,13 +96,31 @@ def main():
         # 샘플을 펜스에 담는다 — 그 안의 상대 href 를 죽은 링크로 잡으면 CI 가 링크가
         # 아닌 것 때문에 실패한다(cyber-cop 패널 지적). 오프셋을 보존해야 리포트의
         # 줄번호가 맞으므로, 펜스 구간은 지우지 말고 **같은 길이의 공백으로 덮는다.**
+        #
+        # 펜스 규칙은 CommonMark 를 따른다: 여는 펜스는 ``` 또는 ~~~ 3개 이상이고,
+        # 닫는 펜스는 **같은 문자 · 같은 길이 이상**이어야 한다. `not in_fence` 토글로
+        # 처리하면 긴 펜스 안에 짧은 ``` 이 들어간 순간 상태가 뒤집힌다(패널 지적).
+        # 4칸 들여쓰기 코드블록도 링크가 아니므로 함께 덮는다.
         scan = list(txt)
-        in_fence = False
+        fence = None          # (문자, 길이) — 열려 있으면 튜플
         pos = 0
         for line in txt.splitlines(keepends=True):
-            if line.lstrip().startswith("```"):
-                in_fence = not in_fence
-            elif in_fence:
+            stripped = line.lstrip()
+            indent = len(line) - len(stripped)
+            fm = re.match(r"(`{3,}|~{3,})", stripped) if indent < 4 else None
+            covered = False
+            if fence is None:
+                if fm:
+                    fence = (fm.group(1)[0], len(fm.group(1)))
+                elif indent >= 4 and stripped.strip():
+                    covered = True      # 들여쓰기 코드블록
+            else:
+                ch, width = fence
+                if fm and fm.group(1)[0] == ch and len(fm.group(1)) >= width:
+                    fence = None        # 닫는 펜스
+                else:
+                    covered = True
+            if covered:
                 for k in range(pos, pos + len(line)):
                     if scan[k] != "\n":
                         scan[k] = " "
@@ -106,11 +128,20 @@ def main():
         scan = "".join(scan)
         matches = [(m.group(1), m.start(1))
                    for m in re.finditer(r"\]\(([^)\s]+)\)", scan)]
+        # 로컬 HTML: `<a href>` 뿐 아니라 `<img src>` 도 본다. README ×4 의 17행이
+        # `<img src="assets/role-winners.svg">` 로 배너를 문다 — src 가 깨져도 예전
+        # "링크 무결성" 게이트는 통과했다(cyber-cop critic 지적).
         matches += [(m.group(2), m.start(2))
-                    for m in re.finditer(r"""<a\b[^>]*\bhref\s*=\s*(["'])(.*?)\1""",
-                                        scan, re.IGNORECASE)]
+                    for m in re.finditer(
+                        r"""<(?:a\b[^>]*\bhref|img\b[^>]*\bsrc)\s*=\s*(["'])(.*?)\1""",
+                        scan, re.IGNORECASE)]
+        # reference-style 정의는 **경로처럼 보이는 것만** 받는다. `[주의]: 설명문` 같은
+        # 산문을 링크 대상으로 읽으면 죽은 파일로 오탐한다(패널 지적) — `--all` 이
+        # evidence/·docs/ 전체를 훑으므로 실제 위험이다.
         matches += [(m.group(1), m.start(1))
-                    for m in re.finditer(r"^\[[^\]]+\]:\s*(\S+)", scan, re.MULTILINE)]
+                    for m in re.finditer(
+                        r"^\[[^\]]+\]:[ \t]*(<?(?:https?://|mailto:|[./#]|[\w./-]+[./#])[^\s>]*)>?",
+                        scan, re.MULTILINE)]
         links = [raw for raw, _ in matches]
         intra = cross = bad = 0
         for raw, position in matches:
