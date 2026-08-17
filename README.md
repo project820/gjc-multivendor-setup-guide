@@ -14,14 +14,14 @@
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
-<img src="assets/role-winners.svg" alt="dream-team 셋업 — 역할별 최강 가설" width="100%">
+<img src="assets/role-winners.svg" alt="ultimate-opus 셋업 — 역할별 최강 가설" width="100%">
 
 </div>
 
 **한국어 (이 문서) · [English](./README.en.md) · [中文](./README.zh.md) · [日本語](./README.ja.md)**
 
 > [!NOTE]
-> 핵심 역할·셀렉터 개념은 [GJC 공식 문서](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md)에 업스트림 머지됐다([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). 이 레포는 원클릭 설치, 4계층 10번들 카탈로그와 [유지보수·검증 도구](./MAINTAINING.md)를 제공한다.
+> 핵심 역할·셀렉터 개념은 [GJC 공식 문서](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md)에 업스트림 머지됐다([PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860), `dev`). 이 레포는 원클릭 설치, 4계층 8번들 카탈로그와 [유지보수·검증 도구](./MAINTAINING.md)를 제공한다.
 
 ---
 
@@ -107,7 +107,7 @@ Core / Premium / Workflow bundle / Specialized 는 각 번들 카드의 **배지
 2. [핵심 설계](#2--핵심-설계)
 3. [GJC 엔진 사실](#3--gjc-엔진-사실)
 4. [벤치마크 근거](#4--벤치마크-근거)
-5. [최종 카탈로그 — 10 번들 · 4계층](#5-️-최종-카탈로그--8-번들--4계층)
+5. [최종 카탈로그 — 8 번들 · 4계층](#5-️-최종-카탈로그--8-번들--4계층)
 6. [검증 매트릭스](#6--검증-매트릭스)
 7. [설치 / 제거](#7-️-설치--제거)
 8. [동적 라우팅 전략](#8--동적-라우팅-전략)
@@ -121,11 +121,11 @@ Core / Premium / Workflow bundle / Specialized 는 각 번들 카드의 **배지
 
 | 역할 | 무엇을 하나 | 최적 모델 |
 |---|---|---|
-| 🧠 **추론·설계**(planner) | 순서·수용기준 짜기 | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · 2026-07-09 GA) — 번들별 좌석은 [§5](#5-️-최종-카탈로그--8-번들--4계층) 참조(예외: cyber-cop·monorepo=Gemini, eco=Luna) |
+| 🧠 **추론·설계**(planner) | 순서·수용기준 짜기 | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · 2026-07-09 GA) — 번들별 좌석은 [§5](#5-️-최종-카탈로그--8-번들--4계층) 참조(예외: cyber-cop·monorepo=Gemini, budget=Qwen3.8 Max) |
 | 🔨 **구현**(executor) | 실제 코드 작성·수정 | **Claude Fable 5** (SWE-bench Verified **95.0**) — 구독 포함 최강은 **Opus 5**(4.8 후계 · $5/$25 동가 · 2026-07-24) |
 | 🔭 **코드리뷰**(architect) | 대형 리포 탐색·아키텍처 | **Gemini 3.1 Pro** (멀티모달 MMMU-Pro 81%) · 초장문맥(>200k)은 **Opus** |
 | ⚖️ **독립 비평**(critic) | 결과 적대 검증 | **cross-family** (본체와 다른 벤더) |
-| 🎛️ **오케스트레이션**(default) | 도구호출·라우팅·정직성 | **Anthropic 플래그십** — Opus 5 (라우터 품질 = 전체 상한; `dream-team`은 Fable 5. 비-Anthropic 라우터는 opt-in `ultimate-sol`(Sol)과 Anthropic 미포함 `eco`(Terra)뿐) |
+| 🎛️ **오케스트레이션**(default) | 도구호출·라우팅·정직성 | **Anthropic 플래그십** — Opus 5 (라우터 품질 = 전체 상한; 비-Anthropic 라우터는 **anthropic 미요구 번들**뿐이고 v3 에선 `budget`(Terra) 하나다) |
 
 ---
 
@@ -139,7 +139,7 @@ Core / Premium / Workflow bundle / Specialized 는 각 번들 카드의 **배지
 
 세 가지 설계 원칙:
 
-- **본체는 절대 양보 불가.** median 작업의 대부분은 본체 혼자 처리하므로, 본체(default)를 약한 모델로 내리면 체감 성능 전체가 무너진다. 기본은 Anthropic 플래그십(Opus 5 — `dream-team`은 Fable 5). 비-Anthropic 라우터는 둘뿐: opt-in 실험 `ultimate-sol`(Sol — validator 등재+WARN)과 Anthropic 미포함 저단가 실험 `eco`(Terra — router 불변식 비적용).
+- **본체는 절대 양보 불가.** median 작업의 대부분은 본체 혼자 처리하므로, 본체(default)를 약한 모델로 내리면 체감 성능 전체가 무너진다. 기본은 Anthropic 플래그십(Opus 5). 비-Anthropic 라우터는 **anthropic 을 요구하지 않는 번들뿐**이고 v3 에선 `budget`(Terra) 하나다 — 규칙이 발동조차 하지 않으므로 allowlist 등재가 필요 없다.
 - **다양성은 "검증"에서만 이득.** critic은 본체와 다른 벤더로 둬 독립성을 확보하되, 직렬 체인은 짧게 유지한다(신뢰성은 `0.99ⁿ`로 떨어진다).
 - **effort는 비대칭 경제학.** `medium→high`는 점수 +1~2점에 토큰 ~23배. 무조건 `max`는 낭비 — "못 풀어서" 올리는 것만 정당.
 
@@ -220,7 +220,7 @@ opencode-go/<model>                           (effort 생략 = 모델 기본값)
 
 **핵심 합의 원칙** — † planner는 2026-07-10 Sol GA를 반영해 2026-07-02 Gemini 3.1 Pro 스냅샷을 대체했고, architect 축은 Gemini 3.5 Pro 출시 시 재검증한다.
 
-1. **default = Anthropic 플래그십(Opus/Fable) 고정** — 라우터 품질이 전체 품질 상한. 예외 둘: `ultimate-sol`(Sol 라우터 — validator 등재 + WARN 표면화 opt-in 실험) · `eco`(Anthropic 미포함 번들 — Terra 라우터, router 불변식 비적용).
+1. **default = Anthropic 플래그십(Opus/Fable) 고정** — 라우터 품질이 전체 품질 상한. **anthropic 을 요구하지 않는 번들은 적용 대상이 아니다**(v3 `budget` — Terra 라우터). v3 에서 allowlist 예외는 **없다**.
 2. **architect = Gemini 3.1 Pro(멀티모달) / Opus(초장문맥)** — Gemini는 비전·중간 ctx 최적, 200k+ 텍스트 실효검색은 Opus(MRCR 76%@1M, Gemini는 26%로 붕괴).
 3. **critic = cross-family** — 본체/플래너와 다른 벤더여야 편향이 완화된다(self-preference bias).
 4. **구조 = 강본체 + 작업신호 위임 + 실패기반 effort 에스컬레이션.**
@@ -234,7 +234,7 @@ opencode-go/<model>                           (effort 생략 = 모델 기본값)
 <img src="assets/profiles-matrix.svg" alt="프로필 × 역할 매트릭스" width="100%">
 </div>
 
-> ★ = 평소 권장. v2.1.0 카탈로그는 동등한 프로필 묶음이 아니라 4계층 10번들이다. 전 번들 `required_providers ≥ 2`, 기본 `critic=cross-family`(예외는 `SAME_FAMILY_OK`+WARN), 엔진 effort 하드룰과 셀렉터 검증([§6](#6--검증-매트릭스))을 따른다. 2026-08-17 최종 좌석 배터리에서 출하 좌석(Opus 5·Grok 4.6 포함)은 전부 그린이다. 08-16 실행은 eco.executor 교체 이전이다.
+> ★ = 평소 권장. v3.0.0 카탈로그는 동등한 프로필 묶음이 아니라 4계층 8번들이다. 전 번들 `required_providers ≥ 2`, 기본 `critic=cross-family`(예외는 `SAME_FAMILY_OK`+WARN), 엔진 effort 하드룰과 셀렉터 검증([§6](#6--검증-매트릭스))을 따른다. 2026-08-17 최종 좌석 배터리에서 출하 좌석(Opus 5·Grok 4.6 포함)은 전부 그린이다. 08-16 실행은 v2.1.0 `eco.executor` 교체 이전 시점이다(그 번들은 v3 에서 삭제됐다).
 
 <details>
 <summary><b>📋 전체 YAML 펼치기 (gjc-profiles.yml 와 동일 — 모델 매핑 기준, 주석의 §참조만 README에 맞춤)</b></summary>
@@ -357,7 +357,7 @@ profiles:
 </details>
 
 > [!TIP]
-> **opencode-go** 는 `OPENCODE_API_KEY` 설정 시 `eco` executor·`monorepo` critic에서 활성화된다(검증✅). 출하 좌석 `glm-5.2` 는 2026-08-16·08-17 실호출 ok 이고 08-17 코딩 프로브에서 8/8·5.1s([증거](./evidence/2026-08-17-eco-executor.md)). `deepseek-v4-flash/pro` 는 카탈로그 id 는 살아 있으나 **이 계정에서 403 China opt-in** 이라 v2.1.0 에서 출하 좌석에서 내렸다(정보성 카나리로만 유지). `kimi-k3` 는 같은 프로브에서 8/8·6.0s 로 동급이지만 **채울 좌석이 없고 레포에 가격·레이트리밋 문서가 없어 미출하**다 — 재평가 트리거로 등재. `kimi-k2.7-code`(262K)·`minimax-m3` 도 미출하.
+> **opencode-go** 는 `OPENCODE_API_KEY` 설정 시 `budget` executor·planner 와 `monorepo` critic에서 활성화된다(검증✅). 출하 좌석 `glm-5.2` 는 2026-08-16·08-17 실호출 ok 이고 08-17 코딩 프로브에서 8/8·5.1s([증거](./evidence/2026-08-17-eco-executor.md)). `deepseek-v4-flash/pro` 는 카탈로그 id 는 살아 있으나 **이 계정에서 403 China opt-in** 이라 v2.1.0 에서 출하 좌석에서 내렸다(정보성 카나리로만 유지). `kimi-k3` 는 같은 프로브에서 8/8·6.0s 로 동급이지만 **채울 좌석이 없고 레포에 가격·레이트리밋 문서가 없어 미출하**다 — 재평가 트리거로 등재. `kimi-k2.7-code`(262K)·`minimax-m3` 도 미출하.
 
 #### 프로필별 설계 근거
 
@@ -375,7 +375,7 @@ profiles:
 ## 6. ✅ 검증 매트릭스
 
 > 범례: ✅ 실호출 그린(괄호=검증일) · 🔴 실패 · ⚠ 주의/클램프 · †‡ 각주 · ●○ 상대비용.
-> 실호출 기록은 셋이고 용도가 다르다. **08-16**(gjc 0.13.3, 전 프로바이더 핵심 셀렉터 — [기록](./evidence/2026-08-16-selectors.md); 0.9.6 그린은 07-10 rerun-3)은 eco.executor 가 아직 DeepSeek 이던 시점이라 최종 좌석 전수 커버가 아니다. **출하 좌석 게이트 정본은 [08-17 재실행](./evidence/2026-08-17-selectors-rerun-2.md)** — 이 PR 에서 고친 `revalidate.sh`(YAML 파생 로스터 · 카나리 겹침 가드 · FAIL 서브셸 버그 수정)를 실행한 결과이며 종료코드 0, 회귀 0건이다. **단일 메시지 476k 입력 근거는 [08-17 최초 실행](./evidence/2026-08-17-selectors.md)** 에 있다(그 파일은 하네스 수정 전 산출물이라 게이트 정본으로는 쓰지 않는다). v2.1 출하 좌석은 전부 그린이고, DeepSeek 는 이 계정에서 403 China opt-in 이라 출하 좌석에서 내렸다.
+> 실호출 기록은 셋이고 용도가 다르다. **08-16**(gjc 0.13.3, 전 프로바이더 핵심 셀렉터 — [기록](./evidence/2026-08-16-selectors.md); 0.9.6 그린은 07-10 rerun-3)은 v2.1.0 의 `eco.executor` 가 아직 DeepSeek 이던 시점이라 최종 좌석 전수 커버가 아니다. **출하 좌석 게이트 정본은 [08-17 재실행](./evidence/2026-08-17-selectors-rerun-2.md)** — 이 PR 에서 고친 `revalidate.sh`(YAML 파생 로스터 · 카나리 겹침 가드 · FAIL 서브셸 버그 수정)를 실행한 결과이며 종료코드 0, 회귀 0건이다. **단일 메시지 476k 입력 근거는 [08-17 최초 실행](./evidence/2026-08-17-selectors.md)** 에 있다(그 파일은 하네스 수정 전 산출물이라 게이트 정본으로는 쓰지 않는다). v2.1 출하 좌석은 전부 그린이고, DeepSeek 는 이 계정에서 403 China opt-in 이라 출하 좌석에서 내렸다.
 
 | 프로바이더 | 검증된 셀렉터 |
 |---|---|
@@ -406,7 +406,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> antigravity 라이브 표면은 당일에도 변하고 `--list-models` 표기는 캐시일 수 있다. 좌석 채택 전 실호출하고, 디스커버리 미갱신이면 재로그인/재시도 또는 번들 id를 사용하라. **eco critic 대체 셀렉터는 현재 권장안이 없다** — `glm-5.2` 는 같은 번들의 executor 라 critic 으로 쓰면 교차검증이 사라지고, `deepseek-v4-pro` 는 이 계정 403 China opt-in 이다. 좌석을 바꾸려면 계열 독립성과 `required_providers` 를 함께 재검토해야 한다.
+> antigravity 라이브 표면은 당일에도 변하고 `--list-models` 표기는 캐시일 수 있다. 좌석 채택 전 실호출하고, 디스커버리 미갱신이면 재로그인/재시도 또는 번들 id를 사용하라. **`gemini-3-flash:low` 는 v3 에서 출하 좌석이 0개다**(v2.1.0 `eco.critic` 이 유일했다) — `glm-5.2` 는 같은 번들의 executor 라 critic 으로 쓰면 교차검증이 사라지고, `deepseek-v4-pro` 는 이 계정 403 China opt-in 이다. 좌석을 바꾸려면 계열 독립성과 `required_providers` 를 함께 재검토해야 한다.
 
 <details>
 <summary><b>지연 참고 (마이크로벤치 2026-07-02; 08-16 ping은 Opus 5·Grok 4.6)</b></summary>
@@ -483,8 +483,8 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 되돌리기(백�
 | 머지/릴리즈 직전·보안·결제 | `escalation` (수동 트리거 — routing-rules 의 Escalation 계약) |
 | PR 리뷰·보안 감사 세션 | `cyber-cop` |
 | 다계열 합의가 필요한 결정 | `llm-council` (+ routing-rules 의 Council 계약) |
-| 정확성 최우선 (opt-in premium) | `ultimate-opus` / `ultimate-sol`(Sol 축 실험) / `dream-team`(Fable·credits 각오) |
-| 대량 리팩터·마이그레이션 | `eco` |
+| 정확성 최우선 (opt-in premium) | `ultimate-opus` |
+| 대량 리팩터·마이그레이션 | `budget`(게이트 통과 시) |
 | 거대 코드베이스 진입 | `monorepo` |
 | 단일 벤더로만 운영 | GJC 내장 프로필(`claude-opus`·`codex-*` 등 — 이 카탈로그 밖) |
 
@@ -509,14 +509,14 @@ Gemini는 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 구독 �
 
 | 모델 | $/1M (in/out) | 역할 |
 |---|---|---|
-| Claude Fable 5 | 10 / 50 (배치 5/25 · 캐시 히트 1)† | dream-team default·executor · escalation executor |
+| Claude Fable 5 | 10 / 50 (배치 5/25 · 캐시 히트 1)† | escalation executor |
 | Claude Opus 5 | 5 / 25 | default·executor 기간산업 (4.8 후계) |
-| Claude Sonnet 5 | 3 / 15 (인트로 2/10 ~2026-08-31)‡ | eco executor 대안 |
-| GPT-5.6 Sol | 5 / 30 (Fast 모드는 12.5/75) | planner(daily·sprint·ultimate-opus·dream-team·council·escalation) · ultimate-sol 3좌석 · cyber-cop executor·critic |
-| GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
-| GPT-5.6 Luna | 1 / 6 | eco planner (v2 신규 채용) |
+| Claude Sonnet 5 | 3 / 15 (인트로 2/10 ~2026-08-31)‡ | **미출하** — 좌석 없음(참고용) |
+| GPT-5.6 Sol | 5 / 30 (Fast 모드는 12.5/75) | planner(daily·sprint·ultimate-opus·council·escalation) · cyber-cop executor·critic |
+| GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
+| GPT-5.6 Luna | 1 / 6 | **daily executor `:max`** (v3 승격 — D-1 이 `{max}` 단독 강제) |
 | Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic(premium 3종·llm-council·escalation) — `/login xai` 또는 XAI_API_KEY |
-| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic |
+| GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **미출하** — 이 계정 403 China opt-in(카탈로그 잔류) |
 | Gemini 3.1 Pro / 3-flash | 프리뷰/구독 토큰 | planner·architect·critic |
 
@@ -528,14 +528,13 @@ Gemini는 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 구독 �
 
 | 프로필 | 비용 | 핵심 비용 동인 |
 |---|---|---|
-| dream-team | ●●●●● | default·executor Fable 5 — Max/premium Team 주간 한도 50% 포함, Pro는 credits $10/50 |
 | escalation | ●●●●● | executor Fable `:xhigh`(구원투수 — 간헐 사용) + planner Sol `:xhigh` + 4벤더 인증 |
-| ultimate-opus / ultimate-sol | ●●●●○ | Opus 또는 Sol 3좌석 `:high~xhigh` + Grok critic(`/login xai` 또는 XAI_API_KEY) |
+| ultimate-opus | ●●●●○ | Opus 3좌석 `:high~xhigh` + Grok critic(`/login xai` 또는 XAI_API_KEY) |
 | llm-council | ●●●●○ | 4벤더 인증 + Sol `:xhigh` planner — council 워크플로 실행 시 표 수만큼 과금 |
 | coding-sprint | ●●●○○ | executor Opus `:high`(실패신호 시에만 max 격상) |
 | daily | ●●●○○ | 본체 Opus `:medium`, 위임은 중·저가로 분산 — 구독 OAuth 3벤더 |
 | monorepo | ●●●○○ | executor/architect Opus + Gemini(프리뷰/구독) + GLM-5.2 |
-| eco | ●○○○○ | executor GLM-5.2($1.40) + Luna($1) + Gemini 프리뷰 — 단, *절대 최저가는 내장 `codex-eco`* |
+| budget | ●○○○○ | executor GLM-5.2($1.40) + planner Qwen3.8 Max + Gemini 프리뷰 — 단, *절대 최저가는 내장 `codex-eco`* |
 
 ---
 

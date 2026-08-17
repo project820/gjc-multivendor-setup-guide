@@ -21,7 +21,7 @@
 **[한국어](./README.md) · [English](./README.en.md) · [中文](./README.zh.md) · 日本語（このページ）**
 
 > [!NOTE]
-> 役割・セレクタの中核概念は [GJC 公式ドキュメント](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) に上流マージ済み（[PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860)、`dev`）。本リポジトリはワンクリック導入、4階層10バンドルのカタログ、[保守・検証ツール](./MAINTAINING.md)を提供する。
+> 役割・セレクタの中核概念は [GJC 公式ドキュメント](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md) に上流マージ済み（[PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860)、`dev`）。本リポジトリはワンクリック導入、4階層8バンドルのカタログ、[保守・検証ツール](./MAINTAINING.md)を提供する。
 
 ---
 
@@ -197,7 +197,7 @@ opencode-go/<model>                           （effort 省略 = モデル既定
 <img src="assets/profiles-matrix.svg" alt="プロファイル × 役割 マトリクス" width="100%">
 </div>
 
-> ★ = 日常推奨。v2.1.0 カタログは同等なプロファイル群ではなく 4階層の10バンドルである。全バンドルは `required_providers ≥ 2`、基本 `critic=cross-family`（例外は `SAME_FAMILY_OK`+WARN）、エンジン effort ハードルールとセレクタ検証（[§6](#6--検証マトリクス)）に従う。2026-08-17 の最終ロスター・バッテリーで出荷席（Opus 5·Grok 4.6 含む）はグリーンだった。08-16 の実行は eco.executor 変更より前である。
+> ★ = 日常推奨。v2.1.0 カタログは同等なプロファイル群ではなく 4階層の8バンドルである。全バンドルは `required_providers ≥ 2`、基本 `critic=cross-family`（例外は `SAME_FAMILY_OK`+WARN）、エンジン effort ハードルールとセレクタ検証（[§6](#6--検証マトリクス)）に従う。2026-08-17 の最終ロスター・バッテリーで出荷席（Opus 5·Grok 4.6 含む）はグリーンだった。08-16 の実行は eco.executor 変更より前である。
 
 <details>
 <summary><b>📋 完全な YAML を展開（モデルマッピングは gjc-profiles.yml と同一 — コメントは除去済み。注釈付きの韓国語正本は <a href="./gjc-profiles.yml">gjc-profiles.yml</a>）</b></summary>

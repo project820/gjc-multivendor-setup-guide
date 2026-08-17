@@ -31,7 +31,7 @@
 curl -fsSL https://raw.githubusercontent.com/project820/gjc-multivendor-setup-guide/main/install.sh | bash
 ```
 
-这一行会**把 10 个捆绑安全合并进 `~/.gjc/agent/models.yml`**，并把默认配置设为 `daily`。原有配置会自动备份，重复执行也会干净更新。
+这一行会**把 8 个捆绑安全合并进 `~/.gjc/agent/models.yml`**，并把默认配置设为 `daily`。原有配置会自动备份，重复执行也会干净更新。
 
 ```bash
 gjc --mpreset daily        # 仅本次会话生效
@@ -197,7 +197,7 @@ opencode-go/<model>                           （省略 effort = 模型默认）
 <img src="assets/profiles-matrix.svg" alt="配置 × 角色矩阵" width="100%">
 </div>
 
-> ★ = 日常推荐。v2.1.0 目录是 4 层级的 10 个捆绑：全部 `required_providers ≥ 2`，默认 `critic=cross-family`（例外为 `SAME_FAMILY_OK`+WARN），并遵循引擎 effort 硬规则及[§6](#6--验证矩阵)选择器验证；2026-08-17 最终席位批次中的出货席位（含 Opus 5·Grok 4.6）均为绿色；08-16 的运行早于 eco.executor 变更。
+> ★ = 日常推荐。v2.1.0 目录是 4 层级的 8 个捆绑：全部 `required_providers ≥ 2`，默认 `critic=cross-family`（例外为 `SAME_FAMILY_OK`+WARN），并遵循引擎 effort 硬规则及[§6](#6--验证矩阵)选择器验证；2026-08-17 最终席位批次中的出货席位（含 Opus 5·Grok 4.6）均为绿色；08-16 的运行早于 eco.executor 变更。
 
 <details>
 <summary><b>📋 展开完整 YAML（模型映射与 gjc-profiles.yml 一致 — 已去除注释）</b></summary>
