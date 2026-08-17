@@ -14,7 +14,7 @@
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
-<img src="assets/role-winners.svg" alt="dream-team 構成 — 役割ごとの最強仮説" width="100%">
+<img src="assets/role-winners.svg" alt="ultimate-opus 構成 — 役割ごとの最強仮説" width="100%">
 
 </div>
 
@@ -62,11 +62,9 @@ gjc                        # 新規セッションは自動で daily
 | Core | 🏎️ **coding-sprint** | executor を Opus に昇格した実装スループット特化 | 純粋な実装スプリント |
 | Core | 🚨 **cyber-cop** | reviewer モード — architect·critic が主役 | PRレビュー・セキュリティ監査 |
 | Premium (exp) | 🏆 **ultimate-opus** | Anthropic 品質基盤のプレミアム | 正確性がコストより重要 |
-| Premium (exp) | 🧪 **ultimate-sol** | Sol 基盤のプレミアム — agentic/terminal/browser 軸 | 長期自律ワークフロー実験 |
-| Premium (exp) | 🔥 **dream-team** | 役割別最強仮説 — Fable default+executor | 最高品質、credits 覚悟 |
 | Workflow | 🏛️ **llm-council** | 4 系列の座席表と Council 契約 | 多系列合意が必要な決定 |
 | Workflow | 🛡️ **escalation** | 手動エスカレーション — Fable 救援投手 + critic 3票パネル | 不可逆変更 |
-| Specialized (exp) | 💸 **eco** | マルチベンダー低単価実験 — *絶対最安ではない* | コスト圧・大量作業 |
+| Specialized (exp) | 💸 **budget** | ゲート通過時のみの低コストマルチベンダー実験 — *絶対最安ではない* | コスト圧・大量作業 |
 | Specialized (exp) | 🗺️ **monorepo** | 全域 ≥1M ctx | 巨大コードベース |
 
 全カタログは [§5](#5-️-最終カタログ--8-バンドル--4階層) · reviewer モードとティーザーは以下を参照。
@@ -84,11 +82,11 @@ gjc                        # 新規セッションは自動で daily
 
 | 役割 | 何をするか | 最適モデル |
 |---|---|---|
-| 🧠 **推論・設計**（planner） | 手順・受け入れ基準 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 席は [§5](#5-️-最終カタログ--8-バンドル--4階層) を参照（例外：cyber-cop・monorepo=Gemini、eco=Luna） |
+| 🧠 **推論・設計**（planner） | 手順・受け入れ基準 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 席は [§5](#5-️-最終カタログ--8-バンドル--4階層) を参照（例外：cyber-cop・monorepo=Gemini、budget=Qwen3.8 Max） |
 | 🔨 **実装**（executor） | 実際のコード作成・修正 | **Claude Fable 5**（SWE-bench Verified **95.0**）— サブスク込み最強は **Opus 5**（4.8 後継 · 同額 $5/$25 · 2026-07-24） |
 | 🔭 **コードレビュー**（architect） | 大規模リポ探索・アーキ | **Gemini 3.1 Pro**（マルチモーダル MMMU-Pro 81%） · 超長文脈（>200k）→ **Opus** |
 | ⚖️ **独立批評**（critic） | 敵対的検証 | **クロスファミリー**（メインループと別ベンダー） |
-| 🎛️ **オーケストレーション**（default） | ツール呼び出し・ルーティング・誠実性 | **Anthropic フラッグシップ** — Opus 5（`dream-team` は Fable 5。非 Anthropic は `ultimate-sol`（Sol）と `eco`（Terra）のみ） |
+| 🎛️ **オーケストレーション**（default） | ツール呼び出し・ルーティング・誠実性 | **Anthropic フラッグシップ** — Opus 5（ルータ品質 = 全体の上限。非 Anthropic ルータは **anthropic を要求しないバンドル**だけで、v3 では `budget`（Terra）だけ） |
 
 ---
 
@@ -102,7 +100,7 @@ gjc                        # 新規セッションは自動で daily
 
 3つの設計原則：
 
-- **メインループは絶対に譲らない。** 中央値のタスクはほぼメインループが単独処理するため、`default` を弱モデルに落とすと体感品質が全面崩壊する。基本は Anthropic フラッグシップ（Opus 5 — `dream-team` は Fable 5）。非 Anthropic ルータは `ultimate-sol`（Sol）と `eco`（Terra）のみ。
+- **メインループは絶対に譲らない。** 中央値のタスクはほぼメインループが単独処理するため、`default` を弱モデルに落とすと体感品質が全面崩壊する。基本は Anthropic フラッグシップ（Opus 5）。非 Anthropic ルータは **anthropic を要求しないバンドル**だけで、v3 では `budget`（Terra）だけ。
 - **多様性は「検証」でのみ効く。** `critic` はメインループと別ベンダーにして独立性を確保する。ただし直列チェーンは短く保つ（信頼性は `0.99ⁿ` で減衰）。
 - **effort は非対称な経済学。** `medium→high` は +1〜2点のためにトークン約23倍。無条件 `max` は無駄 — 解けなかったときだけ上げる。
 
@@ -183,7 +181,7 @@ opencode-go/<model>                           （effort 省略 = モデル既定
 
 **合意原則** — † planner は 2026-07-10 の Sol GA を反映して Gemini 3.1 Pro スナップショットを置換し、architect 軸は Gemini 3.5 Pro リリース時に再検証する。
 
-1. **default = Anthropic フラッグシップ（Opus/Fable）固定** — 例外は `ultimate-sol`（Sol）と `eco`（Terra）のみ。
+1. **default = Anthropic フラッグシップ（Opus/Fable）固定** — ルータ品質 = 全体品質の上限。**anthropic を要求しないバンドルは適用対象外**（v3 の `budget` — Terra ルータ）。v3 には allowlist 例外はない。
 2. **architect = Gemini 3.1 Pro（マルチモーダル）/ Opus（超長文脈）** — 200k+ の検索は Opus（MRCR 76%@1M、Gemini は 26%）。
 3. **critic = クロスファミリー** — メインループ/プランナーと別ベンダーにする。
 4. **構造 = 強メインループ + シグナル駆動委譲 + 失敗駆動 effort エスカレーション。**
@@ -197,7 +195,7 @@ opencode-go/<model>                           （effort 省略 = モデル既定
 <img src="assets/profiles-matrix.svg" alt="プロファイル × 役割 マトリクス" width="100%">
 </div>
 
-> ★ = 日常推奨。v2.1.0 カタログは同等なプロファイル群ではなく 4階層の8バンドルである。全バンドルは `required_providers ≥ 2`、基本 `critic=cross-family`（例外は `SAME_FAMILY_OK`+WARN）、エンジン effort ハードルールとセレクタ検証（[§6](#6--検証マトリクス)）に従う。2026-08-17 の最終ロスター・バッテリーで出荷席（Opus 5·Grok 4.6 含む）はグリーンだった。08-16 の実行は eco.executor 変更より前である。
+> ★ = 日常推奨。v3.0.0 カタログは同等なプロファイル群ではなく 4階層の8バンドルである。全バンドルは `required_providers ≥ 2`、基本 `critic=cross-family`（例外は `SAME_FAMILY_OK`+WARN）、エンジン effort ハードルールとセレクタ検証（[§6](#6--検証マトリクス)）に従う。2026-08-17 の最終ロスター・バッテリーで出荷席（Opus 5·Grok 4.6 含む）はグリーンだった。08-16 の実行は v2.1.0 の `eco.executor` 交換より前である（そのバンドルは v3 で削除された）。
 
 <details>
 <summary><b>📋 完全な YAML を展開（モデルマッピングは gjc-profiles.yml と同一 — コメントは除去済み。注釈付きの韓国語正本は <a href="./gjc-profiles.yml">gjc-profiles.yml</a>）</b></summary>
@@ -294,7 +292,7 @@ profiles:
 ## 6. ✅ 検証マトリクス
 
 > 凡例: ✅ 実呼び出しグリーン（括弧内は検証日）· 🔴 失敗 · ⚠ 注意/クランプ · †‡ 脚注 · ●○ 相対コスト。
-> 実呼び出し記録は3つあり用途が異なる。**08-16**（gjc 0.13.3、全プロバイダの中核セレクタ — [記録](./evidence/2026-08-16-selectors.md)、0.9.6 グリーンは 07-10 rerun-3）は eco.executor 変更より前で、最終席の全数カバーではない。**出荷席ゲートの正は [08-17 再実行](./evidence/2026-08-17-selectors-rerun-2.md)** — 本 PR で修正した `revalidate.sh`（YAML 派生ロスター・カナリア重複ガード・FAIL サブシェル修正）の実行結果で、終了コード 0・回帰 0 件。**単一メッセージ 476k の根拠は [08-17 初回実行](./evidence/2026-08-17-selectors.md)** にある（修正前ハーネスの出力なのでゲート正としては使わない）。v2.1 出荷席は全てグリーン。DeepSeek はこのアカウントで 403 China opt-in のため出荷席から外した。
+> 実呼び出し記録は3つあり用途が異なる。**08-16**（gjc 0.13.3、全プロバイダの中核セレクタ — [記録](./evidence/2026-08-16-selectors.md)、0.9.6 グリーンは 07-10 rerun-3）は v2.1.0 の `eco.executor` がまだ DeepSeek だった時点で、最終席の全数カバーではない。**出荷席ゲートの正は [08-17 再実行](./evidence/2026-08-17-selectors-rerun-2.md)** — 本 PR で修正した `revalidate.sh`（YAML 派生ロスター・カナリア重複ガード・FAIL サブシェル修正）の実行結果で、終了コード 0・回帰 0 件。**単一メッセージ 476k の根拠は [08-17 初回実行](./evidence/2026-08-17-selectors.md)** にある（修正前ハーネスの出力なのでゲート正としては使わない）。v2.1 出荷席は全てグリーン。DeepSeek はこのアカウントで 403 China opt-in のため出荷席から外した。
 
 | プロバイダ | 検証済みセレクタ |
 |---|---|
@@ -325,7 +323,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> antigravity のライブ面は当日中にも変わり、`--list-models` 表記はキャッシュの場合がある。席に採用する前に実呼び出しで確認し、ディスカバリ未更新なら再ログイン/再試行またはバンドル id を使う。**eco critic の代替セレクタは現在推奨案が無い** — `glm-5.2` は同じバンドルの executor なので critic に使うと相互検証が消え、`deepseek-v4-pro` はこのアカウントで 403 China opt-in。席を変えるなら系統の独立性と `required_providers` を併せて再検討すること。
+> antigravity のライブ面は当日中にも変わり、`--list-models` 表記はキャッシュの場合がある。席に採用する前に実呼び出しで確認し、ディスカバリ未更新なら再ログイン/再試行またはバンドル id を使う。**`gemini-3-flash:low` は v3 で出荷席が0個**（v2.1.0 の `eco.critic` が唯一だった）— `glm-5.2` は同じバンドルの executor なので critic に使うと相互検証が消え、`deepseek-v4-pro` はこのアカウントで 403 China opt-in。席を変えるなら系統の独立性と `required_providers` を併せて再検討すること。
 
 <details>
 <summary><b>レイテンシ参考（マイクロベンチ 2026-07-02; 08-16 ping は Opus 5·Grok 4.6）</b></summary>
@@ -400,8 +398,8 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 巻き戻し（バ
 | マージ/リリース前・セキュリティ・決済 | `escalation`（手動トリガー — routing-rules の Escalation 契約） |
 | PR レビュー・セキュリティ監査セッション | `cyber-cop` |
 | 多系列合意が必要な決定 | `llm-council`（+ routing-rules の Council 契約） |
-| 精度最優先（opt-in premium） | `ultimate-opus` / `ultimate-sol`（Sol 軸実験） / `dream-team`（Fable・credits 覚悟） |
-| 大量リファクタ・マイグレーション | `eco` |
+| 精度最優先（opt-in premium） | `ultimate-opus` |
+| 大量リファクタ・マイグレーション | `budget`（ゲート通過時） |
 | 巨大コードベースへ突入 | `monorepo` |
 | 単一ベンダーのみで運用 | GJC 内蔵プロファイル（`claude-opus`・`codex-*` など — このカタログ外） |
 
@@ -426,14 +424,14 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 
 | モデル | $/1M (in/out) | 役割 |
 |---|---|---|
-| Claude Fable 5 | 10 / 50（バッチ 5/25 · キャッシュヒット 1）† | dream-team default·executor · escalation executor |
+| Claude Fable 5 | 10 / 50（バッチ 5/25 · キャッシュヒット 1）† | escalation executor |
 | Claude Opus 5 | 5 / 25 | default·executor の基幹（4.8 後継） |
-| Claude Sonnet 5 | 3 / 15（イントロ 2/10 ~2026-08-31）‡ | eco executor 代替 |
-| GPT-5.6 Sol | 5 / 30（Fast モードは 12.5/75） | planner（daily·sprint·ultimate-opus·dream-team·council·escalation）· ultimate-sol 3席 · cyber-cop executor·critic |
-| GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
-| GPT-5.6 Luna | 1 / 6 | eco planner（v2 新規採用） |
+| Claude Sonnet 5 | 3 / 15（イントロ 2/10 ~2026-08-31）‡ | **未出荷** — 席なし（参考用） |
+| GPT-5.6 Sol | 5 / 30（Fast モードは 12.5/75） | planner（daily·sprint·ultimate-opus·council·escalation）· cyber-cop executor·critic |
+| GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
+| GPT-5.6 Luna | 1 / 6 | **daily executor `:max`**（v3 昇格 — D-1 が `{max}` 単独強制） |
 | Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3種・llm-council・escalation）— `/login xai` または XAI_API_KEY |
-| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic |
+| GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **未出荷** — このアカウントで 403 China opt-in（カタログ id は生存） |
 | Gemini 3.1 Pro / 3-flash | プレビュー/サブスクトークン | planner·architect·critic |
 
@@ -445,14 +443,13 @@ Gemini は [Google AI Pro/Ultra](https://antigravity.google/docs/plans) のサ�
 
 | プロファイル | コスト | 主因 |
 |---|---|---|
-| dream-team | ●●●●● | default·executor Fable 5 — Max/premium Team 週次上限 50%、Pro は credits $10/50 |
 | escalation | ●●●●● | executor Fable `:xhigh`（救援投手 — 間欠使用）+ planner Sol `:xhigh` + 4 ベンダー認証 |
-| ultimate-opus / ultimate-sol | ●●●●○ | Opus または Sol 3席 `:high~xhigh` + Grok critic（`/login xai` または XAI_API_KEY） |
+| ultimate-opus | ●●●●○ | Opus 3席 `:high~xhigh` + Grok critic（`/login xai` または XAI_API_KEY） |
 | llm-council | ●●●●○ | 4 ベンダー認証 + Sol `:xhigh` planner — council 実行時は票数分課金 |
 | coding-sprint | ●●●○○ | executor Opus `:high`（失敗シグナル時のみ max 昇格） |
 | daily | ●●●○○ | 本体 Opus `:medium`、委譲は中・低価格へ分散 — サブスク OAuth 3ベンダー |
 | monorepo | ●●●○○ | executor/architect Opus + Gemini（プレビュー/サブスク）+ GLM-5.2 |
-| eco | ●○○○○ | executor GLM-5.2（$1.40）+ Luna（$1）+ Gemini プレビュー — *絶対最安は内蔵 `codex-eco`* |
+| budget | ●○○○○ | executor GLM-5.2（$1.40）+ planner Qwen3.8 Max + Gemini プレビュー — *絶対最安は内蔵 `codex-eco`* |
 
 ---
 

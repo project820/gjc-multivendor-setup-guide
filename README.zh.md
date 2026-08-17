@@ -14,14 +14,14 @@
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
-<img src="assets/role-winners.svg" alt="dream-team 配置 — 各角色最强假设" width="100%">
+<img src="assets/role-winners.svg" alt="ultimate-opus 配置 — 各角色最强假设" width="100%">
 
 </div>
 
 **[한국어](./README.md) · [English](./README.en.md) · 中文（本页） · [日本語](./README.ja.md)**
 
 > [!NOTE]
-> 核心角色与选择器概念已合并至 [GJC 官方文档](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md)（[PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860)，`dev`）。本仓库提供一键安装、4 层级 10 捆绑目录和[维护与验证工具](./MAINTAINING.md)。
+> 核心角色与选择器概念已合并至 [GJC 官方文档](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md)（[PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860)，`dev`）。本仓库提供一键安装、4 层级 8 捆绑目录和[维护与验证工具](./MAINTAINING.md)。
 
 ---
 
@@ -62,11 +62,9 @@ gjc                        # 新会话自动使用 daily
 | Core | 🏎️ **coding-sprint** | 把 executor 升到 Opus 的实现吞吐特化 | 纯实现冲刺 |
 | Core | 🚨 **cyber-cop** | reviewer 模式 — architect·critic 主导，专用于 PR 审查·安全审计 | 审查他人 PR·合并门禁·安全审计 |
 | Premium (exp) | 🏆 **ultimate-opus** | Anthropic 质量基底 premium | 精度比成本更重要 |
-| Premium (exp) | 🧪 **ultimate-sol** | Sol 基底 premium — agentic/终端/浏览轴 | 长程自治 workflow 实验 |
-| Premium (exp) | 🔥 **dream-team** | 角色最强假设 — Fable default+executor | 最高质量，接受 credits 成本 |
 | Workflow | 🏛️ **llm-council** | 4 系列座位表与 Council 契约 | 需要多系列共识的决策 |
 | Workflow | 🛡️ **escalation** | 手动升级 — Fable 救援投手 + critic 3 票评审团 | 合并·安全·支付·不可逆变更 |
-| Specialized (exp) | 💸 **eco** | 多厂商低价实验 — *不是绝对最低价* | 成本压力·大批量 |
+| Specialized (exp) | 💸 **budget** | 受门禁控制的低成本多厂商实验 — *不是绝对最低价* | 成本压力·大批量 |
 | Specialized (exp) | 🗺️ **monorepo** | 全局 ≥1M ctx | 巨型代码库 |
 
 完整目录 ↓ [§5](#5-️-最终目录--8-个捆绑--4-层级)；reviewer 模式与预告见下方。
@@ -84,11 +82,11 @@ gjc                        # 新会话自动使用 daily
 
 | 角色 | 做什么 | 最佳模型 |
 |---|---|---|
-| 🧠 **推理/规划**（planner） | 排序、验收标准 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 各捆绑席位见[§5](#5-️-最终目录--8-个捆绑--4-层级)（例外：cyber-cop·monorepo=Gemini，eco=Luna） |
+| 🧠 **推理/规划**（planner） | 排序、验收标准 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 各捆绑席位见[§5](#5-️-最终目录--8-个捆绑--4-层级)（例外：cyber-cop·monorepo=Gemini，budget=Qwen3.8 Max） |
 | 🔨 **实现**（executor） | 真正写/改代码 | **Claude Fable 5**（SWE-bench Verified **95.0**）— 订阅内最强是 **Opus 5**（4.8 后继 · 同价 $5/$25 · 2026-07-24） |
 | 🔭 **代码评审**（architect） | 大型仓库导航、架构 | **Gemini 3.1 Pro**（多模态 MMMU-Pro 81%） · 超长上下文（>200k）→ **Opus** |
 | ⚖️ **独立批评**（critic） | 对抗式验证 | **cross-family**（与主循环不同厂商） |
-| 🎛️ **编排**（default） | 工具调用、路由、诚实性 | **Anthropic 旗舰** — Opus 5（路由质量 = 全系统上限；`dream-team` 用 Fable 5。非 Anthropic 路由只有 opt-in `ultimate-sol`（Sol）与不含 Anthropic 的 `eco`（Terra）） |
+| 🎛️ **编排**（default） | 工具调用、路由、诚实性 | **Anthropic 旗舰** — Opus 5（路由质量 = 全系统上限；非 Anthropic 路由仅限于**不要求 anthropic 的捆绑**，v3 中只有 `budget`（Terra）） |
 
 ---
 
@@ -102,7 +100,7 @@ gjc                        # 新会话自动使用 daily
 
 三条设计原则：
 
-- **主循环绝不让步。** 默认使用 Anthropic 旗舰（Opus 5 — `dream-team` 用 Fable 5）；例外仅为 opt-in `ultimate-sol`（Sol）与不含 Anthropic 的 `eco`（Terra）。
+- **主循环绝不让步。** 默认使用 Anthropic 旗舰（Opus 5）。非 Anthropic 路由仅限于**不要求 anthropic 的捆绑**，v3 中只有 `budget`（Terra）— 规则根本不会触发，因此无需列入 allowlist。
 - **多样性只在「验证」环节获益。** 让 `critic` 用不同厂商以保持独立，但串行链要短（可靠性按 `0.99ⁿ` 衰减）。
 - **effort 是非对称经济学。** `medium→high` 只提升 1~2 分却要约 23 倍 token；只在解不出来时才升档。
 
@@ -183,7 +181,7 @@ opencode-go/<model>                           （省略 effort = 模型默认）
 
 **核心共识原则** — † planner 已以 2026-07-10 Sol GA 取代 2026-07-02 Gemini 3.1 Pro 快照；architect 轴在 Gemini 3.5 Pro 发布时重新验证。
 
-1. **default = Anthropic 旗舰（Opus/Fable）固定**；例外为 `ultimate-sol`（Sol）及不含 Anthropic 的 `eco`（Terra）。
+1. **default = Anthropic 旗舰（Opus/Fable）固定** — 路由质量 = 全系统上限。**不要求 anthropic 的捆绑不适用此规则**（v3 `budget` — Terra 路由）。v3 中没有 allowlist 例外。
 2. **architect = Gemini 3.1 Pro（多模态）/ Opus（超长上下文）**；200k+ 文本有效检索用 Opus。
 3. **critic = cross-family**，以缓解 self-preference bias。
 4. **结构 = 强主循环 + 按信号委派 + 按失败升档 effort。**
@@ -197,7 +195,7 @@ opencode-go/<model>                           （省略 effort = 模型默认）
 <img src="assets/profiles-matrix.svg" alt="配置 × 角色矩阵" width="100%">
 </div>
 
-> ★ = 日常推荐。v2.1.0 目录是 4 层级的 8 个捆绑：全部 `required_providers ≥ 2`，默认 `critic=cross-family`（例外为 `SAME_FAMILY_OK`+WARN），并遵循引擎 effort 硬规则及[§6](#6--验证矩阵)选择器验证；2026-08-17 最终席位批次中的出货席位（含 Opus 5·Grok 4.6）均为绿色；08-16 的运行早于 eco.executor 变更。
+> ★ = 日常推荐。v3.0.0 目录不是等价的配置捆绑，而是 4 层级的 8 个捆绑：全部 `required_providers ≥ 2`，默认 `critic=cross-family`（例外为 `SAME_FAMILY_OK`+WARN），并遵循引擎 effort 硬规则及[§6](#6--验证矩阵)选择器验证；2026-08-17 最终席位批次中的出货席位（含 Opus 5·Grok 4.6）均为绿色；08-16 的运行早于 v2.1.0 `eco.executor` 更换（该捆绑已在 v3 删除）。
 
 <details>
 <summary><b>📋 展开完整 YAML（模型映射与 gjc-profiles.yml 一致 — 已去除注释）</b></summary>
@@ -288,7 +286,7 @@ profiles:
 </details>
 
 > [!TIP]
-> `opencode-go` 以 `OPENCODE_API_KEY` 激活 `eco` executor 与 `monorepo` critic；验证与候选详情见[韩文正本 §5](./README.md#프로필별-설계-근거)。
+> `opencode-go` 以 `OPENCODE_API_KEY` 激活 `budget` executor 与 `monorepo` critic；验证与候选详情见[韩文正本 §5](./README.md#프로필별-설계-근거)。
 
 各捆绑的设计理由与 caveat 已浓缩；完整目录见[韩文正本 §5](./README.md#5-️-최종-카탈로그--8-번들--4계층)，逐捆绑说明见[设计依据](./README.md#프로필별-설계-근거)。
 
@@ -297,7 +295,7 @@ profiles:
 ## 6. ✅ 验证矩阵
 
 > 图例：✅ 真实调用绿色（括号为验证日）· 🔴 失败 · ⚠ 注意/夹取 · †‡ 脚注 · ●○ 相对成本。
-> 共有三份真实调用记录，用途不同。**08-16**（gjc 0.13.3，各提供方核心选择器 — [记录](./evidence/2026-08-16-selectors.md)；0.9.6 绿为 07-10 rerun-3）早于 eco.executor 变更，并非最终席位全量覆盖。**出货席位门禁以 [08-17 重跑](./evidence/2026-08-17-selectors-rerun-2.md) 为准** — 由本 PR 修复后的 `revalidate.sh`（YAML 派生名单、金丝雀重叠守卫、FAIL 子 shell 修复）运行产出，退出码 0、回归 0。**单条消息 476k 的证据在 [08-17 首次运行](./evidence/2026-08-17-selectors.md)**（属修复前脚手架产物，故不作门禁依据）。v2.1 出货席位全绿；DeepSeek 在本账号 403 China opt-in，已从出货席位移除。
+> 共有三份真实调用记录，用途不同。**08-16**（gjc 0.13.3，各提供方核心选择器 — [记录](./evidence/2026-08-16-selectors.md)；0.9.6 绿为 07-10 rerun-3）早于 v2.1.0 的 `eco.executor` 仍为 DeepSeek 的时期，故并非最终席位全量覆盖。**出货席位门禁以 [08-17 重跑](./evidence/2026-08-17-selectors-rerun-2.md) 为准** — 由本 PR 修复后的 `revalidate.sh`（YAML 派生名单、金丝雀重叠守卫、FAIL 子 shell 修复）运行产出，退出码 0、回归 0。**单条消息 476k 的证据在 [08-17 首次运行](./evidence/2026-08-17-selectors.md)**（属修复前脚手架产物，故不作门禁依据）。v2.1 出货席位全绿；DeepSeek 在本账号 403 China opt-in，已从出货席位移除。
 
 | 提供方 | 已验证选择器 |
 |---|---|
@@ -328,7 +326,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> antigravity 的 live 表面当日也会变化，`--list-models` 标示可能是缓存；采纳席位前真实调用。发现未刷新时重新登录/重试，或使用捆绑 id。**eco critic 目前没有推荐的替代 selector** — `glm-5.2` 已是同一 bundle 的 executor，用作 critic 会失去交叉校验；`deepseek-v4-pro` 在本账号 403 China opt-in。更换席位需同时复核系列独立性与 `required_providers`。
+> antigravity 的 live 表面当日也会变化，`--list-models` 标示可能是缓存；采纳席位前真实调用。发现未刷新时重新登录/重试，或使用捆绑 id。**`gemini-3-flash:low` 在 v3 中的出货席位为 0**（v2.1.0 中唯一席位是 `eco.critic`）— `glm-5.2` 是同一捆绑的 executor，用作 critic 会失去交叉校验；`deepseek-v4-pro` 在本账号 403 China opt-in。更换席位需同时复核系列独立性与 `required_providers`。
 
 <details>
 <summary><b>延迟参考（微基准 2026-07-02；08-16 ping 为 Opus 5·Grok 4.6）</b></summary>
@@ -403,8 +401,8 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 回滚（恢复备
 | 合并/发布前·安全·支付 | `escalation`（手动触发 — routing-rules 的 Escalation 契约） |
 | PR 审查·安全审计会话 | `cyber-cop` |
 | 需要多系列共识的决策 | `llm-council`（+ routing-rules 的 Council 契约） |
-| 精度至上（opt-in premium） | `ultimate-opus` / `ultimate-sol`（Sol 轴实验）/ `dream-team`（Fable·credits） |
-| 大批量重构·迁移 | `eco` |
+| 精度至上（opt-in premium） | `ultimate-opus` |
+| 大批量重构·迁移 | `budget`（通过门禁时） |
 | 进入巨型代码库 | `monorepo` |
 | 仅单厂商运营 | GJC 内置配置（`claude-opus`·`codex-*` 等 — 不在本目录内） |
 
@@ -429,14 +427,14 @@ Gemini 使用 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 订�
 
 | 模型 | $/1M (in/out) | 角色 |
 |---|---|---|
-| Claude Fable 5 | 10 / 50（批量 5/25 · 缓存命中 1）† | dream-team default·executor · escalation executor |
+| Claude Fable 5 | 10 / 50（批量 5/25 · 缓存命中 1）† | escalation executor |
 | Claude Opus 5 | 5 / 25 | default·executor 基础设施（4.8 后继） |
-| Claude Sonnet 5 | 3 / 15（入门价 2/10 至 2026-08-31）‡ | eco executor 备选 |
-| GPT-5.6 Sol | 5 / 30（Fast 模式为 12.5/75） | planner（daily·sprint·ultimate-opus·dream-team·council·escalation）·ultimate-sol 3 席·cyber-cop executor·critic |
-| GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
-| GPT-5.6 Luna | 1 / 6 | eco planner（v2 新采用） |
+| Claude Sonnet 5 | 3 / 15（入门价 2/10 至 2026-08-31）‡ | **未出货** — 无席位（供参考） |
+| GPT-5.6 Sol | 5 / 30（Fast 模式为 12.5/75） | planner（daily·sprint·ultimate-opus·council·escalation）·cyber-cop executor·critic |
+| GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
+| GPT-5.6 Luna | 1 / 6 | **daily executor `:max`**（v3 晋升 — D-1 强制仅 `{max}`） |
 | Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3 种·llm-council·escalation）— `/login xai` 或 XAI_API_KEY |
-| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic |
+| GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **未出货** — 本账号 403 China opt-in（目录 id 仍在） |
 | Gemini 3.1 Pro / 3-flash | 预览/订阅 token | planner·architect·critic |
 
@@ -448,14 +446,13 @@ Gemini 使用 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 订�
 
 | 配置 | 成本 | 主要成本来源 |
 |---|---|---|
-| dream-team | ●●●●● | default·executor Fable 5 — Max/premium Team 每周额度 50%；Pro 用 credits $10/50 |
 | escalation | ●●●●● | executor Fable `:xhigh`（救援投手 — 间歇使用）+ planner Sol `:xhigh` + 4 厂商认证 |
-| ultimate-opus / ultimate-sol | ●●●●○ | Opus 或 Sol 3 席 `:high~xhigh` + Grok critic（`/login xai` 或 XAI_API_KEY） |
+| ultimate-opus | ●●●●○ | Opus 3 席 `:high~xhigh` + Grok critic（`/login xai` 或 XAI_API_KEY） |
 | llm-council | ●●●●○ | 4 厂商认证 + Sol `:xhigh` planner — 执行 Council 工作流时按票数计费 |
 | coding-sprint | ●●●○○ | executor Opus `:high`（仅失败信号时升 max） |
 | daily | ●●●○○ | 主循环 Opus `:medium`，委派中低价分散 — 订阅 OAuth 3 厂商 |
 | monorepo | ●●●○○ | executor/architect Opus + Gemini（预览/订阅）+ GLM-5.2 |
-| eco | ●○○○○ | executor GLM-5.2（$1.40）+ Luna（$1）+ Gemini 预览；*绝对最低价*是内置 `codex-eco` |
+| budget | ●○○○○ | executor GLM-5.2（$1.40）+ planner Qwen3.8 Max + Gemini 预览；但*绝对最低价*是内置 `codex-eco` |
 
 ---
 

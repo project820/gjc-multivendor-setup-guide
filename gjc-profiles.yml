@@ -28,7 +28,8 @@ profiles:
     required_providers: [anthropic, openai-codex, google-antigravity]
     model_mapping:
       default:   anthropic/claude-opus-5:medium                 # v2.1: 4.8→5 like-for-like. 본체 효율 knee · 1M ctx · $5/$25 동가
-      executor:  openai-codex/gpt-5.6-luna:max                # 코딩특화 $2.5/15에 ≈GPT-5.5급(공식 5.6 평가표)·벤더분산
+      executor:  openai-codex/gpt-5.6-luna:max                # v3 승격(terra:high→luna:max): $1/$6 최저 단가·벤더분산. D-1 이 :max 단독 강제 — 다른 effort 는 validator 거부
+                                                              # ⚠ 측정으로 이긴 좌석이 아니다 — :max vs :xhigh 60콜 배터리에서 정확도 이득 0/10(Wilcoxon p=0.1587). 정책 좌석: docs/whats-new-v3.md
       planner:   openai-codex/gpt-5.6-sol:high                  # 장기 워크플로 완주 1위(Agents' Last Exam 52.7)·tool-heavy 분해
       architect: google-antigravity/gemini-3.1-pro-low:high     # 1M ctx·멀티모달(MMMU-Pro)·GPQA 94.3 — Gemini 전문좌석 (3.5 Pro 미입점)
       critic:    google-antigravity/gemini-3.1-pro-low:high     # grok→Gemini — xai 키 장벽 제거(구독-only daily) + 본체(Opus 5)와 cross-family 유지. ⚠architect 와 동일 셀렉터 — 3벤더 구독-only 제약에서 본체교차+plan/crit교차를 동시에 만족하는 계열이 Google 뿐(의도적 수용). 독립성 강화 원하면 xai 로그인 후 critic 을 xai/grok-4.6:medium 으로 스왑
@@ -104,6 +105,9 @@ profiles:
       critic:    google-antigravity/gemini-3.1-pro-low:high
 
 # ─────────────────────────────────────────────────────────────────────────────
+# v2.1.0 → v3.0.0 (MAJOR): 10 번들 → 8 번들. dream-team·eco·ultimate-sol 삭제 · budget 신설 ·
+#   daily.executor terra:high → luna:max. 1차 선택축이 tier → required_providers 최소조합으로 이동.
+#   아래 v2 이행 이력에 나오는 삭제 번들 이름은 그 시점 기록이며 현행 로스터가 아니다.
 # v2.0.1 → v2.1.0: Opus 4.8→Opus 5 · Grok 4.5→Grok 4.6 like-for-like. 10번들·4계층 불변.
 # v1.11.0 → v2.0.0 마이그레이션:
 #   ultimate → ultimate-opus (executor max→high, architect gemini→opus) · ultimate-f5/legend → dream-team ·
@@ -115,7 +119,8 @@ profiles:
 #   GJC 실효: fable-5 출하 상한 xhigh · sonnet-5 출하 상한 high (카탈로그는 sonnet-5 에 xhigh/max 를 찍지만 클램프 미측정).
 # Claude Opus 5 (2026-07-24): $5/$25 동가 · 1M/128K · effort low..max · Max 기본·Pro 최강. 4.8 은 legacy 로 잔류·호출 가능.
 # GPT-5.6(2026-07-09 GA): Sol $5/$30 · Terra $2.5/$15 · Luna $1/$6 — API 1.05M/128K, GJC 0.13.3 usable prompt budget 372K.
-#   :max 는 수용되나 심도 미검증 — 미출하(상한 xhigh). ⚠ METR: Sol 의 SWE 평가 게이밍 적발 — SWE류 벤치 단독근거 승격 금지.
+#   :max 는 수용되나 심도 미검증 — Sol·Terra 는 미출하(상한 xhigh), Luna 만 v3 에서 :max 단독 출하(D-1 강제).
+#   ⚠ METR: Sol 의 SWE 평가 게이밍 적발 — SWE류 벤치 단독근거 승격 금지.
 # opencode-go: OPENCODE_API_KEY 필요(budget.executor·budget.planner·monorepo.critic). glm-5.2 검증✅(08-16).
 #   deepseek-v4-flash/pro 는 이 계정 08-16 에 403 China opt-in — 카탈로그 잔류, 지역 정책.
 # xai: `/login xai` 또는 XAI_API_KEY 설정 (premium 3종 + llm-council/escalation 의 critic).

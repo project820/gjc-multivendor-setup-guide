@@ -14,7 +14,7 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
-<img src="assets/role-winners.svg" alt="dream-team setup — strongest hypothesis per role" width="100%">
+<img src="assets/role-winners.svg" alt="ultimate-opus setup — strongest hypothesis per role" width="100%">
 
 </div>
 
@@ -62,11 +62,9 @@ gjc                        # new sessions use daily automatically
 | Core | 🏎️ **coding-sprint** | implementation-throughput bundle with executor promoted to Opus | pure implementation sprint |
 | Core | 🚨 **cyber-cop** | reviewer mode — architect and critic lead, dedicated to PR review and security audits | reviewing others' PRs · merge gates · security audits |
 | Premium (exp) | 🏆 **ultimate-opus** | Anthropic-quality premium baseline | accuracy matters more than cost |
-| Premium (exp) | 🧪 **ultimate-sol** | Sol-baseline premium — agentic/terminal/browser axis | long autonomous workflow experiments |
-| Premium (exp) | 🔥 **dream-team** | strongest-per-role hypothesis — Fable default+executor | highest quality, credits accepted |
 | Workflow | 🏛️ **llm-council** | 4-family seating chart and Council contract | decisions needing multi-family consensus |
 | Workflow | 🛡️ **escalation** | manual escalation — Fable rescue pitcher + 3-vote critic panel | merges · security · billing · irreversible changes |
-| Specialized (exp) | 💸 **eco** | low-cost multi-vendor experiment — *not absolute cheapest* | cost pressure · bulk work |
+| Specialized (exp) | 💸 **budget** | low-cost gated multi-vendor experiment — *not absolute cheapest* | cost pressure · bulk work |
 | Specialized (exp) | 🗺️ **monorepo** | ≥1M ctx everywhere | huge codebases |
 
 Full catalog: [§5](#5-️-final-catalog--8-bundles--4-tiers) · reviewer mode and teasers below.
@@ -84,11 +82,11 @@ Full catalog: [§5](#5-️-final-catalog--8-bundles--4-tiers) · reviewer mode a
 
 | Role | What it does | Best model |
 |---|---|---|
-| 🧠 **reasoning/planning** (planner) | sequencing, acceptance criteria | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · GA 2026-07-09) — bundle-specific seats: see §5 (exceptions: cyber-cop/monorepo=Gemini, eco=Luna) |
+| 🧠 **reasoning/planning** (planner) | sequencing, acceptance criteria | **GPT-5.6 Sol** (Agents' Last Exam 52.7 · GA 2026-07-09) — bundle-specific seats: see §5 (exceptions: cyber-cop/monorepo=Gemini, budget=Qwen3.8 Max) |
 | 🔨 **implementation** (executor) | writing/editing real code | **Claude Fable 5** (SWE-bench Verified **95.0**) — strongest *subscription-included* is **Opus 5** (Opus 4.8 successor · same $5/$25 · 2026-07-24) |
 | 🔭 **code review** (architect) | large-repo navigation, architecture | **Gemini 3.1 Pro** (multimodal MMMU-Pro 81%) · ultra-long-context (>200k) → **Opus** |
 | ⚖️ **independent critique** (critic) | adversarial verification | **cross-family** (different vendor than the main loop) |
-| 🎛️ **orchestration** (default) | tool-calling, routing, honesty | **Anthropic flagship** — Opus 5 (router quality caps the whole system; `dream-team` uses Fable 5. The only non-Anthropic routers are opt-in `ultimate-sol` (Sol) and Anthropic-free `eco` (Terra)) |
+| 🎛️ **orchestration** (default) | tool-calling, routing, honesty | **Anthropic flagship** — Opus 5 (router quality caps the whole system; the only non-Anthropic router in v3 is `budget` (Terra)) |
 
 ---
 
@@ -104,7 +102,7 @@ Full catalog: [§5](#5-️-final-catalog--8-bundles--4-tiers) · reviewer mode a
 
 Three design principles:
 
-- **The main loop is non-negotiable.** Most median tasks are handled by the main loop alone, so dropping `default` to a weak model collapses perceived quality across the board. Default to the Anthropic flagship (Opus 5 — Fable 5 in `dream-team`). Only two non-Anthropic routers exist: the opt-in `ultimate-sol` experiment (Sol — validator-listed, WARN surfaced) and the Anthropic-free `eco` (Terra — the router invariant does not apply).
+- **The main loop is non-negotiable.** Most median tasks are handled by the main loop alone, so dropping `default` to a weak model collapses perceived quality across the board. Default to the Anthropic flagship (Opus 5). The only non-Anthropic router in v3 is `budget` (Terra), which does not require Anthropic, so the router invariant does not apply and needs no allowlist entry.
 - **Diversity pays off only in *verification*.** Keep `critic` on a different vendor for independence, but keep serial chains short (reliability decays as `0.99ⁿ`).
 - **Effort is asymmetric economics.** `medium→high` is +1–2 points for ~23× the tokens. Blindly maxing is waste — escalate only because it could not solve the work.
 
@@ -185,7 +183,7 @@ opencode-go/<model>                           (omit effort = model default)
 
 **Consensus principles** — † The planner row reflects the 2026-07-10 Sol GA replacing the 2026-07-02 Gemini 3.1 Pro snapshot; re-verify the architect axis when Gemini 3.5 Pro ships.
 
-1. **default = Anthropic flagship (Opus/Fable), fixed** — router quality is the whole-system ceiling. Exceptions: `ultimate-sol` (Sol router — validator-listed opt-in experiment) and `eco` (Anthropic-free bundle — Terra router).
+1. **default = Anthropic flagship (Opus/Fable), fixed** — router quality is the whole-system ceiling. **Bundles that do not require Anthropic are outside its scope** (v3 `budget` — Terra router). There are **no** allowlist exceptions in v3.
 2. **architect = Gemini 3.1 Pro (multimodal) / Opus (ultra-long-context)** — Gemini is best for vision and mid ctx; for 200k+ text retrieval use Opus (MRCR 76%@1M; Gemini 26%).
 3. **critic = cross-family** — a different vendor than the main loop/planner mitigates self-preference bias.
 4. **Structure = strong main loop + signal-driven delegation + failure-driven effort escalation.**
@@ -201,7 +199,7 @@ opencode-go/<model>                           (omit effort = model default)
 
 </div>
 
-> ★ = everyday recommendation. The v2.1.0 catalog is not a set of equal profiles but 8 bundles across 4 tiers. Every bundle has `required_providers ≥ 2`; `critic=cross-family` by default (exceptions are `SAME_FAMILY_OK` with WARN); it follows engine effort hard-rules and selector verification ([§6](#6--verification-matrix)). Every shipped seat (including Opus 5 · Grok 4.6) was green in the 2026-08-17 final-roster battery; the 2026-08-16 run predates the eco.executor change.
+> ★ = everyday recommendation. The v3.0.0 catalog is not a set of equal profiles but 8 bundles across 4 tiers. Every bundle has `required_providers ≥ 2`; `critic=cross-family` by default (exceptions are `SAME_FAMILY_OK` with WARN); it follows engine effort hard-rules and selector verification ([§6](#6--verification-matrix)). Every shipped seat (including Opus 5 · Grok 4.6) was green in the 2026-08-17 final-roster battery; the 2026-08-16 run predates the v2.1.0 `eco.executor` swap (that bundle was deleted in v3).
 
 <details>
 <summary><b>📋 Expand the full YAML (identical to gjc-profiles.yml by model mapping — comments stripped; the annotated Korean canonical lives in <a href="./gjc-profiles.yml">gjc-profiles.yml</a>)</b></summary>
@@ -298,7 +296,7 @@ profiles:
 ## 6. ✅ Verification matrix
 
 > Legend: ✅ live-call green (date in parentheses) · 🔴 failure · ⚠ caveat/clamp · †‡ footnotes · ●○ relative cost.
-> Three live records exist with different purposes. **08-16** (gjc 0.13.3, core selectors across providers — [record](./evidence/2026-08-16-selectors.md); 0.9.6 green is 07-10 rerun-3) predates the eco.executor change, so it is not full final-roster coverage. **The shipped-seat gate record is the [08-17 rerun](./evidence/2026-08-17-selectors-rerun-2.md)**, produced by the `revalidate.sh` this PR fixed (YAML-derived roster, canary overlap guard, FAIL subshell fix), exit 0 with zero regressions. **The 476k single-message evidence lives in the [first 08-17 run](./evidence/2026-08-17-selectors.md)**, which is a pre-fix harness output and is therefore not used as the gate record. Every v2.1 shipped seat is green; DeepSeek 403s China opt-in on this account and was dropped from shipped seats.
+> Three live records exist with different purposes. **08-16** (gjc 0.13.3, core selectors across providers — [record](./evidence/2026-08-16-selectors.md); 0.9.6 green is 07-10 rerun-3) predates the v2.1.0 `eco.executor` swap (that bundle was deleted in v3), so it is not full final-roster coverage. **The shipped-seat gate record is the [08-17 rerun](./evidence/2026-08-17-selectors-rerun-2.md)**, produced by the `revalidate.sh` this PR fixed (YAML-derived roster, canary overlap guard, FAIL subshell fix), exit 0 with zero regressions. **The 476k single-message evidence lives in the [first 08-17 run](./evidence/2026-08-17-selectors.md)**, which is a pre-fix harness output and is therefore not used as the gate record. Every v2.1 shipped seat is green; DeepSeek 403s China opt-in on this account and was dropped from shipped seats.
 
 | Provider | Verified selectors |
 |---|---|
@@ -329,7 +327,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> The antigravity live surface can change within a day and `--list-models` can be cached. Live-call before adopting a seat; re-login/retry when discovery is stale, or use the bundle id. **There is currently no recommended replacement selector for the eco critic** — `glm-5.2` is already this bundle's executor, so using it as critic destroys the cross-check, and `deepseek-v4-pro` returns 403 China opt-in on this account. Changing a seat requires re-checking family independence and `required_providers` together.
+> The antigravity live surface can change within a day and `--list-models` can be cached. Live-call before adopting a seat; re-login/retry when discovery is stale, or use the bundle id. **`gemini-3-flash:low` has zero shipping seats in v3** (v2.1.0 `eco.critic` was its only one) — `glm-5.2` is already that bundle's executor, so using it as critic destroys the cross-check, and `deepseek-v4-pro` returns 403 China opt-in on this account. Changing a seat requires re-checking family independence and `required_providers` together.
 
 <details>
 <summary><b>Latency reference (micro-bench 2026-07-02; 08-16 pings for Opus 5 · Grok 4.6)</b></summary>
@@ -410,8 +408,8 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # revert (restore ba
 | pre-merge/release · security · billing | `escalation` (manual trigger — routing-rules Escalation contract) |
 | PR review / security-audit session | `cyber-cop` |
 | decision needing multi-family consensus | `llm-council` (+ routing-rules Council contract) |
-| accuracy above all (opt-in premium) | `ultimate-opus` / `ultimate-sol` (Sol-axis experiment) / `dream-team` (Fable · credits accepted) |
-| bulk refactor · migration | `eco` |
+| accuracy above all (opt-in premium) | `ultimate-opus` |
+| bulk refactor · migration | `budget` (gated) |
 | entering a huge codebase | `monorepo` |
 | single-vendor operation | built-in GJC profiles (`claude-opus` · `codex-*` etc. — outside this catalog) |
 
@@ -436,14 +434,14 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 
 | Model | $/1M (in/out) | Role |
 |---|---|---|
-| Claude Fable 5 | 10 / 50 (batch 5/25 · cache hits 1)† | dream-team default·executor · escalation executor |
+| Claude Fable 5 | 10 / 50 (batch 5/25 · cache hits 1)† | escalation executor |
 | Claude Opus 5 | 5 / 25 | default·executor backbone (4.8 successor) |
-| Claude Sonnet 5 | 3 / 15 (intro 2/10 through 2026-08-31)‡ | eco executor alternative |
-| GPT-5.6 Sol | 5 / 30 (Fast mode is 12.5/75) | planner (daily·sprint·ultimate-opus·dream-team·council·escalation) · ultimate-sol 3 seats · cyber-cop executor·critic |
-| GPT-5.6 Terra | 2.5 / 15 | daily executor · coding-sprint critic · llm-council executor · eco default |
-| GPT-5.6 Luna | 1 / 6 | eco planner (new in v2) |
+| Claude Sonnet 5 | 3 / 15 (intro 2/10 through 2026-08-31)‡ | **not shipped** — no seat |
+| GPT-5.6 Sol | 5 / 30 (Fast mode is 12.5/75) | planner (daily·sprint·ultimate-opus·council·escalation) · cyber-cop executor·critic |
+| GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
+| GPT-5.6 Luna | 1 / 6 | **daily executor `:max`** (promoted in v3 — D-1 forces `{max}` alone) |
 | Grok 4.6 | 2 / 6 (<200k prompt) · 4 / 12 (≥200k) | critic (premium 3 bundles · llm-council · escalation) — `/login xai` or XAI_API_KEY |
-| GLM-5.2 (opencode-go) | 1.40 / 4.40 | eco executor · monorepo critic |
+| GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **not shipped** — 403 China opt-in on this account (catalog id still live) |
 | Gemini 3.1 Pro / 3-flash | preview/subscription token | planner·architect·critic |
 
@@ -455,14 +453,13 @@ Gemini uses [Google AI Pro/Ultra](https://antigravity.google/docs/plans) subscri
 
 | Bundle | Cost | Main driver |
 |---|---|---|
-| dream-team | ●●●●● | default·executor Fable 5 — Max/premium Team 50% of weekly limits; Pro uses credits $10/50 |
 | escalation | ●●●●● | executor Fable `:xhigh` (rescue pitcher — intermittent use) + planner Sol `:xhigh` + 4-vendor auth |
-| ultimate-opus / ultimate-sol | ●●●●○ | Opus or Sol 3 seats at `:high~xhigh` + Grok critic (`/login xai` or XAI_API_KEY) |
+| ultimate-opus | ●●●●○ | Opus 3 seats at `:high~xhigh` + Grok critic (`/login xai` or XAI_API_KEY) |
 | llm-council | ●●●●○ | 4-vendor auth + Sol `:xhigh` planner — council workflow bills by vote count when executed |
 | coding-sprint | ●●●○○ | executor Opus `:high` (raise to max only on failure signals) |
 | daily | ●●●○○ | main loop Opus `:medium`, delegation spread across mid/cheap models — subscription OAuth across 3 vendors |
 | monorepo | ●●●○○ | executor/architect Opus + Gemini (preview/subscription) + GLM-5.2 |
-| eco | ●○○○○ | executor GLM-5.2 ($1.40) + Luna ($1) + Gemini preview — not absolute cheapest; built-in `codex-eco` is |
+| budget | ●○○○○ | executor GLM-5.2 ($1.40) + planner Qwen3.8 Max + Gemini preview — but the absolute cheapest is the built-in `codex-eco` |
 
 ---
 
