@@ -12,7 +12,7 @@
 #             · antigravity 고추론 = gemini-3.1-pro-low:high 리터럴 핀. 퍼지 공간 fail-closed 유지 — gemini-3.1-pro-high 는 "not found".
 #             · Gemini 3.5 Pro 는 카탈로그에 없음. Flash 3.5/3.6 은 라이브이나 좌석 미승격(클래스 상이).
 #             · gpt-5.6 3종 카탈로그 low..max — :max 실호출 수용되나 심도 미검증, 출하 상한은 xhigh. usable prompt budget 372K(0.13.3 표기; 0.9.6은 373K).
-# grok-4.6: xai API(XAI_API_KEY) — $2/$6 (<200k prompt) / $4/$12 (≥200k) · ctx 500K. grok-build 변종은 bare 만 검증, 미출하.
+# grok-4.6: `/login xai` OAuth 또는 XAI_API_KEY — $2/$6 (<200k prompt) / $4/$12 (≥200k) · ctx 500K. grok-build 변종은 bare 만 검증, 미출하.
 # Gemini 는 google-antigravity 프로바이더(무료 공개 프리뷰 + AI Pro/Ultra 는 한도 상향).
 # 근거: evidence/2026-08-16-catalog.txt · evidence/2026-08-16-selectors.md · evidence/2026-08-16-notes.md
 #       (v2 구조 freeze: research/2026-07-10-gjc-v2-profile-review/outputs/two-axis-synthesis-and-proposed-config-v1.md).
@@ -138,7 +138,9 @@ profiles:
 #   :max 는 수용되나 심도 미검증 — 미출하(상한 xhigh). ⚠ METR: Sol 의 SWE 평가 게이밍 적발 — SWE류 벤치 단독근거 승격 금지.
 # opencode-go: OPENCODE_API_KEY 필요(eco.executor·monorepo.critic). glm-5.2 검증✅(08-16).
 #   deepseek-v4-flash/pro 는 이 계정 08-16 에 403 China opt-in — 카탈로그 잔류, 지역 정책.
-# xai: XAI_API_KEY 필요(premium 3종 + llm-council/escalation 의 critic). grok-4.6 은 xai :high 검증✅.
+# xai: `/login xai` OAuth 또는 XAI_API_KEY (premium 3종 + llm-council/escalation 의 critic).
+#   08-17 실측: XAI_API_KEY 미설정 환경에서 xai/grok-4.6:high 성공 — 키는 필수가 아니라 대안 경로다(단일 계정 관찰).
+#   grok-4.6 은 xai :high 검증✅.
 #   grok-build/grok-4.6 은 bare OK · :high not found — 출하 금지. grok-4.5 는 레거시 카나리.
 # Grok critic 좌석의 의미: "검증된 결함회수 최강"이 아니라 "제3계열 독립 dissent" — 2축 리서치 합의(critic-specific 근거 0건).
 # 재평가 트리거: GJC 릴리스 diff · catalog drift(catalog-snapshot.sh --diff) · Fable 플랜 스플릿 가격 고통 ·

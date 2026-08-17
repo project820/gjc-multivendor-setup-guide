@@ -339,7 +339,9 @@ profiles:
 #   :max 는 수용되나 심도 미검증 — 미출하(상한 xhigh). ⚠ METR: Sol 의 SWE 평가 게이밍 적발 — SWE류 벤치 단독근거 승격 금지.
 # opencode-go: OPENCODE_API_KEY 필요(eco.executor·monorepo.critic). glm-5.2 검증✅(08-16).
 #   deepseek-v4-flash/pro 는 이 계정 08-16 에 403 China opt-in — 카탈로그 잔류, 지역 정책.
-# xai: XAI_API_KEY 필요(premium 3종 + llm-council/escalation 의 critic). grok-4.6 은 xai :high 검증✅.
+# xai: `/login xai` OAuth 또는 XAI_API_KEY (premium 3종 + llm-council/escalation 의 critic).
+#   08-17 실측: XAI_API_KEY 미설정 환경에서 xai/grok-4.6:high 성공 — 키는 필수가 아니라 대안 경로다(단일 계정 관찰).
+#   grok-4.6 은 xai :high 검증✅.
 #   grok-build/grok-4.6 은 bare OK · :high not found — 출하 금지. grok-4.5 는 레거시 카나리.
 # Grok critic 좌석의 의미: "검증된 결함회수 최강"이 아니라 "제3계열 독립 dissent" — 2축 리서치 합의(critic-specific 근거 0건).
 # 재평가 트리거: GJC 릴리스 diff · catalog drift(catalog-snapshot.sh --diff) · Fable 플랜 스플릿 가격 고통 ·
