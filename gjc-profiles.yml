@@ -120,7 +120,7 @@ profiles:
       default:   anthropic/claude-opus-5:medium                 # 1M
       executor:  anthropic/claude-opus-5:high                   # 1M
       planner:   google-antigravity/gemini-3.1-pro-low:high     # 추론(스코프 입력). 1M window ≠ 완전 recall — 청크 누적 워크플로 전제
-      architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste ~400k 한도(실측 350k ✅/476k 🔴) — >400k 단일 paste 는 현재 권장 셀렉터 없음(청크 누적으로 우회)
+      architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste 는 Opus 5 가 476k 통과(08-17 배터리) — Opus 4.8 의 476k 🔴 는 구세대 수치
       critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51), cross-family vs anthropic. effort 무핀(opencode-go 규칙)
 
 # ─────────────────────────────────────────────────────────────────────────────

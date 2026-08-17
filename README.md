@@ -321,7 +321,7 @@ profiles:
       default:   anthropic/claude-opus-5:medium                 # 1M
       executor:  anthropic/claude-opus-5:high                   # 1M
       planner:   google-antigravity/gemini-3.1-pro-low:high     # 추론(스코프 입력). 1M window ≠ 완전 recall — 청크 누적 워크플로 전제
-      architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste ~400k 한도(실측 350k ✅/476k 🔴) — >400k 단일 paste 는 현재 권장 셀렉터 없음(청크 누적으로 우회)
+      architect: anthropic/claude-opus-5:high                   # 1M 멀티턴 누적. 단일 메시지 paste 는 Opus 5 가 476k 통과(08-17 배터리) — Opus 4.8 의 476k 🔴 는 구세대 수치
       critic:    opencode-go/glm-5.2                            # 오픈웨이트 1위(AA 51), cross-family vs anthropic. effort 무핀(opencode-go 규칙)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -378,7 +378,7 @@ profiles:
 ## 6. ✅ 검증 매트릭스
 
 > 범례: ✅ 실호출 그린(괄호=검증일) · 🔴 실패 · ⚠ 주의/클램프 · †‡ 각주 · ●○ 상대비용.
-> 2026-08-16 gjc **0.13.3**에서 전 프로바이더 핵심 셀렉터를 `gjc -p --no-session --no-tools --model <sel> "..."`로 실호출했다([08-16](./evidence/2026-08-16-selectors.md); 0.9.6 그린은 07-10 rerun-3). v2.1 출하 좌석은 그린이며, DeepSeek는 이 계정에서 403 China opt-in.
+> 실호출 배터리는 두 번 돌렸다. **08-16**(gjc 0.13.3, 전 프로바이더 핵심 셀렉터 — [기록](./evidence/2026-08-16-selectors.md); 0.9.6 그린은 07-10 rerun-3)과 **08-17**(v2.1.0 최종 좌석 기준 재실행 + 단일 메시지 한도 — [기록](./evidence/2026-08-17-selectors.md)). 08-16 배터리는 eco.executor 가 아직 DeepSeek 이던 시점이라 최종 좌석 전수 커버는 **08-17 실행이 정본**이다. v2.1 출하 좌석은 08-17 기준 전부 그린이고, DeepSeek 는 이 계정에서 403 China opt-in 이라 출하 좌석에서 내렸다.
 
 | 프로바이더 | 검증된 셀렉터 |
 |---|---|
