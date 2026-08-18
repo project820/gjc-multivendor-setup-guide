@@ -41,10 +41,30 @@ def _funnel_rows(readme):
     # 펜스 코드블록 안의 `## 🧭 …` 는 헤딩이 아니라 샘플이다. 마스킹하지 않으면 그런
     # 샘플 하나가 헤딩 개수를 2로 만들어 **네 README 전부에서 CI 를 깨뜨린다**
     # (fail-closed 라 위험하진 않지만 링크 게이트가 이미 하는 일을 여기서 안 하면
-    # 게이트끼리 규칙이 어긋난다 — 패널 지적). 오프셋 보존은 필요 없다(헤딩 위치는
-    # 마스킹된 문자열 기준으로만 쓴다).
-    txt = re.sub(r"(?ms)^ {0,3}(`{3,}|~{3,}).*?^ {0,3}\1[ \t]*$",
-                 lambda m: re.sub(r"[^\n]", " ", m.group(0)), txt)
+    # 게이트끼리 규칙이 어긋난다 — 패널 지적).
+    #
+    # 정규식 역참조(`\1`)로 짝을 맞추면 **닫는 펜스 길이가 정확히 같아야만** 매칭된다.
+    # CommonMark 은 `~~~~` 가 `~~~` 를 닫는 것을 허용하므로 그런 문서에서는 아무것도
+    # 마스킹되지 않는다 — `slug-anchor-check.py` 는 `>=` 규칙을 쓴다. 두 게이트가
+    # 마크다운을 다르게 읽으면 안 되므로(이 PR 이 `_has_banner` 에서 편 논리 그대로)
+    # 같은 규칙을 줄 단위로 구현한다.
+    masked, fence = [], None
+    for line in txt.split("\n"):
+        body = re.sub(r"^(?: {0,3}>[ \t]?)*", "", line)
+        fm = re.match(r" {0,3}(`{3,}|~{3,})(.*)$", body)
+        cover = False
+        if fence is None:
+            if fm and (fm.group(1)[0] != "`" or "`" not in fm.group(2)):
+                fence = (fm.group(1)[0], len(fm.group(1)))
+                cover = True
+        else:
+            ch, width = fence
+            if fm and fm.group(1)[0] == ch and len(fm.group(1)) >= width \
+                    and not fm.group(2).strip():
+                fence = None
+            cover = True
+        masked.append(" " * len(line) if cover else line)
+    txt = "\n".join(masked)
 
     # 헤딩은 언어별로 다르므로 🧭 로 찾는다. 그런데 🧭 는 퍼널 절에만 있는 게 아니다 —
     # `## 2. 🧭 핵심 설계`(§2)도 같은 이모지를 쓴다. 예전 코드는 첫 매치를 집어서 우연히

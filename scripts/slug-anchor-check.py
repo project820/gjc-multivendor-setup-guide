@@ -166,6 +166,7 @@ def main():
         # **정상 링크가 통째로 검사에서 빠졌다** — 같은 fail-open 이다.
         scan = list(txt)
         fence = None          # (문자, 길이) — 열려 있으면 튜플
+        fence_at = 0          # 열린 펜스의 시작 오프셋(미닫힘 리포트용)
         pos = 0
         for line in txt.splitlines(keepends=True):
             # blockquote 마커만 걷어낸다. **들여쓰기는 보존해야 한다** — 예전엔
@@ -190,6 +191,7 @@ def main():
             if fence is None:
                 if opener:
                     fence = opener
+                    fence_at = pos
                     covered = True
             else:
                 if closer:
@@ -200,6 +202,12 @@ def main():
                     if scan[k] != "\n":
                         scan[k] = " "
             pos += len(line)
+        # 펜스가 EOF 까지 안 닫혔으면 그 뒤 줄이 전부 마스킹된 것이다 — 링크가 조용히
+        # 미검사가 된 상태다. 카운터는 사람 눈으로 보는 완화책이지 게이트가 아니므로
+        # (패널 지적) **여기서 죽인다.** 닫는 펜스가 4칸 이상 들여쓰여 있으면 이 경우가 된다.
+        if fence is not None:
+            dead.append("%s:%d → (열린 채 끝난 %s 펜스) : 이 줄 뒤 링크가 전부 마스킹됐다"
+                        % (name, txt.count("\n", 0, fence_at) + 1, fence[0] * fence[1]))
         # 인라인 코드 스팬(`` `…` ``)도 링크가 아니다. 문서가 링크 **문법 자체**를
         # 이야기할 때 백틱 안에 `](…)` 를 쓰는데, 마스킹하지 않으면 그걸 진짜 링크로
         # 읽고 "대상 파일 없음" 오탐을 낸다.
@@ -212,9 +220,12 @@ def main():
         # 로컬 HTML: `<a href>` 뿐 아니라 `<img src>` 도 본다. README ×4 의 17행이
         # `<img src="assets/role-winners.svg">` 로 배너를 문다 — src 가 깨져도 예전
         # "링크 무결성" 게이트는 통과했다(cyber-cop critic 지적).
-        matches += [(m.group(2), m.start(2))
+        # 따옴표 없는 속성(`<img src=a.svg>`)도 유효한 HTML 이다. 따옴표를 강제하면
+        # 그런 깨진 참조가 게이트를 그냥 통과한다(패널 지적).
+        matches += [(m.group(2) or m.group(3), m.start(2) if m.group(2) else m.start(3))
                     for m in re.finditer(
-                        r"""<(?:a\b[^>]*\bhref|img\b[^>]*\bsrc)\s*=\s*(["'])(.*?)\1""",
+                        r"""<(?:a\b[^>]*\bhref|img\b[^>]*\bsrc)\s*=\s*"""
+                        r"""(?:(["'])(.*?)\1|([^\s"'>]+))""",
                         scan, re.IGNORECASE)]
         # reference-style 정의. 두 가지를 조심한다(패널 지적):
         #   1. `[x]: <./docs/a.md>` 의 꺾쇠는 **대상에 포함되지 않는다** — 포함하면
