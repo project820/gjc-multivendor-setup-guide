@@ -7,6 +7,12 @@
 10번들을 **7번들 + budget 게이트**로 줄이고, Core 를 **"구독 3벤더 로그인만으로 도는 것"**
 으로 다시 정의하고, 선택 가이드를 **보유 구독 기준**으로 재설계했다.
 
+> [!IMPORTANT]
+> **Gemini 는 지금 v3 카탈로그에서 `budget` 을 제외하고 배제한다.** 품질 비교가 아니라
+> 운영 정책이다 — 이 가이드의 독자는 이미 xAI / Grok 4.6 에 닿는다. 기본 경로(`daily`)와
+> 나머지 비-budget 번들에는 Gemini / `google-antigravity` 좌석이 없다. 저단가 레인
+> (`budget`)에만 남긴다.
+
 ## 왜 줄였나
 
 v2 는 10개 번들을 4계층에 늘어놓았다. 문제는 개수가 아니라 **트리거 없는 번들**이었다.
@@ -51,11 +57,33 @@ v3 는 개수를 목표로 두지 않는다. **사람이 설명할 수 있는 �
 |---|---|---|---|
 | `daily` | executor | `openai-codex/gpt-5.6-terra:high` | **`openai-codex/gpt-5.6-luna:max`** |
 
+### 후속 정책 (2026-08-17) — Gemini 는 `budget` 만
+
+v3.0.0 출하 직후 가정("daily critic 은 xAI 키 장벽 때문에 Gemini")이 틀렸다.
+독자는 이미 Grok 4.6 에 닿는다. **비-budget 번들에서 Gemini 좌석을 전부 빼고**,
+형제 번들에 이미 있는 셀렉터로 자리를 다시 맞췄다. 번들 수(8)와 Luna `:max` 는 그대로다.
+
+| 번들 | 역할 | v3.0.0 출하 | 지금 |
+|---|---|---|---|
+| `daily` | architect | Gemini `-low:high` | **`anthropic/claude-opus-5:high`** (sibling architect) |
+| `daily` | critic | Gemini `-low:high` | **`xai/grok-4.6:high`** (sibling Grok critic 출하 effort) |
+| `coding-sprint` | architect | Gemini `-low:high` | **`anthropic/claude-opus-5:high`** |
+| `coding-sprint` | critic | Terra `:high` | **`xai/grok-4.6:high`** (plan/crit 동계열 해소) |
+| `cyber-cop` | planner | Gemini `-low:high` | **`openai-codex/gpt-daybreak-blue-latest:high`** (방어 레인 핀) |
+| `cyber-cop` | executor | Sol `:high` | **`openai-codex/gpt-daybreak-blue-latest:high`** (동일 핀) |
+| `cyber-cop` | critic | Sol `:high` | **`xai/grok-4.6:high`** (제3계열 머지 게이트) |
+| `llm-council` | architect | Gemini `-low:high` | **`anthropic/claude-opus-5:high`** |
+| `escalation` | architect | Gemini `-low:high` | **`anthropic/claude-opus-5:high`** |
+| `monorepo` | planner | Gemini `-low:high` | **`opencode-go/qwen3.8-max`** (budget sibling; gpt-5.6 은 372K 라 1M 번들 제외) |
+| `budget` | architect·critic | Gemini `-low:high` | **유지** — 카탈로그에서 Gemini 를 남기는 유일한 번들 |
+
 `daily` 는 가장 많이 쓰는 번들이므로 이 변경은 대부분의 사용자에게 체감된다.
 
 **validator 가 Luna 를 `:max` 단독으로 강제한다.** `gpt-5.6-luna` 에 다른 effort 를
 쓰면 검증이 거부한다(`illegal effort '…' for gpt-5.6-luna (legal: ['max'])`).
 Sol·Terra 의 출하 상한은 `xhigh` 로 그대로다.
+Daybreak Blue (`gpt-daybreak-blue-latest`) 는 cyber-cop 방어 레인에만 `:high` 로 앉힌다
+(카탈로그 상한 xhigh, `:max` 없음).
 
 ## 업그레이드하면 내 설정은 어떻게 되나 (2026-08-17 실측)
 
@@ -83,22 +111,20 @@ Sol·Terra 의 출하 상한은 `xhigh` 로 그대로다.
 
 ## Core 의 의미가 바뀐다
 
-v2 의 Core 는 "3벤더 진입점" 이었다. v3 의 Core 는 **`anthropic`·`openai-codex`·
-`google-antigravity` 구독 로그인만으로 activation 되는 것**이다. 정의가 인증 방식으로
-바뀌었으므로, 어떤 프로바이더가 Core 에 들어오는지는 로그인 경로가 실제로 되는지에 달렸다.
-
-> **"키 없이 로그인만" 이라고만 쓰면 정의가 안 된다** (2026-08-17 실측 정정).
-> `xai` 도 `/login xai` 가 되므로, 그 표현이면 `escalation`·`llm-council`·`ultimate-opus`
-> **셋이 함께 Core 에 들어온다.** 실측 분류:
+v2 의 Core 는 "3벤더 진입점" 이었다. v3 출하 직후 Core 는
+`anthropic`·`openai-codex`·`google-antigravity` 로 적혀 있었다. **그 정의는 폐기한다.**
+Gemini 는 `budget` 만 남기고, 기본 경로(`daily`)를 포함한 비-budget 번들은
+`xai` 를 쓴다. 실측 분류:
 >
 > | 분류 | 번들 |
 > |---|---|
-> | 구독 3벤더만 (= **Core**) | `daily` · `coding-sprint` · `cyber-cop` |
-> | 로그인 가능하지만 `xai` 필요 | `escalation` · `llm-council` · `ultimate-opus` |
-> | **키 필수**(`opencode-go`) | `monorepo` · `budget` |
+> | `anthropic`·`openai-codex`·`xai` | `daily` · `coding-sprint` · `cyber-cop` · `ultimate-opus` · `escalation` · `llm-council` |
+> | `anthropic`·`opencode-go` | `monorepo` |
+> | `openai-codex`·`google-antigravity`·`opencode-go` | `budget` — **Gemini 가 남는 유일한 행** |
 >
-> 구분 기준은 "키 유무" 가 아니라 **"어느 벤더까지 필요한가"** 다. 퍼널 문서의
-> `> **세 벤더 로그인만 있으면** 첫 행이 열린다` 가 정확한 표현이고, 이 절이 그걸 따른다.
+> 구분 기준은 "키 유무" 가 아니라 **"어느 벤더까지 필요한가"** 다.
+> `anthropic` + `openai-codex` + `xai` 가 있으면 첫 행(daily 포함 6번들)이 열린다.
+> `google-antigravity` 는 `budget` 전용이다.
 
 ## 선택 가이드가 바뀐다
 
@@ -108,9 +134,10 @@ tier 나열을 버렸다. **보유 구독**에서 시작해 실행 가능한 번
 ## 이 릴리스가 약속하지 않는 것
 
 - **검증 없는 셀렉터는 문서에 없다.** 신규 좌석은 dated 실호출 기록이 있어야 오른다.
-- Gemini 3.7 · `gpt-5.6-cyber` · `grok-build/grok-4.6:high` 는 실호출이 not found 라 미출하.
-- Daybreak Blue 는 **승인 계정 보유자 한정 opt-in 각주**다. Core 필수 의존이 아니고,
-  미보유자는 기존 구성 그대로 돌아간다(패널 좌석이 아니라 수동 교차확인 핀이다).
+- Gemini 3.7 · `gpt-5.6-cyber` · `daybreak-red` · `grok-build/grok-4.6:high` 는 이 캐시에 없거나 실호출이 not found 라 미출하.
+- Daybreak Blue 는 GJC openai-codex 핀 `gpt-daybreak-blue-latest` 다. **cyber-cop planner·executor `:high`**
+  방어 레인에만 쓴다. OpenAI 문서상 cyber-safeguard alias 이며 Sol 과 다른 베이스가 아니다.
+  카탈로그 effort 는 minimal..xhigh (`:max` 없음). daily·budget·monorepo·ultimate-opus 에는 안 앉힌다.
 
 ## 이전 안내
 

@@ -3,6 +3,9 @@
 > [!NOTE]
 > **이 문서는 non-normative 요약이다.** 규범 출처: 매핑 = [`gjc-profiles.yml`](../gjc-profiles.yml) · 운영 계약 = [`routing-rules.md`](../routing-rules.md) · 검증 원본 = [`evidence/`](../evidence/). 모든 수치는 **기재된 검증일 시점**이며 시점 민감하다 — 카탈로그·라이브 표면은 당일에도 변한다(07-10 오후 `gemini-3.5-flash*` 소멸 실측).
 
+> [!IMPORTANT]
+> **Gemini 는 지금 v3 카탈로그에서 `budget` 을 제외하고 배제한다.** 품질 비교가 아니라 운영 정책이다 — 이 가이드의 독자는 이미 xAI / Grok 4.6 에 닿는다. Gemini 좌석은 저단가 레인(`budget`)에만 남긴다.
+
 ## 1. 릴리스
 
 | 항목 | 값 |
@@ -17,16 +20,16 @@
 
 | 번들 | default | executor | planner | architect | critic | 인증 |
 |---|---|---|---|---|---|---|
-| ⭐ daily | Opus5:med | Luna:max | Sol:high | Gemini`-low:high` | Gemini`-low:high`¹ | 구독 3 |
-| 🏎 coding-sprint | Opus5:med | Opus5:high | Sol:high² | Gemini`-low:high` | Terra:high² | 구독 3 |
-| 🚨 cyber-cop | Opus5:high | Sol:high | Gemini`-low:high` | Opus5:high | Sol:high | 구독 3 |
-| 🏆 ultimate-opus | Opus5:high | Opus5:high³ | Sol:xhigh | Opus5:high³ | Grok4.6:high | +xai |
-| 🏛 llm-council | Opus5:high⁵ | Terra:high | Sol:xhigh | Gemini`-low:high` | Grok4.6:high | 구독 3+xai |
-| 🛡 escalation | Opus5:high | Fable:xhigh | Sol:xhigh | Gemini`-low:high` | Grok4.6:high | 구독 3+xai |
+| ⭐ daily | Opus5:med | Luna:max | Sol:high | Opus5:high | Grok4.6:high | anth+codex+xai |
+| 🏎 coding-sprint | Opus5:med | Opus5:high¹ | Sol:high | Opus5:high¹ | Grok4.6:high | anth+codex+xai |
+| 🚨 cyber-cop | Opus5:high³ | DaybreakBlue:high | DaybreakBlue:high | Opus5:high | Grok4.6:high | anth+codex+xai |
+| 🏆 ultimate-opus | Opus5:high | Opus5:high¹ | Sol:xhigh | Opus5:high¹ | Grok4.6:high | anth+codex+xai |
+| 🏛 llm-council | Opus5:high³ | Terra:high | Sol:xhigh | Opus5:high | Grok4.6:high | anth+codex+xai |
+| 🛡 escalation | Opus5:high | Fable:xhigh¹ | Sol:xhigh | Opus5:high¹ | Grok4.6:high | anth+codex+xai |
 | 💸 budget | Terra:med | GLM-5.2 | Qwen3.8Max | Gemini`-low:high` | Gemini`-low:high` | codex+go+google |
-| 🗺 monorepo | Opus5:med | Opus5:high³ | Gemini`-low:high` | Opus5:high³ | GLM-5.2 | anthropic+google+go |
+| 🗺 monorepo | Opus5:med | Opus5:high¹ | Qwen3.8Max² | Opus5:high¹ | GLM-5.2² | anthropic+go |
 
-¹ architect와 동일 셀렉터 — 3벤더 구독-only 제약의 의도적 트레이드오프(xai 로그인 시 `grok-4.6:medium` 스왑 권장). ² plan/crit 동계열 — `SAME_FAMILY_OK` 인간판정. ³ exec/arch 동계열 — `SAME_FAMILY_OK`. ⁵ 집계자 제한 — 판정석은 Google·xAI·OpenAI 3계열.
+¹ exec/arch 동계열 — `SAME_FAMILY_OK`. ² plan/crit 동계열(qwen≠glm) — `SAME_FAMILY_OK`. ³ default 집계자 제한 — 그 좌석은 판정에 참여하지 않음(llm-council.architect Opus 는 판정). Gemini 는 `budget` 만 (정책).
 
 ## 3. 모델 팩트 (검증일 명기)
 
@@ -38,6 +41,7 @@
 | GPT-5.6 Sol | 5 / 30 | **372K**/128K (0.13.3 표기, API 1.05M과 별개) | **xhigh** 출하상한 (`:max` 수용·심도 미검증) | 08-16✅ |
 | GPT-5.6 Terra | 2.5 / 15 | 372K/128K | xhigh 출하상한 | 08-16✅ |
 | GPT-5.6 Luna | 1 / 6 | 372K/128K | **:max 출하**(D-1 이 `{max}` 단독 강제) | 08-16✅ |
+| Daybreak Blue (`gpt-daybreak-blue-latest`) | — | openai-codex 캐시 | 카탈로그 **minimal..xhigh** (`:max` 없음) · 출하 **:high** · cyber-cop planner·executor 만. cyber-safeguard alias (Sol 과 다른 베이스가 아님). Red/Cyber 미출하 | 08-17✅ 프로브 ok |
 | Gemini 3.1 Pro | 프리뷰/구독¹ | 1M/66K (MRCR 1M 26.3% — nominal ≠ recall) | `low`/`high` 2단 · **`-low:high` 리터럴 핀** | 08-16✅ |
 | Gemini 3-flash | 프리뷰/구독¹ | 1M/66K | minimal..high | 08-16✅ |
 | Grok 4.6 | 2 / 6 (<200k) · 4 / 12 (≥200k) | provider 500K | 카탈로그 **xhigh** · 출하 **high** · xai API | 08-16✅ |
@@ -61,7 +65,7 @@
 
 1. 전 번들 멀티벤더 — **실사용 벤더 ≥2** (required_providers 패딩으로 우회 불가, 패딩은 WARN)
 2. default = Anthropic 플래그십 (anthropic 미요구 번들은 적용 대상 아님 — 예외 목록 없음)
-3. exec/arch · plan/crit cross-family (예외는 `SAME_FAMILY_OK` 등재 + WARN 영구 표면화 — 현재 3건)
+3. exec/arch · plan/crit cross-family (예외는 `SAME_FAMILY_OK` 등재 + WARN 영구 표면화 — 현재 5건: monorepo exec_arch·plan_crit, ultimate-opus/coding-sprint/escalation exec_arch)
 4. effort 하드룰 (§3 상한 위반은 하드에러)
 5. required_providers ⊇ 실사용 provider
 6. README×4 임베드 YAML == `gjc-profiles.yml` (parsed-mapping 비교 — `scripts/sync-readme-yaml.py`로 동기화)

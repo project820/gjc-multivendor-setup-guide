@@ -23,6 +23,9 @@
 > [!NOTE]
 > 核心角色与选择器概念已合并至 [GJC 官方文档](https://github.com/Yeachan-Heo/gajae-code/blob/dev/docs/multi-vendor-profiles.md)（[PR #860](https://github.com/Yeachan-Heo/gajae-code/pull/860)，`dev`）。本仓库提供一键安装、4 层级 8 捆绑目录和[维护与验证工具](./MAINTAINING.md)。
 
+> [!IMPORTANT]
+> **Gemini 现在从 v3 目录中排除，只留在 `budget`。** 这不是质量比较，而是运营政策——本指南的读者已经能用到 xAI / Grok 4.6。默认路径（`daily`）及其他非 budget 捆绑没有 Gemini 席位。只留在低价车道（`budget`）。
+
 ---
 
 ## ⚡ 30 秒安装
@@ -64,11 +67,9 @@ gjc                        # 新会话自动使用 daily
 
 | 最小所需组合 | 可用捆绑 |
 |---|---|
-| `anthropic` + `openai-codex` + `google-antigravity` | ⭐ **daily** · 🏎 **coding-sprint** · 🚨 **cyber-cop** |
-| `anthropic` + `openai-codex` + `xai` | 🏆 **ultimate-opus** |
-| `anthropic` + `openai-codex` + `google-antigravity` + `xai` | 🛡 **escalation** · 🏛 **llm-council** |
-| `anthropic` + `google-antigravity` + `opencode-go` | 🗺 **monorepo** |
-| `openai-codex` + `google-antigravity` + `opencode-go` | 💸 **budget**（v3 新增） |
+| `anthropic` + `openai-codex` + `xai` | ⭐ **daily** · 🏎 **coding-sprint** · 🚨 **cyber-cop** · 🏆 **ultimate-opus** · 🛡 **escalation** · 🏛 **llm-council** |
+| `anthropic` + `opencode-go` | 🗺 **monorepo** |
+| `openai-codex` + `google-antigravity` + `opencode-go` | 💸 **budget** — 仍保留 Gemini 的唯一一行 |
 
 ### 认证方式是另一条轴
 
@@ -81,7 +82,7 @@ gjc                        # 新会话自动使用 daily
 | `opencode-go` | `OPENCODE_API_KEY` |
 
 > [!TIP]
-> **仅有三个厂商的订阅登录**就能开启第一行——daily · coding-sprint · cyber-cop。大多数人从这里开始即可；其余是按需补充的扩展。
+> **`anthropic` + `openai-codex` + `xai`** 即可开启第一行——含 daily 在内的 6 个捆绑。`google-antigravity` 仅用于 `budget`。`opencode-go` 密钥解锁 monorepo 与 budget。
 
 完整目录 ↓ [§5](#5-️-最终目录--8-个捆绑--4-层级)；reviewer 模式与预告见下方。
 
@@ -93,16 +94,16 @@ Core / Premium / Workflow bundle / Specialized 只保留为各捆绑卡片的**�
 
 | Tier | 捆绑 | 一句话定义 | 何时用 |
 |---|---|---|---|
-| Core | ⭐ **daily** | Opus 主循环 + 各角色分散委派 — **仅订阅 OAuth 3 厂商即可激活** | **日常默认** |
+| Core | ⭐ **daily** | Opus 主循环 + Grok critic — **无 Gemini**（政策；只留 `budget`） | **日常默认** |
 | Core | 🏎️ **coding-sprint** | 把 executor 升到 Opus 的实现吞吐特化 | 纯实现冲刺 |
 | Core | 🚨 **cyber-cop** | reviewer 模式 — architect·critic 主导，专用于 PR 审查·安全审计 | 审查他人 PR·合并门禁·安全审计 |
 | Premium (exp) | 🏆 **ultimate-opus** | Anthropic 质量基底 premium | 精度比成本更重要 |
-| Workflow | 🏛️ **llm-council** | 4 系列座位表与 Council 契约 | 需要多系列共识的决策 |
-| Workflow | 🛡️ **escalation** | 手动升级 — Fable 救援投手 + critic 3 票评审团 | 合并·安全·支付·不可逆变更 |
+| Workflow | 🏛️ **llm-council** | 3 系列座位表（architect Opus 判定，default 只汇总）与 Council 契约 | 需要多系列共识的决策 |
+| Workflow | 🛡️ **escalation** | 手动升级 — Fable 救援投手 + critic 2 票评审团 | 合并·安全·支付·不可逆变更 |
 | Specialized (exp) | 💸 **budget** | 低成本多厂商实验 — *不是绝对最低价* | 成本压力·大批量 |
 | Specialized (exp) | 🗺️ **monorepo** | 全局 ≥1M ctx | 巨型代码库 |
 
-> **🚨 cyber-cop** — GJC 首个 reviewer 模式：architect·critic 是主角，executor 是复现配角。高风险 PR 使用三票评审团；PR #4~#7 曾在合并前拦截 10 个缺陷。
+> **🚨 cyber-cop** — GJC 首个 reviewer 模式：architect·critic 是主角，executor 是复现配角。高风险 PR 使用两票评审团；PR #4~#7 曾在合并前拦截 10 个缺陷。
 > 安装 wrapper：`curl -fsSL …/install.sh | GJC_SETUP_COP=1 bash` → `gjc-cop 123`
 > → [公告文档](./docs/whats-new-cyber-cop.md)
 
@@ -115,7 +116,7 @@ Core / Premium / Workflow bundle / Specialized 只保留为各捆绑卡片的**�
 
 | 角色 | 做什么 | 最佳模型 |
 |---|---|---|
-| 🧠 **推理/规划**（planner） | 排序、验收标准 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 各捆绑席位见[§5](#5-️-最终目录--8-个捆绑--4-层级)（例外：cyber-cop·monorepo=Gemini，budget=Qwen3.8 Max） |
+| 🧠 **推理/规划**（planner） | 排序、验收标准 | **GPT-5.6 Sol**（Agents' Last Exam 52.7 · 2026-07-09 GA） — 各捆绑席位见[§5](#5-️-最终目录--8-个捆绑--4-层级)（例外：cyber-cop=Daybreak Blue，monorepo·budget=Qwen3.8 Max） |
 | 🔨 **实现**（executor） | 真正写/改代码 | **Claude Fable 5**（SWE-bench Verified **95.0**）— 订阅内最强是 **Opus 5**（4.8 后继 · 同价 $5/$25 · 2026-07-24） |
 | 🔭 **代码评审**（architect） | 大型仓库导航、架构 | **Gemini 3.1 Pro**（多模态 MMMU-Pro 81%） · 超长上下文（>200k）→ **Opus** |
 | ⚖️ **独立批评**（critic） | 对抗式验证 | **cross-family**（与主循环不同厂商） |
@@ -238,31 +239,31 @@ opencode-go/<model>                           （省略 effort = 模型默认）
 profiles:
 
   daily:
-    required_providers: [anthropic, openai-codex, google-antigravity]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:medium
       executor:  openai-codex/gpt-5.6-luna:max
       planner:   openai-codex/gpt-5.6-sol:high
-      architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    google-antigravity/gemini-3.1-pro-low:high
+      architect: anthropic/claude-opus-5:high
+      critic:    xai/grok-4.6:high
 
   coding-sprint:
-    required_providers: [anthropic, openai-codex, google-antigravity]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:medium
       executor:  anthropic/claude-opus-5:high
       planner:   openai-codex/gpt-5.6-sol:high
-      architect: google-antigravity/gemini-3.1-pro-low:high
-      critic:    openai-codex/gpt-5.6-terra:high
+      architect: anthropic/claude-opus-5:high
+      critic:    xai/grok-4.6:high
 
   cyber-cop:
-    required_providers: [anthropic, openai-codex, google-antigravity]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high
-      executor:  openai-codex/gpt-5.6-sol:high
-      planner:   google-antigravity/gemini-3.1-pro-low:high
+      executor:  openai-codex/gpt-daybreak-blue-latest:high
+      planner:   openai-codex/gpt-daybreak-blue-latest:high
       architect: anthropic/claude-opus-5:high
-      critic:    openai-codex/gpt-5.6-sol:high
+      critic:    xai/grok-4.6:high
 
   ultimate-opus:
     required_providers: [anthropic, openai-codex, xai]
@@ -274,29 +275,29 @@ profiles:
       critic:    xai/grok-4.6:high
 
   llm-council:
-    required_providers: [anthropic, openai-codex, google-antigravity, xai]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high
       executor:  openai-codex/gpt-5.6-terra:high
       planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: google-antigravity/gemini-3.1-pro-low:high
+      architect: anthropic/claude-opus-5:high
       critic:    xai/grok-4.6:high
 
   escalation:
-    required_providers: [anthropic, openai-codex, google-antigravity, xai]
+    required_providers: [anthropic, openai-codex, xai]
     model_mapping:
       default:   anthropic/claude-opus-5:high
       executor:  anthropic/claude-fable-5:xhigh
       planner:   openai-codex/gpt-5.6-sol:xhigh
-      architect: google-antigravity/gemini-3.1-pro-low:high
+      architect: anthropic/claude-opus-5:high
       critic:    xai/grok-4.6:high
 
   monorepo:
-    required_providers: [anthropic, google-antigravity, opencode-go]
+    required_providers: [anthropic, opencode-go]
     model_mapping:
       default:   anthropic/claude-opus-5:medium
       executor:  anthropic/claude-opus-5:high
-      planner:   google-antigravity/gemini-3.1-pro-low:high
+      planner:   opencode-go/qwen3.8-max
       architect: anthropic/claude-opus-5:high
       critic:    opencode-go/glm-5.2
 
@@ -334,7 +335,7 @@ profiles:
 | 提供方 | 已验证选择器 |
 |---|---|
 | `anthropic` | `claude-fable-5:high`/`:xhigh` · `claude-sonnet-5:high` · `claude-opus-5:high`/`:medium` · `claude-opus-4-8:high`（遗留）· `claude-sonnet-4-6:high` — sel ✅（08-16·**08-17 最终席位批次**） |
-| `openai-codex` | 出货席位：`gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:max` — sel ✅（**08-17 最终席位批次**）。`gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` 为金丝雀而非出货席位；08-17 批次中均为绿 |
+| `openai-codex` | 出货席位：`gpt-5.6-sol:high`/`:xhigh` · `gpt-5.6-terra:high`/`:medium` · `gpt-5.6-luna:max` — sel ✅（**08-17 最终席位批次**）。`gpt-daybreak-blue-latest:high` — cyber-cop planner·executor（探针 ✅ 08-17）。`gpt-5.5:high` · `gpt-5.4:high` · `gpt-5.6-luna:high` 为金丝雀而非出货席位；08-17 批次中均为绿 |
 | `xai` | `grok-4.6:medium`/`:high` · `grok-4.5:medium`/`:high`（遗留）· `grok-4.3:high` · `grok-4-fast:high` — sel ✅（08-16·**08-17 最终席位批次**） |
 | `grok-build` | `grok-4.6`（裸选择器）— sel ✅（**08-17**）。`grok-4.3`（裸）为 07-02 记录。effort 后缀无法解析（`grok-4.6:high` = not found）— 不出货 |
 | `google-antigravity` | `gemini-3.1-pro-low`/`:high` · `gemini-3-flash:low` — sel ✅（08-16·**08-17 最终席位批次**）。模糊 `gemini-3.1-pro-high`/`-bogus` 与裸 `gemini-3.5-flash` 已确认 fail-closed |
@@ -449,7 +450,7 @@ cp ~/.gjc/agent/models.yml.bak-*  ~/.gjc/agent/models.yml   # 回滚（恢复备
 ```
 
 - critic 必须**与主循环不同厂商，先并行独立投票、再由主循环汇总**（禁止辩论 — 元裁判更优）。
-- critic 评审团示例：`{openai-codex/gpt-5.6-sol:high, xai/grok-4.6:high, google-antigravity/gemini-3.1-pro-low:high}` 并行 → 2/3 反对或任一 CRITICAL/BLOCK 即拦截；**CRITICAL/HIGH dissent 不可由多数票否决**，必须解决或进入 human gate。
+- critic 评审团示例：`{xai/grok-4.6:high, openai-codex/gpt-daybreak-blue-latest:high}` 并行 → 2/2 反对或任一 CRITICAL/BLOCK 即拦截。Gemini 第三票已废止（`budget` 以外）。**CRITICAL/HIGH dissent 不可由多数票否决**，必须解决或进入 human gate。
 - executor 扇出仅在工作真正独立（无共享状态）时。
 - 链要短，主循环作为唯一事实源（子代理之间不直接达成共识）。
 
@@ -464,13 +465,14 @@ Gemini 使用 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 订�
 | Claude Fable 5 | 10 / 50（批量 5/25 · 缓存命中 1）† | escalation executor |
 | Claude Opus 5 | 5 / 25 | default·executor 基础设施（4.8 后继） |
 | Claude Sonnet 5 | 3 / 15（入门价 2/10 至 2026-08-31）‡ | **未出货** — 无席位（供参考） |
-| GPT-5.6 Sol | 5 / 30（Fast 模式为 12.5/75） | planner（daily·sprint·ultimate-opus·council·escalation）·cyber-cop executor·critic |
-| GPT-5.6 Terra | 2.5 / 15 | coding-sprint critic · llm-council executor · budget default |
+| GPT-5.6 Sol | 5 / 30（Fast 模式为 12.5/75） | planner（daily·sprint·ultimate-opus·council·escalation） |
+| GPT-5.6 Terra | 2.5 / 15 | llm-council executor · budget default |
 | GPT-5.6 Luna | 1 / 6 | **daily executor `:max`**（v3 晋升 — D-1 强制仅 `{max}`） |
-| Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（premium 3 种·llm-council·escalation）— `/login xai` 或 XAI_API_KEY |
+| Daybreak Blue | — | **cyber-cop planner·executor `:high`** — GJC 钉 `gpt-daybreak-blue-latest`。cyber-safeguard 别名（并非与 Sol 不同的基座）。无 `:max` |
+| Grok 4.6 | 2 / 6（<200k prompt）· 4 / 12（≥200k） | critic（daily·coding-sprint·cyber-cop·ultimate-opus·llm-council·escalation）— `/login xai` 或 XAI_API_KEY |
 | GLM-5.2 (opencode-go) | 1.40 / 4.40 | budget executor · monorepo critic |
 | DeepSeek V4 Flash / Pro (opencode-go) | 0.14/0.28 · 1.74/3.48 | **未出货** — 本账号 403 China opt-in（目录 id 仍在） |
-| Gemini 3.1 Pro / 3-flash | 预览/订阅 token | planner·architect·critic |
+| Gemini 3.1 Pro / 3-flash | 预览/订阅 token | **仅 budget architect·critic**（其余捆绑排除 — 政策） |
 
 > † Fable 5 单价恰为 Opus 的 2 倍。07-20 起 Max/premium Team 含每周额度的 50%，Pro/standard 用 credits。
 > ‡ Sonnet 5 因 tokenizer 变更，同一文本会多出 ~30% token；实际成本应高于标价估算。
@@ -480,12 +482,12 @@ Gemini 使用 [Google AI Pro/Ultra](https://antigravity.google/docs/plans) 订�
 
 | 配置 | 成本 | 主要成本来源 |
 |---|---|---|
-| escalation | ●●●●● | executor Fable `:xhigh`（救援投手 — 间歇使用）+ planner Sol `:xhigh` + 4 厂商认证 |
+| escalation | ●●●●● | executor Fable `:xhigh`（救援投手 — 间歇使用）+ planner Sol `:xhigh` + 3 厂商认证（anthropic+codex+xai） |
 | ultimate-opus | ●●●●○ | Opus 3 席 `:high~xhigh` + Grok critic（`/login xai` 或 XAI_API_KEY） |
-| llm-council | ●●●●○ | 4 厂商认证 + Sol `:xhigh` planner — 执行 Council 工作流时按票数计费 |
+| llm-council | ●●●●○ | 3 厂商认证（anthropic+codex+xai）+ Sol `:xhigh` planner — 执行 Council 工作流时按票数计费 |
 | coding-sprint | ●●●○○ | executor Opus `:high`（仅失败信号时升 max） |
-| daily | ●●●○○ | 主循环 Opus `:medium`，委派中低价分散 — 订阅 OAuth 3 厂商 |
-| monorepo | ●●●○○ | executor/architect Opus + Gemini（预览/订阅）+ GLM-5.2 |
+| daily | ●●●○○ | 主循环 Opus `:medium`，委派中低价分散 — anthropic+codex+xai。无 Gemini |
+| monorepo | ●●●○○ | executor/architect Opus + Qwen planner + GLM-5.2（anthropic+opencode-go）。无 Gemini |
 | budget | ●○○○○ | executor GLM-5.2（$1.40）+ planner Qwen3.8 Max + Gemini 预览；但*绝对最低价*是内置 `codex-eco` |
 
 ---

@@ -33,8 +33,8 @@ command -v gjc >/dev/null 2>&1 || { echo "gjc not found"; exit 2; }
 DATE="$(date +%Y-%m-%d)"; OUT="evidence/${DATE}-catalog.txt"
 # Per-provider model listing GJC currently resolves (bundled + live-discovered after /login).
 : > "$OUT"
-# v3: daybreak 추가. Daybreak Blue 가 cyber-cop 의 opt-in 수동 교차확인 핀으로 문서에
-# 오르므로 드리프트 감시가 그 계열에 눈먼 채로 남으면 안 된다(승인된 post-interview R2).
+# v3: daybreak 추가. Daybreak Blue (`gpt-daybreak-blue-latest`) 는 cyber-cop planner·executor
+# 출하 핀이므로 드리프트 감시가 그 계열에 눈먼 채로 남으면 안 된다.
 # cyber 도 함께 넣는다 — gpt-5.6-cyber 는 미출하지만 카탈로그 등장 여부가 재평가 트리거다.
 for q in claude-opus claude-sonnet claude-haiku claude-fable gpt-5 daybreak cyber grok gemini deepseek glm kimi qwen mimo minimax; do
   echo "## query: $q" >> "$OUT"

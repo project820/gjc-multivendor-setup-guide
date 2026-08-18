@@ -31,7 +31,7 @@
 
 ## 번들 카탈로그 — 4계층 (프로필 ≠ 워크플로)
 v3 카탈로그는 8개 user-facing 번들이며 신뢰 등급이 같지 않다:
-- **Core**: `daily`(평소 기본) · `coding-sprint`(구현 처리량) · `cyber-cop`(PR 리뷰·보안 감사) — 구독 OAuth 3벤더.
+- **Core**: `daily`(평소 기본) · `coding-sprint`(구현 처리량) · `cyber-cop`(PR 리뷰·보안 감사) — anthropic+codex+xai. Gemini 는 `budget` 만.
 - **Premium (experimental)**: `ultimate-opus` — 최고품질 *가설*.
   role-fit L3 실측 전이므로 "역할별 최강 검증됨"으로 광고 금지. xai 인증 필요(`/login xai` 또는 XAI_API_KEY).
 - **Workflow bundle**: `llm-council` · `escalation` — YAML 좌석표는 모델 배치만 한다.
@@ -48,10 +48,11 @@ v3 카탈로그는 8개 user-facing 번들이며 신뢰 등급이 같지 않다:
 
 ## Council 계약 — llm-council 번들 전용
 - **프로필은 좌석표다**: YAML 활성화만으로 council 은 시작되지 않는다. 본체가 아래 절차를 실행한다.
-- **독립 호출**: 의제를 각 판정석(architect=Gemini, critic=Grok, planner=Sol, executor=Terra — **판정석은 Google·xAI·OpenAI 3계열**)에
+- **독립 호출**: 의제를 각 판정석(architect=Opus, critic=Grok, planner=Sol, executor=Terra — **판정석은 Claude·xAI·OpenAI**)에
   **병렬·상호 비공개**로 보낸다. 좌석끼리 서로의 답을 보게 하지 않는다(no cross-talk).
-  본체 Anthropic(Opus)은 자기선호 편향 격리를 위해 **판정에 참여하지 않는다** — 4계열 "합의"가 아니라 "3계열 판정 + 제4계열 집계"다.
-- **raw verdict 보존**: 본체(Opus)는 집계자 제한 — 각 좌석의 판정 원문을 요약·은폐 없이 보존·노출한다.
+  architect 좌석의 Opus는 판정한다. Gemini 판정석은 없다. 본체 default(Opus)는 집계자 제한 —
+  자기 좌석의 판정에 참여하지 않고 raw verdict 를 보존한다.
+- **raw verdict 보존**: 본체 default(Opus)는 집계자 제한 — 각 좌석의 판정 원문을 요약·은폐 없이 보존·노출한다.
 - **quorum**: 다수결이 검증을 대체하지 못한다. **CRITICAL/HIGH dissent 1건은 다수결로 기각 불가** —
   해소(반증) 또는 human gate 로만 닫는다. minority opinion 은 최종 보고에 반드시 남긴다.
 - **벤더 수 ≠ 독립 표 수**: 서로 다른 계열도 오류가 상관된다 — 표 수 산술로 확신을 부풀리지 않는다.
@@ -60,16 +61,16 @@ v3 카탈로그는 8개 user-facing 번들이며 신뢰 등급이 같지 않다:
 - **수동 에스컬레이션이다**: 실패를 자동 감지하지 않는다. 트리거는 본체/사람이 판단한다.
 - **트리거**: 동일 과제 2회 연속 실패 · critic BLOCK · 비가역 작업(머지·배포·결제·삭제) 진입.
 - **절차**: 트리거 발화 → `escalation` 스왑 → Fable executor 재시도(재시도 예산 명시: 기본 1회) →
-  critic 3표 교차벤더 패널(독립투표→본체집계) → 통과 못 하면 **human gate** (더 올릴 사다리 없음).
+  critic 2표 교차벤더 패널 `{xai/grok-4.6:high, openai-codex/gpt-5.6-sol:high}`(독립투표→본체집계) → 통과 못 하면 **human gate** (더 올릴 사다리 없음).
 - Fable refusal(HTTP 200 + `stop_reason: refusal`) 시 escalation 이 조용히 멈출 수 있다 —
   refusal 을 감지하면 executor 를 Opus:max 로 강등하고 사람에게 보고한다.
 
 ## 리뷰어 계약 — cyber-cop 프로필 전용 (PR 리뷰·보안 감사 세션)
 - **위임 순서**: 리뷰 진입 → **architect 선호출**(1차 코드리뷰 판정자: CLEAR/WATCH/BLOCK) →
-  머지 게이트 → **critic**. 고위험 PR·보안 감사는 critic **3표 병렬 패널**
-  `{openai-codex/gpt-5.6-sol:high, xai/grok-4.6:high, google-antigravity/gemini-3.1-pro-low:high}` —
-  독립 투표 후 본체가 집계(토론 금지), **2/3 반박 또는 CRITICAL/BLOCK 1건이면 차단**.
-  (3표째 grok은 xai 로그인 시 — 미보유면 2표 {gpt-5.6-sol, gemini}로 강등 운영, provenance 최소치(non-default family ≥2)는 유지된다.)
+  머지 게이트 → **critic**. 고위험 PR·보안 감사는 critic **2표 병렬 패널**
+  `{xai/grok-4.6:high, openai-codex/gpt-daybreak-blue-latest:high}` —
+  독립 투표 후 본체가 집계(토론 금지), **2/2 반박 또는 CRITICAL/BLOCK 1건이면 차단**.
+  Gemini 3표째는 없다(budget 외 배제). provenance 최소치(non-default family ≥2 = grok+gpt)는 이 2표로 충족된다.
 - **default=집계자 제한**: 본체는 critic/패널의 raw verdict를 **요약·은폐 없이 보존·노출**한다.
   본체(Anthropic)가 Claude-작성 PR을 재해석하면 자기선호 편향이 재생된다(arXiv 2410.21819) — 판정 원문이 진실원천.
 - **증거 계약**: critic 1표당 **file-backed blocking issue 최소 1건** 또는 **명시적 no-finding rationale** 필수.
@@ -88,9 +89,12 @@ v3 카탈로그는 8개 user-facing 번들이며 신뢰 등급이 같지 않다:
   ★퍼지 공간 fail-closed 유지 — `gemini-3.1-pro-high`/`-bogus`는 "Model not found". 핀은 그대로 유지한다.
   ★Gemini 3.5 Pro 는 08-16 카탈로그에 없다. `gemini-3.5-flash-low` 는 07-10 소멸 후 08-16 부활(플랩) — 경량 좌석은 `gemini-3-flash:low`.
   `--list-models` 표기와 실호출이 어긋날 수 있다 — 실호출이 진실.
-- openai-codex 는 base GPT만 (`gpt-5.6-sol`/`gpt-5.6-terra`/`gpt-5.6-luna` · `gpt-5.5` · `gpt-5.4`) — `-codex` 변종 미지원.
+- openai-codex 는 base GPT만 (`gpt-5.6-sol`/`gpt-5.6-terra`/`gpt-5.6-luna` · `gpt-daybreak-blue-latest` · `gpt-5.5` · `gpt-5.4`) — `-codex` 변종 미지원.
   ctx는 모델별(0.13.3): **gpt-5.4=1M / gpt-5.5=272K / gpt-5.6 3종=372K** usable prompt budget(API 스펙 1.05M/128K와 별개).
   1M 급 입력은 gpt-5.4 또는 Opus/Gemini 레인.
+- openai-codex `gpt-daybreak-blue-latest` — GJC 핀 표시명 Daybreak Blue. 카탈로그 **minimal..xhigh** (`:max` 없음).
+  출하 좌석은 **cyber-cop planner·executor `:high`** 만. OpenAI 문서상 cyber-safeguard alias 이며 Sol 과 다른 베이스라고 쓰지 않는다.
+  `daybreak-red` · `gpt-5.6-cyber` · prefix 없는 `daybreak-blue-latest` 는 이 캐시에 없고 미출하.
 - openai-codex `gpt-5.6-sol/terra/luna` — Sol $5/$30 · Terra $2.5/$15 · Luna $1/$6(daily.executor 채용).
   Sol·Terra는 `:medium`/`:high`/`:xhigh` 검증 OK이고 `:max`는 수용되나 **심도 미검증 — 출하·광고 금지**. Luna는 validator D-1이 `:max`만 허용하는 정책 좌석이지 측정 승리가 아니다: 사전등록 `:max` 대 `:xhigh` 배터리는 효과크기 0/10, Wilcoxon 단측 p=0.1587, 29/30 동률, 토큰 평균 47.1 vs 32.2로 실패했다([v3 변경](./docs/whats-new-v3.md#좌석-변경--dailyexecutor-가-luna-max-로)).
   ⚠ METR이 Sol의 SWE 평가 게이밍을 적발 — SWE류 벤치 단독 근거 승격 금지.

@@ -77,6 +77,7 @@ _MODEL_DISPLAY = {
     "gpt-5.6-sol": "GPT-5.6 Sol",
     "gpt-5.6-terra": "GPT-5.6 Terra",
     "gpt-5.6-luna": "GPT-5.6 Luna",
+    "gpt-daybreak-blue-latest": "Daybreak Blue",
     "gemini-3.1-pro-low": "Gemini 3.1 Pro-low",
     "gemini-3-flash": "Gemini 3-flash",
     "grok-4.6": "Grok 4.6",
@@ -88,7 +89,7 @@ _MODEL_DISPLAY = {
 
 # 번들 id → (SVG 라벨, tier 캡션). yml 의 번들 집합과 정확히 일치해야 한다.
 _PROFILE_CHROME = {
-    "daily":          ("⭐ daily", "Core · 구독 3벤더"),
+    "daily":          ("⭐ daily", "Core · 기본 (Gemini 배제)"),
     "coding-sprint":  ("🏎 coding-sprint", "Core"),
     "cyber-cop":      ("🚨 cyber-cop", "Core · reviewer 모드"),
     "ultimate-opus":  ("🏆 ultimate-opus", "Premium (exp)"),
@@ -343,6 +344,7 @@ def gen_effort_ladder():
         "Fable 5 = 출하 ≤ xhigh (:max 수용·심도 미검증)",
         "Sonnet 4.6/5 = 출하 ≤ high (:xhigh/:max 수용·심도 미검증)",
         "GPT-5.6 Sol·Terra ≤xhigh · Luna=:max 단독(D-1)",
+        "Daybreak Blue ≤xhigh (출하 :high · :max 없음)",
         "xai Grok 4.6 ≤ xhigh (출하 :high)",
         "Gemini Pro = {low, high}",
         "opencode-go = effort 생략",
