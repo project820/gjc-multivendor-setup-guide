@@ -96,7 +96,7 @@ v3 카탈로그는 8개 user-facing 번들이며 신뢰 등급이 같지 않다:
   출하 좌석은 **cyber-cop planner·executor `:high`** 만. OpenAI 문서상 cyber-safeguard alias 이며 Sol 과 다른 베이스라고 쓰지 않는다.
   `daybreak-red` · `gpt-5.6-cyber` · prefix 없는 `daybreak-blue-latest` 는 이 캐시에 없고 미출하.
 - openai-codex `gpt-5.6-sol/terra/luna` — Sol $5/$30 · Terra $2.5/$15 · Luna $1/$6(daily.executor 채용).
-  Sol·Terra는 `:medium`/`:high`/`:xhigh` 검증 OK이고 `:max`는 수용되나 **심도 미검증 — 출하·광고 금지**. Luna는 validator D-1이 `:max`만 허용하는 정책 좌석이지 측정 승리가 아니다: 사전등록 `:max` 대 `:xhigh` 배터리는 효과크기 0/10, Wilcoxon 단측 p=0.1587, 29/30 동률, 토큰 평균 47.1 vs 32.2로 실패했다([v3 변경](./docs/whats-new-v3.md#좌석-변경--dailyexecutor-가-luna-max-로)).
+  Sol·Terra는 `:medium`/`:high`/`:xhigh` 검증 OK이고 `:max`는 수용되나 **심도 미검증 — 출하·광고 금지**. Luna는 validator D-1이 `:max`만 허용하는 정책 좌석이지 측정 승리가 아니다: 사전등록 `:max` 대 `:xhigh` 배터리는 효과크기 0/10, 29/30 동률로 검정력이 사실상 없고(동점 때문에 Wilcoxon 이 정규근사로 후퇴 — p=0.1587 은 근사값, 유효쌍 1개의 정확검정 단측 p 는 0.5), 토큰 평균은 47.1 vs 32.2 로 오히려 늘어 실패했다([v3 변경](./docs/whats-new-v3.md#좌석-변경--dailyexecutor-가-luna-max-로)).
   ⚠ METR이 Sol의 SWE 평가 게이밍을 적발 — SWE류 벤치 단독 근거 승격 금지.
 - xai `grok-4.6` — **`/login xai` 또는 XAI_API_KEY 설정**(08-17: XAI_API_KEY 환경변수 없이 호출 성공한 단일 계정 관찰 — 메커니즘 단정 금지) · $2/$6 (<200k prompt) / $4/$12 (≥200k) · ctx **500K**.
   출하 상한 = **high** (`:xhigh` 수용·심도 미검증 — 미출하). `grok-build/grok-4.6:high` 는 not found(bare 만 OK — 미출하).

@@ -14,7 +14,7 @@ Stop agonizing over model choice. **Install in one line** and let each role get 
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
-<img src="assets/role-winners.svg" alt="ultimate-opus setup — strongest hypothesis per role" width="100%">
+<img src="assets/role-winners.svg" alt="ultimate-opus setup — Anthropic quality base + cross-checking" width="100%">
 
 </div>
 
@@ -360,7 +360,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> The antigravity live surface can change within a day and `--list-models` can be cached. Live-call before adopting a seat; re-login/retry when discovery is stale, or use the bundle id. **`gemini-3-flash:low` has zero shipping seats in v3** (v2.1.0 `eco.critic` was its only one) — `glm-5.2` is already that bundle's executor, so using it as critic destroys the cross-check, and `deepseek-v4-pro` returns 403 China opt-in on this account. Changing a seat requires re-checking family independence and `required_providers` together.
+> The antigravity live surface can change within a day and `--list-models` can be cached. Live-call before adopting a seat; re-login/retry when discovery is stale, or use the bundle id. **`gemini-3-flash:low` has zero shipping seats in v3** (v2.1.0 `eco.critic` was its only one) — `glm-5.2` is `budget.executor` in v3, so using it as that bundle's critic destroys the cross-check (`budget.critic` is Gemini Pro today), and `deepseek-v4-pro` returns 403 China opt-in on this account. Changing a seat requires re-checking family independence and `required_providers` together.
 
 <details>
 <summary><b>Latency reference (micro-bench 2026-07-02; 08-16 pings for Opus 5 · Grok 4.6)</b></summary>

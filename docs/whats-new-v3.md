@@ -4,7 +4,7 @@
 
 ## 한 줄 요약
 
-10번들을 **7번들 + budget 게이트**로 줄이고, Core 를 **"구독 3벤더 로그인만으로 도는 것"**
+10번들을 **8번들**로 줄이고, Core 를 **"구독 3벤더 로그인만으로 도는 것"**
 으로 다시 정의하고, 선택 가이드를 **보유 구독 기준**으로 재설계했다.
 
 > [!IMPORTANT]
@@ -32,8 +32,8 @@ v3 는 개수를 목표로 두지 않는다. **사람이 설명할 수 있는 �
 | `escalation` | 유지 | 실패 신호 시 부르는 수동 게이트. Fable executor 의 출구 |
 | `llm-council` | **유지** | routing-rules 의 Council 계약이 이 프로필을 진입점·좌석 소스로 참조한다 |
 | `monorepo` | 유지 | 전역 1M ctx |
-| `budget` | **게이트** | 3조건(프로브 3종 그린 · 비-ocgo 가족 분리 · validator green) 충족 전 미출하 |
-| `eco` | **삭제** | 독립 트리거 소멸 — 저가 5역할은 `budget` 이 흡수. DeepSeek 지역 정책은 v2.1.0 좌석 교체 사유이지 v3 삭제 사유가 아님 <!-- 판정 완료: "glm-5.2 SKU 근거 약함" 문구는 쓰지 않는다. 2026-08-17 실측 — v2.1.0 에서 glm-5.2 는 `eco.executor` 와 **`monorepo.critic`** 두 좌석이고 `monorepo` 는 v3 에 남는다. 게다가 v3 `budget` 은 glm-5.2 를 executor 로 쓴다. 그 사유를 쓰면 살아남는 번들 둘을 동시에 부정한다 --> |
+| `budget` | **신규** | 게이트 3조건(프로브 3종 그린 · 비-ocgo 가족 분리 · 브랜치 validator green) **전부 통과** — `evidence/2026-08-17-v3-budget-gate-ruling.md` |
+| `eco` | **삭제** | 독립 트리거 소멸 — 저가 5역할은 `budget` 이 흡수. DeepSeek 지역 정책은 v2.1.0 좌석 교체 사유이지 v3 삭제 사유가 아님 <!-- 판정 완료: "glm-5.2 SKU 근거 약함" 문구는 쓰지 않는다. 2026-08-17 실측 — v2.1.0 에서 glm-5.2 는 `eco.executor` 와 **`monorepo.critic`** 두 좌석이고 `monorepo` 는 v3 에 남는다. 게다가 v3 `budget` 은 glm-5.2 를 executor 로 쓴다. 그 사유를 쓰면 살아남는 번들 둘을 동시에 부정한다 -->  |
 | `dream-team` | **삭제** | Fable 을 default 로 못 쓰게 되자 escalation 과 **3/5 좌석이 같아졌다**(executor·planner·critic 동일 / default·architect 상이 — 2026-08-17 실측). 남은 차이를 살리려면 새 validator waiver 가 필요해 부채만 는다 |
 | `ultimate-sol` | **삭제** | Sol 3좌석 밀집. daily·ultimate-opus 가 이미 Sol planner 를 흡수 |
 
@@ -105,7 +105,10 @@ Daybreak Blue (`gpt-daybreak-blue-latest`) 는 cyber-cop 방어 레인에만 `:h
 
 > **정직하게 적는다 — 이건 측정으로 이긴 좌석이 아니다.**
 > `:max` 와 `:xhigh` 를 10개 태스크 × 3반복 = 60콜로 비교했고, 이 난이도에서는
-> **정확도 이득이 나오지 않았다**(효과크기 0/10, Wilcoxon 단측 p=0.1587). 토큰은
+> **정확도 이득이 나오지 않았다**(효과크기 0/10). 30쌍 중 29쌍이 정확히 동점이라
+> **검정이 사실상 무력하다** — scipy 는 동점 때문에 정확검정을 포기하고 정규근사로
+> 후퇴하므로 보고된 `p=0.1587` 은 근사값이고, 유효쌍 1개의 정확검정 단측 p 는 **0.5** 다.
+> 어느 쪽으로 읽어도 우위는 없다. 토큰은
 > `:max` 가 평균 47.1 vs 32.2 로 더 쓴다. 좌석은 그 결과를 **알고** 내린 정책 결정이다.
 > 원시 60콜과 사전등록 채점기가 `evidence/` 에 보존돼 있으니 직접 확인할 수 있다.
 

@@ -282,19 +282,66 @@ if [ "$SHIP" = 1 ]; then
   echo
   echo "## 출하 게이트 (계획 10단계)"
 
+  # `check-funnel-parity.py` 는 실패 시 **exit 1** 을 낸다(CI 스텝이 그 코드로 판정한다).
+  # 이 스크립트는 26행에서 `set -uo pipefail` 만 켠다 — `-e` 는 **의도적으로 없다.**
+  # `-e` 를 켜면 아래 명령치환의 비영 종료가 25축 순회를 중간에 끊어버려서 `bad funnel`
+  # 을 기록하지 못한다. 축 하나가 실패해도 나머지 축은 계속 재야 한다.
   # #5 퍼널 매트릭스: 각 shipped 번들의 required_providers 가 정확히 하나의 최소행과 집합 동일
-  FUNNEL="$(python3 scripts/_funnel_parity.py 2>&1)"
+  FUNNEL="$(python3 scripts/check-funnel-parity.py 2>&1)"
   case "$FUNNEL" in
     OK*)  ok funnel "$FUNNEL" ;;
     *)    bad funnel "$FUNNEL" ;;
   esac
 
   # #8 whats-new-v3 존재 + 구 공지 배너 + CHANGELOG 에는 배너 없음
+  #
+  # 계획이 금지한 것은 CHANGELOG **최상단의 공지 배너**(`> … whats-new-v3.md` 인용줄)다.
+  # 파일명 언급 자체가 아니다 — CHANGELOG 항목이 "whats-new-v3.md 의 이 문장을 고쳤다"
+  # 라고 쓰는 것은 정상이고 오히려 권장된다. 예전 검사는 파일 전체를 `grep -q
+  # "whats-new-v3.md"` 로 훑어서 그런 정상 항목에 FAIL 을 냈다(#27 머지 직후 실측).
+  # 크루드한 검사가 오탐을 내면 사람은 문서를 약하게 고치거나 게이트를 무시한다 —
+  # 둘 다 나쁘다.
+  #
+  # 판정식은 **양방향이 같은 모양**을 써야 한다(cyber-cop 패널 지적). 예전엔 음성만
+  # `^>` 로 좁혀서, 구 공지 파일 쪽은 배너가 아니라 단순 파일명 언급만 있어도 "배너 존재"
+  # 로 통과했다. 아래 `_has_banner` 하나를 양쪽이 공유한다.
+  #
+  # 범위도 좁힌다 — CHANGELOG 는 **첫 릴리스 헤딩(`## v…`) 앞**까지가 배너 자리다.
+  # 그 아래 항목 본문의 인용문이 파일명을 언급하는 것은 배너가 아니다.
+  # `$2` 는 **명시적 센티널**을 쓴다: `all` = 파일 전체, 숫자 = 그 줄수까지.
+  # 예전엔 `0` 을 "전체" 로 썼는데, CHANGELOG 가 곧바로 릴리스 헤딩으로 시작하면 배너
+  # 영역이 0줄이고 awk 도 `0` 을 돌려준다. 그러면 "전체 스캔" 으로 조용히 되돌아가 이
+  # hunk 가 없애려던 #27 오탐이 다시 살아난다(cyber-cop 패널 지적).
+  #
+  # 파이프를 **아예 쓰지 않는다** — `… | grep -q` 는 `grep` 이 첫 매치에서 끝나 쓰는 쪽이
+  # SIGPIPE(141)를 받고, `set -o pipefail` 아래에서 파이프라인 상태가 141 이 된다.
+  # 그러면 **배너가 있는데 "없음"** 으로 뒤집힌다(패널 지적). 실측: 2만 줄 파일 + 최상단
+  # 배너로 `cat|grep -q` 와 `printf|grep -q` 둘 다 rc=141, herestring 은 rc=0.
+  # 변수에 담아 herestring 으로 넘기면 쓰는 프로세스가 없어 SIGPIPE 자체가 안 생긴다.
+  _has_banner() {  # $1=file  $2=all | <줄수>
+    [ -f "$1" ] || return 1
+    local _text
+    if [ "$2" = "all" ]; then _text="$(cat "$1")"; else _text="$(head -n "$2" "$1")"; fi
+    grep -qE '^[[:space:]]*>.*whats-new-v3\.md' <<< "$_text"
+  }
   if [ -f docs/whats-new-v3.md ]; then ok whats-new "docs/whats-new-v3.md 존재"; else bad whats-new "docs/whats-new-v3.md 없음"; fi
   for f in docs/whats-new-v2.md docs/whats-new-cyber-cop.md; do
-    if [ -f "$f" ] && grep -q "whats-new-v3.md" "$f"; then ok banner "$f 배너 존재"; else bad banner "$f 배너 없음"; fi
+    if _has_banner "$f" all; then ok banner "$f 배너 존재(인용줄 모양)"; else bad banner "$f 배너 없음 — 파일명만 언급된 것은 배너가 아니다"; fi
   done
-  if grep -q "whats-new-v3.md" CHANGELOG.md 2>/dev/null; then bad banner "CHANGELOG.md 에 배너가 들어갔다(계획상 제외 대상)"; else ok banner "CHANGELOG.md 배너 없음(의도대로)"; fi
+  # CHANGELOG 의 배너 자리 = **첫 릴리스 헤딩 앞**. 헤딩 문법은 아래 `changelog` 축과
+  # 같은 것을 써야 한다 — 예전엔 여기는 `^## v`, 저기는 `^#+ .*v?3\.0\.0` 이라 릴리스
+  # 표기가 `## 3.0.0` 이나 `## [3.0.0]` 로 바뀌면 여기만 안 걸려 `CL_HEAD` 가 전체 줄수가
+  # 되고 배너 검사가 다시 전체 스캔으로 되돌아간다(패널 지적).
+  CL_RELEASE_RE='^#+[[:space:]]+\[?v?[0-9]+\.[0-9]+'
+  if ! CL_HEAD="$(awk -v re="$CL_RELEASE_RE" '$0 ~ re {exit} {n++} END{print n+0}' CHANGELOG.md 2>/dev/null)"; then
+    bad banner "CHANGELOG.md 배너 영역을 계산하지 못했다(awk 실패)"
+  elif ! grep -qE "$CL_RELEASE_RE" CHANGELOG.md 2>/dev/null; then
+    bad banner "CHANGELOG.md 에서 릴리스 헤딩을 못 찾았다 — 배너 영역을 정할 수 없다"
+  elif _has_banner CHANGELOG.md "$CL_HEAD"; then
+    bad banner "CHANGELOG.md 머리 ${CL_HEAD}줄에 공지 배너가 들어갔다(계획상 제외 대상)"
+  else
+    ok banner "CHANGELOG.md 머리 ${CL_HEAD}줄에 공지 배너 없음(의도대로 — 항목 내 파일명 언급은 정상)"
+  fi
 
   # #11 CHANGELOG v3.0.0 + MAINTAINING MAJOR 사례
   if grep -qE '^#+ .*v?3\.0\.0' CHANGELOG.md 2>/dev/null; then ok changelog "v3.0.0 항목 존재"; else bad changelog "CHANGELOG 에 v3.0.0 항목 없음"; fi

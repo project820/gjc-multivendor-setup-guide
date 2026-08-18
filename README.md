@@ -14,7 +14,7 @@
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
-<img src="assets/role-winners.svg" alt="ultimate-opus 셋업 — 역할별 최강 가설" width="100%">
+<img src="assets/role-winners.svg" alt="ultimate-opus 셋업 — Anthropic 품질 기저 + 교차검증" width="100%">
 
 </div>
 
@@ -253,7 +253,8 @@ profiles:
     model_mapping:
       default:   anthropic/claude-opus-5:medium                 # v2.1: 4.8→5 like-for-like. 본체 효율 knee · 1M ctx · $5/$25 동가
       executor:  openai-codex/gpt-5.6-luna:max                # v3 승격(terra:high→luna:max): $1/$6 최저 단가·벤더분산. D-1 이 :max 단독 강제 — 다른 effort 는 validator 거부
-                                                              # ⚠ 측정으로 이긴 좌석이 아니다 — :max vs :xhigh 60콜 배터리에서 정확도 이득 0/10(Wilcoxon p=0.1587). 정책 좌석: docs/whats-new-v3.md
+                                                              # ⚠ 측정으로 이긴 좌석이 아니다 — :max vs :xhigh 60콜 배터리 정확도 이득 0/10, 30쌍 중 29쌍 동점이라 검정력이 사실상 없다
+                                                              # (Wilcoxon 은 동점 때문에 정규근사로 후퇴: p=0.1587 은 근사값이고 유효쌍 1개의 정확검정 p 는 0.5). 정책 좌석: docs/whats-new-v3.md
       planner:   openai-codex/gpt-5.6-sol:high                  # 장기 워크플로 완주 1위(Agents' Last Exam 52.7)·tool-heavy 분해
       architect: anthropic/claude-opus-5:high                   # sibling architect (cyber-cop·ultimate-opus·monorepo). Gemini 는 budget 만
       critic:    xai/grok-4.6:high                              # 제3계열 독립 dissent. :high = sibling Grok critic 출하 effort (ultimate-opus·llm-council·escalation). validator 는 medium 도 허용하나 daily 만 낮추지 않는다
@@ -420,7 +421,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> antigravity 라이브 표면은 당일에도 변하고 `--list-models` 표기는 캐시일 수 있다. 좌석 채택 전 실호출하고, 디스커버리 미갱신이면 재로그인/재시도 또는 번들 id를 사용하라. **`gemini-3-flash:low` 는 v3 에서 출하 좌석이 0개다**(v2.1.0 `eco.critic` 이 유일했다) — `glm-5.2` 는 같은 번들의 executor 라 critic 으로 쓰면 교차검증이 사라지고, `deepseek-v4-pro` 는 이 계정 403 China opt-in 이다. 좌석을 바꾸려면 계열 독립성과 `required_providers` 를 함께 재검토해야 한다.
+> antigravity 라이브 표면은 당일에도 변하고 `--list-models` 표기는 캐시일 수 있다. 좌석 채택 전 실호출하고, 디스커버리 미갱신이면 재로그인/재시도 또는 번들 id를 사용하라. **`gemini-3-flash:low` 는 v3 에서 출하 좌석이 0개다**(v2.1.0 `eco.critic` 이 유일했다) — `glm-5.2` 는 v3 에서 `budget.executor` 라 그 번들의 critic 으로 쓰면 교차검증이 사라지고(현재 `budget.critic` 은 Gemini Pro 다), `deepseek-v4-pro` 는 이 계정 403 China opt-in 이다. 좌석을 바꾸려면 계열 독립성과 `required_providers` 를 함께 재검토해야 한다.
 
 <details>
 <summary><b>지연 참고 (마이크로벤치 2026-07-02; 08-16 ping은 Opus 5·Grok 4.6)</b></summary>

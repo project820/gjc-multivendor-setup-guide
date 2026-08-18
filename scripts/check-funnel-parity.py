@@ -5,8 +5,10 @@
 집합으로 동일해야 한다. 0개면 그 번들이 퍼널에서 빠진 것이고, 2개 이상이면 표가
 중복 행을 가진 것이다(사용자가 어느 행을 봐야 할지 모른다).
 
-`check-v3-target-state.sh --ship` 이 호출한다. 단독 실행도 된다.
-출력: `OK …` 또는 `BAD …` 한 줄. 종료코드는 항상 0(호출부가 문자열로 판정).
+`.github/workflows/validate.yml` 의 상시 CI 스텝이 호출하고, `check-v3-target-state.sh
+--ship` 도 호출한다. 단독 실행도 된다.
+출력: `OK …` 또는 `BAD …`로 시작한다. 종료코드는 성공 시 0, 실패 시 1이다.
+검사 대상은 **네 언어 README 전부**다(KO 정본 + EN/ZH/JA 미러).
 """
 import pathlib
 import re
@@ -30,20 +32,23 @@ def _default_root():
     return pathlib.Path(top) if top else parent
 
 
-def main():
-    root = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else _default_root()
+def _funnel_rows(readme):
+    try:
+        txt = readme.read_text(encoding="utf-8")
+    except OSError as exc:
+        return None, f"읽지 못함 ({exc})"
 
-    data = yaml.safe_load((root / "gjc-profiles.yml").read_text(encoding="utf-8"))
-    profiles = data.get("profiles") or data.get("model_profiles")
-    if not isinstance(profiles, dict) or not profiles:
-        print("BAD gjc-profiles.yml 에서 profiles 를 읽지 못함")
-        return 1
-
-    txt = (root / "README.md").read_text(encoding="utf-8")
-    m = re.search(r"^## .*어떤 번들을 쓸까.*$", txt, re.M)
-    if not m:
-        print("BAD README 에서 퍼널 절 헤딩을 찾지 못함")
-        return 1
+    # 헤딩은 언어별로 다르므로 🧭 로 찾는다. 그런데 🧭 는 퍼널 절에만 있는 게 아니다 —
+    # `## 2. 🧭 핵심 설계`(§2)도 같은 이모지를 쓴다. 예전 코드는 첫 매치를 집어서 우연히
+    # 맞았을 뿐이고, 절 순서가 바뀌면 조용히 다른 절을 파싱했다(cyber-cop 패널 지적).
+    #
+    # 판별식: 퍼널 절은 **번호 없는** 절이다. §1~§11 은 전부 `## <숫자>.` 로 시작한다.
+    # 번호 없는 🧭 헤딩이 정확히 하나여야 하고, 아니면 코드가 대상을 정할 수 없으니 BAD.
+    heads = [h for h in re.findall(r"^## .*🧭.*$", txt, re.M)
+             if not re.match(r"^## \d", h)]
+    if len(heads) != 1:
+        return None, f"번호 없는 퍼널 헤딩(🧭)이 {len(heads)}개 — 정확히 1개여야 한다"
+    m = re.search(re.escape(heads[0]), txt)
     seg = txt[m.end():]
     nxt = re.search(r"^## ", seg, re.M)
     if nxt:
@@ -67,12 +72,17 @@ def main():
                 # (cyber-cop 패널 지적). 계약의 절반을 검사하지 않은 것이다.
                 names = set(re.findall(r"\*\*([a-z0-9-]+)\*\*", cells[1] if len(cells) > 1 else ""))
                 rows.append((provs, names))
-        elif started and line.strip() == "":
-            break          # 첫 표 블록이 끝났다
+        elif started:
+            # 표 블록은 `|` 아닌 첫 줄에서 끝난다. 표 중간에 주석줄(`<!-- -->`)이나 빈 줄을
+            # 끼우면 그 뒤 행이 조용히 빠진다 — 지금 레이아웃엔 그런 게 없고, 행이 하나도
+            # 안 잡히면 아래에서 BAD 로 떨어진다. 표 안에 뭘 끼우려면 이 조건을 먼저 봐라.
+            break
     if not rows:
-        print("BAD 퍼널 표에서 최소 credential 행을 찾지 못함")
-        return 1
+        return None, "퍼널 표에서 최소 credential 행을 찾지 못함"
+    return rows, None
 
+
+def _problems(profiles, rows):
     problems = []
     for name, spec in profiles.items():
         req = set((spec or {}).get("required_providers") or [])
@@ -95,14 +105,42 @@ def main():
     for provs, names in rows:
         for ghost in sorted(names - set(profiles)):
             problems.append(f"{ghost}: 퍼널 표에 있으나 로스터에 없음 ({sorted(provs)})")
+    return problems
 
-    if problems:
-        print("BAD " + " | ".join(problems))
+
+def main():
+    root = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else _default_root()
+
+    data = yaml.safe_load((root / "gjc-profiles.yml").read_text(encoding="utf-8"))
+    profiles = data.get("profiles") or data.get("model_profiles")
+    if not isinstance(profiles, dict) or not profiles:
+        print("BAD gjc-profiles.yml 에서 profiles 를 읽지 못함")
         return 1
-    total = sum(len(names) for _, names in rows)
+
+    results = []
+    failures = []
+    for filename in ("README.md", "README.en.md", "README.zh.md", "README.ja.md"):
+        rows, error = _funnel_rows(root / filename)
+        if error:
+            failures.append(f"{filename}: {error}")
+            results.append(f"{filename} BAD")
+            continue
+        problems = _problems(profiles, rows)
+        if problems:
+            failures.append(f"{filename}: " + "; ".join(problems))
+            results.append(f"{filename} BAD")
+            continue
+        total = sum(len(names) for _, names in rows)
+        results.append(f"{filename} OK {len(rows)}행·{total}번들")
+
+    if failures:
+        # `results` 는 파일별 OK/BAD 한 줄 요약, `failures` 는 사유다. 예전엔 실패
+        # 파일명이 양쪽에 다 찍혀 중복됐다 — 요약에서는 상태만, 사유에서만 이름을 쓴다.
+        print("BAD " + " | ".join(results) + " || " + " | ".join(failures))
+        return 1
     print(
-        f"OK 퍼널 {len(rows)}행 · {len(profiles)}번들 — 각 번들이 정확히 한 최소행과 일치, "
-        f"표에 실린 번들 {total}개 전부 로스터와 양방향 일치"
+        f"OK 퍼널 4개 README · {len(profiles)}번들 — " + " | ".join(results)
+        + " · 각 번들이 정확히 한 최소행과 일치, 표의 번들 전부 로스터와 양방향 일치"
     )
     return 0
 
