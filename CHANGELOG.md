@@ -11,7 +11,7 @@
 
 ---
 
-## Unreleased
+## v3.1.0 — 2026-08-18
 
 ### Changed (operator policy — Gemini 는 `budget` 만)
 
@@ -31,6 +31,52 @@
   앉힘. 2표 패널은 `{grok, daybreak-blue}`. 카탈로그 상한 xhigh — `:max` 없음.
   cyber-safeguard alias (Sol 과 다른 베이스가 아님). Red/Cyber 미출하.
   daily·budget·monorepo·ultimate-opus 에는 안 씀.
+
+### Tooling (게이트가 "검사한다" 고 말하고 안 하던 구간)
+
+`v3.0.0` 태그(`912aed7`) **이후**에 들어간 게이트 변경이다. 전부 음성 경로로 실증했고,
+회귀는 `scripts/check-link-fixtures.py` 로 고정했다.
+
+- **`scripts/_funnel_parity.py` → `scripts/check-funnel-parity.py`** 로 개명하고
+  **상시 CI 스텝**(`Funnel matrix parity (4 READMEs)`)으로 승격. 예전엔 1회용
+  `--ship` 게이트 안에만 있어서 v3 머지 후 퍼널 매트릭스에 가드가 **0** 이었다.
+  검사 범위도 KO 단일 → **4개 언어 README 전수**, 판정도 **양방향**(번들이 정확히 한
+  행에 실렸는가 + 표에만 있고 로스터에 없는 이름은 없는가)으로 넓혔다.
+  퍼널 절 탐지는 "번호 없는 🧭 헤딩 1개" 로 못박았다 — 예전 "첫 🧭 매치" 는
+  `## 2. 🧭 핵심 설계` 와 구분이 안 돼 우연히 맞고 있었다. 계약은 `MAINTAINING.md` §4.
+- **`scripts/slug-anchor-check.py` 링크 수집 확대** — 예전엔 인라인 마크다운 링크만 봤다.
+  로컬 HTML `<a href>` · **`<img src>`** · reference-style 정의를 모두 수집한다.
+  `<img src>` 누락이 특히 컸다: README ×4 의 히어로 배너가 `<img src>` 라서
+  **자산 경로가 깨져도 "링크 무결성" 게이트가 통과**했다. 실측 효과는 **HTML 링크 22건**
+  (이 레포의 `<img src>` 20 + `<a href>` 2; reference-style 정의는 0건).
+  속성 이름은 공백 뒤에서 시작해야 한다 — `data-href` 가 진짜 `href` 를 가리던 우회를 막았다.
+  펜스 코드블록과 인라인 코드 스팬을 마스킹하되 **CommonMark 규칙**을 지킨다(백틱 펜스는
+  info string 에 백틱이 있으면 펜스가 아니고, 닫는 펜스는 뒤에 공백 외 아무것도 없어야 한다).
+  안 닫힌 펜스는 그 줄을 지목해 FAIL 한다 — 예전엔 EOF 까지 조용히 마스킹됐다.
+  **4칸 들여쓰기를 코드블록으로 보던 로직은 제거**했다. 이 문서들의 3단계 불릿과 리스트 안
+  문단 이어가기가 전부 4칸을 넘어서 **정상 링크가 통째로 검사에서 빠졌다.**
+- **`scripts/check-link-fixtures.py` 신규 + 상시 CI 스텝**(`Link gate fail-closed fixtures`).
+  링크 게이트는 그린이면 아무 말도 안 해서 "검사한다고 말하고 안 하는" 상태를 눈으로
+  못 잡는다 — 이 작업에서 그 클래스가 **세 번** 나왔고 셋 다 게이트는 `OK` 를 찍고 있었다.
+  음성 경로를 픽스처 **16종**으로 고정했다: 들여쓴 펜스가 열리면 안 됨 · 중첩 리스트 링크는
+  검사돼야 함 · 안 닫힌 펜스는 FAIL · 펜스/blockquote 펜스/인라인 코드 스팬은 마스킹 ·
+  산문 속 백틱 런이 펜스를 열면 안 됨 · 따옴표 없는 `<img src>`·`<a href>` 도 검사 ·
+  `data-href`/`data-src` 가 진짜 속성을 가리면 안 됨 · 빈 따옴표 속성은 트레이스백 금지 ·
+  산문 reference 정의는 무시 · 꺾쇠 reference 는 해석.
+  `ci-fixture-check.sh` 가 validator 에 대해 하는 것과 같은 계약이다.
+- **`banner` 축 판정식 교정** — 파일명 언급을 배너로 오판하던 것을 인용줄(`>`) 모양으로
+  좁히되 **양방향이 같은 술어**를 쓰게 했고, CHANGELOG 는 첫 릴리스 헤딩 앞만 본다.
+  릴리스 헤딩 문법은 `changelog` 축과 **접두 상수 하나에서 조립**한다.
+  `head|grep -q` 파이프는 제거했다 — `grep -q` 가 조기 종료하면 `pipefail` 아래에서
+  상태가 141 이 되어 **배너가 있는데 "없음"** 으로 뒤집힌다(2만 줄 파일로 재현:
+  파이프 rc=141, herestring rc=0). 파일 부재와 배너 부재도 rc 로 구분한다.
+- **p값 서술 정정** — `:max` vs `:xhigh` 배터리의 `p=0.1587` 은 **정규근사값**이다.
+  30쌍 중 29쌍이 정확히 동점이라 scipy 가 정확검정을 포기하고 후퇴한 결과이고,
+  유효쌍 1개의 정확검정 단측 p 는 **0.5** 다. CHANGELOG · MAINTAINING · routing-rules ·
+  whats-new-v3 · `gjc-profiles.yml` 주석을 모두 이 서술로 맞췄다. FAIL 판정은 불변.
+- **`evidence/` append-only 예외 명문화**(`MAINTAINING.md` §2) — 비측정 식별자에 한해
+  `<redacted>` 치환을 허용하되 (a) 그 줄의 측정값은 바이트 동일 (b) dated errata 첨부
+  두 조건을 못 박았다. 적용 1건: `2026-08-17-v3-verify-baseline.md` 의 세션 UUID.
 
 ---
 
@@ -101,51 +147,8 @@
   브랜치 트리 실행이다: `profiles checked: 8` · `OK — all invariants hold` · exit 0 · 의도된 WARN 3건.
   기록: `evidence/2026-08-17-v3-budget-gate-ruling.md`.
 
-### Tooling (v3.0.0 에서 게이트가 이렇게 바뀌었다)
+### Tooling (게이트)
 
-이 절은 **릴리스 단위 기록**이다 — 아래 항목은 v3.0.0 을 구성한 여러 PR 에 걸쳐
-들어갔고, 특정 PR 하나의 변경 목록이 아니다. 공통점은 게이트가 "검사한다" 고 말하고
-실제로는 안 하던 구간을 닫았다는 것이고, 전부 음성 경로로 실증했다.
-
-- **`scripts/_funnel_parity.py` → `scripts/check-funnel-parity.py`** 로 개명하고
-  **상시 CI 스텝**(`Funnel matrix parity (4 READMEs)`)으로 승격. 예전엔 1회용
-  `--ship` 게이트 안에만 있어서 v3 머지 후 퍼널 매트릭스에 가드가 **0** 이었다.
-  검사 범위도 KO 단일 → **4개 언어 README 전수**, 판정도 **양방향**(번들이 정확히 한
-  행에 실렸는가 + 표에만 있고 로스터에 없는 이름은 없는가)으로 넓혔다.
-  퍼널 절 탐지는 "번호 없는 🧭 헤딩 1개" 로 못박았다 — 예전 "첫 🧭 매치" 는
-  `## 2. 🧭 핵심 설계` 와 구분이 안 돼 우연히 맞고 있었다. 계약은 `MAINTAINING.md` §4.
-- **`scripts/slug-anchor-check.py` 링크 수집 확대** — 예전엔 인라인 `](…)` 만 봤다.
-  로컬 HTML `<a href>` · **`<img src>`** · reference-style 정의를 모두 수집한다.
-  `<img src>` 누락이 특히 컸다: README ×4 의 히어로 배너가 `<img src>` 라서
-  **자산 경로가 깨져도 "링크 무결성" 게이트가 통과**했다.
-  실측 효과는 **HTML 링크 22건**이다 — 이 레포의 `<img src>` 20 + `<a href>` 2 가
-  통째로 미검사였다(reference-style 정의는 0건). 절대 검사 건수는 문서가 바뀔 때마다
-  움직이므로 적지 않는다. 재현: 구/신 스크립트를 같은 트리에 `--all` 로 각각 돌려
-  파일별 `링크 내부 N/파일간 M` 합을 비교하면 된다.
-  펜스 코드블록을 마스킹한다 — 여는/닫는 펜스의 문자·길이를 대응시키고(`````` 안의
-  ``` 에서 상태가 뒤집히지 않는다), `~~~` 와 blockquote 안의 펜스도 인식한다.
-  **인라인 코드 스팬도 마스킹한다** — 문서가 링크 문법 자체를 백틱 안에서 이야기하면
-  구 스크립트는 그걸 진짜 링크로 읽었다. 실제로 이 CHANGELOG 에서 구 스크립트가
-  `대상 파일 없음` 오탐으로 exit 1 을 낸다.
-  reference-style 대상은 ASCII 경로/URL 모양일 때만 링크로 본다 — `[주의]: 산문` 오탐 방지.
-  **4칸 들여쓰기를 코드블록으로 보던 로직은 제거**했다. 이 문서들의 3단계 불릿과
-  리스트 안 문단 이어가기가 전부 4칸을 넘어서 **정상 링크가 통째로 검사에서 빠졌다** —
-  게이트가 검사한다고 말하고 안 하는 fail-open 이었다.
-- **`scripts/check-link-fixtures.py` 신규 + 상시 CI 스텝**(`Link gate fail-closed fixtures`).
-  링크 게이트는 그린이면 아무 말도 안 해서 "검사한다고 말하고 안 하는" 상태를 눈으로
-  못 잡는다 — v3 작업에서 이 클래스가 **세 번** 나왔고 셋 다 게이트는 `OK` 를 찍고 있었다.
-  음성 경로를 픽스처 **13종**으로 고정했다: 들여쓴 펜스가 열리면 안 됨 · 중첩 리스트 링크는
-  검사돼야 함 · 안 닫힌 펜스는 FAIL · 펜스/blockquote 펜스/인라인 코드 스팬은 마스킹 ·
-  산문 속 백틱 런이 펜스를 열면 안 됨 · 따옴표 없는 `<img src>`·`<a href>` 도 검사 ·
-  산문 reference 정의는 무시 · 꺾쇠 reference 는 해석. `ci-fixture-check.sh` 가
-  validator 에 대해 하는 것과 같은 계약이다.
-- **`banner` 축 판정식 교정** — 파일명 언급을 배너로 오판하던 것을 인용줄(`>`) 모양으로
-  좁히되 **양방향이 같은 술어**를 쓰게 했고, CHANGELOG 는 첫 릴리스 헤딩 앞만 본다.
-  릴리스 헤딩 문법은 `changelog` 축과 **같은 상수(`CL_RELEASE_RE`)를 쓴다**(두 축의
-  술어는 다르다 — 여기는 "첫 릴리스 헤딩 위치", 저기는 "3.0.0 존재"). `head|grep -q`
-  파이프는 제거했다 —
-  `grep -q` 가 조기 종료하면 `pipefail` 아래에서 상태가 141 이 되어 **배너가 있는데
-  "없음"** 으로 뒤집힌다(2만 줄 파일로 재현: 파이프 rc=141, herestring rc=0).
 - **`generators` 축**이 `git status --porcelain` 을 해시하던 것을 **생성물 내용 해시**로
   교체. porcelain 은 파일명과 상태 플래그만 담아서, 이미 ` M` 인 파일의 내용이 2차
   실행에서 또 바뀌어도 같은 해시가 나온다 — 멱등 오판이었다.
