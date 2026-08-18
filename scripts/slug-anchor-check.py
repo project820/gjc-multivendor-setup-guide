@@ -148,31 +148,45 @@ def main():
         # 아닌 것 때문에 실패한다. 오프셋을 보존해야 리포트의 줄번호가 맞으므로,
         # 펜스 구간은 지우지 말고 **같은 길이의 공백으로 덮는다.**
         #
-        # 여는 펜스는 ``` 또는 ~~~ 3개 이상, 닫는 펜스는 **같은 문자 · 같은 길이 이상**.
-        # 단순 토글로 처리하면 긴 펜스(````) 안의 짧은 ``` 에서 상태가 뒤집힌다.
-        # 펜스 줄 자체도 덮는다(info string 에 링크 모양이 들어갈 수 있다).
-        # blockquote 안의 펜스(`> ```)와 리스트 안에 들여쓴 펜스도 인식해야 하므로
-        # 들여쓰기 제한을 두지 않는다.
+        # 펜스 판정은 CommonMark 를 그대로 쓴다. 대충 "줄 앞이 ``` 이면 펜스" 로 잡으면
+        # **산문이 펜스를 연다.** 실측: 이 레포 CHANGELOG 가 백틱 런을 문장 안에서
+        # 이야기하는 순간 그 아래 링크가 통째로 미검사가 됐다(파일 링크 1 → 0).
+        # 게이트가 조용히 fail-open 된 것이라 오탐보다 훨씬 나쁘다.
+        #
+        #   - 여는 펜스: 들여쓰기 ≤3 + ```/~~~ 3개 이상.
+        #     백틱 펜스는 **info string 에 백틱이 있으면 펜스가 아니다**(CommonMark 규칙).
+        #     위 CHANGELOG 문장이 정확히 이 경우다.
+        #   - 닫는 펜스: 같은 문자 · 같은 길이 이상 + 뒤에 공백 말고 아무것도 없어야 한다.
+        #
+        # 안 맞으면 마스킹을 **덜** 하는 쪽으로 틀린다 — 오탐(시끄럽고 안전)이지
+        # 미검사(조용하고 위험)가 아니다.
         #
         # ⚠ **들여쓰기 코드블록은 다루지 않는다.** 한때 `indent >= 4` 를 코드로 보고
         # 덮었는데, 이 문서들의 3단계 불릿과 리스트 안 문단 이어가기가 전부 4칸을 넘어서
-        # **정상 링크가 통째로 검사에서 빠졌다** — 게이트가 검사한다고 말하고 안 하는,
-        # 이 스크립트가 없애려던 바로 그 결함이다(cyber-cop 패널 3인 동시 지적).
-        # 실제로 필요한 것은 펜스 마스킹뿐이다.
+        # **정상 링크가 통째로 검사에서 빠졌다** — 같은 fail-open 이다.
         scan = list(txt)
         fence = None          # (문자, 길이) — 열려 있으면 튜플
         pos = 0
         for line in txt.splitlines(keepends=True):
             body = re.sub(r"^[ \t]*(?:>[ \t]?)*", "", line)   # blockquote 마커 제거
-            fm = re.match(r"(`{3,}|~{3,})", body.lstrip())
+            fm = re.match(r" {0,3}(`{3,}|~{3,})(.*)$", body.rstrip("\n"))
+            opener = closer = None
+            if fm:
+                run, rest = fm.group(1), fm.group(2)
+                if fence is None:
+                    if run[0] != "`" or "`" not in rest:
+                        opener = (run[0], len(run))
+                else:
+                    ch, width = fence
+                    if run[0] == ch and len(run) >= width and not rest.strip():
+                        closer = True
             covered = False
             if fence is None:
-                if fm:
-                    fence = (fm.group(1)[0], len(fm.group(1)))
+                if opener:
+                    fence = opener
                     covered = True
             else:
-                ch, width = fence
-                if fm and fm.group(1)[0] == ch and len(fm.group(1)) >= width:
+                if closer:
                     fence = None
                 covered = True
             if covered:
@@ -182,9 +196,11 @@ def main():
             pos += len(line)
         # 인라인 코드 스팬(`` `…` ``)도 링크가 아니다. 문서가 링크 **문법 자체**를
         # 이야기할 때 백틱 안에 `](…)` 를 쓰는데, 마스킹하지 않으면 그걸 진짜 링크로
-        # 읽고 "대상 파일 없음" 오탐을 낸다 — 이 게이트가 실제로 자기 CHANGELOG 에서
-        # 그렇게 걸렸다. 여는 백틱 런과 **같은 길이**의 런이 닫는다(CommonMark).
-        scan = _mask_code_spans("".join(scan))
+        # 읽고 "대상 파일 없음" 오탐을 낸다.
+        # 스팬 짝짓기는 **한 줄 안에서만** 한다 — 파일 전체에서 짝을 찾으면 짝 없는 런
+        # 하나가 다음 같은 길이 런까지의 모든 링크를 조용히 지운다(패널 지적).
+        # 줄을 넘어가는 스팬은 못 잡지만, 그건 오탐 방향이라 안전하다.
+        scan = "\n".join(_mask_code_spans(l) for l in "".join(scan).split("\n"))
         matches = [(m.group(1), m.start(1))
                    for m in re.finditer(r"\]\(([^)\s]+)\)", scan)]
         # 로컬 HTML: `<a href>` 뿐 아니라 `<img src>` 도 본다. README ×4 의 17행이
@@ -239,8 +255,13 @@ def main():
                             % (name, txt.count("\n", 0, position) + 1, owner, frag,
                                links.count(raw),
                                ", 퍼센트 인코딩" if "%" in raw else ""))
-        print("%-30s 헤딩 %3d · 링크 내부 %2d/파일간 %2d · 죽은 링크 %d"
-              % (name, len(headings[name]), intra, cross, bad))
+        # 마스킹된 링크 모양 개수를 같이 찍는다. 마스킹이 과하게 먹으면 검사 건수만
+        # 조용히 줄어드는데, 그 숫자를 아무도 diff 하지 않는다 — 마스킹 건수를 옆에
+        # 두면 "왜 갑자기 안 세지?" 를 눈으로 잡을 수 있다(패널 제안).
+        masked = len(re.findall(r"\]\(([^)\s]+)\)", txt)) - len(
+            re.findall(r"\]\(([^)\s]+)\)", scan))
+        print("%-30s 헤딩 %3d · 링크 내부 %2d/파일간 %2d · 마스킹 %2d · 죽은 링크 %d"
+              % (name, len(headings[name]), intra, cross, masked, bad))
 
     if dead:
         print("\nFAIL — 죽은 링크 %d건:" % len(dead))

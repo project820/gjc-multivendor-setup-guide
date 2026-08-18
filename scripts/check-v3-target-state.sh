@@ -328,11 +328,16 @@ if [ "$SHIP" = 1 ]; then
   for f in docs/whats-new-v2.md docs/whats-new-cyber-cop.md; do
     if _has_banner "$f" all; then ok banner "$f 배너 존재(인용줄 모양)"; else bad banner "$f 배너 없음 — 파일명만 언급된 것은 배너가 아니다"; fi
   done
-  # CHANGELOG 의 배너 자리 = **첫 릴리스 헤딩 앞**. 헤딩 문법은 아래 `changelog` 축과
-  # 같은 것을 써야 한다 — 예전엔 여기는 `^## v`, 저기는 `^#+ .*v?3\.0\.0` 이라 릴리스
-  # 표기가 `## 3.0.0` 이나 `## [3.0.0]` 로 바뀌면 여기만 안 걸려 `CL_HEAD` 가 전체 줄수가
-  # 되고 배너 검사가 다시 전체 스캔으로 되돌아간다(패널 지적).
-  CL_RELEASE_RE='^#+[[:space:]]+\[?v?[0-9]+\.[0-9]+'
+  # CHANGELOG 의 배너 자리 = **첫 릴리스 헤딩 앞**. 릴리스 헤딩 문법은 아래 `changelog`
+  # 축과 **같은 상수(`CL_RELEASE_RE`)에서 나온다** — 예전엔 여기는 `^## v`, 저기는
+  # `^#+ .*v?3\.0\.0` 로 문법이 달라서, 표기가 `## 3.0.0` 이나 `## [3.0.0]` 로 바뀌면
+  # 여기만 안 걸려 `CL_HEAD` 가 전체 줄수가 되고 배너 검사가 전체 스캔으로 되돌아갔다.
+  # 두 축의 **술어**는 다르다(여기 = "첫 릴리스 헤딩이 어디냐", 저기 = "3.0.0 이 있냐").
+  # 공유하는 것은 술어가 아니라 **헤딩 문법**이다.
+  #
+  # `\[?` 는 awk 의 동적 정규식에서 처리가 구현마다 다르다(gawk 는 경고 후 `[` 로 축약).
+  # 게이트 술어가 미정의 이스케이프에 기대면 안 되므로 `[[]?` 로 명시한다.
+  CL_RELEASE_RE='^#+[[:space:]]+[[]?v?[0-9]+\.[0-9]+'
   if ! CL_HEAD="$(awk -v re="$CL_RELEASE_RE" '$0 ~ re {exit} {n++} END{print n+0}' CHANGELOG.md 2>/dev/null)"; then
     bad banner "CHANGELOG.md 배너 영역을 계산하지 못했다(awk 실패)"
   elif ! grep -qE "$CL_RELEASE_RE" CHANGELOG.md 2>/dev/null; then
@@ -344,7 +349,7 @@ if [ "$SHIP" = 1 ]; then
   fi
 
   # #11 CHANGELOG v3.0.0 + MAINTAINING MAJOR 사례
-  if grep -qE '^#+ .*v?3\.0\.0' CHANGELOG.md 2>/dev/null; then ok changelog "v3.0.0 항목 존재"; else bad changelog "CHANGELOG 에 v3.0.0 항목 없음"; fi
+  if grep -qE "${CL_RELEASE_RE}.*3\.0\.0|^#+[[:space:]]+[[]?v?3\.0\.0" CHANGELOG.md 2>/dev/null; then ok changelog "v3.0.0 항목 존재"; else bad changelog "CHANGELOG 에 v3.0.0 항목 없음"; fi
   if grep -q "Worked example" MAINTAINING.md 2>/dev/null; then ok maintaining "MAJOR 사례 기재됨"; else bad maintaining "MAINTAINING 에 MAJOR 사례 없음"; fi
 
   # #10 태그가 분기점보다 앞서는가

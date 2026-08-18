@@ -44,11 +44,14 @@ def _funnel_rows(readme):
     #
     # 판별식: 퍼널 절은 **번호 없는** 절이다. §1~§11 은 전부 `## <숫자>.` 로 시작한다.
     # 번호 없는 🧭 헤딩이 정확히 하나여야 하고, 아니면 코드가 대상을 정할 수 없으니 BAD.
-    heads = [h for h in re.findall(r"^## .*🧭.*$", txt, re.M)
-             if not re.match(r"^## \d", h)]
-    if len(heads) != 1:
-        return None, f"번호 없는 퍼널 헤딩(🧭)이 {len(heads)}개 — 정확히 1개여야 한다"
-    m = re.search(re.escape(heads[0]), txt)
+    # 헤딩 **매치 객체를 그대로 들고 간다.** 예전엔 `^## …$` 로 찾아놓고 그 문자열을
+    # `re.search(re.escape(...))` 로 다시 찾았는데, 같은 문장이 앞쪽 펜스 샘플이나
+    # 인용문에 있으면 그쪽이 먼저 걸려 파서가 엉뚱한 위치에서 시작한다(패널 지적).
+    hits = [m for m in re.finditer(r"^## .*🧭.*$", txt, re.M)
+            if not re.match(r"^## \d", m.group(0))]
+    if len(hits) != 1:
+        return None, f"번호 없는 퍼널 헤딩(🧭)이 {len(hits)}개 — 정확히 1개여야 한다"
+    m = hits[0]
     seg = txt[m.end():]
     nxt = re.search(r"^## ", seg, re.M)
     if nxt:
