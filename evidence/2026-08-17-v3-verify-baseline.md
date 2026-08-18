@@ -27,7 +27,7 @@ python3 (로컬)            3.9.6 · CI 핀 3.12
   MAINTAINING-v3-updates.md  37개 절
 
 정본 ultragoal 원장 (네 곳 중 이것만 정본)
-  경로  .gjc/_session-01a00aa9-781a-7000-9614-6e933a8b3625/ultragoal/
+  경로  .gjc/_session-<redacted>/ultragoal/
   goals.json sha256  c9a36e9be2c28391f99972f1883d2cb23b090e6097ade9797274ad238a47f977
   ledger.jsonl 줄수   52
   goal 상태          G001=complete G002=complete G003=blocked G004=blocked G005=blocked G006=complete
@@ -89,3 +89,16 @@ OK — 검증 12 종 전부 통과 (사람 액션은 별개)
 실제 작성일은 **2026-08-17** 이다(KST). 미래 날짜가 박힌 증거 파일명을 그대로
 출하하지 않기 위해 파일명을 `2026-08-17-v3-verify-baseline.md` 로 정정했다.
 위 본문은 손대지 않았다 — 원문의 `2026-08-18` 표기는 그 시점의 오기로 읽어라.
+
+## Errata 2 — 2026-08-17 (이 기준선의 범위)
+
+이 기록은 **`main`(v2.1.0, 10번들·50 좌석셀) 트리의 기준선**이다.
+`feat/v3-catalog-redesign` 브랜치의 검증 출력이 아니다 — PR 본문이 이걸 이 PR 의
+검증 결과로 인용했다면 오독이다. 브랜치 검증은 각 커밋의 게이트 실행 출력과
+`evidence/2026-08-17-v3-budget-gate-ruling.md` 를 봐라.
+
+또한 30행의 머신 로컬 세션 UUID 는 **`<redacted>` 로 지웠다.** append-only 는 측정값을
+보호하는 원칙이고, 이 레포 밖에서 아무 의미도 없는 로컬 식별자를 공개 저장소에 남길
+근거는 아니다(cyber-cop 패널 지적). 지운 것은 UUID 문자열뿐이고 그 줄의 나머지·다른
+모든 측정값은 그대로다. 줄바꿈이 깨진 지문 블록도 원문 그대로 뒀다 — 판독은 어렵지만
+측정 기록이다.

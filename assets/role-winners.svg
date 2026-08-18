@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1256" height="268" viewBox="0 0 1256 268" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img">
-<title>🏆 ultimate-opus 셋업 — 역할별 최강 가설 (Premium · experimental)</title>
+<title>🏆 ultimate-opus 셋업 — Anthropic 품질 기저 + 교차검증 (Premium · experimental)</title>
 <rect width="1256" height="268" rx="18" fill="#ffffff"/><rect width="1256" height="268" rx="18" fill="none" stroke="#ECECF1"/>
-<text x="24" y="44" font-size="22" font-weight="700" fill="#1A1A28">🏆 ultimate-opus 셋업 — 역할별 최강 가설 (Premium · experimental)</text>
-<text x="24" y="70" font-size="13" fill="#6B6B7B">한 벤더가 모든 역할에서 1위는 아니다 — 5역할을 강점별로 3개 벤더에 분산(Anthropic·OpenAI·xAI) · role-fit L3 실측 전 experimental</text>
+<text x="24" y="44" font-size="22" font-weight="700" fill="#1A1A28">🏆 ultimate-opus 셋업 — Anthropic 품질 기저 + 교차검증 (Premium · experimental)</text>
+<text x="24" y="70" font-size="13" fill="#6B6B7B">Opus 5 가 default·executor·architect 3좌석을 잡고, planner(Sol)·critic(Grok)이 교차검증을 맡는다 — 3벤더(Anthropic·OpenAI·xAI) · role-fit L3 실측 전 experimental</text>
 <rect x="24" y="92" width="232" height="152" rx="14" fill="#FBE9E4"/><rect x="24" y="92" width="232" height="6" rx="3" fill="#D9583E"/>
 <text x="40" y="124" font-size="15" font-weight="700" fill="#8A2B1A">🎛 default</text>
 <text x="40" y="145" font-size="11.5" fill="#5a5a6a">오케스트레이션·툴 신뢰성</text>

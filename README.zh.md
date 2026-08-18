@@ -14,7 +14,7 @@
 ![Verified](https://img.shields.io/badge/rerun-all%20providers%202026--08--17-brightgreen?style=flat-square)
 ![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey?style=flat-square)
 
-<img src="assets/role-winners.svg" alt="ultimate-opus 配置 — 各角色最强假设" width="100%">
+<img src="assets/role-winners.svg" alt="ultimate-opus 配置 — Anthropic 质量基座 + 交叉校验" width="100%">
 
 </div>
 
@@ -361,7 +361,7 @@ profiles:
 </details>
 
 > [!NOTE]
-> antigravity 的 live 表面当日也会变化，`--list-models` 标示可能是缓存；采纳席位前真实调用。发现未刷新时重新登录/重试，或使用捆绑 id。**`gemini-3-flash:low` 在 v3 中的出货席位为 0**（v2.1.0 中唯一席位是 `eco.critic`）— `glm-5.2` 是同一捆绑的 executor，用作 critic 会失去交叉校验；`deepseek-v4-pro` 在本账号 403 China opt-in。更换席位需同时复核系列独立性与 `required_providers`。
+> antigravity 的 live 表面当日也会变化，`--list-models` 标示可能是缓存；采纳席位前真实调用。发现未刷新时重新登录/重试，或使用捆绑 id。**`gemini-3-flash:low` 在 v3 中的出货席位为 0**（v2.1.0 中唯一席位是 `eco.critic`）— `glm-5.2` 在 v3 中是 `budget.executor`，用作该捆绑的 critic 会失去交叉校验（当前 `budget.critic` 是 Gemini Pro）；`deepseek-v4-pro` 在本账号 403 China opt-in。更换席位需同时复核系列独立性与 `required_providers`。
 
 <details>
 <summary><b>延迟参考（微基准 2026-07-02；08-16 ping 为 Opus 5·Grok 4.6）</b></summary>
