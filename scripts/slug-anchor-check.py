@@ -168,7 +168,13 @@ def main():
         fence = None          # (문자, 길이) — 열려 있으면 튜플
         pos = 0
         for line in txt.splitlines(keepends=True):
-            body = re.sub(r"^[ \t]*(?:>[ \t]?)*", "", line)   # blockquote 마커 제거
+            # blockquote 마커만 걷어낸다. **들여쓰기는 보존해야 한다** — 예전엔
+            # `^[ \t]*` 로 앞 공백을 통째로 지운 뒤 ` {0,3}` 로 폭을 제한했는데, 그러면
+            # 그 제한이 죽은 코드가 된다. 4칸 이상 들여쓴 ``` (CommonMark 상 들여쓰기
+            # 코드블록의 *내용*)이 펜스를 열고, 닫히지 않으면 EOF 까지 마스킹돼
+            # 링크가 조용히 미검사가 된다 — 이 PR 이 없앤 fail-open 이 한 줄 옆으로
+            # 옮겨간 꼴이다(패널 지적). blockquote 마커 앞 공백만 CommonMark 대로 ≤3 허용.
+            body = re.sub(r"^(?: {0,3}>[ \t]?)*", "", line)
             fm = re.match(r" {0,3}(`{3,}|~{3,})(.*)$", body.rstrip("\n"))
             opener = closer = None
             if fm:

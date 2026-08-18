@@ -349,7 +349,9 @@ if [ "$SHIP" = 1 ]; then
   fi
 
   # #11 CHANGELOG v3.0.0 + MAINTAINING MAJOR 사례
-  if grep -qE "${CL_RELEASE_RE}.*3\.0\.0|^#+[[:space:]]+[[]?v?3\.0\.0" CHANGELOG.md 2>/dev/null; then ok changelog "v3.0.0 항목 존재"; else bad changelog "CHANGELOG 에 v3.0.0 항목 없음"; fi
+  # 헤딩 문법만 공유하고 버전은 이 축이 직접 고정한다. 예전 OR 첫 가지는 헐거웠다 —
+  # `## v3.1.0 — 3.0.0 이후 정리` 처럼 본문에 3.0.0 이 스치기만 해도 통과했다(패널 지적).
+  if grep -qE "^#+[[:space:]]+[[]?v?3\.0\.0" CHANGELOG.md 2>/dev/null; then ok changelog "v3.0.0 항목 존재"; else bad changelog "CHANGELOG 에 v3.0.0 항목 없음"; fi
   if grep -q "Worked example" MAINTAINING.md 2>/dev/null; then ok maintaining "MAJOR 사례 기재됨"; else bad maintaining "MAINTAINING 에 MAJOR 사례 없음"; fi
 
   # #10 태그가 분기점보다 앞서는가
