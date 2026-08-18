@@ -55,6 +55,14 @@ CASES = {
         ["# Target", "", "<a href=missing.md>x</a>"], 1),
     "quoted-img-src-ok": (
         ["# Target", "", '<img src="assets/ok.svg">'], 0),
+    # `\bhref` 는 `data-href` 에도 걸린다 — 진짜 깨진 링크를 놓치면 안 된다
+    "data-href-must-not-shadow-real-href": (
+        ["# Target", "", '<a href="missing.md" data-href="#target">x</a>'], 1),
+    "data-src-must-not-shadow-real-src": (
+        ["# Target", "", '<img data-src="#target" src="assets/missing.svg">'], 1),
+    # 빈 따옴표 속성은 트레이스백이 아니라 조용한 무시여야 한다
+    "empty-quoted-attr-must-not-crash": (
+        ["# Target", "", '<img src="">', "", "[ok](#target)"], 0),
     # reference-style: 산문은 링크가 아니다, 꺾쇠는 대상에 포함되지 않는다
     "prose-ref-definition-must-be-ignored": (
         ["# Target", "", "[주의]: 이건 산문이다.", "", "[ok](#target)"], 0),
@@ -66,15 +74,16 @@ CASES = {
 
 
 def run_case(lines):
-    d = tempfile.mkdtemp(prefix="link-fixture.")
-    open(os.path.join(d, "gjc-profiles.yml"), "w").close()
-    os.makedirs(os.path.join(d, "assets"), exist_ok=True)
-    open(os.path.join(d, "assets", "ok.svg"), "w").close()
-    with open(os.path.join(d, "README.md"), "w", encoding="utf-8") as fh:
-        fh.write("\n".join(lines) + "\n")
-    proc = subprocess.run([sys.executable, CHECKER, "--root", d, "--all"],
-                          capture_output=True, text=True)
-    return proc.returncode, proc.stdout
+    # `mkdtemp` 는 지워주지 않는다 — CI 마다 13개씩 영구히 샌다(패널 지적).
+    with tempfile.TemporaryDirectory(prefix="link-fixture.") as d:
+        open(os.path.join(d, "gjc-profiles.yml"), "w").close()
+        os.makedirs(os.path.join(d, "assets"), exist_ok=True)
+        open(os.path.join(d, "assets", "ok.svg"), "w").close()
+        with open(os.path.join(d, "README.md"), "w", encoding="utf-8") as fh:
+            fh.write("\n".join(lines) + "\n")
+        proc = subprocess.run([sys.executable, CHECKER, "--root", d, "--all"],
+                              capture_output=True, text=True)
+        return proc.returncode, proc.stdout
 
 
 def main():

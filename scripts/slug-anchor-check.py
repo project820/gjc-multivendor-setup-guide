@@ -222,11 +222,21 @@ def main():
         # "링크 무결성" 게이트는 통과했다(cyber-cop critic 지적).
         # 따옴표 없는 속성(`<img src=a.svg>`)도 유효한 HTML 이다. 따옴표를 강제하면
         # 그런 깨진 참조가 게이트를 그냥 통과한다(패널 지적).
-        matches += [(m.group(2) or m.group(3), m.start(2) if m.group(2) else m.start(3))
-                    for m in re.finditer(
-                        r"""<(?:a\b[^>]*\bhref|img\b[^>]*\bsrc)\s*=\s*"""
-                        r"""(?:(["'])(.*?)\1|([^\s"'>]+))""",
-                        scan, re.IGNORECASE)]
+        # 속성 이름은 **공백 뒤에서 시작**해야 한다. `\bhref` 는 `-` 가 비단어 문자라
+        # `data-href` 에도 걸린다 — 그러면 `<a href="missing.md" data-href="#ok">` 에서
+        # 진짜 깨진 링크를 놓치고 장식 속성만 검사한다(패널 지적).
+        # 빈 따옴표 속성(`<img src="">`)은 group(2) 가 falsy 라 `or` 로 고르면 None 이 되어
+        # 진단 대신 트레이스백이 난다 — `is not None` 으로 고른다.
+        for m in re.finditer(
+                r"""<(?:a\b[^>]*\shref|img\b[^>]*\ssrc)\s*=\s*"""
+                r"""(?:(["'])(.*?)\1|([^\s"'>]+))""",
+                scan, re.IGNORECASE):
+            if m.group(2) is not None:
+                raw, start = m.group(2), m.start(2)
+            else:
+                raw, start = m.group(3), m.start(3)
+            if raw:
+                matches.append((raw, start))
         # reference-style 정의. 두 가지를 조심한다(패널 지적):
         #   1. `[x]: <./docs/a.md>` 의 꺾쇠는 **대상에 포함되지 않는다** — 포함하면
         #      `<./docs/a.md` 라는 없는 파일로 오탐한다.

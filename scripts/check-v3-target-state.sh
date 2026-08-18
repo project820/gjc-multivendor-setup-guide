@@ -318,15 +318,21 @@ if [ "$SHIP" = 1 ]; then
   # 그러면 **배너가 있는데 "없음"** 으로 뒤집힌다(패널 지적). 실측: 2만 줄 파일 + 최상단
   # 배너로 `cat|grep -q` 와 `printf|grep -q` 둘 다 rc=141, herestring 은 rc=0.
   # 변수에 담아 herestring 으로 넘기면 쓰는 프로세스가 없어 SIGPIPE 자체가 안 생긴다.
-  _has_banner() {  # $1=file  $2=all | <줄수>
-    [ -f "$1" ] || return 1
+  _has_banner() {  # $1=file  $2=all | <줄수> ; rc 0=배너 있음, 1=없음, 2=파일 없음
+    [ -f "$1" ] || return 2
     local _text
     if [ "$2" = "all" ]; then _text="$(cat "$1")"; else _text="$(head -n "$2" "$1")"; fi
     grep -qE '^[[:space:]]*>.*whats-new-v3\.md' <<< "$_text"
   }
   if [ -f docs/whats-new-v3.md ]; then ok whats-new "docs/whats-new-v3.md 존재"; else bad whats-new "docs/whats-new-v3.md 없음"; fi
   for f in docs/whats-new-v2.md docs/whats-new-cyber-cop.md; do
-    if _has_banner "$f" all; then ok banner "$f 배너 존재(인용줄 모양)"; else bad banner "$f 배너 없음 — 파일명만 언급된 것은 배너가 아니다"; fi
+    _has_banner "$f" all; _hb=$?
+    # 파일 부재와 배너 부재를 구분한다 — 예전엔 둘 다 "배너 없음" 이라 원인을 못 찾았다.
+    case "$_hb" in
+      0) ok banner "$f 배너 존재(인용줄 모양)" ;;
+      2) bad banner "$f 파일이 없다" ;;
+      *) bad banner "$f 배너 없음 — 파일명만 언급된 것은 배너가 아니다" ;;
+    esac
   done
   # CHANGELOG 의 배너 자리 = **첫 릴리스 헤딩 앞**. 릴리스 헤딩 문법은 아래 `changelog`
   # 축과 **같은 상수(`CL_RELEASE_RE`)에서 나온다** — 예전엔 여기는 `^## v`, 저기는
@@ -339,7 +345,11 @@ if [ "$SHIP" = 1 ]; then
   # `awk -v` 는 값에서 이스케이프를 먼저 처리하므로 `\[` 는 `[`, `\.` 는 그냥 `.`(임의 문자)로
   # 무너진다. 그러면 "같은 상수" 를 쓰는 두 소비자의 술어가 서로 달라진다(패널 지적:
   # `## v3-0-0` 이 awk 쪽만 통과). 브래킷 표현식으로만 쓴다 — `[[]` `[.]`.
-  CL_RELEASE_RE='^#+[[:space:]]+[[]?v?[0-9]+[.][0-9]+'
+  # 두 축이 **같은 접두 상수**에서 조립한다. 지난번엔 상수를 정의해놓고 changelog 축이
+  # 이스케이프 방언이 다른 손복사본을 갖고 있었다 — 상수를 만든 이유가 바로 그 드리프트다.
+  CL_HEADING_PREFIX='^#+[[:space:]]+[[]?v?'
+  CL_RELEASE_RE="${CL_HEADING_PREFIX}[0-9]+[.][0-9]+"
+  CL_V3_RE="${CL_HEADING_PREFIX}3[.]0[.]0"
   if ! CL_HEAD="$(awk -v re="$CL_RELEASE_RE" '$0 ~ re {exit} {n++} END{print n+0}' CHANGELOG.md 2>/dev/null)"; then
     bad banner "CHANGELOG.md 배너 영역을 계산하지 못했다(awk 실패)"
   elif ! grep -qE "$CL_RELEASE_RE" CHANGELOG.md 2>/dev/null; then
@@ -353,7 +363,7 @@ if [ "$SHIP" = 1 ]; then
   # #11 CHANGELOG v3.0.0 + MAINTAINING MAJOR 사례
   # 헤딩 문법만 공유하고 버전은 이 축이 직접 고정한다. 예전 OR 첫 가지는 헐거웠다 —
   # `## v3.1.0 — 3.0.0 이후 정리` 처럼 본문에 3.0.0 이 스치기만 해도 통과했다(패널 지적).
-  if grep -qE "^#+[[:space:]]+[[]?v?3\.0\.0" CHANGELOG.md 2>/dev/null; then ok changelog "v3.0.0 항목 존재"; else bad changelog "CHANGELOG 에 v3.0.0 항목 없음"; fi
+  if grep -qE "$CL_V3_RE" CHANGELOG.md 2>/dev/null; then ok changelog "v3.0.0 항목 존재"; else bad changelog "CHANGELOG 에 v3.0.0 항목 없음"; fi
   if grep -q "Worked example" MAINTAINING.md 2>/dev/null; then ok maintaining "MAJOR 사례 기재됨"; else bad maintaining "MAINTAINING 에 MAJOR 사례 없음"; fi
 
   # #10 태그가 분기점보다 앞서는가
