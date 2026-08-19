@@ -137,24 +137,56 @@ PY
 
 # 4) 기본 프로필 설정 (config.yml). none 이면 건너뜀
 if [ "$DEFAULT_PROFILE" != "none" ]; then
-python3 - "$CONFIG" "$DEFAULT_PROFILE" <<'PY'
+python3 - "$CONFIG" "$DEFAULT_PROFILE" <<'PY'   # BEGIN set-default-profile
 import sys, os, re
 cfg, prof = sys.argv[1], sys.argv[2]
 content = open(cfg, encoding="utf-8").read() if os.path.exists(cfg) else ""
 lines = content.splitlines()
-mi = next((i for i, l in enumerate(lines) if re.match(r"^modelProfile:\s*$", l)), None)
-if mi is None:
+
+# `modelProfile` 은 GJC 가 쓰는 형태가 여러 가지다. 블록 매핑만 가정하면 깨진다:
+#   modelProfile:        ← 값이 다음 줄 `  {}` (GJC 가 비어 있을 때 쓰는 형태)
+#   modelProfile: {}     ← 인라인 빈 매핑
+#   modelProfile: null   ← 명시적 null
+#   modelProfile:        ← 정상 블록, 아래 `  default: x`
+# 예전 코드는 첫 형태에서 `  {}` 를 남긴 채 `  default:` 를 끼워 넣어
+# **config.yml 을 파싱 불가로 만들고 GJC 를 기동 불능으로 만들었다**(실사용자 실측).
+# 나머지 두 형태에서는 `modelProfile:` 를 하나 더 덧붙여 중복 키를 만들었다.
+head = next((i for i, l in enumerate(lines)
+             if re.match(r"^modelProfile\s*:", l)), None)
+
+if head is None:
     block = f"modelProfile:\n  default: {prof}"
     content = (content.rstrip() + "\n\n" + block + "\n") if content.strip() else (block + "\n")
 else:
-    j, found = mi+1, False
-    while j < len(lines) and (lines[j].startswith("  ") or not lines[j].strip()):
-        if re.match(r"\s+default:\s*", lines[j]):
-            lines[j] = re.sub(r"(default:\s*).*", lambda m: m.group(1)+prof, lines[j]); found = True; break
-        if lines[j].strip() and not lines[j].startswith("  "): break
-        j += 1
-    if not found: lines.insert(mi+1, f"  default: {prof}")
+    inline = lines[head].split(":", 1)[1].strip()
+    if inline in ("", "|", ">"):
+        # 값이 다음 줄들에 있다 — 블록 본문 범위를 잡는다
+        end = head + 1
+        while end < len(lines) and (not lines[end].strip() or lines[end].startswith((" ", "\t"))):
+            end += 1
+        body = lines[head + 1:end]
+        keep = [l for l in body
+                if l.strip() and l.strip() not in ("{}", "null", "~")
+                and not re.match(r"\s*default\s*:", l)]
+        lines[head:end] = [f"modelProfile:", f"  default: {prof}"] + keep
+    else:
+        # 인라인 값(`{}`·`null`·`{default: x}` 등)은 통째로 블록으로 바꾼다
+        lines[head:head + 1] = [f"modelProfile:", f"  default: {prof}"]
     content = "\n".join(lines) + "\n"
+
+# **쓰기 전에 반드시 파싱한다.** 여기까지 온 적이 없어서 사용자 config 가 깨졌다.
+try:
+    import yaml
+    yaml.safe_load(content)
+except ImportError:
+    pass                      # pyyaml 없으면 검증 생략(설치는 계속)
+except Exception as exc:
+    sys.stderr.write(
+        "  ⚠ 기본 프로필 설정을 건너뜁니다 — 생성된 config.yml 이 올바른 YAML 이 아닙니다.\n"
+        f"    {str(exc).splitlines()[0]}\n"
+        "    config.yml 은 손대지 않았습니다. 수동 설정: modelProfile.default: "
+        f"{prof}\n")
+    raise SystemExit(0)
 open(cfg, "w", encoding="utf-8").write(content)
 print(f"  · 기본 프로필 = {prof} (config.yml)")
 PY

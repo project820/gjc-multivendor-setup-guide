@@ -28,5 +28,7 @@ jobs:
         run: python3 scripts/slug-anchor-check.py --all
       - name: Link gate fail-closed fixtures
         run: python3 scripts/check-link-fixtures.py
+      - name: install.sh config.yml fixtures
+        run: python3 scripts/check-install-config.py
       - name: factsheet §2 parity
         run: python3 scripts/check-factsheet-parity.py
